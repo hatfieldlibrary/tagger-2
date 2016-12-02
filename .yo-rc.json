@@ -1,0 +1,12 @@
+{
+  "generator-ng-fullstack": {
+    "username": "mspalti",
+    "appName": "test-app",
+    "stack": "fullstack",
+    "server": "node",
+    "client": "ng1",
+    "transpilerServer": "node",
+    "secure": false,
+    "differentStaticServer": false
+  }
+}
