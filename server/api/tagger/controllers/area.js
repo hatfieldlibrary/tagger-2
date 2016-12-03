@@ -1,6 +1,6 @@
 'use strict';
 
-const areaDao = require('../dao/area-dao');
+const taggerDao = require('../dao/area-dao');
 const utils = require('../utils/response-utility');
 
 /**
@@ -11,7 +11,7 @@ const utils = require('../utils/response-utility');
 exports.byUd = function (req, res) {
   const areaId = req.params.id;
 
-  areaDao.findAreaById(areaId).then(function (areas) {
+  taggerDao.findAreaById(areaId).then(function (areas) {
     utils.sendResponse(res, areas);
 
   }).catch(
@@ -27,7 +27,7 @@ exports.byUd = function (req, res) {
  */
 exports.list = function (req, res) {
 
-  areaDao.listAllAreas().then(function (areas) {
+  taggerDao.listAllAreas().then(function (areas) {
     utils.sendResponse(res, areas);
 
   }).catch(function (err) {
@@ -45,9 +45,9 @@ exports.list = function (req, res) {
 exports.add = function (req, res) {
   const title = req.body.title;
 
-  areaDao.getAreaCount()
+  taggerDao.getAreaCount()
     .then(function (count) {
-      areaDao.addArea(title, count + 1)
+      taggerDao.addArea(title, count + 1)
         .then(
           function () {
             utils.sendResponse(res, {status: 'success'});
@@ -83,7 +83,7 @@ exports.update = function (req, res) {
     description: description
   };
 
-  areaDao.Area.updateArea(data, id)
+  taggerDao.Area.updateArea(data, id)
     .then(function (result) {
       utils.sendResponse(res, {status: 'success', id: result.id});
     }).catch(
@@ -104,7 +104,7 @@ exports.reorder = function (req, res) {
   const areas = req.body.areas;
   const areaCount = areas.length;
 
-  areaDao.reorder(areas, areaCount)
+  taggerDao.reorder(areas, areaCount)
     .then(function () {
       utils.sendResponse(res, {status: 'success'});
     })
@@ -121,7 +121,7 @@ exports.reorder = function (req, res) {
 exports.delete = function (req, res) {
   const id = req.body.id;
 
-  areaDao.deleteArea(id).then(function () {
+  taggerDao.deleteArea(id).then(function () {
     utils.sendResponse(res, {status: 'success'});
   }).catch(
     function (err) {
