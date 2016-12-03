@@ -2,7 +2,9 @@
 
 const async = require('async');
 const utils = require('../utils/response-utility');
+const imageConvert = require('../utils/image-convert');
 const taggerDao = require('../dao/collection-dao');
+const config = require('../../../config/environment');
 
 
 /**
@@ -12,7 +14,7 @@ const taggerDao = require('../dao/collection-dao');
  * @param res
  */
 exports.countCTypesByArea = function (req, res) {
-  var areaId = req.params.areaId;
+  const areaId = req.params.areaId;
 
   taggerDao.countCTypesByArea(areaId).then(function (types) {
     utils.sendResponse(res, types);
@@ -27,22 +29,11 @@ exports.countCTypesByArea = function (req, res) {
  * @param res
  */
 exports.browseTypesByArea = function (req, res) {
+  const areaId = req.params.areaId;
 
-  var areaId = req.params.areaId;
-
-  db.sequelize.query('SELECT Collections.browseType, COUNT(Collections.id) as count from AreaTargets ' +
-    'join Collections on AreaTargets.CollectionId=Collections.id where AreaTargets.AreaId = ? group by Collections.browseType',
-    {
-      replacements: [areaId],
-      type: db.Sequelize.QueryTypes.SELECT
-    }).then(
+  taggerDao.browseTypesByArea(areaId).then(
     function (collections) {
-
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify(collections));
-
+      utils.sendResponse(res, collections);
     }).error(function (err) {
     console.log(err);
   });
@@ -54,21 +45,11 @@ exports.browseTypesByArea = function (req, res) {
  * @param req
  * @param res
  */
-exports.repoTypeByArea = function (req, res) {
+exports.repoTypesByArea = function (req, res) {
+  const areaId = req.params.areaId;
 
-  var areaId = req.params.areaId;
-
-  db.sequelize.query('SELECT repoType, COUNT(*) as count FROM AreaTargets ' +
-    'LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id ' +
-    'WHERE AreaTargets.AreaId = ? GROUP BY repoType',
-    {
-      replacements: [areaId],
-      type: db.Sequelize.QueryTypes.SELECT
-    }
-  ).then(function (types) {
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(types));
+  taggerDao.repoTypesByArea(areaId).then(function (types) {
+    utils.sendResponse(res, types);
   }).error(function (err) {
     console.log(err);
   });
@@ -81,21 +62,10 @@ exports.repoTypeByArea = function (req, res) {
  * @param res
  */
 exports.list = function (req, res) {
+  const areaId = req.params.areaId;
 
-  var areaId = req.params.areaId;
-
-  db.AreaTarget.findAll({
-    where: {
-      AreaId: areaId
-    },
-    order: [[db.Collection, 'title', 'ASC']],
-    include: [db.Collection]
-
-  }).then(function (collections) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(collections));
+  taggerDao.findCollectionsInArea(areaId).then(function (collections) {
+    utils.sendResponse(res, collections);
 
   }).error(function (err) {
     console.log(err);
@@ -109,18 +79,10 @@ exports.list = function (req, res) {
  * @param res
  */
 exports.areas = function (req, res) {
+  const collId = req.params.collId;
 
-  var collId = req.params.collId;
-
-  db.AreaTarget.findAll({
-    where: {
-      CollectionId: collId
-    }
-  }).then(function (areas) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(areas));
+  taggerDao.findAreasForCollection(collId).then(function (areas) {
+    utils.sendResponse(res, areas);
   }).error(function (err) {
     console.log(err);
   });
@@ -134,21 +96,14 @@ exports.areas = function (req, res) {
  * @param res
  */
 exports.addTypeTarget = function (req, res) {
+  const collId = req.params.collId;
+  const typeId = req.params.typeId;
 
-  var collId = req.params.collId;
-  var typeId = req.params.typeId;
-
-  async.series ({
+  async.series({
       check: function (callback) {
-        db.ItemContentTarget.find(
-          {
-            where: {
-              CollectionId: collId,
-              ItemContentId: typeId
-            }
-          }).then(function (result) {
-            callback(null, result);
-          })
+        taggerDao.ItemContentTarget(collId, typeId).then(function (result) {
+          callback(null, result);
+        })
           .error(function (err) {
             console.log(err);
           });
@@ -160,29 +115,16 @@ exports.addTypeTarget = function (req, res) {
       }
       if (result.check === null) {
 
-        db.ItemContentTarget.create(
-          {
-            CollectionId: collId,
-            ItemContentId: typeId
-          }
-        ).then(function () {
-          // JSON response
-          res.setHeader('Content-Type', 'application/json');
-          res.setHeader('Access-Control-Allow-Origin', '*');
-          res.end(JSON.stringify({status: 'success'}));
+        taggerDao.createItemContentTarget(collId, typeId).then(function () {
+          utils.sendResponse(res, {status: 'success'});
         }).error(function (e) {
           console.log(e);
         });
 
       } else {
-
-        // JSON response
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.end(JSON.stringify({status: 'exists'}));
+        utils.sendResponse(res, {status: 'exists'});
 
       }
-
     }
   );
 };
@@ -193,22 +135,11 @@ exports.addTypeTarget = function (req, res) {
  * @param res
  */
 exports.removeTypeTarget = function (req, res) {
+  const collId = req.params.collId;
+  const typeId = req.params.typeId;
 
-  var collId = req.params.collId;
-  var typeId = req.params.typeId;
-
-  db.ItemContentTarget.destroy(
-    {
-      where: {
-        ItemContentId: typeId,
-        CollectionId: collId
-      }
-    }
-  ).then(function () {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify({status: 'success'}));
+  taggerDao.deleteItemContentTarget(collId, typeId).then(function () {
+    utils.sendResponse(res, {status: 'success'});
   }).error(function (e) {
     console.log(e);
   });
@@ -222,21 +153,15 @@ exports.removeTypeTarget = function (req, res) {
  * @param res
  */
 exports.addTagTarget = function (req, res) {
-
-  var collId = req.params.collId;
-  var tagId = req.params.tagId;
+  const collId = req.params.collId;
+  const tagId = req.params.tagId;
 
   async.series(
     {
       check: function (callback) {
 
-        db.TagTarget.find(
-          {
-            where: {
-              CollectionId: collId,
-              TagId: tagId
-            }
-          }).then(function (result) {
+        taggerDao.checkForExistingTagTarget(collId, tagId)
+          .then(function (result) {
             callback(null, result);
           })
           .error(function (err) {
@@ -245,34 +170,21 @@ exports.addTagTarget = function (req, res) {
       }
     },
     function (err, result) {
-
       if (err) {
         console.log(err);
       }
       // if new, add target
       if (result.check === null) {
 
-        db.TagTarget.create(
-          {
-            CollectionId: collId,
-            TagId: tagId
-          }
-        ).then(function () {
-          // JSON response
-          res.setHeader('Content-Type', 'application/json');
-          res.setHeader('Access-Control-Allow-Origin', '*');
-          res.end(JSON.stringify({status: 'success'}));
-        }).error(function (e) {
+        taggerDao.addTagTarget(collId, tagId)
+          .then(function () {
+            utils.sendResponse(res, {status: 'success'});
+          }).error(function (e) {
           console.log(e);
         });
 
       } else {
-
-        // JSON response
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.end(JSON.stringify({status: 'exists'}));
-
+        utils.sendResponse(res, {status: 'exists'});
       }
 
     });
@@ -285,22 +197,11 @@ exports.addTagTarget = function (req, res) {
  * @param res
  */
 exports.removeTagTarget = function (req, res) {
+  const collId = req.params.collId;
+  const tagId = req.params.tagId;
 
-  var collId = req.params.collId;
-  var tagId = req.params.tagId;
-
-  db.TagTarget.destroy(
-    {
-      where: {
-        TagId: tagId,
-        CollectionId: collId
-      }
-    }
-  ).then(function () {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify({status: 'success'}));
+  taggerDao.deleteTagTarget(collId, tagId).then(function () {
+    utils.sendResponse(res, {status: 'success'});
   }).error(function (e) {
     console.log(e);
   });
@@ -318,12 +219,8 @@ function addArea(collId, areaId, res) {
   async.series(
     {
       create: function (callback) {
-        db.AreaTarget.create(
-          {
-            CollectionId: collId,
-            AreaId: areaId
-          }
-        ).then(function (result) {
+        taggerDao.addCollectionToArea(collId, areaId)
+          .then(function (result) {
             callback(null, result);
           })
           .error(function (err) {
@@ -332,14 +229,8 @@ function addArea(collId, areaId, res) {
 
       },
       areaList: function (callback) {
-        db.AreaTarget.findAll(
-          {
-            where: {
-              CollectionId: collId
-            },
-            attributes: ['AreaId']
-          }
-        ).then(function (result) {
+        taggerDao.getAreaIdsForCollection(collId)
+          .then(function (result) {
             callback(null, result);
           })
           .error(function (err) {
@@ -352,10 +243,7 @@ function addArea(collId, areaId, res) {
       if (err) {
         console.log(err);
       }
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList}));
+      utils.sendResponse(res, {status: 'success', areaTargets: result.areaList});
 
     }
   );
@@ -369,25 +257,18 @@ function addArea(collId, areaId, res) {
  * @param res
  */
 exports.addAreaTarget = function (req, res) {
-
-  var collId = req.params.collId;
-  var areaId = req.params.areaId;
+  const collId = req.params.collId;
+  const areaId = req.params.areaId;
 
   async.series(
     {
-      // Check to see if tag is already associated
+      // Check to see if collection is already associated
       // with area.
       check: function (callback) {
 
-        db.AreaTarget.find(
-          {
-            where: {
-              CollectionId: collId,
-              AreaId: areaId
-            }
-          }).then(function (result) {
-            callback(null, result);
-          })
+        taggerDao.checkAreaAssociation(collId, areaId).then(function (result) {
+          callback(null, result);
+        })
           .error(function (err) {
             console.log(err);
           });
@@ -399,24 +280,13 @@ exports.addAreaTarget = function (req, res) {
       }
       // if new
       if (result.check === null) {
-
         addArea(collId, areaId, res);
 
       }
       // if not new, just return the current list.
       else {
-        db.AreaTarget.findAll(
-          {
-            where: {
-              CollectionId: collId
-            }
-          },
-          {attributes: ['AreaId']}
-        ).then = function (areas) {
-          // JSON response
-          res.setHeader('Content-Type', 'application/json');
-          res.setHeader('Access-Control-Allow-Origin', '*');
-          res.end(JSON.stringify({status: 'exists', areaTargets: areas}));
+        taggerDao.findCollectionsInArea(areaId).then = function (areas) {
+          utils.sendResponse(res, {status: 'exists', areaTargets: areas});
         };
       }
 
@@ -432,36 +302,23 @@ exports.addAreaTarget = function (req, res) {
  */
 exports.removeAreaTarget = function (req, res) {
 
-  var collId = req.params.collId;
-  var areaId = req.params.areaId;
+  const collId = req.params.collId;
+  const areaId = req.params.areaId;
 
   async.series(
     {
       create: function (callback) {
-        db.AreaTarget.destroy({
-          where: {
-            AreaId: areaId,
-            CollectionId: collId
-          }
-
-        }).then(function (result) {
-            callback(null, result);
-          })
+        taggerDao.removeCollectionFromArea(areaId, collId).then(function (result) {
+          callback(null, result);
+        })
           .error(function (err) {
             console.log(err);
           });
       },
       areaList: function (callback) {
-        db.AreaTarget.findAll(
-          {
-            where: {
-              CollectionId: collId
-            },
-            attributes: ['AreaId']
-          }
-        ).then(function (result) {
-            callback(null, result);
-          })
+        taggerDao.getAreaIdsForCollection(collId).then(function (result) {
+          callback(null, result);
+        })
           .error(function (err) {
             console.log(err);
           });
@@ -472,10 +329,7 @@ exports.removeAreaTarget = function (req, res) {
       if (err) {
         console.log(err);
       }
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList}));
+      utils.sendResponse(res, {status: 'success', areaTargets: result.areaList});
 
     });
 };
@@ -487,35 +341,21 @@ exports.removeAreaTarget = function (req, res) {
  */
 exports.byId = function (req, res) {
 
-  var collId = req.params.id;
+  const collId = req.params.id;
 
   async.parallel({
       getCollection: function (callback) {
-        db.Collection.find(
-          {
-            where: {
-              id: collId
-            }
-          }).then(function (result) {
+        taggerDao.findCollectionById(collId).then(function (result) {
           callback(null, result);
         });
       },
       getCategory: function (callback) {
-        db.CategoryTarget.find(
-          {
-            where: {
-              CollectionId: collId
-            }
-          }).then(function (result) {
+        taggerDao.findCategoryAssociation(collId).then(function (result) {
           callback(null, result);
         });
       },
       getAreas: function (callback) {
-        db.AreaTarget.findAll({
-          where: {
-            CollectionId: collId
-          }
-        }).then(function (result) {
+        taggerDao.findAreasForCollection(collId).then(function (result) {
           callback(null, result);
         });
       }
@@ -550,11 +390,7 @@ exports.byId = function (req, res) {
         }
         response.areas = areas;
       }
-
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify(response));
+      utils.sendResponse(res, response);
     });
 };
 
@@ -566,54 +402,45 @@ exports.byId = function (req, res) {
  */
 exports.update = function (req, res) {
 
-  var id = req.body.id;
-  var title = req.body.title;
-  var url = req.body.url;
-  var browseType = req.body.browseType;
-  var description = req.body.description;
-  var dates = req.body.dates;
-  var items = req.body.items;
-  var ctype = req.body.ctype;
-  var repoType = req.body.repoType;
-  var restricted = req.body.restricted;
-  var category = req.body.category;
+  const id = req.body.id;
+  const title = req.body.title;
+  const url = req.body.url;
+  const browseType = req.body.browseType;
+  const description = req.body.description;
+  const dates = req.body.dates;
+  const items = req.body.items;
+  const ctype = req.body.ctype;
+  const repoType = req.body.repoType;
+  const restricted = req.body.restricted;
+  const category = req.body.category;
 
-  res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const update = {
+    title: title,
+    url: url,
+    browseType: browseType,
+    description: description,
+    dates: dates,
+    items: items,
+    ctype: ctype,
+    repoType: repoType,
+    restricted: restricted
+  };
 
   async.series({
-      updateCollection: function (callback) {
-        db.Collection.update({
 
-            title: title,
-            url: url,
-            browseType: browseType,
-            description: description,
-            dates: dates,
-            items: items,
-            ctype: ctype,
-            repoType: repoType,
-            restricted: restricted
-          },
-          {
-            where: {
-              id: id
-            }
-          }).then(function (result) {
-          callback(null, result);
-        }).error(function (err) {
+      updateCollection: function (callback) {
+        taggerDao.updateCollection(update, id)
+          .then(function (result) {
+            callback(null, result);
+          }).error(function (err) {
           callback(err, null);
           console.log(err);
         });
       },
       checkCategory: function (callback) {
-        db.CategoryTarget.find({
-          where: {
-            CollectionId: id
-          }
-        }).then(function (result) {
-            callback(null, result);
-          })
+        taggerDao.findCategoryAssociation(id).then(function (result) {
+          callback(null, result);
+        })
           .error(function (err) {
             callback(err, null);
             console.log(err);
@@ -622,33 +449,24 @@ exports.update = function (req, res) {
     },
     function (err, result) {
       if (err !== undefined && err !== null) {
-        res.end(JSON.stringify({status: 'failed'}));
+        utils.sendResponse(res, {status: 'failed'});
         console.log(err);
       }
       // If no category exists for this collection,
       // add new entry.
       if (result.checkCategory === null) {
-        db.CategoryTarget.create({CollectionId: id, CategoryId: category})
+        taggerDao.addCollectionToCategory(id, category)
           .then(function () {
-            // JSON response
-            res.end(JSON.stringify({status: 'success'}));
+            utils.sendResponse(res, {status: 'success'});
 
           }).catch(function (err) {
           console.log(err);
         });
         // If category does exist, update to the current value.
       } else {
-        db.CategoryTarget.update({
-            CategoryId: category
-          },
-          {
-            where: {
-              CollectionId: id
-            }
-          }).then(
+        taggerDao.updateCollectionCategory(id, category).then(
           function () {
-            // JSON response
-            res.end(JSON.stringify({status: 'success'}));
+            utils.sendResponse(res, {status: 'success'});
 
           }).catch(
           function (err) {
@@ -665,21 +483,14 @@ exports.update = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
+  const id = req.body.id;
 
-  var id = req.body.id;
-
-  db.Collection.destroy({
-    where: {
-      id: id
-    }
-  }).then(function () {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify({status: 'success'}));
+  taggerDao.deleteCollection(id).then(function () {
+    utils.sendResponse(res, {status: 'success'});
   }).catch(function (err) {
     console.log(err);
   });
+
 };
 
 
@@ -691,18 +502,13 @@ exports.delete = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
-
-
-  var title = req.body.title;
-  var areaId = req.body.areaId;
+  const title = req.body.title;
+  const areaId = req.body.areaId;
   var newCollectionId;
-
 
   async.series({
       addCollection: function (callback) {
-        db.Collection.create({
-          title: title
-        }).then(function (coll) {
+        taggerDao.addNewCollection(title).then(function (coll) {
           newCollectionId = coll.id;
           callback(null, coll);
         }).catch(function (err) {
@@ -710,25 +516,18 @@ exports.add = function (req, res) {
         });
       },
       addArea: function (callback) {
-        db.AreaTarget.create({
-          CollectionId: newCollectionId,
-          AreaId: areaId
-        }).then(function (result) {
-          callback(null, result);
-        }).catch(function (err) {
+        taggerDao.addCollectionToArea(newCollectionId, areaId)
+          .then(function (result) {
+            callback(null, result);
+          }).catch(function (err) {
           callback(err);
         });
       },
       collections: function (callback) {
-        db.AreaTarget.findAll({
-          where: {
-            AreaId: areaId
-          },
-          include: [db.Collection],
-          order: [[db.Collection, 'title', 'ASC']]
-        }).then(function (colls) {
-          callback(null, colls);
-        }).catch(function (err) {
+        taggerDao.findCollectionsInArea(areaId)
+          .then(function (colls) {
+            callback(null, colls);
+          }).catch(function (err) {
           callback(err);
         });
       }
@@ -736,10 +535,7 @@ exports.add = function (req, res) {
       if (err) {
         console.log(err);
       }
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify({status: 'success', id: newCollectionId, collections: results.collections}));
+    utils.sendResponse(res, {status: 'success', id: newCollectionId, collections: results.collections});
     }
   );
 
@@ -756,76 +552,26 @@ exports.add = function (req, res) {
  */
 exports.updateImage = function (req, res, config) {
 
-  //https://github.com/danialfarid/ng-file-upload
-  // https://github.com/danialfarid/ng-file-upload/wiki/node.js-example
-
-  // paths for imagemagick and image dirctory
-  var convert = config.convert,
-    identify = config.identify,
-    imagePath = config.taggerImageDir;
-
-  var fs = require('fs'),
-    multiparty = require('multiparty'),
-    magick = require('imagemagick');
-
-
-  magick.identify.path = identify;
-  magick.convert.path = convert;
-
+  const multiparty = require('multiparty');
 
   var form = new multiparty.Form();
-  var imageName;
-  var id;
+
   form.parse(req, function (err, fields, files) {
+
+    if (err) {
+      console.log(err);
+      res.end();
+    }
 
     if (files.file !== undefined) {
       try {
-        // read in the temp file from the upload
-        fs.readFile(files.file[0].path, function (err, data) {
-          if (err !== null) {
-            console.log(err);
-            res.end();
-          }
-          imageName = files.file[0].originalFilename;
-          id = fields.id;
-          if (!imageName) {
-            res.redirect('/');
-            res.end();
-
-          } else {
-            // use imagemagick to transform the full image to thumbnail.
-            // write to thumb directory
-            var fullPath = imagePath + '/full/' + imageName;
-            var thumbPath = imagePath + '/thumb/' + imageName;
-            fs.writeFile(fullPath, data, function (err) {
-              if (err) {
-                console.log(err);
-                res.end();
-              }
-              else {
-                magick.resize({
-                    srcPath: fullPath,
-                    dstPath: thumbPath,
-                    width: 200
-
-                  },
-                  /*jshint unused:false */
-                  function (err, stdout, stderr) {
-                    if (err) {
-                      console.log(err);
-                    }
-                    // update database even if the conversion fails
-                    updateDb(id);
-                  });
-              }
-            });
-          }
-
-        });
+        imageConvert(res, files, fields, config, updateImageInDb)
       } catch (err) {
         console.log(err);
+        res.end();
       }
-    } else {
+    }
+    else {
       console.log('No image files were received. Aborting upload.');
       res.end();
     }
@@ -835,33 +581,22 @@ exports.updateImage = function (req, res, config) {
   /**
    * Updates the data base with new image information.
    * @param id
+   * @param imageName
    */
-  function updateDb(id) {
-    db.Collection.update(
-      {
-        image: imageName
-      },
-      {
-        where: {
-          id: id
-        }
-      }
-      /*jshint unused:false*/
-    ).then(function (result) {
-        // JSON response
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.end(JSON.stringify({status: 'success'}));
+  function updateImageInDb(res, id, imageName) {
+    taggerDao.updateCollectionImage(id, imageName).then(function () {
+      utils.sendResponse(res, {status: 'success'});
       }
     ).catch(function (err) {
         console.log(err);
       }
     );
-
   }
 };
 
 
+// The following used by the Tagger application and as
+// rest endpoints for external clients (e.g. Academic Commons).
 /**
  * Retrieves the tags associated with a single collection. Used by
  * both admin interface and public REST API.
@@ -869,27 +604,13 @@ exports.updateImage = function (req, res, config) {
  * @param res
  */
 exports.tagsForCollection = function (req, res) {
-
   var collId = req.params.collId;
 
-  db.TagTarget.findAll(
-    {
-      where: {
-        CollectionId: collId
-      },
-      include: [db.Tag],
-      attributes: ['"Tags.name"', 'id']
-    }).then(function (tags) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(tags));
-
+  taggerDao.findTagsForCollection(collId).then(function (tags) {
+    utils.sendResponse(res, tags);
   }).catch(function (err) {
     console.log(err);
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify({status: 'failed'}));
+    utils.sendResponse(res, {status: 'failed'});
   });
 
 };
@@ -901,30 +622,20 @@ exports.tagsForCollection = function (req, res) {
  * @param res
  */
 exports.typesForCollection = function (req, res) {
-
   var collId = req.params.collId;
 
-  db.ItemContentTarget.findAll(
-    {
-      where: {
-        CollectionId: collId
-      },
-      include: [db.ItemContent]
-    }
-  ).then(function (types) {
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify(types));
-    })
+  taggerDao.findContentTypesForCollection(collId).then(function (types) {
+    utils.sendResponse(res, types);
+  })
     .catch(function (err) {
       console.log(err);
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify({status: 'failed'}));
+      utils.sendResponse(res, {status: 'failed'});
     });
 
 };
+
+// The following are used exclusively for requests from
+// external clients (e.g. Academic Commons).
 
 /**
  * Retrieves a list of all collections for the public API.
@@ -933,13 +644,8 @@ exports.typesForCollection = function (req, res) {
  */
 exports.allCollections = function (req, res) {
 
-  db.Collection.findAll({
-    order: [['title', 'ASC']]
-  }).then(function (collections) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(collections));
+  taggerDao.retrieveAllCollections().then(function (collections) {
+    utils.sendResponse(res, collections)
 
   }).catch(function (err) {
     console.log(err);
@@ -953,18 +659,12 @@ exports.allCollections = function (req, res) {
  * @param res
  */
 exports.collectionById = function (req, res) {
-
-  var collId = req.params.id;
+  const collId = req.params.id;
 
   async.series({
       collection: function (callback) {
 
-        db.Collection.find(
-          {
-            where: {
-              id: collId
-            }
-          }).then(
+        taggerDao.findCollectionById(collId).then(
           function (data) {
             callback(null, data);
           }).catch(
@@ -976,13 +676,7 @@ exports.collectionById = function (req, res) {
       },
       categories: function (callback) {
 
-        db.CategoryTarget.find(
-          {
-            where: {
-              CollectionId: collId
-            },
-            include: [db.Category]
-          }).then(
+        taggerDao.getCategoryForCollection(collId).then(
           function (data) {
             callback(null, data);
           }).catch(
@@ -993,14 +687,7 @@ exports.collectionById = function (req, res) {
       },
       itemTypes: function (callback) {
 
-        db.ItemContentTarget.findAll(
-          {
-            where: {
-              CollectionId: collId
-            },
-            include: [db.ItemContent]
-          }
-        ).then(
+        taggerDao.findContentTypesForCollection(collId).then(
           function (data) {
             callback(null, data);
           }).catch(
@@ -1012,14 +699,9 @@ exports.collectionById = function (req, res) {
     function (err, result) {
       if (err) {
         console.log(err);
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.end(JSON.stringify({status: 'failed', reason: err}));
+        utils.sendResponse(res, {status: 'failed', reason: err});
       } else {
-        // JSON response
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.end(JSON.stringify(result));
+        utils.sendResponse(res, result);
       }
     }
   );
@@ -1032,19 +714,11 @@ exports.collectionById = function (req, res) {
  * @param res
  */
 exports.collectionsByArea = function (req, res) {
+  const areaId = req.params.id;
 
-  var areaId = req.params.id;
-
-  db.sequelize.query('Select * from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where at.AreaId = ? order by c.title',
-    {
-      replacements: [areaId],
-      type: db.Sequelize.QueryTypes.SELECT
-    }).then(
+  taggerDao.getCollectionsByArea(areaId).then(
     function (collections) {
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify(collections));
+      utils.sendResponse(res, collections);
 
     }).catch(function (err) {
     console.log(err);
@@ -1057,42 +731,23 @@ exports.collectionsByArea = function (req, res) {
  * @param res
  */
 exports.collectionsBySubject = function (req, res) {
+  const subjectId = req.params.id;
+  const areaId = req.params.areaId;
 
-  var subjectId = req.params.id;
-  var areaId = req.params.areaId;
-
-  db.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
-    'on tt.CollectionId = c.id LEFT JOIN AreaTargets at on c.id=at.CollectionId where tt.TagId = ? and at.AreaId = ?' +
-    'order by c.title',
-    {
-      replacements: [subjectId, areaId],
-      type: db.Sequelize.QueryTypes.SELECT
-    }).then(
+ taggerDao.getCollectionsBySubjectAndArea(subjectId, areaId).then(
     function (collections) {
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify(collections));
-
+      utils.sendResponse(res, collections);
     }).catch(function (err) {
     console.log(err);
   });
+
 };
 
 exports.allCollectionsByCategory = function (req, res) {
+  const categoryId = req.params.id;
 
-  var categoryId = req.params.id;
-
-  db.sequelize.query('Select * from Collections c left join CategoryTargets ct on ct.CollectionId = c.id where ct.CategoryId = ? order by c.title',
-  {
-    replacements: [categoryId],
-    type: db.Sequelize.QueryTypes.SELECT
-  }).then(function(collections) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(collections));
-
+  taggerDao.getCollectionsByCategory(categoryId).then(function (collections) {
+    utils.sendResponse(res, collections);
   }).catch(function (err) {
     console.log(err);
   });
@@ -1103,22 +758,11 @@ exports.allCollectionsByCategory = function (req, res) {
  * Retrieves collections by subject (from all areas)
  */
 exports.allCollectionsBySubject = function (req, res) {
+  const subjectId = req.params.id;
 
-  var subjectId = req.params.id;
-
-  db.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
-    'on tt.CollectionId = c.id where tt.TagId = ? order by c.title',
-    {
-      replacements: [subjectId],
-      type: db.Sequelize.QueryTypes.SELECT
-
-    }).then(
+  taggerDao.getCollectionsBySubject(subjectId).then(
     function (collections) {
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify(collections));
-
+      utils.sendResponse(res, collections);
     }).catch(function (err) {
     console.log(err);
   });
@@ -1126,9 +770,9 @@ exports.allCollectionsBySubject = function (req, res) {
 
 
 /**
- * Returns a JSON list of objects retrieved from the eXist
- * database host for the public API.  The objects contain the
- * query term (title) and count.
+ * Used by the Academic Commons.  Returns a JSON list of
+ * objects retrieved from the eXist database host.  The fields
+ * are the query term (title) and count.
  *
  * {
  *   item: {
@@ -1136,27 +780,24 @@ exports.allCollectionsBySubject = function (req, res) {
  *     count: "4"
  * }
  *
+ * Uses the 'collection' request parameter in the query.
+ *
  * @param req
  * @param res
  */
 exports.browseList = function (req, res) {
+  const collection = req.params.collection;
 
-  var http = require('http');
-  var collection = req.params.collection;
-
-  var options = {
+  const http = require('http');
+  const options = {
     headers: {
       accept: 'application/json'
     },
-    // Since this Node app is already serving as proxy, there's
-    // no need to proxy again through a public host like libmedia.
-    host: 'exist.willamette.edu',
-    port: 8080,
-    path: '/exist/apps/METSALTO/api/BrowseList.xquery?collection=' + collection,
+    host: config.externalHostA.host,
+    port: config.externalHostA.port,
+    path: config.externalHostA.path + collection,
     method: 'GET'
   };
-
-
   // If no error, handle response.
   function handleResponse(response) {
 
@@ -1167,21 +808,17 @@ exports.browseList = function (req, res) {
     });
 
     response.on('end', function () {
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(str);
+      utils.sendResponse(res, str);
 
     });
   }
 
-  // The eXist collections API returns a list of objects.
-  var request = http.request(options, handleResponse);
+  const request = http.request(options, handleResponse);
 
   request.on('error', function (e) {
     console.log(e);
     request.end();
   });
-
 
   request.end();
 };

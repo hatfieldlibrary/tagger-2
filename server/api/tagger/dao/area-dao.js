@@ -6,7 +6,7 @@
 const taggerSchema = require('../models/index');
 const taggerDao = {};
 
-taggerDao.byId = (areaId) => {
+taggerDao.findAreaById = (areaId) => {
 
   return taggerSchema.Area.find({
     where: {
@@ -17,7 +17,7 @@ taggerDao.byId = (areaId) => {
 
 };
 
-taggerDao.list = () => {
+taggerDao.listAllAreas = () => {
 
   return taggerSchema.Area.findAll({
     order: [['position', 'ASC']]
@@ -40,7 +40,7 @@ taggerDao.addArea = (title, position) => {
   });
 };
 
-taggerDao.update = (data, id) => {
+taggerDao.updateArea = (data, id) => {
 
   return taggerSchema.Area.update(data,
     {
@@ -93,7 +93,7 @@ taggerDao.reorder = (areas, areaCount) => {
 
 };
 
-taggerDao.delete = (id) => {
+taggerDao.deleteArea = (id) => {
 
   return taggerSchema.Area.destroy({
     where: {

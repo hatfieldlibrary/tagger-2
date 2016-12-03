@@ -1,0 +1,17 @@
+<md-dialog aria-label="Add tag" class="dialogs">
+  <md-dialog-content>
+    <h3 class="md-display-1">Delete Category</h3>
+    <md-input-container>
+      Are you sure you want to elete this Tag? <em>Removal will delete the tag and tag references from all collections that have used it.</em>
+     </md-input-container>
+   </md-dialog-content>
+  <md-dialog-actions>
+    <md-button ng-click="closeDialog()">
+      Cancel
+    </md-button>
+    <md-button ng-click="deleteTag(Data.currentTagIndex)">
+      Delete Tag
+    </md-button>
+   </md-dialog-actions>
+</md-dialog>
+

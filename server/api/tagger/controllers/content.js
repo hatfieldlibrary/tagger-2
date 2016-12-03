@@ -1,8 +1,9 @@
 'use strict';
 
 
-var async = require('async');
-
+const async = require('async');
+const utils = require('../utils/response-utility');
+const taggerDao = require('../dao/content-dao');
 
 /**
  * Retrieves content type by id
@@ -10,18 +11,10 @@ var async = require('async');
  * @param res
  */
 exports.byId = function (req, res) {
+  const id = req.params.id;
 
-  var id = req.params.id;
-
-  db.ItemContent.find({
-    where:{
-       id: id
-    }
-  }).then(function (type) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(type));
+  taggerDao.retrieveContentTypeById(id).then(function (type) {
+    utils.sendResponse(res, type);
   }).catch(function (err) {
     console.log(err);
   });
@@ -35,14 +28,8 @@ exports.byId = function (req, res) {
  */
 exports.list = function (req, res) {
 
-  db.ItemContent.findAll({
-    attributes: ['id', 'name'],
-    order: [['name', 'ASC']]
-  }).then(function (types) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(types));
+  taggerDao.getContentTypes().then(function (types) {
+    utils.sendResponse(res, types);
   }).catch(function (err) {
     console.log(err);
   });
@@ -56,23 +43,10 @@ exports.list = function (req, res) {
  * @param res
  */
 exports.countByArea = function (req, res) {
+  const areaId = req.params.areaId;
 
-  var areaId = req.params.areaId;
-
-  db.sequelize.query('Select name, COUNT(*) as count from AreaTargets left ' +
-    'join Collections on AreaTargets.CollectionId = Collections.id left join ItemContentTargets ' +
-    'on ItemContentTargets.CollectionId = Collections.id left join ItemContents on ' +
-    'ItemContentTargets.ItemContentId = ItemContents.id ' +
-    'where AreaTargets.AreaId = ? group by ItemContents.id order by ' +
-    'count DESC',
-    {
-      replacements: [areaId],
-      type: db.Sequelize.QueryTypes.SELECT
-    }
-  ).then(function (types) {
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(types));
+  taggerDao.getAreaContentTypeSummary(areaId).then(function (types) {
+    utils.sendResponse(res, types);
   });
 
 };
@@ -83,22 +57,16 @@ exports.countByArea = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
+  const name = req.body.title;
 
-  var name = req.body.title;
-
-  async.parallel (
+  async.parallel(
     {
       // Check to see if content type already exists.
       check: function (callback) {
-        db.ItemContent.find(
-          {
-            where: {
-              name:  name
-            }
-          }
-        ).then(function(result) {
-          callback(null, result);
-        })
+        taggerDao.findContentTypesForCollection(name)
+          .then(function (result) {
+            callback(null, result);
+          })
           .catch(function (err) {
             callback(err);
           });
@@ -110,24 +78,16 @@ exports.add = function (req, res) {
       }
       if (result.check === null) {
         // Add new content type
-        db.ItemContent.create({
-          name: name
-        }).then(function (result) {
-            // JSON response
-            res.setHeader('Content-Type', 'application/json');
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.end(JSON.stringify({status: 'success', id: result.id}));
+        taggerDao.createContentType(name)
+          .then(function (result) {
+            utils.sendResponse(res, {status: 'success', id: result.id});
           })
           .catch(function (err) {
             console.log(err);
           });
 
       } else {
-        // JSON response
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.end(JSON.stringify({status: 'failure'}));
-
+        utils.sendResponse(res, {status: 'failure'});
       }
     }
   );
@@ -138,26 +98,12 @@ exports.add = function (req, res) {
  * @param res
  */
 exports.update = function (req, res) {
+  const id = req.body.id;
+  const name = req.body.name;
+  const icon = req.body.icon;
 
-  var id = req.body.id;
-  var name = req.body.name;
-  var icon = req.body.icon;
-
-  db.ItemContent.update(
-    {
-      name: name,
-      icon: icon
-    },
-    {
-      where: {
-        id: id
-      }
-    }
-  ).then(function () {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify({status: 'success'}));
+  taggerDao.updateContentType(name, icon, id).then(function () {
+    utils.sendResponse(res, {status: 'success'});
   }).catch(function (err) {
     console.log(err);
   });
@@ -169,22 +115,11 @@ exports.update = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
+  const contentId = req.body.id;
 
-  var contentId = req.body.id;
-
-  db.ItemContent.destroy(
-    {
-      where: {
-        id: contentId
-      }
-    }).then(function () {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify({status: 'success'}));
-
-  }).
-  catch(function (err) {
+  taggerDao.deleteContentType(contentId).then(function () {
+    utils.sendResponse(res, {status: 'success'});
+  }).catch(function (err) {
     console.log(err);
   });
 

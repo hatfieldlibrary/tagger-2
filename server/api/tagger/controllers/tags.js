@@ -4,7 +4,9 @@
  * Created by mspalti on 5/23/14.
  */
 
-var async = require('async');
+const async = require('async');
+const utils = require('../utils/response-utility');
+const taggerDao = require('../dao/tags-dao');
 
 
 /**
@@ -14,16 +16,9 @@ var async = require('async');
  */
 exports.list = function (req, res) {
 
-  db.Tag.findAll({
-    order: [['name', 'ASC']]
-
-  }).then(function (tags) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(tags));
-
-  }).catch(function(err) {
+  taggerDao.findAllTags().then(function (tags) {
+    utils.sendResponse(res, tags);
+  }).catch(function (err) {
     console.log(err);
   });
 
@@ -34,28 +29,19 @@ exports.list = function (req, res) {
  * @param req
  * @param res
  */
-exports.byId = function(req, res) {
+exports.byId = function (req, res) {
+  const id = req.params.id;
 
-  var id = req.params.id;
-
-  db.Tag.find( {
-    where: {
-      id:  id
-    },
-    order: [['name', 'ASC']]
-  }).then( function(tag) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify(tag));
-
-  }).catch(function(err) {
+  taggerDao.findTagById(id).then(function (tag) {
+    utils.sendResponse(res, tag);
+  }).catch(function (err) {
     console.log(err);
   });
+
 };
 
 /**
- * Retrieves list of tags assoicated with an area. Query
+ * Retrieves list of tags associated with an area. Query
  * by area id.
  * @param req
  * @param res
@@ -64,20 +50,9 @@ exports.tagByArea = function (req, res) {
 
   var areaId = req.params.areaId;
 
-  db.TagAreaTarget.findAll( {
-    where: {
-      AreaId: areaId
-    },
-
-    attributes: ['"Tags.name"', 'TagId'],
-    order: [[db.Tag, 'name', 'ASC']],
-    include: [db.Tag]
-  }).then( function(tags) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify(tags));
-  }).catch(function(err) {
+  taggerDao.findTagsInArea(areaId).then(function (tags) {
+    utils.sendResponse(res, tags);
+  }).catch(function (err) {
     console.log(err);
   });
 };
@@ -92,20 +67,11 @@ exports.tagByAreaCount = function (req, res) {
 
   var areaId = req.params.areaId;
 
-  db.sequelize.query('SELECT name, COUNT(*) as count from TagTargets left join Tags on ' +
-    'TagTargets.TagId = Tags.id left join TagAreaTargets on TagAreaTargets.TagId = Tags.id  ' +
-    'WHERE TagAreaTargets.AreaId = ? group by TagTargets.TagId order by Tags.name',
-    {
-      replacements: [areaId],
-      type: db.Sequelize.QueryTypes.SELECT
-    }
-  ).then(function (tags) {
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify(tags));
-    }).catch(function(err) {
-      console.log(err);
-    });
+  taggerDao.getTagCountByArea(areaId).then(function (tags) {
+    utils.sendResponse(res, tags);
+  }).catch(function (err) {
+    console.log(err);
+  });
 };
 
 
@@ -115,23 +81,16 @@ exports.tagByAreaCount = function (req, res) {
  * @param req
  * @param res
  */
-exports.add = function( req, res) {
+exports.add = function (req, res) {
+  const name = req.body.name;
 
-  var name = req.body.name;
-
-  async.parallel (
+  async.parallel(
     {
       // Check to see if content type already exists.
       check: function (callback) {
-        db.Tag.find(
-          {
-            where: {
-              name: name
-            }
-          }
-        ).then(function (result) {
-            callback(null, result);
-          })
+        taggerDao.findTagByName(name).then(function (result) {
+          callback(null, result);
+        })
           .catch(function (err) {
             callback(err);
           });
@@ -143,26 +102,17 @@ exports.add = function( req, res) {
       }
       if (result.check === null) {
         // Add new content type
-        db.Tag.create({name: name
-        }).then(function (result) {
-          // JSON response
-          res.setHeader('Content-Type', 'application/json');
-          res.setHeader('Access-Control-Allow-Origin','*');
-          res.end(JSON.stringify({status: 'success', id: result.id}));
+        taggerDao.createTag(name).then(function (result) {
+          utils.sendResponse(res, {status: 'success', id: result.id});
         })
           .catch(function (err) {
             console.log(err);
           });
 
       } else {
-        // JSON response
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin','*');
-        res.end(JSON.stringify({status: 'failure'}));
-
+        utils.sendResponse(res, {status: 'failure'});
       }
     }
-
   );
 };
 
@@ -172,26 +122,15 @@ exports.add = function( req, res) {
  * @param res
  */
 exports.update = function (req, res) {
+  const id = req.body.id;
+  const name = req.body.name;
 
-  var id = req.body.id;
-  var name = req.body.name;
+  taggerDao.updateTag(name, id).then(function () {
+    utils.sendResponse(res, {status: 'success'});
+  }).catch(function (err) {
+    console.log(err);
+  });
 
-  db.Tag.update(
-    {
-      name: name
-    },
-    {
-      where: {
-        id: id
-      }
-    }).then(function() {
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({status: 'success'}));
-    }).catch(function(err) {
-      console.log(err);
-    });
 };
 
 /**
@@ -199,20 +138,13 @@ exports.update = function (req, res) {
  * @param req
  * @param res
  */
-exports.delete = function (req , res) {
+exports.delete = function (req, res) {
+  const id = req.body.id;
 
-  var id = req.body.id;
-
-  db.Tag.destroy({
-    where: {
-      id: id
-    }
-  }).then(function() {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify({ status: 'success'}));
+  taggerDao.deleteTag(id).then(function () {
+    utils.sendResponse(res, {status: 'success'});
   });
+
 };
 
 
@@ -221,24 +153,14 @@ exports.delete = function (req , res) {
  * @param req
  * @param res
  */
-exports.subjectsByArea = function(req, res) {
+exports.subjectsByArea = function (req, res) {
+  const id = req.params.id;
 
-  var id = req.params.id;
-  db.TagAreaTarget.findAll( {
-    where: {
-      AreaId: id
-    },
-    include: [db.Tag],
-    attributes: ['"Tags.name"', 'TagId'],
-    order: [[db.Tag, 'name', 'ASC']]
-
-  }).then( function(tags) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify(tags));
-  }).catch(function(err) {
+  taggerDao.getSubjectsForArea(id).then(function (tags) {
+    utils.sendResponse(res, tags);
+  }).catch(function (err) {
     console.log(err);
   });
+
 };
 

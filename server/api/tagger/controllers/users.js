@@ -1,24 +1,20 @@
 'use strict';
 
+const utils = require('../utils/response-utility');
+const taggerDao = require('../dao/users.dao');
+
 /**
  * Retrieves list of current users.
  * @param req
  * @param res
  */
-exports.list = function (req, res ) {
+exports.list = function (req, res) {
 
-  db.Users.findAll({
-      attributes:['id','name','email', 'area'],
-      order: [['name', 'ASC']],
-    }
-  ).then(function(users) {
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify(users));
-    }).catch(function(e) {
-      console.log(e);
-    });
+  taggerDao.findAllUsers().then(function (users) {
+    utils.sendResponse(res, users);
+  }).catch(function (e) {
+    console.log(e);
+  });
 
 };
 
@@ -27,25 +23,17 @@ exports.list = function (req, res ) {
  * @param req
  * @param res
  */
-exports.add = function(req, res) {
+exports.add = function (req, res) {
+  const name = req.body.name;
+  const email = req.body.email;
+  const area = req.body.area;
 
-  var name = req.body.name;
-  var email = req.body.email;
-  var area = req.body.area;
+  taggerDao.createNewUser(name, email, area).then(function () {
+    utils.sendResponse(res, {status: 'success'});
+  }).catch(function (e) {
+    console.log(e);
+  });
 
-  db.Users.create({
-      name: name,
-      email: email,
-      area: area
-    }
-  ).then(function() {
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({status: 'success'}));
-    }).catch(function(e) {
-      console.log(e);
-    });
 };
 
 /**
@@ -53,19 +41,12 @@ exports.add = function(req, res) {
  * @param req
  * @param res
  */
-exports.delete = function(req, res) {
-  var id = req.body.id;
+exports.delete = function (req, res) {
+  const id = req.body.id;
 
-  db.Users.destroy({
-    where: {
-      id: id
-    }
-  }).then(function() {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify({ status: 'success' }));
-  }).catch(function(err) {
+  taggerDao.deleteUser(id).then(function () {
+    utils.sendResponse(res, {status: 'success'});
+  }).catch(function (err) {
     console.log(err);
   });
 
@@ -76,26 +57,16 @@ exports.delete = function(req, res) {
  * @param req
  * @param res
  */
-exports.update = function(req, res) {
-  var name = req.body.name;
-  var email = req.body.email;
-  var area = req.body.area;
-  var id = req.body.id;
-  db.Users.update({
-      name: name,
-      email: email,
-      area: area
-    },
-    {
-      where: {
-        id: id
-      }
-    }).then(function() {
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({status: 'success'}));
-    }).catch(function(err) {
-      console.log(err);
-    });
+exports.update = function (req, res) {
+  const name = req.body.name;
+  const email = req.body.email;
+  const area = req.body.area;
+  const id = req.body.id;
+
+  taggerDao.updateUser(name, email, area, id).then(function () {
+    utils.sendResponse(res, {status: 'success'});
+  }).catch(function (err) {
+    console.log(err);
+  });
+
 };

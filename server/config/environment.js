@@ -30,6 +30,8 @@ var config = {
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: 'http://localhost:3000/auth/google/callback',
+    externalHostA: '',
+    externalHostB: '', // not in use
     nodeEnv: env
   },
 
@@ -57,6 +59,8 @@ var config = {
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: 'http://localhost:3000/auth/google/callback',
+    externalHostA: credentials.externalHostA,
+    externalHostB: credentials.externalHostB, // not in use
     nodeEnv: env
   },
 
@@ -84,6 +88,8 @@ var config = {
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: 'http://localhost:3000/auth/google/callback',
+    externalHostA: credentials.externalHostA,
+    externalHostB: credentials.externalHostB, // not in use
     nodeEnv: env
   },
 
@@ -112,6 +118,8 @@ var config = {
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: credentials.googleCallback,
+    externalHostA: credentials.externalHostA,
+    externalHostB: credentials.externalHostB, // not in use
     nodeEnv: env
   }
 };

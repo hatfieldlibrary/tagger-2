@@ -1,6 +1,9 @@
 .idea
+server/config/credentials.js
 coverage
 node_modules
 unit_coverage
 bower_components
 typings
+
+

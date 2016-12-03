@@ -16,8 +16,6 @@ module.exports = function(app,config,passport){
    */
   var ensureAuthenticated = app.ensureAuthenticated;
 
-  /*jshint unused:false*/
-
   // TAGGER ROUTES
 
   // AUTHENTICATION
