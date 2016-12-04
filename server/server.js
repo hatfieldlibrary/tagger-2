@@ -1,17 +1,18 @@
 'use strict';
 
-var server;
+let server;
 
-var express = require('express'),
+const express = require('express'),
   http = require('http'),
   passport = require('passport'),
   /* jshint unused:false */
   multiparty = require('multiparty');
 
-var config = require('./config/environment');
-var app = express();
+const config = require('./config/environment');
+const app = express();
 
-const dbSchema = require('./api/tagger/models/index');
+// initialize database.
+const taggerSchema = require('./api/tagger/models/index');
 
 // configure express
 require('./config/express')(app, config);
@@ -93,7 +94,7 @@ module.exports = app;
 
 // Snyc database if not in test mode
 if (config.nodeEnv !== 'test') {
-  dbSchema
+  taggerSchema
     .sequelize
     .sync(config.sync)
     .error(function (err) {

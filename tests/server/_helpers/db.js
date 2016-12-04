@@ -1,18 +1,40 @@
-import Todo from '../../../server/api/todo/dao/todo-dao';
-import dbJson from './db.json';
+import {config} from './db-conf';
+import fs from 'fs';
+import lodash from 'lodash';
+import Sequelize from 'sequelize';
 
-exports.setupMongoose = (mongoose) => {
-  mongoose.models = {};
-  mongoose.connect(dbJson.db.test.url);
-  mongoose.connection.on('error', () => {});
-}
 
-exports.createTodos = () => {
-    let _array = [];
+const sequelize = new Sequelize(
+  config.mysql.db,
+  config.mysql.user,
+  config.mysql.password,
+  {
+    host: config.mysql.host,
+    port: config.mysql.port,
+    dialect: config.mysql.dialect
+  }),
+  database = {};
 
-    for (let i = 0; i < 10; i++) {
-        _array.push({_id: '507c7f79bcf86cd7994f6c'+ (i + 10), todoMessage: 'aaaaaaa'+i});
-    }
+fs
+  .readdirSync(__dirname)
+  .filter(function (file) {
+    return (file.indexOf('.') !== 0) && (file !== 'index.js');
+  })
+  .forEach(function (file) {
+    var model = sequelize.import(path.join(__dirname, file));
+    database[model.name] = model;
+  });
 
-    return Todo.create(_array);
-}
+Object.keys(database).forEach(function (modelName) {
+  if ('associate' in database[modelName]) {
+    database[modelName].associate(database);
+  }
+});
+
+exports.sequelize = lodash.extend({
+  sequelize: sequelize,
+  Sequelize: Sequelize
+}, database);
+
+
+

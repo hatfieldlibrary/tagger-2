@@ -8,7 +8,7 @@ const utils = require('../utils/response-utility');
  * @param req
  * @param res
  */
-exports.byUd = function (req, res) {
+exports.byId = function (req, res) {
   const areaId = req.params.id;
 
   taggerDao.findAreaById(areaId).then(function (areas) {
