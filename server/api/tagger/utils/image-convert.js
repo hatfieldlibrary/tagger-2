@@ -5,7 +5,7 @@
 //https://github.com/danialfarid/ng-file-upload
 //https://github.com/danialfarid/ng-file-upload/wiki/node.js-example
 
-const convert = function (res, files, fields, config, callback) => {
+const convert = (res, files, fields, config, callback) => {
 
   const fs = require('fs'),
     magick = require('imagemagick');

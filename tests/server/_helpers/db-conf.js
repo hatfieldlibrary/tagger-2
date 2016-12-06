@@ -4,7 +4,7 @@
 
 import path from 'path';
 
-import credentials from '../../../server/config/environment';
+import credentials from '../../../server/config/credentials';
 
 let rootPath = path.normalize(__dirname + '/../../../server');
 
@@ -12,7 +12,7 @@ exports.config = {
   test: {
     root: rootPath,
     app: {
-      name: 'acomtags'
+      name: 'tagger'
     },
     uid: credentials.develuid,
     gid: credentials.develgid,
@@ -35,7 +35,7 @@ exports.config = {
     googleCallback: 'http://localhost:3000/auth/google/callback',
     externalHostA: credentials.externalHostA,
     externalHostB: credentials.externalHostB, // not in use
-    nodeEnv: env
+    nodeEnv: 'test'
   }
 
 };

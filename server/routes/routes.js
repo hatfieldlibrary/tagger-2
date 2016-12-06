@@ -2,14 +2,14 @@ module.exports = function(app,config,passport){
 
   'use strict';
 
-  var entry = require('../app/controllers/entry');
-  var tag = require('../app/controllers/tags');
-  var tagTarget = require('../app/controllers/tag-target.js');
-  var area = require('../app/controllers/area');
-  var content = require('../app/controllers/content');
-  var collection = require('../app/controllers/collection');
-  var category = require('../app/controllers/category');
-  var users = require('../app/controllers/users');
+  var entry = require('../../server/api/tagger/controllers/entry');
+  var tag = require('../../server/api/tagger/controllers/tags');
+  var tagTarget = require('../../server/api/tagger/controllers/tag-target.js');
+  var area = require('../../server/api/tagger/controllers/area');
+  var content = require('../../server/api/tagger/controllers/content');
+  var collection = require('../../server/api/tagger/controllers/collection');
+  var category = require('../../server/api/tagger/controllers/category');
+  var users = require('../../server/api/tagger/controllers/users');
   /**
    * Indicates whether the request has an authenticated session.
    * @type {boolean}

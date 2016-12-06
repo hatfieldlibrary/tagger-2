@@ -14,8 +14,8 @@ const app = express();
 // initialize database.
 const taggerSchema = require('./api/tagger/models/index');
 
-// configure express
-require('./config/express')(app, config);
+// // configure express
+// require('./config/')(app, config);
 // static routes
 require('./routes/routes.conf')(app, config);
 // configure passport and session

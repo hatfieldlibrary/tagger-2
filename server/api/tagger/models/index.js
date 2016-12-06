@@ -14,7 +14,7 @@ const fs = require('fs'),
   path      = require('path'),
   Sequelize = require('sequelize'),
   lodash    = require('lodash'),
-  config    = require('../../config/environment');
+  config    = require('../../../config/environment');
 
 const  sequelize = new Sequelize(
     config.mysql.db,

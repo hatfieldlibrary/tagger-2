@@ -9,7 +9,7 @@ var config = {
   development: {
     root: rootPath,
     app: {
-      name: 'acomtags'
+      name: 'tagger'
     },
     uid: credentials.develuid,
     gid: credentials.develgid,
@@ -67,7 +67,7 @@ var config = {
   test: {
     root: rootPath,
     app: {
-      name: 'acomtags'
+      name: 'tagger'
     },
     uid: credentials.develuid,
     gid: credentials.develgid,
@@ -96,7 +96,7 @@ var config = {
   production: {
     root: rootPath,
     app: {
-      name: 'acomtags'
+      name: 'tagger'
     },
     sync: {force: false},
     uid: credentials.uid,
