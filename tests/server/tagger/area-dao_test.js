@@ -7,38 +7,107 @@ import  areaDao from '../../../server/api/tagger/dao/area-dao'
 import {expect} from 'chai';
 import async from 'async';
 
-describe('area.dao', () => {
+/** Test area names. */
+const areas = [
+  'Area Stub One',
+  'Area Stub Two',
+  'Area Stub Three'
+];
+/**
+ * Area array with reordered ids.  This is
+ * used to change position attributes in the Areas table.
+ * */
+const reorderedAreas = [
+  {
+    id: 3
+  },
+  {
+    id: 1
+  },
+  {
+    id: 2
+  },
+  {
+    id: 4
+  },
 
-  before((done) => {
+];
 
+/** Adds test areas. */
+const areasSetup = (callback,) => {
+
+  let count = 2;
+
+  async.series(
+    {
+      areaOne: (callback) => {
+        areaDao
+          .addArea(areas[0], count++)
+          .then(callback(null))
+          .catch((err) => callback(err));
+
+      },
+      areaTwo: (callback) => {
+        areaDao
+          .addArea(areas[1], count++)
+          .then(callback(null))
+          .catch((err) => callback(err));
+
+      },
+      areaThree: (callback) => {
+        areaDao
+          .addArea(areas[2], count++)
+          .then(callback(null))
+          .catch((err) => callback(err));
+
+      }
+    }, (err) => {
+      if (err) {
+        callback(err);
+      }
+      callback(null);
+    });
+
+};
+
+
+describe('Area operations', () => {
+
+  // Don't use fat arrow. We need this binding for timeout.
+  before(function (done) {
+
+    this.timeout(5000);
     async.series(
       {
-        removeChecks: function (callback) {
+        removeChecks: (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(function () {
+            .then( () => {
               callback(null);
             }).catch(function (err) {
             console.log(err);
           });
         },
-        syncDb: function (callback) {
+        syncDb: (callback) => {
           db.sequelize.sync({force: true})
-            .then(function () {
+            .then( () => {
               callback(null);
             }).catch(function (err) {
             callback(err);
           });
         },
-        addChecks: function (callback) {
+        addChecks: (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(function () {
+            .then(() => {
               callback(null,);
             }).catch(function (err) {
             callback(err);
           });
+        },
+        addAreas: (callback) => {
+          areasSetup(callback)
         }
       },
-      function (err) {
+      (err) => {
         if (err) {
           console.log(err);
         } else {
@@ -48,110 +117,151 @@ describe('area.dao', () => {
   });
 
 
-  describe('Area operations', () => {
 
-    it("should create a new area.", (done) => {
+  it('should create a new area.', (done) => {
 
-      let _onSuccess = (area) => {
-        expect(area).to.be.defined;
-        expect(area.dataValues.title).to.have.string('Item One');
-        done();
-      };
+    let _onSuccess = (area) => {
+      expect(area).to.be.defined;
+      expect(area.dataValues.title).to.have.string('New Area One');
+      done();
+    };
 
-      let _onError = (err) => {
-        console.log(err)
-        expect(true).to.be.false; // should not come here
-      };
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
 
-      areaDao
-        .addArea('Item One', '1')
-        .then(_onSuccess)
-        .catch(_onError);
+    areaDao
+      .addArea('New Area One', '1')
+      .then(_onSuccess)
+      .catch(_onError);
 
-    });
-
-    // it("should insert a new collection into the Collections table", (done) => {
-    //   request(app)
-    //     .post('/rest/collection/add')
-    //     .type('form')
-    //     .send({title: 'Test One'})
-    //     .send({areaId: '1'})
-    //     .expect(200)
-    //     .end((err, res) => {
-    //       should.not.exist(err);
-    //       res.text.should.have.string('Test One');
-    //       done()
-    //     });
-    // });
-
-    // it("should retrieve the new collection", (done) => {
-    //   request(server.app)
-    //     .get("/admin/form/collection")
-    //     .expect(200)
-    //     .expect('Content-Type', /html/)
-    //     .end((err, res) => {
-    //       should.not.exist(err);
-    //       res.text.should.have.string('Test One');
-    //       done();
-    //     });
-    // });
-    //
-    // it("should create a tag", (done)=> {
-    //   request(server.app)
-    //     .post('/admin/tag/create')
-    //     .type('form')
-    //     .send({name:'Summer'})
-    //     .expect(200)
-    //     .end((err,res) => {
-    //       should.not.exist(err);
-    //       res.text.should.have.string('Summer');
-    //       done();
-    //     });
-    // });
-    //
-    // it("should add tag to collection", (done) => {
-    //   request(server.app)
-    //     .post('/admin/collection/tag')
-    //     .type('form')
-    //     .send({collid: '1'})
-    //     .send({tagid: "1"})
-    //     .expect(302)
-    //     .end((err,res) => {
-    //       should.not.exist(err);
-    //       done();
-    //     });
-    // });
-    //
-    // it("should create a category", (done) => {
-    //   request(server.app)
-    //     .post('/admin/category/create')
-    //     .type('form')
-    //     .send({title: 'Category One'})
-    //     .send({url: 'http://localhost:3000'})
-    //     .send({description: 'This is a test Category.'})
-    //     .expect(200)
-    //     .end((err, res) => {
-    //       should.not.exist(err);
-    //       res.text.should.have.string('Category One');
-    //       done()
-    //     });
-    // });
-    //
-    // it("should update a category", (done) => {
-    //   request(server.app)
-    //     .post('/admin/category/create')
-    //     .type('form')
-    //     .send({id: '1'})
-    //     .send({title: 'Category Two'})
-    //     .send({url: 'http://localhost:3000'})
-    //     .send({description: 'This is a test Category.'})
-    //     .expect(200)
-    //     .end((err, res) =>
-    //     {
-    //       should.not.exist(err);
-    //       res.text.should.have.string('Category Two');
-    //       done()
-    //     });
-    // });
   });
+
+  it('should list four areas.', (done) => {
+
+    let _onSuccess = (areas) => {
+      expect(areas).to.be.defined;
+      expect(areas.length).to.equal(4);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    areaDao.listAllAreas()
+      .then(_onSuccess)
+      .catch(_onError);
+
+  });
+
+  it('should return the area count.', (done) => {
+
+
+    let _onSuccess = (result) => {
+      expect(result[0].dataValues.count).to.be.defined;
+      expect(result[0].dataValues.count).to.equal(4);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    areaDao
+      .getAreaCount()
+      .then(_onSuccess)
+      .catch(_onError);
+
+  });
+
+  it('should update the area with id 1.', (done) => {
+
+    let data = {
+      title: 'Updated Area',
+      url: 'http://some.url.com',
+      searchUrl: 'http:/search.com',
+      description: 'This is an updated area.',
+      linkLabel: 'Go to area'
+    };
+
+    let _onSuccess = (result) => {
+      expect(result[0]).to.equal(1);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    areaDao
+      .updateArea(data, 1)
+      .then(_onSuccess)
+      .catch(_onError);
+
+  });
+
+  it('should return area with the updated title.', (done) => {
+
+    let _onSuccess = (result) => {
+      expect(result.dataValues.title).to.equal('Updated Area');
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    areaDao
+      .findAreaById(1)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+  it('should reorder the areas.', (done) => {
+
+    let _onSuccess = (result) => {
+      expect(result).to.be.defined;
+      // The reorder function returns the area count.
+      expect(result).to.equal(4);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    areaDao
+      .reorder(reorderedAreas, 4)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+  it('should delete area with id 1.', (done) => {
+
+    let _onSuccess = (result) => {
+      expect(result).to.be.defined;
+      // Returns id of the deleted area.
+      expect(result).to.equal(1);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    areaDao
+      .deleteArea(1)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
 });
+

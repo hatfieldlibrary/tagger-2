@@ -16,7 +16,7 @@ taggerDao.retrieveAllCollections = () => {
 
 taggerDao.countCTypesByArea = (areaId) => {
 
-  taggerSchema.sequelize.query('SELECT ctype, COUNT(*) as count FROM AreaTargets ' +
+  return taggerSchema.sequelize.query('SELECT ctype, COUNT(*) as count FROM AreaTargets ' +
     'LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id ' +
     'WHERE AreaTargets.AreaId = ? GROUP BY ctype',
     {
@@ -51,7 +51,7 @@ taggerDao.repoTypeByArea = (areaId) => {
 
 taggerDao.findCollectionsInArea = (areaId) => {
 
-  return taggerDao.AreaTarget.findAll({
+  return taggerSchema.AreaTarget.findAll({
     where: {
       AreaId: areaId
     },
@@ -64,7 +64,7 @@ taggerDao.findCollectionsInArea = (areaId) => {
 
 taggerDao.findAreasForCollection = (collId) => {
 
-  return taggerDao.AreaTarget.findAll({
+  return taggerSchema.AreaTarget.findAll({
     where: {
       CollectionId: collId
     }
@@ -72,7 +72,7 @@ taggerDao.findAreasForCollection = (collId) => {
 
 };
 
-taggerDao.ItemContentTarget = (collId, typeId) => {
+taggerDao.findItemContentTarget = (collId, typeId) => {
 
   return taggerSchema.ItemContentTarget.find(
     {
@@ -295,7 +295,7 @@ taggerDao.updateCollectionImage = (collId, imageName) => {
     },
     {
       where: {
-        id: id
+        id: collId
       }
     }
   );
@@ -328,7 +328,7 @@ taggerDao.getCollectionsByArea = (areaId) => {
 taggerDao.getCollectionsBySubjectAndArea = (subjectId, areaId) => {
 
   return taggerSchema.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
-    'on tt.CollectionId = c.id LEFT JOIN AreaTargets at on c.id=at.CollectionId where tt.TagId = ? and at.AreaId = ?' +
+    'on tt.CollectionId = c.id LEFT JOIN AreaTargets at on c.id=at.CollectionId where tt.TagId = ? and at.AreaId = ? ' +
     'order by c.title',
     {
       replacements: [subjectId, areaId],

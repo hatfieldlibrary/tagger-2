@@ -15,6 +15,7 @@ taggerDao.findAll = () => {
 
 };
 
+// Seems to be collection specific.  Should it be here?
 taggerDao.categoryCountByArea = (areaId) => {
 
   return taggerSchema.sequelize.query('select Categories.title, COUNT(*) as count from AreaTargets left join ' +

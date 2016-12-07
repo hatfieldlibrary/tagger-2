@@ -27,9 +27,13 @@ taggerDao.listAllAreas = () => {
 
 taggerDao.getAreaCount = () => {
 
-  return taggerSchema.Area.findAll()
-    .then(function (currentPosition) {
-    });
+  return taggerSchema.Area.findAll(
+    {
+      attributes: [[taggerSchema.sequelize.fn('count', taggerSchema.sequelize.col('id')), 'count']],
+    },
+
+  )
+
 };
 
 taggerDao.addArea = (title, position) => {

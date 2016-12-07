@@ -101,7 +101,7 @@ exports.addTypeTarget = function (req, res) {
 
   async.series({
       check: function (callback) {
-        taggerDao.ItemContentTarget(collId, typeId).then(function (result) {
+        taggerDao.findItemContentTarget(collId, typeId).then(function (result) {
           callback(null, result);
         })
           .error(function (err) {

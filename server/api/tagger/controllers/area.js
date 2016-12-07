@@ -45,9 +45,10 @@ exports.list = function (req, res) {
 exports.add = function (req, res) {
   const title = req.body.title;
 
+  // the area count function has been changed to return the count.
   taggerDao.getAreaCount()
-    .then(function (count) {
-      taggerDao.addArea(title, count + 1)
+    .then(function (result) {
+      taggerDao.addArea(title, result.count + 1)
         .then(
           function () {
             utils.sendResponse(res, {status: 'success'});
@@ -96,7 +97,6 @@ exports.update = function (req, res) {
  * Updates area position to new value based on the
  * order of the new array passed in via POST. The new position
  * can be used to order query results for clients (order by position).
- * Requires bluebird Promise library.
  * @param req
  * @param res
  */
