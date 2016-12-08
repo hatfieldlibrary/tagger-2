@@ -14,58 +14,6 @@ const categoriesInit = [
   'Category Stub Two'
 ];
 
-const newCategoryType = 'New Category';
-
-/** Adds test areas. */
-const setupCategories = (callback,) => {
-
-
-  async.series(
-    {
-      categoryOne: (callback) => {
-        contentDao
-          .createContentType(categoriesInit[0])
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      categoryTwo: (callback) => {
-        contentDao
-          .createContentType(categoriesInit[1])
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      mockArea: (callback) => {
-        areaDao.addArea(1, 1)
-          .then(callback(null))
-          .catch((err) => callback(err))
-      },
-      mockCollection: (callback) => {
-        collectionDao.addNewCollection('mock collection')
-          .then(callback(null))
-          .catch((err) => callback(err));
-      },
-      mockContentTarget: (callback) => {
-        collectionDao.createItemContentTarget(1, 1)
-          .then(callback(null))
-          .catch((err) => callback(err))
-      },
-      mockAreaTarget: (callback) => {
-        collectionDao.addCollectionToArea(1, 1)
-          .then(callback(null))
-          .catch((err) => callback(err))
-      },
-
-    }, (err) => {
-      if (err) {
-        callback(err);
-      }
-      callback(null);
-    });
-
-};
-
 describe('Content type operations', () => {
 
 // Don't use fat arrow. We need this binding for timeout.
@@ -98,8 +46,39 @@ describe('Content type operations', () => {
             callback(err);
           });
         },
-        addAreas: (callback) => {
-          setupCategories(callback)
+        categoryOne: (callback) => {
+          contentDao
+            .createContentType(categoriesInit[0])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        categoryTwo: (callback) => {
+          contentDao
+            .createContentType(categoriesInit[1])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        mockArea: (callback) => {
+          areaDao.addArea(1, 1)
+            .then(callback(null))
+            .catch((err) => callback(err))
+        },
+        mockCollection: (callback) => {
+          collectionDao.addNewCollection('mock collection')
+            .then(callback(null))
+            .catch((err) => callback(err));
+        },
+        mockContentTarget: (callback) => {
+          collectionDao.createItemContentTarget(1, 1)
+            .then(callback(null))
+            .catch((err) => callback(err))
+        },
+        mockAreaTarget: (callback) => {
+          collectionDao.addCollectionToArea(1, 1)
+            .then(callback(null))
+            .catch((err) => callback(err))
         }
       },
       (err) => {
@@ -132,7 +111,7 @@ describe('Content type operations', () => {
 
   });
 
-  it('should create new content type.', (done) => {
+  it('should find content type by name.', (done) => {
 
     let _onSuccess = (type) => {
       expect(type).to.be.defined;
@@ -151,24 +130,6 @@ describe('Content type operations', () => {
       .catch(_onError);
 
 
-  });
-
-  it('should find content type by name.', (done) => {
-    let _onSuccess = (type) => {
-      expect(type).to.be.defined;
-      expect(type.dataValues.name).to.have.string('New Category');
-      done();
-    };
-
-    let _onError = (err) => {
-      console.log(err);
-      expect(true).to.be.false; // should not come here
-    };
-
-    contentDao
-      .createContentType(newCategoryType)
-      .then(_onSuccess)
-      .catch(_onError);
   });
 
   it('should find content type by id.', (done) => {
@@ -196,7 +157,6 @@ describe('Content type operations', () => {
 
     let _onSuccess = (type) => {
       expect(type).to.be.defined;
-      console.log(type)
       expect(type[0]).to.equal(1);
       done();
     };

@@ -9,7 +9,5 @@ export const path = {
 
 export const tasks = {
   SERVER_INTEGRATION_TEST: 'server.integration_test',
-  SET_TEST_ENVIRONMENT: 'server.set_test_evn',
-  SET_TEST_BABEL: 'sserver.set_test_babel'
 };
 

@@ -1,5 +1,5 @@
 var path = require('path'),
-  rootPath = path.normalize(__dirname + '/../app'),
+  rootPath = path.normalize(__dirname + '/../../'),
   credentials = require('./credentials');
 
 var env = process.env.NODE_ENV || 'development';
@@ -26,7 +26,7 @@ var config = {
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
-    adminPath: '/views',
+    adminPath: '/server/views',
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: 'http://localhost:3000/auth/google/callback',

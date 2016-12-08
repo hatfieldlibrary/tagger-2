@@ -5,7 +5,6 @@
 
   'use strict';
 
-  /*globals taggerServices*/
 
   /**
    * D3 service lazyloads the d3 script and

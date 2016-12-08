@@ -97,18 +97,6 @@ taggerDao.findTagByName = (name) => {
 
 };
 
-taggerDao.getSubjectsForArea = (areaId) => {
 
-  return taggerSchema.TagAreaTarget.findAll({
-    where: {
-      AreaId: areaId
-    },
-    include: [taggerSchema.Tag],
-    attributes: ['"Tags.name"', 'TagId'],
-    order: [[taggerSchema.Tag, 'name', 'ASC']]
-
-  });
-
-};
 
 module.exports = taggerDao;

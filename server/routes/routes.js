@@ -56,7 +56,7 @@ module.exports = function(app,config,passport){
   app.get('/rest/collection/:collId/remove/tag/:tagId', ensureAuthenticated, collection.removeTagTarget);
   app.get('/rest/collection/:collId/add/type/:typeId', ensureAuthenticated, collection.addTypeTarget);
   app.get('/rest/collection/:collId/remove/type/:typeId', ensureAuthenticated, collection.removeTypeTarget);
-  app.get('/rest/collection/repoTypeByArea/:areaId', ensureAuthenticated, collection.repoTypeByArea);
+  app.get('/rest/collection/repoTypeByArea/:areaId', ensureAuthenticated, collection.repoTypesByArea);
   app.get('/rest/collection/count/types/byArea/:areaId', ensureAuthenticated, collection.countCTypesByArea);
   app.get('/rest/collection/count/linkTypes/byArea/:areaId', ensureAuthenticated, collection.browseTypesByArea);
 
@@ -146,109 +146,109 @@ module.exports = function(app,config,passport){
 
 
 
-  /* Static Angularjs module routes.  Used by the Academic Commons public site. */
-  // request for partials
-
-  app.get('/partials/:name', function(req, res) {
-
-    var name = req.params.name;
-
-    res.sendFile(
-      config.root +
-      config.modulePath +
-      '/partials/'  +
-      name +
-      '.html'
-    );
-  });
-
-  app.get('/info/data/:name', function(req, res) {
-
-    var name = req.params.name;
-
-    res.sendFile(
-      config.root +
-      config.modulePath +
-      '/info/data/' +
-      name +
-      '.html'
-    );
-  });
-
-  app.get('/info/student/:name', function(req, res) {
-
-    var name = req.params.name;
-
-    res.sendFile(
-      config.root +
-      config.modulePath +
-      '/info/student/' +
-      name +
-      '.html'
-    );
-  });
-
-  app.get('/info/:name', function(req, res) {
-
-    var name = req.params.name;
-
-    res.sendFile(
-      config.root +
-      config.modulePath +
-      '/info/' +
-      name +
-      '.html'
-    );
-  });
-
-  // requests for an angular directive template.
-  app.get('/components/:name', function(req, res) {
-
-    var name = req.params.name;
-
-    res.sendFile(
-      config.root +
-      config.modulePath +
-      '/components/' +
-      name
-    );
-  });
-
-
-  app.get('/commons/error/:name', function(req, res) {
-
-    var name = req.params.name;
-
-      res.sendFile(
-        config.root +
-        config.modulePath +
-        '/error/' +
-        name +
-        '.html'
-      );
-  });
-
-  // This catch-all is required by html5mode.
-  app.get('/commons', function(req, res) {
-
-    res.sendFile(
-      config.root +
-      config.modulePath +
-      '/index.html'
-    );
-  });
-
-  // This catch-all is required by html5mode.
-  app.get('/commons/*', function(req, res) {
-
-    res.sendFile(
-      config.root +
-      config.modulePath +
-      '/index.html'
-    );
-  });
-
-
+  // /* Static Angularjs module routes.  Used by the Academic Commons public site. */
+  // // request for partials
+  //
+  // app.get('/partials/:name', function(req, res) {
+  //
+  //   var name = req.params.name;
+  //
+  //   res.sendFile(
+  //     config.root +
+  //     config.modulePath +
+  //     '/partials/'  +
+  //     name +
+  //     '.html'
+  //   );
+  // });
+  //
+  // app.get('/info/data/:name', function(req, res) {
+  //
+  //   var name = req.params.name;
+  //
+  //   res.sendFile(
+  //     config.root +
+  //     config.modulePath +
+  //     '/info/data/' +
+  //     name +
+  //     '.html'
+  //   );
+  // });
+  //
+  // app.get('/info/student/:name', function(req, res) {
+  //
+  //   var name = req.params.name;
+  //
+  //   res.sendFile(
+  //     config.root +
+  //     config.modulePath +
+  //     '/info/student/' +
+  //     name +
+  //     '.html'
+  //   );
+  // });
+  //
+  // app.get('/info/:name', function(req, res) {
+  //
+  //   var name = req.params.name;
+  //
+  //   res.sendFile(
+  //     config.root +
+  //     config.modulePath +
+  //     '/info/' +
+  //     name +
+  //     '.html'
+  //   );
+  // });
+  //
+  // // requests for an angular directive template.
+  // app.get('/components/:name', function(req, res) {
+  //
+  //   var name = req.params.name;
+  //
+  //   res.sendFile(
+  //     config.root +
+  //     config.modulePath +
+  //     '/components/' +
+  //     name
+  //   );
+  // });
+  //
+  //
+  // app.get('/commons/error/:name', function(req, res) {
+  //
+  //   var name = req.params.name;
+  //
+  //     res.sendFile(
+  //       config.root +
+  //       config.modulePath +
+  //       '/error/' +
+  //       name +
+  //       '.html'
+  //     );
+  // });
+  //
+  // // This catch-all is required by html5mode.
+  // app.get('/commons', function(req, res) {
+  //
+  //   res.sendFile(
+  //     config.root +
+  //     config.modulePath +
+  //     '/index.html'
+  //   );
+  // });
+  //
+  // // This catch-all is required by html5mode.
+  // app.get('/commons/*', function(req, res) {
+  //
+  //   res.sendFile(
+  //     config.root +
+  //     config.modulePath +
+  //     '/index.html'
+  //   );
+  // });
+  //
+  //
 
 };
 

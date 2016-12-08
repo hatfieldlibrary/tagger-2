@@ -50,145 +50,7 @@ const updateCollectionData = {
 
 };
 
-/** Adds test areas. */
-const areasSetup = (callback,) => {
-
-  let count = 2;
-
-  async.series(
-    {
-      areaOne: (callback) => {
-        areaDao
-          .addArea(initAreas[0], count++)
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      areaTwo: (callback) => {
-        areaDao
-          .addArea(initAreas[1], count++)
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      }
-    }, (err) => {
-      if (err) {
-        callback(err);
-      }
-      callback(null);
-    });
-};
-
-
-/** Adds test areas. */
-const categoriesSetup = (callback,) => {
-
-  async.series(
-    {
-      catOne: (callback) => {
-        categoryDao
-          .add(initCategories[0])
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      catTwo: (callback) => {
-        categoryDao
-          .add(initCategories[1])
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      }
-    }, (err) => {
-      if (err) {
-        callback(err);
-      }
-      callback(null);
-    });
-};
-
-
-/** Adds test areas. */
-const tagsSetup = (callback,) => {
-
-  async.series(
-    {
-      tagOne: (callback) => {
-        tagDao
-          .createTag(initTags[0])
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      tagTwo: (callback) => {
-        tagDao
-          .createTag(initTags[1])
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      }
-    }, (err) => {
-      if (err) {
-        callback(err);
-      }
-      callback(null);
-    });
-};
-
-/** Adds content types. */
-const typesSetup = (callback,) => {
-
-  async.series(
-    {
-      typeOne: (callback) => {
-        typeDao
-          .createContentType(initTypes[0])
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      typeTwo: (callback) => {
-        typeDao
-          .createContentType(initTypes[1])
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      }
-    }, (err) => {
-      if (err) {
-        callback(err);
-      }
-      callback(null);
-    });
-
-};
-
-/** Adds content types. */
-const collectionsSetup = (callback,) => {
-
-  async.series(
-    {
-      collOne: (callback) => {
-        collectionDao
-          .addNewCollection(initCollections[0])
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      collTwo: (callback) => {
-        collectionDao
-          .addNewCollection(initCollections[1])
-          .then(callback(null))
-          .catch((err) => callback(err));
-      }
-    }, (err) => {
-      if (err) {
-        callback(err);
-      }
-      callback(null);
-    });
-
-};
+let count = 2;
 
 describe('Collection operations', () => {
 
@@ -222,20 +84,74 @@ describe('Collection operations', () => {
             callback(err);
           });
         },
-        addAreas: (callback) => {
-          areasSetup(callback);
+        areaOne: (callback) => {
+          areaDao
+            .addArea(initAreas[0], count++)
+            .then(callback(null))
+            .catch((err) => callback(err));
+
         },
-        addCategories: (callback) => {
-          categoriesSetup(callback);
+        areaTwo: (callback) => {
+          areaDao
+            .addArea(initAreas[1], count++)
+            .then(callback(null))
+            .catch((err) => callback(err));
+
         },
-        addTypes: (callback) => {
-          typesSetup(callback);
+        catOne: (callback) => {
+          categoryDao
+            .add(initCategories[0])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
         },
-        addTags: (callback) => {
-          tagsSetup(callback);
+        catTwo: (callback) => {
+          categoryDao
+            .add(initCategories[1])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
         },
-        addCollection: (callback) => {
-          collectionsSetup(callback);
+        typeOne: (callback) => {
+          typeDao
+            .createContentType(initTypes[0])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        typeTwo: (callback) => {
+          typeDao
+            .createContentType(initTypes[1])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        tagOne: (callback) => {
+          tagDao
+            .createTag(initTags[0])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        tagTwo: (callback) => {
+          tagDao
+            .createTag(initTags[1])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        collOne: (callback) => {
+          collectionDao
+            .addNewCollection(initCollections[0])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        collTwo: (callback) => {
+          collectionDao
+            .addNewCollection(initCollections[1])
+            .then(callback(null))
+            .catch((err) => callback(err));
         }
       },
       (err) => {
@@ -246,6 +162,7 @@ describe('Collection operations', () => {
         }
       })
   });
+
 
   it('should list three collections.', (done) => {
 
@@ -266,32 +183,12 @@ describe('Collection operations', () => {
       .catch(_onError);
   });
 
-  it('should add a new collection', (done) => {
-
-    let _onSuccess = (collection) => {
-
-      expect(collection).to.be.defined;
-      expect(collection.dataValues.title).to.have.string('New Collection');
-      // check for default image value.
-      expect(collection.dataValues.image).to.have.string('no_image.gif');
-      done();
-    };
-
-    let _onError = (err) => {
-      console.log(err);
-      expect(true).to.be.false; // should not come here
-    };
-
-    collectionDao.addNewCollection('New Collection')
-      .then(_onSuccess)
-      .catch(_onError);
-  });
 
   it('should add collection to area one', (done) => {
 
     let _onSuccess = (collection) => {
       expect(collection).to.be.defined;
-      expect(collection.dataValues.CollectionId).to.equal(3);
+      expect(collection.dataValues.CollectionId).to.equal(2);
       expect(collection.dataValues.AreaId).to.equal(1);
       done();
     };
@@ -301,7 +198,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.addCollectionToArea(3, 1)
+    collectionDao.addCollectionToArea(2, 1)
       .then(_onSuccess)
       .catch(_onError);
 
@@ -366,7 +263,7 @@ describe('Collection operations', () => {
   it('should retrieve all collections', (done) => {
     let _onSuccess = (collections) => {
       expect(collections).to.be.defined;
-      expect(collections[2].dataValues.title).to.have.string('New Collection');
+      expect(collections[1].dataValues.title).to.have.string('Init Collection Two');
       // expect(collection.dataValues.TagId).to.equal(1);
       done();
     };
@@ -381,7 +278,7 @@ describe('Collection operations', () => {
       .catch(_onError);
   });
 
-  it('should update collection with id 3', (done) => {
+  it('should update collection with id 2', (done) => {
     let _onSuccess = (collection) => {
       expect(collection).to.be.defined;
       expect(collection[0]).to.equal(1);
@@ -393,7 +290,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.updateCollection(updateCollectionData, 3)
+    collectionDao.updateCollection(updateCollectionData, 2)
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -456,7 +353,7 @@ describe('Collection operations', () => {
   it('should find collections in area 1', (done) => {
     let _onSuccess = (collections) => {
       expect(collections).to.be.defined;
-      expect(collections[0].dataValues.CollectionId).to.equal(3);
+      expect(collections[0].dataValues.CollectionId).to.equal(2);
       done();
     };
 
@@ -470,7 +367,7 @@ describe('Collection operations', () => {
       .catch(_onError);
   });
 
-  it('should find areas for collection 3', (done) => {
+  it('should find areas for collection 2', (done) => {
     let _onSuccess = (areas) => {
       expect(areas).to.be.defined;
       expect(areas[0].dataValues.AreaId).to.equal(1);
@@ -482,7 +379,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findAreasForCollection(3)
+    collectionDao.findAreasForCollection(2)
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -549,7 +446,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getAreaIdsForCollection(3)
+    collectionDao.getAreaIdsForCollection(2)
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -565,7 +462,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.checkAreaAssociation(3, 1)
+    collectionDao.checkAreaAssociation(2, 1)
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -573,7 +470,7 @@ describe('Collection operations', () => {
   it('should find collection by collection id', (done) => {
     let _onSuccess = (collection) => {
       expect(collection).to.be.defined;
-     expect(collection.dataValues.title).to.have.string('Updated Collection');
+      expect(collection.dataValues.title).to.have.string('Updated Collection');
       done();
     };
 
@@ -581,7 +478,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findCollectionById(3)
+    collectionDao.findCollectionById(2)
       .then(_onSuccess)
       .catch(_onError)
   });
@@ -606,7 +503,7 @@ describe('Collection operations', () => {
   it('should update the collection category.', (done) => {
     let _onSuccess = (category) => {
       expect(category).to.be.defined;
-     expect(category[0]).to.equal(1);
+      expect(category[0]).to.equal(1);
       done();
     };
 
@@ -614,7 +511,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.updateCollectionCategory(1,2)
+    collectionDao.updateCollectionCategory(1, 2)
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -630,7 +527,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.updateCollectionImage(1,'image_for_coll_1.jpg')
+    collectionDao.updateCollectionImage(1, 'image_for_coll_1.jpg')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -680,7 +577,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsBySubjectAndArea(1,1)
+    collectionDao.getCollectionsBySubjectAndArea(1, 1)
       .then(_onSuccess)
       .catch(_onError);
   });

@@ -47,72 +47,7 @@ const initAreas = [
   'Area Two'
 ];
 
-/** Adds test areas. */
-const areasSetup = (callback,) => {
-
-  let count = 2;
-
-  async.series(
-    {
-      areaOne: (callback) => {
-        areaDao
-          .addArea(initAreas[0], count++)
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      areaTwo: (callback) => {
-        areaDao
-          .addArea(initAreas[1], count++)
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      }
-    }, (err) => {
-      if (err) {
-        callback(err);
-      }
-      callback(null);
-    });
-
-};
-
-/** Adds test areas. */
-const categoriesSetup = (callback,) => {
-
-  let count = 2;
-
-  async.series(
-    {
-      catOne: (callback) => {
-        categoryDao
-          .add(initCategories[0], count++)
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      catTwo: (callback) => {
-        categoryDao
-          .add(initCategories[1], count++)
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      catThree: (callback) => {
-        categoryDao
-          .add(initCategories[2], count++)
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      }
-    }, (err) => {
-      if (err) {
-        callback(err);
-      }
-      callback(null);
-    });
-
-};
+let count = 2;
 
 
 describe('Category operations', () => {
@@ -147,11 +82,40 @@ describe('Category operations', () => {
             callback(err);
           });
         },
-        addAreas: (callback) => {
-          areasSetup(callback);
+        areaOne: (callback) => {
+          areaDao
+            .addArea(initAreas[0], count++)
+            .then(callback(null))
+            .catch((err) => callback(err));
+
         },
-        addCategories: (callback) => {
-          categoriesSetup(callback);
+        areaTwo: (callback) => {
+          areaDao
+            .addArea(initAreas[1], count++)
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        catOne: (callback) => {
+          categoryDao
+            .add(initCategories[0])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        catTwo: (callback) => {
+          categoryDao
+            .add(initCategories[1])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        catThree: (callback) => {
+          categoryDao
+            .add(initCategories[2])
+            .then(callback(null))
+            .catch((err) => callback(err));
+
         }
       },
       (err) => {
@@ -260,26 +224,7 @@ describe('Category operations', () => {
       .catch(_onError);
   });
 
-  it('should add a new category', (done) => {
-    let _onSuccess = (category) => {
-      expect(category).to.be.defined;
-      expect(category.dataValues.title).to.have.string('New Category');
-
-      newCategoryId = category.dataValues.id;
-      done();
-    };
-
-    let _onError = (err) => {
-      console.log(err);
-      expect(true).to.be.false; // should not come here
-    };
-
-    categoryDao.add('New Category')
-      .then(_onSuccess)
-      .catch(_onError);
-  });
-
-  it('should delete category just added', (done) => {
+  it('should delete category 1', (done) => {
 
     let _onSuccess = (category) => {
       expect(category).to.be.defined;
@@ -292,7 +237,7 @@ describe('Category operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    categoryDao.delete(newCategoryId)
+    categoryDao.delete(1)
       .then(_onSuccess)
       .catch(_onError);
   });

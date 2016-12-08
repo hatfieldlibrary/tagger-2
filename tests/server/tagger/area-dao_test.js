@@ -33,43 +33,7 @@ const reorderedAreas = [
 
 ];
 
-/** Adds test areas. */
-const areasSetup = (callback,) => {
-
-  let count = 2;
-
-  async.series(
-    {
-      areaOne: (callback) => {
-        areaDao
-          .addArea(areas[0], count++)
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      areaTwo: (callback) => {
-        areaDao
-          .addArea(areas[1], count++)
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      },
-      areaThree: (callback) => {
-        areaDao
-          .addArea(areas[2], count++)
-          .then(callback(null))
-          .catch((err) => callback(err));
-
-      }
-    }, (err) => {
-      if (err) {
-        callback(err);
-      }
-      callback(null);
-    });
-
-};
-
+let count = 2;
 
 describe('Area operations', () => {
 
@@ -103,8 +67,26 @@ describe('Area operations', () => {
             callback(err);
           });
         },
-        addAreas: (callback) => {
-          areasSetup(callback)
+        areaOne: (callback) => {
+          areaDao
+            .addArea(areas[0], count++)
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        areaTwo: (callback) => {
+          areaDao
+            .addArea(areas[1], count++)
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        areaThree: (callback) => {
+          areaDao
+            .addArea(areas[2], count++)
+            .then(callback(null))
+            .catch((err) => callback(err));
+
         }
       },
       (err) => {
@@ -116,33 +98,11 @@ describe('Area operations', () => {
       })
   });
 
-
-
-  it('should create a new area.', (done) => {
-
-    let _onSuccess = (area) => {
-      expect(area).to.be.defined;
-      expect(area.dataValues.title).to.have.string('New Area One');
-      done();
-    };
-
-    let _onError = (err) => {
-      console.log(err);
-      expect(true).to.be.false; // should not come here
-    };
-
-    areaDao
-      .addArea('New Area One', '1')
-      .then(_onSuccess)
-      .catch(_onError);
-
-  });
-
-  it('should list four areas.', (done) => {
+  it('should list three areas.', (done) => {
 
     let _onSuccess = (areas) => {
       expect(areas).to.be.defined;
-      expect(areas.length).to.equal(4);
+      expect(areas.length).to.equal(3);
       done();
     };
 
@@ -162,7 +122,7 @@ describe('Area operations', () => {
 
     let _onSuccess = (result) => {
       expect(result[0].dataValues.count).to.be.defined;
-      expect(result[0].dataValues.count).to.equal(4);
+      expect(result[0].dataValues.count).to.equal(3);
       done();
     };
 

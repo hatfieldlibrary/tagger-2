@@ -6,7 +6,7 @@ module.exports = function(sequelize, DataTypes) {
     sequelize.define('TagAreaTarget',
     {
       id: {
-        type: DataTypes.INTEGER(5),
+        type: DataTypes.INTEGER(4),
         primaryKey: true,
         autoIncrement: true
       }

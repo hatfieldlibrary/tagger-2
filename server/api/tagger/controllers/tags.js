@@ -156,7 +156,7 @@ exports.delete = function (req, res) {
 exports.subjectsByArea = function (req, res) {
   const id = req.params.id;
 
-  taggerDao.getSubjectsForArea(id).then(function (tags) {
+  taggerDao.findTagsInArea(id).then(function (tags) {
     utils.sendResponse(res, tags);
   }).catch(function (err) {
     console.log(err);

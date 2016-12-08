@@ -30,9 +30,7 @@ taggerDao.getAreaCount = () => {
   return taggerSchema.Area.findAll(
     {
       attributes: [[taggerSchema.sequelize.fn('count', taggerSchema.sequelize.col('id')), 'count']],
-    },
-
-  )
+    });
 
 };
 
