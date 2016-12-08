@@ -35,94 +35,50 @@ const reorderedAreas = [
 
 let count = 2;
 
-describe('Area operations', () => {
+describe('Area creation', () => {
 
   // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
     this.timeout(5000);
     async.series(
-      {
-        removeChecks: (callback) => {
+      [
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then( () => {
+            .then(() => {
               callback(null);
             }).catch(function (err) {
             console.log(err);
           });
         },
-        syncDb: (callback) => {
+        (callback) => {
           db.sequelize.sync({force: true})
-            .then( () => {
+            .then(() => {
               callback(null);
-            }).catch(function (err) {
+            }).catch((err) => {
             callback(err);
           });
         },
-        addChecks: (callback) => {
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
               callback(null,);
-            }).catch(function (err) {
+            }).catch((err) => {
             callback(err);
           });
-        },
-        areaOne: (callback) => {
-          areaDao
-            .addArea(areas[0], count++)
-            .then(callback(null))
-            .catch((err) => callback(err));
-
-        },
-        areaTwo: (callback) => {
-          areaDao
-            .addArea(areas[1], count++)
-            .then(callback(null))
-            .catch((err) => callback(err));
-
-        },
-        areaThree: (callback) => {
-          areaDao
-            .addArea(areas[2], count++)
-            .then(callback(null))
-            .catch((err) => callback(err));
-
         }
-      },
-      (err) => {
+      ], (err) => {
         if (err) {
           console.log(err);
         } else {
           done();
         }
-      })
+      });
   });
 
-  it('should list three areas.', (done) => {
-
-    let _onSuccess = (areas) => {
-      expect(areas).to.be.defined;
-      expect(areas.length).to.equal(3);
-      done();
-    };
-
-    let _onError = (err) => {
-      console.log(err);
-      expect(true).to.be.false; // should not come here
-    };
-
-    areaDao.listAllAreas()
-      .then(_onSuccess)
-      .catch(_onError);
-
-  });
-
-  it('should return the area count.', (done) => {
-
-
+  it('should add area.', (done) => {
     let _onSuccess = (result) => {
-      expect(result[0].dataValues.count).to.be.defined;
-      expect(result[0].dataValues.count).to.equal(3);
+      expect(result.dataValues.title).to.equal(areas[0]);
       done();
     };
 
@@ -132,10 +88,94 @@ describe('Area operations', () => {
     };
 
     areaDao
-      .getAreaCount()
+      .addArea(areas[0],1)
       .then(_onSuccess)
       .catch(_onError);
+  });
 
+  it('should delete area with id 1.', (done) => {
+
+    let _onSuccess = (result) => {
+      expect(result).to.be.defined;
+      // Returns id of the deleted area.
+      expect(result).to.equal(1);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    areaDao
+      .deleteArea(1)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+});
+
+describe('Area operations', () => {
+
+  // Don't use fat arrow. We need this binding for timeout.
+  before(function (done) {
+
+    this.timeout(6000);
+    async.series(
+      [
+        (callback) => {
+          db.sequelize.query('SET foreign_key_checks = 0')
+            .then(() => {
+              callback(null);
+            }).catch(function (err) {
+              console.log(err);
+            });
+        },
+        (callback) => {
+          db.sequelize.sync({force: true})
+            .then(() => {
+              callback(null);
+            }).catch((err) => {
+            callback(err);
+          });
+        },
+        (callback) => {
+          db.sequelize.query('SET foreign_key_checks = 1')
+            .then(() => {
+              callback(null,);
+            }).catch((err) => {
+            callback(err);
+          });
+        },
+        (callback) => {
+          areaDao
+            .addArea(areas[0], count++)
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        (callback) => {
+          areaDao
+            .addArea(areas[1], count++)
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        },
+        (callback) => {
+          areaDao
+            .addArea(areas[2], count++)
+            .then(callback(null))
+            .catch((err) => callback(err));
+
+        }
+      ],
+      (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          done();
+        }
+      });
   });
 
   it('should update the area with id 1.', (done) => {
@@ -203,12 +243,31 @@ describe('Area operations', () => {
       .catch(_onError);
   });
 
-  it('should delete area with id 1.', (done) => {
+  it('should list three areas.', (done) => {
+
+    let _onSuccess = (areas) => {
+      expect(areas).to.be.defined;
+      expect(areas.length).to.equal(3);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    areaDao.listAllAreas()
+      .then(_onSuccess)
+      .catch(_onError);
+
+  });
+
+  it('should return the area count.', (done) => {
+
 
     let _onSuccess = (result) => {
-      expect(result).to.be.defined;
-      // Returns id of the deleted area.
-      expect(result).to.equal(1);
+      expect(result[0].dataValues.count).to.be.defined;
+      expect(result[0].dataValues.count).to.equal(3);
       done();
     };
 
@@ -218,9 +277,10 @@ describe('Area operations', () => {
     };
 
     areaDao
-      .deleteArea(1)
+      .getAreaCount()
       .then(_onSuccess)
       .catch(_onError);
+
   });
 
 });

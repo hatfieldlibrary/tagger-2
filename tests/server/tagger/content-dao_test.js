@@ -14,15 +14,18 @@ const categoriesInit = [
   'Category Stub Two'
 ];
 
-describe('Content type operations', () => {
+const newTypeTitle = 'new category';
 
-// Don't use fat arrow. We need this binding for timeout.
+
+describe('Content type creation', () => {
+
+  // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
     this.timeout(5000);
     async.series(
-      {
-        removeChecks: (callback) => {
+      [
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
             .then(() => {
               callback(null);
@@ -30,7 +33,88 @@ describe('Content type operations', () => {
             console.log(err);
           });
         },
-        syncDb: (callback) => {
+        (callback) => {
+          db.sequelize.sync({force: true})
+            .then(() => {
+              callback(null);
+            }).catch((err) => {
+            callback(err);
+          });
+        },
+        (callback) => {
+          db.sequelize.query('SET foreign_key_checks = 1')
+            .then(() => {
+              callback(null,);
+            }).catch((err) => {
+            callback(err);
+          });
+        }
+      ], (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          done();
+        }
+      });
+  });
+
+
+  it('should add content type.', (done) => {
+    let _onSuccess = (result) => {
+      expect(result.dataValues.name).to.equal(newTypeTitle);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    contentDao
+      .createContentType(newTypeTitle)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+  it('should delete content type with id 1.', (done) => {
+
+    let _onSuccess = (result) => {
+      expect(result).to.be.defined;
+      expect(result).to.equal(1);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    contentDao
+      .deleteContentType(1)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+});
+
+
+describe('Content type operations', () => {
+
+// Don't use fat arrow. We need this binding for timeout.
+  before(function (done) {
+
+    this.timeout(5000);
+    async.series(
+      [
+        (callback) => {
+          db.sequelize.query('SET foreign_key_checks = 0')
+            .then(() => {
+              callback(null);
+            }).catch(function (err) {
+            console.log(err);
+          });
+        },
+        (callback) => {
           db.sequelize.sync({force: true})
             .then(() => {
               callback(null);
@@ -38,7 +122,7 @@ describe('Content type operations', () => {
             callback(err);
           });
         },
-        addChecks: (callback) => {
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
               callback(null,);
@@ -46,41 +130,41 @@ describe('Content type operations', () => {
             callback(err);
           });
         },
-        categoryOne: (callback) => {
+        (callback) => {
           contentDao
             .createContentType(categoriesInit[0])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        categoryTwo: (callback) => {
+        (callback) => {
           contentDao
             .createContentType(categoriesInit[1])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        mockArea: (callback) => {
+        (callback) => {
           areaDao.addArea(1, 1)
             .then(callback(null))
             .catch((err) => callback(err))
         },
-        mockCollection: (callback) => {
+        (callback) => {
           collectionDao.addNewCollection('mock collection')
             .then(callback(null))
             .catch((err) => callback(err));
         },
-        mockContentTarget: (callback) => {
+        (callback) => {
           collectionDao.createItemContentTarget(1, 1)
             .then(callback(null))
             .catch((err) => callback(err))
         },
-        mockAreaTarget: (callback) => {
+        (callback) => {
           collectionDao.addCollectionToArea(1, 1)
             .then(callback(null))
             .catch((err) => callback(err))
         }
-      },
+      ],
       (err) => {
         if (err) {
           console.log(err);
@@ -188,24 +272,6 @@ describe('Content type operations', () => {
 
     contentDao
       .getAreaContentTypeSummary(1)
-      .then(_onSuccess)
-      .catch(_onError);
-  });
-
-  it('should delete content type.', (done) => {
-    let _onSuccess = (type) => {
-      expect(type).to.be.defined;
-      expect(type).to.equal(1);
-      done();
-    };
-
-    let _onError = (err) => {
-      console.log(err);
-      expect(true).to.be.false; // should not come here
-    };
-
-    contentDao
-      .deleteContentType(1)
       .then(_onSuccess)
       .catch(_onError);
   });

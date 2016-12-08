@@ -52,15 +52,13 @@ const updateCollectionData = {
 
 let count = 2;
 
-describe('Collection operations', () => {
+describe('Collection init', () => {
 
-  // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
-
-    this.timeout(11000);
+    this.timeout(7000);
     async.series(
-      {
-        removeChecks: (callback) => {
+      [
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
             .then(() => {
               callback(null);
@@ -68,7 +66,7 @@ describe('Collection operations', () => {
             console.log(err);
           });
         },
-        syncDb: (callback) => {
+        (callback) => {
           db.sequelize.sync({force: true})
             .then(() => {
               callback(null);
@@ -76,7 +74,69 @@ describe('Collection operations', () => {
             callback(err);
           });
         },
-        addChecks: (callback) => {
+        (callback) => {
+          db.sequelize.query('SET foreign_key_checks = 1')
+            .then(() => {
+              callback(null,);
+            }).catch(function (err) {
+            callback(err);
+          });
+        }
+      ], (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          done();
+        }
+      });
+  });
+
+  it('should create a collection.', (done) => {
+
+    let _onSuccess = (collection) => {
+
+      expect(collection).to.be.defined;
+      expect(collection.dataValues.title).to.have.string(initCollections[0]);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    collectionDao.addNewCollection(initCollections[0])
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+});
+
+describe('Collection operations', () => {
+
+  // Don't use fat arrow. We need this binding for timeout.
+  before(function (done) {
+
+    this.timeout(11000);
+    async.series(
+      [
+        (callback) => {
+          db.sequelize.query('SET foreign_key_checks = 0')
+            .then(() => {
+              callback(null);
+            }).catch(function (err) {
+            console.log(err);
+          });
+        },
+        (callback) => {
+          db.sequelize.sync({force: true})
+            .then(() => {
+              callback(null);
+            }).catch(function (err) {
+            callback(err);
+          });
+        },
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
               callback(null,);
@@ -84,83 +144,83 @@ describe('Collection operations', () => {
             callback(err);
           });
         },
-        areaOne: (callback) => {
+        (callback) => {
           areaDao
             .addArea(initAreas[0], count++)
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        areaTwo: (callback) => {
+        (callback) => {
           areaDao
             .addArea(initAreas[1], count++)
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        catOne: (callback) => {
+        (callback) => {
           categoryDao
             .add(initCategories[0])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        catTwo: (callback) => {
+        (callback) => {
           categoryDao
             .add(initCategories[1])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        typeOne: (callback) => {
+        (callback) => {
           typeDao
             .createContentType(initTypes[0])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        typeTwo: (callback) => {
+        (callback) => {
           typeDao
             .createContentType(initTypes[1])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        tagOne: (callback) => {
+        (callback) => {
           tagDao
             .createTag(initTags[0])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        tagTwo: (callback) => {
+        (callback) => {
           tagDao
             .createTag(initTags[1])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        collOne: (callback) => {
+        (callback) => {
           collectionDao
             .addNewCollection(initCollections[0])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        collTwo: (callback) => {
+        (callback) => {
           collectionDao
             .addNewCollection(initCollections[1])
             .then(callback(null))
             .catch((err) => callback(err));
         }
-      },
+      ],
       (err) => {
         if (err) {
           console.log(err);
         } else {
           done();
         }
-      })
+      });
   });
 
 
@@ -264,7 +324,6 @@ describe('Collection operations', () => {
     let _onSuccess = (collections) => {
       expect(collections).to.be.defined;
       expect(collections[1].dataValues.title).to.have.string('Init Collection Two');
-      // expect(collection.dataValues.TagId).to.equal(1);
       done();
     };
 

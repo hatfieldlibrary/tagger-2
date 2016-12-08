@@ -21,15 +21,15 @@ const initTags = [
 
 let count = 1;
 
-describe('Tag operations', () => {
+describe('Tag creation', () => {
 
   // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(6000);
+    this.timeout(5000);
     async.series(
-      {
-        removeChecks: (callback) => {
+      [
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
             .then(() => {
               callback(null);
@@ -37,7 +37,88 @@ describe('Tag operations', () => {
             console.log(err);
           });
         },
-        syncDb: (callback) => {
+        (callback) => {
+          db.sequelize.sync({force: true})
+            .then(() => {
+              callback(null);
+            }).catch((err) => {
+            callback(err);
+          });
+        },
+        (callback) => {
+          db.sequelize.query('SET foreign_key_checks = 1')
+            .then(() => {
+              callback(null,);
+            }).catch((err) => {
+            callback(err);
+          });
+        }
+      ], (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          done();
+        }
+      });
+  });
+
+
+  it('should add tag.', (done) => {
+    let _onSuccess = (result) => {
+      expect(result.dataValues.name).to.equal(initTags[0]);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    tagDao
+      .createTag(initTags[0])
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+  it('should delete tag with id 1.', (done) => {
+
+    let _onSuccess = (result) => {
+      expect(result).to.be.defined;
+      // Returns id of the deleted area.
+      expect(result).to.equal(1);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    tagDao
+      .deleteTag(1)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+});
+
+describe('Tag operations', () => {
+
+  // Don't use fat arrow. We need this binding for timeout.
+  before(function (done) {
+
+    this.timeout(7000);
+    async.series(
+      [
+        (callback) => {
+          db.sequelize.query('SET foreign_key_checks = 0')
+            .then(() => {
+              callback(null);
+            }).catch(function (err) {
+            console.log(err);
+          });
+        },
+        (callback) => {
           db.sequelize.sync({force: true})
             .then(() => {
               callback(null);
@@ -45,7 +126,7 @@ describe('Tag operations', () => {
             callback(err);
           });
         },
-        addChecks: (callback) => {
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
               callback(null,);
@@ -53,50 +134,50 @@ describe('Tag operations', () => {
             callback(err);
           });
         },
-        tagOne: (callback) => {
+        (callback) => {
           tagDao
             .createTag(initTags[0])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        tagTwo: (callback) => {
+        (callback) => {
           tagDao
             .createTag(initTags[1])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        areaOne: (callback) => {
+        (callback) => {
           areaDao
             .addArea(initAreas[0], count++)
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        areaTwo: (callback) => {
+        (callback) => {
           areaDao
             .addArea(initAreas[1], count++)
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        mockCollection: (callback) => {
+        (callback) => {
           collectionDao.addNewCollection('mock collection')
             .then(callback(null))
             .catch((err) => callback(err))
         },
-        mockTagAreaTarget: (callback) => {
+        (callback) => {
           targetDao.addTagToArea(1, 1)
             .then(callback(null))
             .catch((err) => callback(err))
         },
-        mockTagTarget: (callback) => {
+        (callback) => {
           collectionDao.addTagTarget(1, 1)
             .then(callback(null))
             .catch((err) => callback(err))
         }
-      },
+      ],
       (err) => {
         if (err) {
           console.log(err);
@@ -211,21 +292,5 @@ describe('Tag operations', () => {
       .catch(_onError);
   });
 
-  it('should delete tag one', (done) => {
-    let _onSuccess = (tag) => {
-      expect(tag).to.be.defined;
-      expect(tag).to.equal(1);
-      done();
-    };
-
-    let _onError = (err) => {
-      console.log(err);
-      expect(true).to.be.false; // should not come here
-    };
-
-    tagDao.deleteTag(1)
-      .then(_onSuccess)
-      .catch(_onError);
-  });
 
 });

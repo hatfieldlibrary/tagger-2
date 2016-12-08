@@ -50,15 +50,15 @@ const initAreas = [
 let count = 2;
 
 
-describe('Category operations', () => {
+describe('Category creation', () => {
 
   // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(6000);
+    this.timeout(5000);
     async.series(
-      {
-        removeChecks: (callback) => {
+      [
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
             .then(() => {
               callback(null);
@@ -66,7 +66,91 @@ describe('Category operations', () => {
             console.log(err);
           });
         },
-        syncDb: (callback) => {
+        (callback) => {
+          db.sequelize.sync({force: true})
+            .then(() => {
+              callback(null);
+            }).catch((err) => {
+            callback(err);
+          });
+        },
+        (callback) => {
+          db.sequelize.query('SET foreign_key_checks = 1')
+            .then(() => {
+              callback(null,);
+            }).catch((err) => {
+            callback(err);
+          });
+        }
+      ], (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          done();
+        }
+      });
+  });
+
+
+  it('should add category.', (done) => {
+    let _onSuccess = (result) => {
+      expect(result.dataValues.title).to.equal(initCategories[0]);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    categoryDao
+      .add(initCategories[0])
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+  it('should delete category with id 1.', (done) => {
+
+    let _onSuccess = (result) => {
+      expect(result).to.be.defined;
+      // Returns id of the deleted area.
+      expect(result).to.equal(1);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    categoryDao
+      .delete(1)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+});
+
+
+
+
+describe('Category operations', () => {
+
+  // Don't use fat arrow. We need this binding for timeout.
+  before(function (done) {
+
+    this.timeout(6000);
+    async.series(
+      [
+        (callback) => {
+          db.sequelize.query('SET foreign_key_checks = 0')
+            .then(() => {
+              callback(null);
+            }).catch(function (err) {
+            console.log(err);
+          });
+        },
+        (callback) => {
           db.sequelize.sync({force: true})
             .then(() => {
               callback(null);
@@ -74,7 +158,7 @@ describe('Category operations', () => {
             callback(err);
           });
         },
-        addChecks: (callback) => {
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
               callback(null,);
@@ -82,42 +166,42 @@ describe('Category operations', () => {
             callback(err);
           });
         },
-        areaOne: (callback) => {
+        (callback) => {
           areaDao
             .addArea(initAreas[0], count++)
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        areaTwo: (callback) => {
+        (callback) => {
           areaDao
             .addArea(initAreas[1], count++)
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        catOne: (callback) => {
+        (callback) => {
           categoryDao
             .add(initCategories[0])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        catTwo: (callback) => {
+        (callback) => {
           categoryDao
             .add(initCategories[1])
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        catThree: (callback) => {
+        (callback) => {
           categoryDao
             .add(initCategories[2])
             .then(callback(null))
             .catch((err) => callback(err));
 
         }
-      },
+      ],
       (err) => {
         if (err) {
           console.log(err);
@@ -223,25 +307,6 @@ describe('Category operations', () => {
       .then(_onSuccess)
       .catch(_onError);
   });
-
-  it('should delete category 1', (done) => {
-
-    let _onSuccess = (category) => {
-      expect(category).to.be.defined;
-      expect(category).to.equal(1);
-      done();
-    };
-
-    let _onError = (err) => {
-      console.log(err);
-      expect(true).to.be.false; // should not come here
-    };
-
-    categoryDao.delete(1)
-      .then(_onSuccess)
-      .catch(_onError);
-  });
-
 
 
 });

@@ -14,10 +14,10 @@ describe('Tag area target operations', () => {
 // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(5000);
+    this.timeout(6000);
     async.series(
-      {
-        removeChecks: (callback) => {
+      [
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
             .then(() => {
               callback(null);
@@ -25,7 +25,7 @@ describe('Tag area target operations', () => {
             console.log(err);
           });
         },
-        syncDb: (callback) => {
+        (callback) => {
           db.sequelize.sync({force: true})
             .then(() => {
               callback(null);
@@ -33,7 +33,7 @@ describe('Tag area target operations', () => {
             callback(err);
           });
         },
-        addChecks: (callback) => {
+        (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
               callback(null,);
@@ -41,36 +41,36 @@ describe('Tag area target operations', () => {
             callback(err);
           });
         },
-        mockArea: (callback) => {
+        (callback) => {
           areaDao
             .addArea('mock area', 1)
             .then(callback(null))
             .catch((err) => callback(err));
 
         },
-        mockCollection: (callback) => {
+        (callback) => {
           collectionDao.addNewCollection('mock collection')
             .then(callback(null))
             .catch((err) => callback(err))
         },
-        mockAreaTarget: (callback) => {
+        (callback) => {
           collectionDao
             .addCollectionToArea(1, 1)
             .then(callback(null))
             .catch((err) => callback(err));
         },
-        mockTag: (callback) => {
+        (callback) => {
           tagDao
             .createTag('mock tag')
             .then(callback(null))
             .catch((err) => callback(err));
         },
-        mockTagTarget: (callback) => {
+        (callback) => {
           collectionDao.addTagTarget(1, 1)
             .then(callback(null))
             .catch((err) => callback(err))
         }
-      },
+      ],
       (err) => {
         if (err) {
           console.log(err);
@@ -100,7 +100,7 @@ describe('Tag area target operations', () => {
 
   });
 
-  it('should find areas for gat.', (done) => {
+  it('should find areas for tag.', (done) => {
 
     let _onSuccess = (areas) => {
       expect(areas).to.be.defined;
