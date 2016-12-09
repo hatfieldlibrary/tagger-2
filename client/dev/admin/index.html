@@ -2,12 +2,12 @@
 <html>
 <head>
   <title></title>
-  <link rel="stylesheet" href="common/stylesheets/jquery-ui-1.11.2-min.css">
+  <link rel="stylesheet" href="/resources/stylesheets/jquery-ui-1.11.2-min.css">
   <link rel="stylesheet" href="../bower_components/angular-material/angular-material.min.css">
-  <link rel="stylesheet" href="common/stylesheets/style.css">
+  <link rel="stylesheet" href="/resources/stylesheets/style.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-  <base href="/admin/">
+  <base href="/">
 </head>
 <body ng-cloak ng-controller="LayoutCtrl as vm">
 <div layout-fill layout="column">
@@ -35,40 +35,145 @@
     </div>
   </md-toolbar>
   <div class="view-container" layout="row" flex>
+    <md-sidenav class="md-sidenav-left transparent" style="height: 650px" flex="5" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+      <md-toolbar class="md-default-theme">
+        <md-card class="local-hue-1 margin-override">
+          <md-card-content style="padding-left: 12px">
+            <md-list>
+              <md-list-item class="contact-item"><!-- Passport login provides picture from Google profile--><img class="md-avatar" src="#{picture}">
+              </md-list-item>
+              <md-list-item ng-controller="AuthorizedCtrl as vm"><!-- The user and areaId are also from passport login.--><!-- Passing the areaId to the controller will initialize--><!-- the application context.-->
+                <div class="md-subhead">
+                  <div class="md-caption" elem-ready="vm.getRole(#{areaId})">{{vm.role}}</div>
+                </div>
+              </md-list-item>
+            </md-list>
+          </md-card-content>
+        </md-card>
+      </md-toolbar>
+      <md-content class="transparent">
+        <md-list>
+          <md-list-item hide-gt-md="true">
+            <md-button class=" md-button md-default-theme" ng-click="vm.toggleLeft();">
+              <div class="md-list-item-inner"><div class="list-group-item-text">HIDE MENU<div class="md-ripple-container"></div>
+              </div>
+              </div>
+            </md-button>
+          </md-list-item>
+          <md-list-item ng-class="{selected: vm.currentIndex===0}">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(0);vm.toggleLeft();" href="/admin/overview">
+              <div class="md-list-item-inner"><md-icon aria-hidden="true" style="margin: 10px">
+                <i class="material-icons">home</i>
+              </md-icon>
+                <div class="list-group-item-text">Overview<div class="md-ripple-container"></div>
+                </div>
+              </div>
+            </md-button>
+          </md-list-item>
+          <md-list-item ng-class="{selected: vm.currentIndex===1}">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(1); vm.toggleLeft();" ng-href="/admin/collections">
+              <div class="md-list-item-inner">
+                <md-icon aria-hidden="true" style="margin: 10px"><i class="material-icons">collections</i></md-icon>
+                <div class="list-group-item-text">Collections<div class="md-ripple-container"></div>
+                </div>
+              </div>
+            </md-button>
+          </md-list-item>
+          <md-list-item ng-class="{selected: vm.currentIndex===2}">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(2); vm.toggleLeft();" href="/admin/tags" tabindex="0">
+              <div class="md-list-item-inner"><md-icon aria-hidden="true" style="margin: 10px">
+                <i class="material-icons">link</i>
+              </md-icon>
+                <div class="list-group-item-text">Subject Tags<div class="md-ripple-container"></div>
+                </div>
+              </div>
+            </md-button>
+          </md-list-item>
+          <md-list-item ng-class="{selected: vm.currentIndex===3}">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(3); vm.toggleLeft();" ng-disabled="vm.userAreaId &gt; 0" href="/admin/contentTypes" tabindex="0">
+              <div class="md-list-item-inner">
+                <md-icon aria-hidden="true" style="margin: 10px">
+                  <i class="material-icons">local_movies</i>
+                </md-icon>
+                <div class="list-group-item-text">Content Types<div class="md-ripple-container"></div>
+                </div>
+              </div>
+            </md-button>
+          </md-list-item>
+          <md-list-item ng-class="{selected: vm.currentIndex===4}">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(4); vm.toggleLeft();" ng-disabled="vm.userAreaId &gt; 0" href="/admin/categories" tabindex="0">
+              <div class="md-list-item-inner">
+                <md-icon aria-hidden="true" style="margin: 10px">
+                  <i class="material-icons">library_books</i>
+                </md-icon>
+                <div class="list-group-item-text">Collection Groups<div class="md-ripple-container"></div>
+                </div>
+              </div>
+            </md-button>
+          </md-list-item>
+          <md-list-item ng-class="{selected: vm.currentIndex===5}">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(5); vm.toggleLeft();" ng-disabled="vm.userAreaId &gt; 0" href="/admin/areas" tabindex="0">
+              <div class="md-list-item-inner">
+                <md-icon aria-hidden="true" style="margin: 10px">
+                  <i class="material-icons">public</i>
+                </md-icon>
+                <div class="list-group-item-text">Areas<div class="md-ripple-container">
+                </div>
+                </div>
+              </div>
+            </md-button>
+          </md-list-item>
+          <md-list-item ng-class="{selected: vm.currentIndex===6}">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(6); vm.toggleLeft();" ng-disabled="vm.userAreaId &gt; 0" href="/admin/users" tabindex="0">
+              <div class="md-list-item-inner">
+                <md-icon aria-hidden="true" style="margin: 10px">
+                  <i class="material-icons">group</i>
+                </md-icon>
+                <div class="list-group-item-text">Users<div class="md-ripple-container"></div>
+                </div>
+              </div>
+            </md-button>
+          </md-list-item>
+        </md-list>
+      </md-content>
+    </md-sidenav>
     <div ng-view style="overflow:auto" layout="row" layout-gt-md="column" flex></div>
   </div>
 </div>
 </body>
 <!-- build:js javascripts/main.min.js -->
 <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-route/angular-route.js"></script>
 <script type="text/javascript" src="../bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-animate/angular-animate.min.js"></script>
-<script type="text/javascript" src="../bower_components/angular-route/angular-route.js"></script>
 <script type="text/javascript" src="../bower_components/angular-resource/angular-resource.js"></script>
 <script type="text/javascript" src="../bower_components/angular-aria/angular-aria.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-material/angular-material.js"></script>
 <script type="text/javascript" src="../bower_components/ng-file-upload-shim/ng-file-upload-shim.min.js"></script>
 <script type="text/javascript" src="../bower_components/ng-file-upload/ng-file-upload.min.js"></script>
 <script type="text/javascript" src="../bower_components/d3/d3.js"></script>
-<script type="text/javascript" src="app/common/context.js"></script>
-<script type="text/javascript" src="app/common/controllers.js"></script>
-<script type="text/javascript" src="app/controllers/collections.js"></script>
-<script type="text/javascript" src="app/controllers/authorization.js"></script>
-<script type="text/javascript" src="app/controllers/layout.js"></script>
-<script type="text/javascript" src="app/controllers/overview.js"></script>
-<script type="text/javascript" src="app/controllers/tags.js"></script>
-<script type="text/javascript" src="app/controllers/types.js"></script>
-<script type="text/javascript" src="app/controllers/users.js"></script>
-<script type="text/javascript" src="app/controllers/areas.js"></script>
-<script type="text/javascript" src="app/controllers/categories.js"></script>
-<script type="text/javascript" src="app/common/services.js"></script>
-<script type="text/javascript" src="app/common/environment.js"></script>
-<script type="text/javascript" src="app/services/tagger.js"></script>
-<script type="text/javascript" src="app/services/dialog.js"></script>
-<script type="text/javascript" src="app/common/directives.js"></script>
-<script type="text/javascript" src="app/directives/tagger.js"></script>
-<script type="text/javascript" src="app/directives/charts.js"></script>
-<script type="text/javascript" src="app/app.js"></script>
+<script type="text/javascript" src="../app/app.js"></script>
+<script type="text/javascript" src="../app/app.config.js"></script>
+<script type="text/javascript" src="../app/app.route.js"></script>
+<script type="text/javascript" src="../app/common/context.js"></script>
+<script type="text/javascript" src="../app/common/controllers.js"></script>
+<script type="text/javascript" src="../app/controllers/collections.js"></script>
+<script type="text/javascript" src="../app/controllers/authorization.js"></script>
+<script type="text/javascript" src="../app/controllers/layout.js"></script>
+<script type="text/javascript" src="../app/controllers/overview.js"></script>
+<script type="text/javascript" src="../app/controllers/tags.js"></script>
+<script type="text/javascript" src="../app/controllers/types.js"></script>
+<script type="text/javascript" src="../app/controllers/users.js"></script>
+<script type="text/javascript" src="../app/controllers/areas.js"></script>
+<script type="text/javascript" src="../app/controllers/categories.js"></script>
+<script type="text/javascript" src="../app/common/services.js"></script>
+<script type="text/javascript" src="../app/common/environment.js"></script>
+<script type="text/javascript" src="../app/services/tagger.js"></script>
+<script type="text/javascript" src="../app/services/dialog.js"></script>
+<script type="text/javascript" src="../app/common/directives.js"></script>
+<script type="text/javascript" src="../app/directives/tagger.js"></script>
+<script type="text/javascript" src="../app/directives/charts.js"></script>
+
 <!-- endbuild -->
 
 </html>

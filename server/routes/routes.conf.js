@@ -19,6 +19,11 @@ module.exports = function(app, config) {
   let _clientFiles = (process.env.NODE_ENV === 'production') ? '/client/dist/' : '/client/dev/';
   app.use(express.static(_root + _nodeModules));
   app.use(express.static(_root + _clientFiles));
+
+
+  /** Application directory. */
+  app.set('appPath', _root + _clientFiles);
+
   app.set('views', path.join(_root, '/server/views'));
   //app.use(helmet());
 
@@ -45,7 +50,7 @@ module.exports = function(app, config) {
   // app.use('/commons/bower_components', express.static(config.root ));
 
 
- // app.use(favicon(config.root + '/favicon.ico'));
+  app.use(favicon(path.join(_root, 'server/common/favicon.ico'), {}));
   // setup the access logger
   var accessLogStream = fs.createWriteStream('/var/log/tagger/public/access.log', {flags: 'a'});
   app.use(logger('combined', {stream: accessLogStream}));

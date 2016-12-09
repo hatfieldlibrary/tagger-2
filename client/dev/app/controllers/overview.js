@@ -24,6 +24,7 @@
       TagCountForArea,
       Data ) {
 
+
       var vm = this;
       var collectionTotal = Data.collectionsTotal;
       var collectionTypeTotal = Data.collectionTypeTotal;

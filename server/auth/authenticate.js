@@ -31,6 +31,8 @@ var
    */
   RedisStore = require('connect-redis')(session);
 
+  const db = require('../api/tagger/models');
+
 
 module.exports = function (app, config, passport) {
 

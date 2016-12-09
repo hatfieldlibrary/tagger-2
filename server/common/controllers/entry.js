@@ -2,7 +2,8 @@
 
 
 exports.login = function(req, res) {
-  res.render('login', {
+  res.render(config.root +
+    config.adminPath + 'login', {
     title: 'Login'
   });
 };

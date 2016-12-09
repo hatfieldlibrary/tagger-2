@@ -1,7 +1,7 @@
-;(function(ng) {
+;(function (ng) {
   'use strict';
 
-  ng.module('tagger', [
+   ng.module('tagger', [
 
     'ngMaterial',
     'ngRoute',
@@ -13,7 +13,7 @@
     'taggerServices',
     'taggerDirectives'
 
-    ]);
+  ]);
 
   /**
    * Bootstrap Angular.

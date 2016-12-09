@@ -2,7 +2,7 @@ module.exports = function(app,config,passport){
 
   'use strict';
 
-  var entry = require('../../server/api/tagger/controllers/entry');
+  var entry = require('../common/controllers/entry');
   var tag = require('../../server/api/tagger/controllers/tags');
   var tagTarget = require('../../server/api/tagger/controllers/tag-target.js');
   var area = require('../../server/api/tagger/controllers/area');
@@ -19,7 +19,7 @@ module.exports = function(app,config,passport){
   // TAGGER ROUTES
 
   // AUTHENTICATION
-  app.get('/login', entry.login);
+//  app.get('/login', entry.login);
 
   // Use passport.authenticate() as middleware. The first step in Google authentication
   // redirects the user to google.com.  After authorization, Google
@@ -116,33 +116,67 @@ module.exports = function(app,config,passport){
   app.use('/rest/collection/types/:id',   collection.typesForCollection);
 
 
-  // PARTIALS
-  app.get('/admin/partials/:name', ensureAuthenticated, function(req, res) {
+  // // PARTIALS
+  // app.get('/admin/partials/:name', ensureAuthenticated, function(req, res) {
+  //
+  //   var name = req.params.name;
+  //   res.render(
+  //     config.root +
+  //     config.adminPath +
+  //     '/partials/'  +
+  //     name
+  //   );
+  // });
+  //
+  // // This catch-all is required by html5mode.
+  // app.get('/admin/*', ensureAuthenticated, function(req, res) {
+  //
+  //   res.render(
+  //     config.root +
+  //     config.adminPath +
+  //     '/layout',
+  //     {
+  //       title: 'Overview',
+  //       user: req.user.displayName,
+  //       picture: req.user._json.picture,
+  //       areaId: req.user.areaId
+  //     }
+  //   );
+  // });
+
+  // HTML5 MODE ROUTING
+  /**
+   * Route to page partials.
+   */
+
+  app.get('/login', function (req, res) {
+    res.sendFile(
+      app.get('appPath') +
+      '/admin/partials/login.html'
+    );
+  });
+  app.get('/admin/partials/:name', ensureAuthenticated, function (req, res) {
 
     var name = req.params.name;
-    res.render(
-      config.root +
-      config.adminPath +
-      '/partials/'  +
+
+    res.sendFile(
+      app.get('appPath') +
+      '/admin/partials/' +
       name
     );
   });
 
-  // This catch-all is required by html5mode.
-  app.get('/admin/*', ensureAuthenticated, function(req, res) {
+  /**
+   * Catch-all required by html5 mode.
+   */
+  app.get('/admin/*', function (req, res) {
 
-    res.render(
-      config.root +
-      config.adminPath +
-      '/layout',
-      {
-        title: 'Overview',
-        user: req.user.displayName,
-        picture: req.user._json.picture,
-        areaId: req.user.areaId
-      }
-    );
-  });
+      res.sendFile(
+        app.get('appPath') +
+        '/admin/index.html'
+      );
+    }
+  );
 
 
 
