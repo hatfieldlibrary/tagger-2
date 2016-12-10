@@ -4,7 +4,7 @@
 
 import path from 'path';
 
-import credentials from '../../../server/config/credentials';
+import credentials from '../../../server/credentials/credentials';
 
 let rootPath = path.normalize(__dirname + '/../../../server');
 

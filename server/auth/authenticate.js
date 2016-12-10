@@ -137,7 +137,7 @@ module.exports = function (app, config, passport) {
     if (req.isAuthenticated()) {
       return next();
     }
-    res.redirect('/login');
+    res.redirect('/tagger/login');
   };
 
 };

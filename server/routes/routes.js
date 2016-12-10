@@ -2,19 +2,19 @@ module.exports = function(app,config,passport){
 
   'use strict';
 
-  var userInfo = require('../../server/api/tagger/controllers/user-info');
-  var tag = require('../../server/api/tagger/controllers/tags');
-  var tagTarget = require('../../server/api/tagger/controllers/tag-target.js');
-  var area = require('../../server/api/tagger/controllers/area');
-  var content = require('../../server/api/tagger/controllers/content');
-  var collection = require('../../server/api/tagger/controllers/collection');
-  var category = require('../../server/api/tagger/controllers/category');
-  var users = require('../../server/api/tagger/controllers/users');
+  const userInfo = require('../../server/api/tagger/controllers/user-info');
+  const tag = require('../../server/api/tagger/controllers/tags');
+  const tagTarget = require('../../server/api/tagger/controllers/tag-target.js');
+  const area = require('../../server/api/tagger/controllers/area');
+  const content = require('../../server/api/tagger/controllers/content');
+  const collection = require('../../server/api/tagger/controllers/collection');
+  const category = require('../../server/api/tagger/controllers/category');
+  const users = require('../../server/api/tagger/controllers/users');
   /**
    * Indicates whether the request has an authenticated session.
    * @type {boolean}
    */
-  var ensureAuthenticated = app.ensureAuthenticated;
+  const ensureAuthenticated = app.ensureAuthenticated;
 
   // AUTHENTICATION
 
@@ -33,7 +33,7 @@ module.exports = function(app,config,passport){
   // to the admin page page.
   app.get('/auth/google/callback',
     passport.authenticate('google', { successRedirect: '/tagger/',
-      failureRedirect: '/login' }));
+      failureRedirect: '/tagger/login' }));
 
   app.use('/rest/userinfo', ensureAuthenticated, userInfo.returnUserInfo);
 
@@ -119,28 +119,28 @@ module.exports = function(app,config,passport){
    * Route to page partials.
    */
 
-  app.get('/login', function (req, res) {
+  app.get('/tagger/login', function (req, res) {
     res.sendFile(
-      app.get('appPath') + '/tagger/partials/login.html'
+      app.get('appPath') + '/partials/login.html'
     );
   });
-  app.get('/tagger/:name', ensureAuthenticated, function (req, res) {
+  app.get('/tagger/partials/:name', ensureAuthenticated, function (req, res) {
 
-    var name = req.params.name;
+    const name = req.params.name;
 
     res.sendFile(
       app.get('appPath') +
-      '/tagger/partials/' + name  + '.html'
+      '/partials/' + name  + '.html'
     );
   });
 
   /**
    * Catch-all required by html5 mode.
    */
-  app.get('/tagger/*', function (req, res) {
+  app.get('/tagger*', function (req, res) {
 
       res.sendFile(
-        app.get('appPath') + '/tagger/index.html'
+        app.get('appPath') + '/index.html'
       );
     }
   );

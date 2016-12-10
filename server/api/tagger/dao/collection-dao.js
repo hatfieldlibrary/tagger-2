@@ -37,7 +37,7 @@ taggerDao.browseTypesByArea = (areaId) => {
 
 };
 
-taggerDao.repoTypeByArea = (areaId) => {
+taggerDao.repoTypesByArea = (areaId) => {
 
   return taggerSchema.sequelize.query('SELECT repoType, COUNT(*) as count FROM AreaTargets ' +
     'LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id ' +

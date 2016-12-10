@@ -1,5 +1,6 @@
 html
   head
   body
-    h1 Error
-    p {{message}}
+    div(style="text-align: center; width: 100%;background: #ccc;padding: 50px;margin: 10px;margin-left: 0;")
+      h1 Error (#{error.status})
+      p #{message}

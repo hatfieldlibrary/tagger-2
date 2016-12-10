@@ -33,9 +33,9 @@
         // set the string
         vm.role = getUserRole(areaId);
         // set area default for non-admin user
-       // if (areaId > 0) {
+        if (areaId > 0) {
           Data.currentAreaIndex = areaId;
-        //}
+        }
       };
 
       /**

@@ -1,18 +1,27 @@
 'use strict';
-var express = require('express');
-var favicon = require('static-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const favicon = require('static-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const helmet = require('helmet');
 //var helmet = require('helmet');
-var path = require('path');
-var fs = require('fs');
+const path = require('path');
+const fs = require('fs');
+const cors = require('cors');
 
 module.exports = function(app, config) {
 
+
   app.set('port', config.port);
   app.set('view engine', 'pug');
+
+  var corsOptions = {
+    origin: 'http://localhost:3001',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  };
+
+  app.use(cors(corsOptions));
 
   let _root = process.cwd();
   let _nodeModules = '/node_modules/';

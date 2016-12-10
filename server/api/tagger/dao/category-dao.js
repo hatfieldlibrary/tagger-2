@@ -43,7 +43,7 @@ taggerDao.listByArea = (areaId) => {
 };
 
 taggerDao.byId = (categoryId) => {
-  taggerSchema.Category.find({
+  return taggerSchema.Category.find({
     where: {
       id: categoryId
     }

@@ -42,7 +42,7 @@ exports.categoryCountByArea = function (req, res) {
 exports.listByArea = function (req, res) {
   var areaId = req.params.areaId;
 
-  taggerDao.list(areaId).then(function (categories) {
+  taggerDao.listByArea(areaId).then(function (categories) {
     utils.sendResponse(res, categories);
   }).error(function (err) {
     console.log(err);

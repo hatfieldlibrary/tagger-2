@@ -51,7 +51,7 @@
       vm.currentIndex = 0;
 
       /** @type {Array.<Object>} */
-      vm.areas = [{title: 'a', id: 0}];
+      vm.areas = [];
 
       /** @type {number} */
       vm.currentId = 0;
@@ -135,6 +135,8 @@
                 vm.areas = data;
                 Data.areas = data;
 
+                console.log(vm.areas)
+
                 // Assure we have a non-zero area id.
                 // For the admin user, this method will
                 // return the id of the first area.
@@ -153,6 +155,42 @@
 
         });
 
+      /**
+       * Sets the role of the user based on the
+       * area to which they belong. Called on the
+       * initial page load after successful authentication.
+       * @param areaId the current area id
+       */
+      function getRole(areaId) {
+
+        console.log('area id is ' + areaId);
+
+        // update the app state
+        Data.userAreaId = areaId;
+        // set the string
+        vm.role = getUserRole(areaId);
+        // set area default for non-admin user
+        if (areaId > 0) {
+          Data.currentAreaIndex = areaId;
+        }
+      }
+
+      /**
+       * Returns the user role based on the area id in their
+       * user profile.
+       * @param areaId
+       * @returns string for role
+       */
+      function getUserRole(areaId) {
+
+        if (areaId === 0) {
+          return 'Administrator';
+        } else {
+          return 'Area Maintainer';
+        }
+
+      }
+
       vm.authorized = function () {
 
         return vm.isAuth;
@@ -160,13 +198,19 @@
       };
 
       function retrieveUserInfo() {
+
         var userinfo = getUserInfo.query();
         userinfo.$promise.then(function (user) {
+          console.log(user)
           Data.isAuth = true;
           Data.user = user;
+          vm.userAreaId = user.areaId;
+          Data.userAreaId = user.areaId;
+          getRole(user.areaId);
         }).catch(function(err) {
           console.log(err);
         });
+
       }
 
       /**
@@ -292,6 +336,7 @@
             }
 
           });
+
           // Get subject tags for area.
           var tagsForArea = TagsForArea.query({areaId: id});
           tagsForArea.$promise.then(function (data) {
@@ -325,6 +370,7 @@
             console.log('got new area list');
             vm.currentId = Data.areas[0].id;
             vm.areas = newValue;
+            console.log(vm.areas)
             Data.areaLabel = Data.areas[0].title;
             updateAreaContext(vm.currentId);
             $scope.$apply();
