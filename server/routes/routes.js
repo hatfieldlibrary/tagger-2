@@ -2,7 +2,7 @@ module.exports = function(app,config,passport){
 
   'use strict';
 
-  var entry = require('../common/controllers/entry');
+  var userInfo = require('../../server/api/tagger/controllers/user-info');
   var tag = require('../../server/api/tagger/controllers/tags');
   var tagTarget = require('../../server/api/tagger/controllers/tag-target.js');
   var area = require('../../server/api/tagger/controllers/area');
@@ -16,10 +16,7 @@ module.exports = function(app,config,passport){
    */
   var ensureAuthenticated = app.ensureAuthenticated;
 
-  // TAGGER ROUTES
-
   // AUTHENTICATION
-//  app.get('/login', entry.login);
 
   // Use passport.authenticate() as middleware. The first step in Google authentication
   // redirects the user to google.com.  After authorization, Google
@@ -35,8 +32,10 @@ module.exports = function(app,config,passport){
   // If authentication failed, redirect the login page.  Otherwise, redirect
   // to the admin page page.
   app.get('/auth/google/callback',
-    passport.authenticate('google', { successRedirect: '/admin/',
+    passport.authenticate('google', { successRedirect: '/tagger/',
       failureRedirect: '/login' }));
+
+  app.use('/rest/userinfo', ensureAuthenticated, userInfo.returnUserInfo);
 
   // COLLECTIONS
   app.use('/rest/collection/byId/:id', ensureAuthenticated, collection.byId);
@@ -47,7 +46,7 @@ module.exports = function(app,config,passport){
   app.post('/rest/collection/add', ensureAuthenticated, collection.add);
   app.post('/rest/collection/delete', ensureAuthenticated, collection.delete);
   app.post('/rest/collection/update', ensureAuthenticated, collection.update);
-  app.post('/admin/collection/image', ensureAuthenticated, function (res, req) {
+  app.post('/tagger/collection/image', ensureAuthenticated, function (res, req) {
     collection.updateImage(res, req, config);
   });
   app.get('/rest/collection/:collId/add/area/:areaId', ensureAuthenticated, collection.addAreaTarget);
@@ -115,35 +114,6 @@ module.exports = function(app,config,passport){
   app.use('/rest/collection/tags/:id',   collection.tagsForCollection);
   app.use('/rest/collection/types/:id',   collection.typesForCollection);
 
-
-  // // PARTIALS
-  // app.get('/admin/partials/:name', ensureAuthenticated, function(req, res) {
-  //
-  //   var name = req.params.name;
-  //   res.render(
-  //     config.root +
-  //     config.adminPath +
-  //     '/partials/'  +
-  //     name
-  //   );
-  // });
-  //
-  // // This catch-all is required by html5mode.
-  // app.get('/admin/*', ensureAuthenticated, function(req, res) {
-  //
-  //   res.render(
-  //     config.root +
-  //     config.adminPath +
-  //     '/layout',
-  //     {
-  //       title: 'Overview',
-  //       user: req.user.displayName,
-  //       picture: req.user._json.picture,
-  //       areaId: req.user.areaId
-  //     }
-  //   );
-  // });
-
   // HTML5 MODE ROUTING
   /**
    * Route to page partials.
@@ -151,138 +121,29 @@ module.exports = function(app,config,passport){
 
   app.get('/login', function (req, res) {
     res.sendFile(
-      app.get('appPath') +
-      '/admin/partials/login.html'
+      app.get('appPath') + '/tagger/partials/login.html'
     );
   });
-  app.get('/admin/partials/:name', ensureAuthenticated, function (req, res) {
+  app.get('/tagger/:name', ensureAuthenticated, function (req, res) {
 
     var name = req.params.name;
 
     res.sendFile(
       app.get('appPath') +
-      '/admin/partials/' +
-      name
+      '/tagger/partials/' + name  + '.html'
     );
   });
 
   /**
    * Catch-all required by html5 mode.
    */
-  app.get('/admin/*', function (req, res) {
+  app.get('/tagger/*', function (req, res) {
 
       res.sendFile(
-        app.get('appPath') +
-        '/admin/index.html'
+        app.get('appPath') + '/tagger/index.html'
       );
     }
   );
-
-
-
-  // /* Static Angularjs module routes.  Used by the Academic Commons public site. */
-  // // request for partials
-  //
-  // app.get('/partials/:name', function(req, res) {
-  //
-  //   var name = req.params.name;
-  //
-  //   res.sendFile(
-  //     config.root +
-  //     config.modulePath +
-  //     '/partials/'  +
-  //     name +
-  //     '.html'
-  //   );
-  // });
-  //
-  // app.get('/info/data/:name', function(req, res) {
-  //
-  //   var name = req.params.name;
-  //
-  //   res.sendFile(
-  //     config.root +
-  //     config.modulePath +
-  //     '/info/data/' +
-  //     name +
-  //     '.html'
-  //   );
-  // });
-  //
-  // app.get('/info/student/:name', function(req, res) {
-  //
-  //   var name = req.params.name;
-  //
-  //   res.sendFile(
-  //     config.root +
-  //     config.modulePath +
-  //     '/info/student/' +
-  //     name +
-  //     '.html'
-  //   );
-  // });
-  //
-  // app.get('/info/:name', function(req, res) {
-  //
-  //   var name = req.params.name;
-  //
-  //   res.sendFile(
-  //     config.root +
-  //     config.modulePath +
-  //     '/info/' +
-  //     name +
-  //     '.html'
-  //   );
-  // });
-  //
-  // // requests for an angular directive template.
-  // app.get('/components/:name', function(req, res) {
-  //
-  //   var name = req.params.name;
-  //
-  //   res.sendFile(
-  //     config.root +
-  //     config.modulePath +
-  //     '/components/' +
-  //     name
-  //   );
-  // });
-  //
-  //
-  // app.get('/commons/error/:name', function(req, res) {
-  //
-  //   var name = req.params.name;
-  //
-  //     res.sendFile(
-  //       config.root +
-  //       config.modulePath +
-  //       '/error/' +
-  //       name +
-  //       '.html'
-  //     );
-  // });
-  //
-  // // This catch-all is required by html5mode.
-  // app.get('/commons', function(req, res) {
-  //
-  //   res.sendFile(
-  //     config.root +
-  //     config.modulePath +
-  //     '/index.html'
-  //   );
-  // });
-  //
-  // // This catch-all is required by html5mode.
-  // app.get('/commons/*', function(req, res) {
-  //
-  //   res.sendFile(
-  //     config.root +
-  //     config.modulePath +
-  //     '/index.html'
-  //   );
-  // });
-  //
-  //
 
 };
 

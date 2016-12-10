@@ -19,10 +19,11 @@ const taggerSchema = require('./api/tagger/models/index');
 
 // configure passport and session
 require('./auth/authenticate')(app, config, passport);
-// configure angular and api routes
-require('./routes/routes')(app, config, passport);
 // static routes
 require('./routes/routes.conf')(app, config);
+// configure angular and api routes
+require('./routes/routes')(app, config, passport);
+
 function startServer() {
 
   // stop annoying error message when testing.

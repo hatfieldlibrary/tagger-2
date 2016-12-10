@@ -63,7 +63,7 @@ exports.add = function (req, res) {
     {
       // Check to see if content type already exists.
       check: function (callback) {
-        taggerDao.findContentTypesForCollection(name)
+        taggerDao.findContentTypeByName(name)
           .then(function (result) {
             callback(null, result);
           })
@@ -80,6 +80,7 @@ exports.add = function (req, res) {
         // Add new content type
         taggerDao.createContentType(name)
           .then(function (result) {
+            console.log(result)
             utils.sendResponse(res, {status: 'success', id: result.id});
           })
           .catch(function (err) {

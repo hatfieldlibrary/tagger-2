@@ -35,7 +35,9 @@ var taggerContext = angular.module('taggerContext', []);
       tagsForArea: [],
       tagsForCollection: [],
       typesForCollection: [],
-      userAreaId: null
+      userAreaId: null,
+      isAuth: false,
+      user: null
     };
   });
 

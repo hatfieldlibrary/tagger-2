@@ -59,15 +59,23 @@
    * ngResource services
    */
 
+
+  taggerServices.factory('getUserInfo', ['$resource', 'Env',
+    function ($resource, Env) {
+      console.log(Env.restHost + 'userinfo')
+      return $resource(Env.restHost + 'userinfo', {}, {
+        query: {method: 'GET', isArray: false}
+      });
+    }
+  ]);
   /**
    * Maps to controller: users.list
    */
   taggerServices.factory('UserList', ['$resource', 'Env',
-    function ($resource, Env)
-  {
-    console.log(Env);
-    return $resource(Env.restHost + 'users/list');
-  }
+    function ($resource, Env) {
+      console.log(Env);
+      return $resource(Env.restHost + 'users/list');
+    }
   ])
   ;
   /**

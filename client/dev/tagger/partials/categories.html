@@ -1,0 +1,79 @@
+<md-content class="transparent" layout="row" layout-align="start start" flex="flex" ng-controller="CategoryCtrl as vm">
+  <md-content class="transparent" layout="column" flex="100" flex-gt-lg="75">
+    <md-card class="flex">
+      <div ng-if="vm.category.$resolved"></div>
+      <md-toolbar class="md_primary">
+        <div class="md-toolbar-tools">
+          <span flex="20">
+            <i class="material-icons">library_books</i>
+            <span class="md-subhead">&nbsp;GROUPS</span>
+          </span>
+          <span flex="70">
+            <h2 class="md-display-2">{{vm.category.title}}  (ID: {{vm.category.id}})</h2>
+          </span>
+          <span flex="flex"></span>
+          <md-button class="md-warn md-raised md-fab md-mini" aria-label="Delete Category" ng-click="vm.showDialog($event, vm.deleteMessage)">
+            <i class="material-icons">delete</i>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-content>
+        <div layout="row" layout-align="start start">
+          <md-card-content flex="20">
+            <md-button class="md-raised md-accent" ng-click="vm.showDialog($event, vm.addMessage)">Add Group</md-button>
+          </md-card-content>
+          <md-card-content layout="column" layout-padding="layout-padding" flex="80" flex-gt-md="80" style="padding-left: 20px">
+            <div class="md-subhead grey-text" flex="80">
+              <span>Collections can belong to a single <em>Collection Group</em>. A Collection Group provides specific information about the current collection and related collections.</span>
+            </div>
+          </md-card-content>
+        </div><md-content layout="row" layout-align="start start">
+        <md-card-content flex="20"><div layout="column" style="height:700px">
+          <md-content flex="flex">
+            <md-list>
+              <div ng-repeat="cat in vm.categories">
+                <md-list-item>
+                  <md-button class="md-no-style md-button nav-item-dimens md-default-theme" ng-class="{'md-primary': cat.id==vm.currentCategory}" ng-click="vm.resetCategory(cat.id);">
+                    <div class="list-group-item-text md-subhead layout-fill">{{cat.title}}
+                      <div class="md-ripple-container"></div>
+                    </div>
+                  </md-button>
+                </md-list-item>
+                <md-divider></md-divider>
+              </div>
+            </md-list>
+          </md-content>
+        </div>
+        </md-card-content>
+        <md-content layout-padding="layout-padding" flex="80" layout="column" style="padding-left: 20px">
+          <md-button class="md-raised md-accent large-button" ng-click="vm.updateCategory()">Update Group</md-button>
+          <md-input-container>
+            <label>Collection Name</label>
+            <input type="text" ng-model="vm.category.title"/>
+          </md-input-container>
+          <md-input-container>
+            <label>Area (mandatory)</label>
+            <md-select ng-model="vm.category.areaId" placeholder="Select an Area (mandatory)">
+              <md-option ng-repeat="area in vm.areas" ng-value="area.id" ng-selected="area.id">{{area.title}}</md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container>
+            <label>Description  &nbsp;<span class="md-subhead md-default">maxuimum characters 450 (current {{vm.category.description.length}})</span></label>
+            <textarea type="textarea" ng-trim="false" ng-model="vm.category.description" maxlength="450"></textarea>
+          </md-input-container>
+          <md-input-container>
+            <label>Button Label</label>
+            <input type="text" ng-model="vm.category.linkLabel"/>
+          </md-input-container>
+          <md-input-container>
+            <label>URL</label>
+            <input type="text" ng-model="vm.category.url"/>
+          </md-input-container>
+        </md-content>
+      </md-content>
+      </md-content>
+    </md-card>
+  </md-content>
+  <md-content layout="column" flex="25">
+  </md-content>
+</md-content>

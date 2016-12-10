@@ -594,7 +594,7 @@
           if (file !== undefined) {
             /* jshint unused: false */
             Upload.upload({
-              url: '/admin/collection/image',
+              url: '/tagger/collection/image',
               file: file,
               fields: {id: Data.currentCollectionIndex}
             }).progress(function (evt) {

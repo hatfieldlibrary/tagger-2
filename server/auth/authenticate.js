@@ -77,6 +77,7 @@ module.exports = function (app, config, passport) {
     done(null, user);
   });
   passport.deserializeUser(function (user, done) {
+
     done(null, user);
   });
   // Configure Google authentication for this application
@@ -106,12 +107,15 @@ module.exports = function (app, config, passport) {
           // callback.
           if (user) {
             profile.areaId = user.area;
+            profile.picture = user.picture;
             return done(err, profile);
           }
           // Otherwise pass null user profile
           // to the passport callback.
           done(null, null);
-        });
+        }).catch( function (err) {
+            console.log(err);
+          });
       });
     }
   ));

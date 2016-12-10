@@ -1,0 +1,76 @@
+<md-content class="transparent" ng-controller="AreaCtrl as vm" flex="100">
+  <md-content class="transparent" layout="column" flex="100" flex-gt-lg="75">
+    <md-card class="flex">
+      <div ng-if="vm.area.$resolved"></div>
+      <md-toolbar class="md_primary">
+        <div class="md-toolbar-tools">
+          <span flex="20">
+            <i class="material-icons">public</i>
+            <span class="md-subhead">&nbsp;AREAS</span>
+          </span><span flex="70">
+          <h2 class="md-display-2">{{area.title}}</h2>
+        </span>
+          <span flex="flex"></span>
+          <md-button class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="vm.showDialog($event, vm.deleteMessage)">
+            <i class="material-icons">delete</i>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-content>
+        <div layout="row" layout-align="start start">
+          <md-card-content flex="20"><md-button class="md-raised md-accent" ng-click="vm.showDialog($event, vm.addMessage)">Add Area</md-button>
+          </md-card-content>
+          <md-card-content layout="column" layout-padding="layout-padding" flex="80" flex-gt-md="80" style="padding-left: 20px">
+            <div class="md-subhead grey-text" flex="80">
+              <span><em>Areas</em> are the most general way to group collections. A collection can be assigned to multiple Areas.</span>
+            </div>
+          </md-card-content>
+        </div>
+      </md-content>
+      <md-content layout="row" layout-align="start start">
+        <md-card-content flex="20">
+          <div layout="column" style="height:700px">
+            <md-content class="sortable-list" flex="flex">
+              <div class="md-caption" style="margin-top: 10px">Drag item to reorder</div>
+              <md-list dnd-list="vm.areas">
+                <md-list-item ng-repeat="area in vm.areas" dnd-draggable="area" dnd-moved="vm.orderAreaList($index, area.id)" dnd-effect-allowed="move">
+                  <md-button class="md-no-style md-button nav-item-dimens md-default-theme" ng-class="{'md-primary': area.id==vm.currentAreaId}" ng-click="vm.resetArea(area.id);">
+                    <div class="list-group-item-text md-subhead layout-fill">{{area.title}}
+                      <div class="md-ripple-container"></div>
+                    </div>
+                    <md-divider></md-divider>
+                  </md-button>
+                </md-list-item>
+              </md-list>
+            </md-content>
+          </div>
+        </md-card-content>
+        <md-card-content class="md-subhead grey-text" layout-padding="layout-padding" layout="column" flex="80">
+          <md-button class="md-raised md-accent large-button" ng-click="vm.updateArea()">Update Area</md-button>
+          <md-input-container>
+            <label>Area Name</label>
+            <input type="text" ng-model="vm.area.title"/>
+          </md-input-container>
+          <md-input-container>
+            <label>
+              Description  &nbsp;<span class="md-subhead md-default">maxuimum characters 450 (current {{vm.area.description.length}})</span>
+            </label>
+            <textarea type="textarea" ng-trim="false" ng-model="vm.area.description" maxlength="450"></textarea>
+          </md-input-container>
+          <md-input-container>
+            <label>Button Label</label>
+            <input type="text" ng-model="vm.area.linkLabel"/>
+          </md-input-container>
+          <md-input-container>
+            <label>URL</label>
+            <input type="text" ng-model="vm.area.url"/>
+          </md-input-container>
+          <md-input-container>
+            <label>Search URL</label>
+            <input type="text" ng-model="vm.area.searchUrl"/>
+          </md-input-container>
+        </md-card-content>
+      </md-content>
+    </md-card>
+  </md-content>
+</md-content>

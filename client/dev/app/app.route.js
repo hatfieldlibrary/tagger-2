@@ -7,14 +7,15 @@
       function ($routeProvider) {
 
         $routeProvider
-          .when('/admin/:name', {
+          .when('/tagger/:name', {
             templateUrl: function (params) {
-              return '/admin/partials/' + params.name + '.html';
+              return '/tagger/' + params.name ;
             }
-          }).when('/admin/', {
-          templateUrl: '/admin/partials/overview.html',
-          reloadOnSearch: false
-        });
+          })
+          .when('/tagger/', {
+            templateUrl: '/tagger/overview',
+            reloadOnSearch: false
+          });
 
       }
     ]);

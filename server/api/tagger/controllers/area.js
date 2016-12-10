@@ -48,7 +48,7 @@ exports.add = function (req, res) {
   // the area count function has been changed to return the count.
   taggerDao.getAreaCount()
     .then(function (result) {
-      taggerDao.addArea(title, result.count + 1)
+      taggerDao.addArea(title, result[0].dataValues.count + 1)
         .then(
           function () {
             utils.sendResponse(res, {status: 'success'});

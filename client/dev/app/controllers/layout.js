@@ -25,6 +25,7 @@
     'ContentTypeList',
     'TagList',
     'TagsForArea',
+    'getUserInfo',
     'Data',
     function ($scope,
               $timeout,
@@ -39,9 +40,12 @@
               ContentTypeList,
               TagList,
               TagsForArea,
+              getUserInfo,
               Data) {
 
       var vm = this;
+
+      vm.authorized = false;
 
       /** @type {number} */
       vm.currentIndex = 0;
@@ -54,6 +58,7 @@
 
       /** @type {number} */
       vm.userAreaId = 0;
+
 
       /**
        * Supplies a function that will continue to operate until the
@@ -90,6 +95,19 @@
 
       vm.toggleLeft = buildDelayedToggler('left');
 
+      $scope.$watch(function () {
+          return Data.isAuth;
+        },
+        function (newValue, oldValue) {
+             if (newValue === true) {
+               vm.authorized = true;
+               vm.userName = Data.user.name;
+               vm.userPicture = Data.user.picture;
+             }
+
+        });
+
+
       /**
        * Watches for update to the user's area. Data.userAreaId should change
        * only when the app is loaded.  The value is obtained in the Passport
@@ -100,10 +118,9 @@
         },
         function (newValue, oldValue) {
 
+
           // In initial state, userAreaId is null (object).
           if (typeof(newValue) === 'number') {
-
-            console.log('initializing the application');
 
             // The userAreaId can be zero (administrator).
             // Set the view model user area id before continuing.
@@ -135,6 +152,22 @@
           }
 
         });
+
+      vm.authorized = function () {
+
+        return vm.isAuth;
+
+      };
+
+      function retrieveUserInfo() {
+        var userinfo = getUserInfo.query();
+        userinfo.$promise.then(function (user) {
+          Data.isAuth = true;
+          Data.user = user;
+        }).catch(function(err) {
+          console.log(err);
+        });
+      }
 
       /**
        * Convenience method for initialization.
@@ -276,7 +309,6 @@
         }
       }
 
-
       /**
        * Updates the area list and selected area id
        * values when areas change.   Changes occur when
@@ -315,6 +347,10 @@
         } else {
           return id;
         }
+      }
+
+      vm.$onInit = function () {
+        retrieveUserInfo();
       }
 
     }]);

@@ -12,7 +12,7 @@ var fs = require('fs');
 module.exports = function(app, config) {
 
   app.set('port', config.port);
-  app.set('view engine', 'jade');
+  app.set('view engine', 'pug');
 
   let _root = process.cwd();
   let _nodeModules = '/node_modules/';
@@ -24,7 +24,7 @@ module.exports = function(app, config) {
   /** Application directory. */
   app.set('appPath', _root + _clientFiles);
 
-  app.set('views', path.join(_root, '/server/views'));
+  app.set('views', path.join(_root, '/server/common/views'));
   //app.use(helmet());
 
   // setup static file paths
