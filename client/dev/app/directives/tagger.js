@@ -623,20 +623,19 @@
       transclude: true,
       template: '<md-card flex>' +
       ' <md-toolbar class="md_primary">' +
-      '   <div class="md-toolbar-tools">' +
-      '     <i class="material-icons">local_movies</i>' +
-      '     <h3 class="md-display-1">&nbsp;Content Types</h3>' +
-      '     <span flex></span>' +
-      '   </div>' +
+      '   <div class="md-toolbar-tools">     ' +
+      '     <i class="material-icons">link</i>     ' +
+      '     <h3 class="md-display-1">&nbsp;Tags</h3>     ' +
+      '     <span flex="" class="flex"></span>   </div>' +
       ' </md-toolbar>' +
       ' <md-card-content>' +
       '    <div layout="column">' +
       '       <md-input-container>' +
       '         <div layout="column" class="chips">' +
       '           <md-container>' +
-      '             <label>Add Type</label>' +
-      '             <md-chips class="tagger-chips" ng-model="tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="addType($chip)" md-on-remove="removeType($chip)">' +
-      '               <md-autocomplete md-selected-item="selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in queryTypes(searchText)" md-item-text="item.tag">' +
+      '             <label>Add Tags</label>' +
+      '             <md-chips class="tagger-chips" ng-model="tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="addTag($chip)" md-on-remove="removeType($chip)">' +
+      '               <md-autocomplete md-selected-item="selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in queryTags(searchText)"  md-item-text="item.tag">' +
       '                 <span md-highlight-text="searchText"> {{item.Tag.name}} </span>' +
       '               </md-autocomplete>' +
       '               <md-chip-template>' +
