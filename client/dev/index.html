@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="/resources/stylesheets/jquery-ui-1.11.2-min.css">
   <link rel="stylesheet" href="/bower_components/angular-material/angular-material.min.css">
   <link rel="stylesheet" href="/resources/stylesheets/style.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <base href="/">
 </head>
@@ -13,29 +13,31 @@
 <div layout-fill layout="column">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <md-button class="md-icon-button" style="padding-top: 8px" aria-label="Settings" ng-click="vm.toggleLeft()" hide-gt-md="true">
+      <md-button class="md-icon-button" style="padding-top: 8px" aria-label="Settings" ng-click="vm.toggleLeft()"
+                 hide-gt-md="true">
         <i class="material-icons">menu</i>
       </md-button>
       <span>
         <h2 class="md-display-1">Tagger</h2>
       </span>
       <span flex></span>
-      <md-list ng-if="vm.userAreaId === 0">
-        <md-list-item ng-style="{'display':'inline'}">
-          <md-input-container class="md-no-float">
-            <md-select ng-model="vm.areas" placeholder="Select Area">
-              <md-option ng-repeat="area in vm.areas track by area.id" ng-selected="vm.currentId == area.id" ng-click="vm.updateArea(area.id, $index)">{{area.title}}</md-option>
-            </md-select>
-          </md-input-container>
-        </md-list-item>
-      </md-list>
+      <div ng-if="vm.userAreaId === 0">
+        <md-input-container class="md-no-float">
+          <md-select ng-model="vm.areas" placeholder="Select Area">
+            <md-option ng-repeat="area in vm.areas track by area.id" ng-value="area.title" ng-selected="vm.currentId == area.id"
+                       ng-click="vm.updateArea(area.id, $index)">{{area.title}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
       <md-container ng-if="vm.userAreaId &gt; 0">
         <span class="md-subhead">Area: &nbsp;  {{vm.areaLabel}}</span>
       </md-container>
     </div>
   </md-toolbar>
   <div class="view-container" layout="row" flex>
-    <md-sidenav class="md-sidenav-left transparent" style="height: 650px" flex="5" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+    <md-sidenav class="md-sidenav-left transparent" style="height: 650px" flex="5" md-component-id="left"
+                md-is-locked-open="$mdMedia('gt-md')">
       <md-toolbar class="md-default-theme">
         <md-card class="local-hue-1 margin-override">
           <md-card-content style="padding-left: 12px">
@@ -45,7 +47,7 @@
                 <img ng-if="vm.authorized" class="md-avatar" ng-src="{{vm.userPicture}}">
               </md-list-item>
               <md-list-item>
-              {{vm.userName}}
+                {{vm.userName}}
               </md-list-item>
               <md-list-item>
                 <!-- The user and areaId are also from passport login.-->
@@ -63,81 +65,99 @@
         <md-list>
           <md-list-item hide-gt-md="true">
             <md-button class=" md-button md-default-theme" ng-click="vm.toggleLeft();">
-              <div class="md-list-item-inner"><div class="list-group-item-text">HIDE MENU<div class="md-ripple-container"></div>
-              </div>
+              <div class="md-list-item-inner">
+                <div class="list-group-item-text">HIDE MENU
+                  <div class="md-ripple-container"></div>
+                </div>
               </div>
             </md-button>
           </md-list-item>
           <md-list-item ng-class="{selected: vm.currentIndex===0}">
-            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(0);vm.toggleLeft();" href="/tagger/overview">
-              <div class="md-list-item-inner"><md-icon aria-hidden="true" style="margin: 10px">
-                <i class="material-icons">home</i>
-              </md-icon>
-                <div class="list-group-item-text">Overview<div class="md-ripple-container"></div>
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(0);vm.toggleLeft();"
+                       href="/tagger/overview">
+              <div class="md-list-item-inner">
+                <md-icon aria-hidden="true" style="margin: 10px">
+                  <i class="material-icons">home</i>
+                </md-icon>
+                <div class="list-group-item-text">Overview
+                  <div class="md-ripple-container"></div>
                 </div>
               </div>
             </md-button>
           </md-list-item>
           <md-list-item ng-class="{selected: vm.currentIndex===1}">
-            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(1); vm.toggleLeft();" ng-href="/tagger/collections">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(1); vm.toggleLeft();"
+                       ng-href="/tagger/collections">
               <div class="md-list-item-inner">
                 <md-icon aria-hidden="true" style="margin: 10px"><i class="material-icons">collections</i></md-icon>
-                <div class="list-group-item-text">Collections<div class="md-ripple-container"></div>
+                <div class="list-group-item-text">Collections
+                  <div class="md-ripple-container"></div>
                 </div>
               </div>
             </md-button>
           </md-list-item>
           <md-list-item ng-class="{selected: vm.currentIndex===2}">
-            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(2); vm.toggleLeft();" href="/tagger/tags" tabindex="0">
-              <div class="md-list-item-inner"><md-icon aria-hidden="true" style="margin: 10px">
-                <i class="material-icons">link</i>
-              </md-icon>
-                <div class="list-group-item-text">Subject Tags<div class="md-ripple-container"></div>
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(2); vm.toggleLeft();"
+                       href="/tagger/tags" tabindex="0">
+              <div class="md-list-item-inner">
+                <md-icon aria-hidden="true" style="margin: 10px">
+                  <i class="material-icons">link</i>
+                </md-icon>
+                <div class="list-group-item-text">Subject Tags
+                  <div class="md-ripple-container"></div>
                 </div>
               </div>
             </md-button>
           </md-list-item>
           <md-list-item ng-class="{selected: vm.currentIndex===3}">
-            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(3); vm.toggleLeft();" ng-disabled="vm.userAreaId &gt; 0" href="/tagger/contentTypes" tabindex="0">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(3); vm.toggleLeft();"
+                       ng-disabled="vm.userAreaId &gt; 0" href="/tagger/contentTypes" tabindex="0">
               <div class="md-list-item-inner">
                 <md-icon aria-hidden="true" style="margin: 10px">
                   <i class="material-icons">local_movies</i>
                 </md-icon>
-                <div class="list-group-item-text">Content Types<div class="md-ripple-container"></div>
+                <div class="list-group-item-text">Content Types
+                  <div class="md-ripple-container"></div>
                 </div>
               </div>
             </md-button>
           </md-list-item>
           <md-list-item ng-class="{selected: vm.currentIndex===4}">
-            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(4); vm.toggleLeft();" ng-disabled="vm.userAreaId &gt; 0" href="/tagger/categories" tabindex="0">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(4); vm.toggleLeft();"
+                       ng-disabled="vm.userAreaId &gt; 0" href="/tagger/categories" tabindex="0">
               <div class="md-list-item-inner">
                 <md-icon aria-hidden="true" style="margin: 10px">
                   <i class="material-icons">library_books</i>
                 </md-icon>
-                <div class="list-group-item-text">Collection Groups<div class="md-ripple-container"></div>
+                <div class="list-group-item-text">Collection Groups
+                  <div class="md-ripple-container"></div>
                 </div>
               </div>
             </md-button>
           </md-list-item>
           <md-list-item ng-class="{selected: vm.currentIndex===5}">
-            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(5); vm.toggleLeft();" ng-disabled="vm.userAreaId &gt; 0" href="/tagger/areas" tabindex="0">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(5); vm.toggleLeft();"
+                       ng-disabled="vm.userAreaId &gt; 0" href="/tagger/areas" tabindex="0">
               <div class="md-list-item-inner">
                 <md-icon aria-hidden="true" style="margin: 10px">
                   <i class="material-icons">public</i>
                 </md-icon>
-                <div class="list-group-item-text">Areas<div class="md-ripple-container">
-                </div>
+                <div class="list-group-item-text">Areas
+                  <div class="md-ripple-container">
+                  </div>
                 </div>
               </div>
             </md-button>
           </md-list-item>
           <md-list-item ng-class="{selected: vm.currentIndex===6}">
-            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(6); vm.toggleLeft();" ng-disabled="vm.userAreaId &gt; 0" href="/tagger/users" tabindex="0">
+            <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(6); vm.toggleLeft();"
+                       ng-disabled="vm.userAreaId &gt; 0" href="/tagger/users" tabindex="0">
               <div class="md-list-item-inner">
                 <md-icon aria-hidden="true" style="margin: 10px">
                   <i class="material-icons">group</i>
                 </md-icon>
-                <div class="list-group-item-text">Users<div class="md-ripple-container"></div>
+                <div class="list-group-item-text">Users
+                  <div class="md-ripple-container"></div>
                 </div>
               </div>
             </md-button>
@@ -152,7 +172,8 @@
 <!-- build:js javascripts/main.min.js -->
 <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
 <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
-<script type="text/javascript" src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+<script type="text/javascript"
+        src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
 <script type="text/javascript" src="bower_components/angular-animate/angular-animate.min.js"></script>
 <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
 <script type="text/javascript" src="bower_components/angular-aria/angular-aria.min.js"></script>

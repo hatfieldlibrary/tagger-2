@@ -38,6 +38,7 @@
     }]
   ).config(function($mdIconProvider) {
     $mdIconProvider.fontSet('fa', 'fontawesome');
+    $mdIconProvider.icon('md-clear', '/resources/icons/ic_clear_black_24px.svg', 24);
   });
 
 }(window.angular));

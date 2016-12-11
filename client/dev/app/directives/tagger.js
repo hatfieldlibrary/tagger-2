@@ -457,7 +457,7 @@
       '         <div layout="column" class="chips">' +
       '           <md-container>' +
       '             <label>Add Type</label>' +
-      '             <md-chips ng-model="typesForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="addType($chip)" md-on-remove="removeType($chip)">' +
+      '             <md-chips class="tagger-chips" ng-model="typesForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="addType($chip)" md-on-remove="removeType($chip)">' +
       '               <md-autocomplete md-selected-item="selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in queryTypes(searchText)" md-item-text="item.tag">' +
       '                 <span md-highlight-text="searchText"> {{item.name}} </span>' +
       '               </md-autocomplete>' +
@@ -465,7 +465,9 @@
       '                 <span> {{$chip.name}} </span>' +
       '               </md-chip-template>' +
       '               <button md-chip-remove="" class="md-primary taggerchip">' +
-      '                 <md-icon md-svg-icon="md-close"></md-icon>' +
+      '                 <md-icon md-svg-icon="md-clear" aria-label="remove"></md-icon>' +
+      '               </button>' +
+      '             </md-chips>' +
       '            </md-container>' +
       '         </div>' +
       '       </md-input-container>' +
@@ -622,8 +624,8 @@
       template: '<md-card flex>' +
       ' <md-toolbar class="md_primary">' +
       '   <div class="md-toolbar-tools">' +
-      '     <i class="material-icons">link</i>' +
-      '     <h3 class="md-display-1">&nbsp;Tags</h3>' +
+      '     <i class="material-icons">local_movies</i>' +
+      '     <h3 class="md-display-1">&nbsp;Content Types</h3>' +
       '     <span flex></span>' +
       '   </div>' +
       ' </md-toolbar>' +
@@ -632,16 +634,18 @@
       '       <md-input-container>' +
       '         <div layout="column" class="chips">' +
       '           <md-container>' +
-      '             <label>Add Tags</label>' +
-      '             <md-chips ng-model="tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="addTag($chip)" md-on-remove="removeTag($chip)">' +
-      '               <md-autocomplete md-selected-item="selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in queryTags(searchText)" md-item-text="item.tag">' +
+      '             <label>Add Type</label>' +
+      '             <md-chips class="tagger-chips" ng-model="tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="addType($chip)" md-on-remove="removeType($chip)">' +
+      '               <md-autocomplete md-selected-item="selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in queryTypes(searchText)" md-item-text="item.tag">' +
       '                 <span md-highlight-text="searchText"> {{item.Tag.name}} </span>' +
       '               </md-autocomplete>' +
       '               <md-chip-template>' +
       '                 <span> {{$chip.name}} </span>' +
       '               </md-chip-template>' +
       '               <button md-chip-remove="" class="md-primary taggerchip">' +
-      '                 <md-icon md-svg-icon="md-close"></md-icon>' +
+      '                 <md-icon md-svg-icon="md-clear" aria-label="remove"></md-icon>' +
+      '               </button>' +
+      '             </md-chips>' +
       '            </md-container>' +
       '         </div>' +
       '       </md-input-container>' +

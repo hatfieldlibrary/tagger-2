@@ -147,53 +147,95 @@ figcaption .alert-color .material-icons {
   font-size: 20px;
 }
 
-.chips .md-chip {
+/*.md-chips {*/
+  /*position: relative;*/
+  /*padding-right: 55px;*/
+  /*font-size: 0.8rem;*/
+/*}*/
+
+/*.md-chips .md-chip-content {*/
+  /*padding-right: 10px;*/
+/*}*/
+
+/*.md-chips {*/
+  /*!*position: absolute;*!*/
+  /*right: 6px;*/
+  /*top: 6px;*/
+  /*margin-right: 0;*/
+  /*margin-left: 20px;*/
+  /*height: 20px;*/
+/*}*/
+
+/*.md-chips button.taggerchip {*/
+  /*position: relative;*/
+  /*height: 20px;*/
+  /*width: 20px;*/
+  /*line-height: 30px;*/
+  /*text-align: center;*/
+  /*background: rgba(0, 0, 0, 0.3);*/
+  /*border-radius: 50%;*/
+  /*border: none;*/
+  /*box-shadow: none;*/
+  /*padding: 0;*/
+  /*margin: 0;*/
+  /*transition: background 0.15s linear;*/
+  /*display: block;*/
+/*}*/
+
+/*.md-chips  button.taggerchip md-icon {*/
+  /*!*position: absolute;*!*/
+  /*top: 50%;*/
+  /*left: 50%;*/
+  /*transform: translate3d(-50%, -50%, 0) scale(0.7);*/
+  /*color: white;*/
+  /*fill: white;*/
+/*}*/
+
+/*.chips .md-chip .md-chip-remove-container button.taggerchip:hover, .chips .md-chip .md-chip-remove-container button.taggerchip:focus {*/
+  /*!*background: rgba(255, 0, 0, 0.8);*!*/
+/*}*/
+
+.tagger-chips .errors {
+  font-size: 12px;
+  color: #dd2c00;
+  margin-top: 10px; }
+
+.tagger-chips   {
+  position: relative; }
+.tagger-chips    {
   position: relative;
-  padding-right: 55px;
-  font-size: 0.8rem;
-}
-
-.chips .md-chips .md-chip .md-chip-content {
-  padding-right: 10px;
-}
-
-.chips .md-chip .md-chip-remove-container {
-  position: absolute;
-  right: 6px;
-  top: 6px;
+  right: 4px;
+  top: 4px;
   margin-right: 0;
-  margin-left: 20px;
-  height: 20px;
-}
-
-.chips .md-chip .md-chip-remove-container button.taggerchip {
+  height: 24px; }
+.tagger-chips button.taggerchip {
   position: relative;
-  height: 20px;
-  width: 20px;
+  height: 24px;
+  width: 24px;
   line-height: 30px;
   text-align: center;
-  background: rgba(0, 0, 0, 0.3);
+  /*background: rgba(0, 0, 0, 0.3);*/
+  background: transparent;
   border-radius: 50%;
   border: none;
   box-shadow: none;
   padding: 0;
-  margin: 0;
+  margin: 3px 3px 0 0;
   transition: background 0.15s linear;
-  display: block;
-}
-
-.chips .md-chip .md-chip-remove-container button.taggerchip md-icon {
+  display: block; }
+.tagger-chips  button.taggerchip md-icon {
   position: absolute;
-  top: 50%;
+  top: 56%;
   left: 50%;
   transform: translate3d(-50%, -50%, 0) scale(0.7);
   color: white;
-  fill: white;
-}
+  fill: white; }
+.tagger-chips  md-chipbutton.taggerchip:hover,  .md-chip-remove-container button.taggerchip:focus {
+  background: rgba(255, 0, 0, 0.8); }
 
-.chips .md-chip .md-chip-remove-container button.taggerchip:hover, .chips .md-chip .md-chip-remove-container button.taggerchip:focus {
-  background: rgba(255, 0, 0, 0.8);
-}
+.tagger-chips md-chips-wrap.md-removable  md-chip-template {
+  padding-right: 5px; }
+
 
 /* D3  chart */
 

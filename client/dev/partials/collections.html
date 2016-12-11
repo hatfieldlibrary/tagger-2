@@ -1,1 +1,184 @@
-<md-content class="transparent" layout="column" layout-gt-md="row" layout-align="start start" ng-controller="CollectionCtrl as vm"><md-content class="transparent" layout="column" flex="100" flex-gt-md="75"><md-card class="flex primary-content" flex="flex" style="background: #EAEAE6"><div ng-if="vm.collectionList.$resolved"></div><md-toolbar class="md_primary"><div class="md-toolbar-tools"><span flex="25"><i class="material-icons">collections</i><span class="md-subhead responsive-heading">&nbsp;COLLECTIONS</span></span><span flex="65"><h3 class="md-display-1">{{vm.collection.title}}</h3></span><span flex="flex"></span><md-button class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection" ng-click="vm.showDialog($event, vm.deleteMessage)"><i class="material-icons">delete</i></md-button></div></md-toolbar><md-content style="background: transparent"><div layout="row" layout-align="start start"><md-card-content flex="20"><md-button class="md-raised md-accent responsive-button" ng-click="vm.showDialog($event, vm.addMessage)">Add Collection</md-button></md-card-content><md-card-content layout="column" layout-padding="layout-padding" flex="80" flex-gt-md="80" style="padding-left: 20px"><div class="md-subhead grey-text" flex="80"><span>Values must be provided for ALL of the information below, with the exception of coverage dates and item counts, which can be blank.  You can use the default image if none is available. A minimum of one content type and one subject tag should be provided.</span></div></md-card-content></div><md-card-content layout="row" layout-align="start start"><md-content flex="20" style="background: transparent"><div layout="column" style="height:700px"><md-content flex="flex" style="background: transparent"><md-list></md-list><div ng-repeat="col in vm.collectionList"><md-list-item><md-button class="md-no-style md-button  md-default-theme nav-item-dimens" ng-class="{'md-primary': col.Collection.id==vm.collectionId}" ng-click="vm.getCollectionById(col.Collection.id);"><div class="list-group-item-text md-subhead layout-fill">{{col.Collection.title}}<div class="md-ripple-container"></div></div></md-button></md-list-item><md-divider></md-divider></div></md-content></div></md-content><md-content ng-if="vm.collectionId &gt; -1" layout-padding="layout-padding" layout="column" flex="80" style="padding:25px;border: 1px solid #ccc;background: #fff"><md-button class="md-raised md-accent large-button" ng-click="vm.updateCollection()">Update Collection</md-button><md-input-container><label>Collection Name</label><input type="text" ng-model="vm.collection.title"/></md-input-container><md-input-container><label>Collection Group</label><md-select ng-model="vm.collection.category" placeholder="Select a Collection Group"><md-option ng-repeat="category in vm.categoryList" ng-value="category.id">{{category.title}}</md-option></md-select></md-input-container><md-input-container><label>Description  &nbsp;<span class="md-subhead md-default">maximum characters 450 (current {{vm.collection.description.length}})</span></label><textarea type="textarea" ng-trim="false" ng-model="vm.collection.description" maxlength="450"></textarea></md-input-container><md-input-container><label>Coverage Dates</label><input type="text" ng-model="vm.collection.dates"/></md-input-container><md-input-container><label>Item Count</label><input type="text" ng-model="vm.collection.items"/></md-input-container><div style="margin-bottom: 15px"><div class="md-caption">Item Type</div><md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.ctype"><div flex="100" flex-gt-md="25"><md-radio-button aria-label="Unrestricted" value="dig" style="display: inline">Collection</md-radio-button></div><div flex="100" flex-gt-md="25"><md-radio-button aria-label="Restricted" value="itm" style="display: inline">Single Item</md-radio-button></div><div flex="100" flex-gt-md="25"><md-radio-button aria-label="Restricted" value="aid" style="display: inline">Finding Aid</md-radio-button></div><span flex="flex"></span></md-radio-group></div><md-divider></md-divider><div style="margin-bottom: 15px"><div class="md-caption">Search Options</div><md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.repoType"><div flex="100" flex-gt-md="25"><md-radio-button aria-label="Search &amp; Browse" value="DEFAULT" flex="15" style="display: inline">Search & Browse</md-radio-button></div><div flex="100" flex-gt-md="25"><md-radio-button aria-label="Browse Only" value="BROWSE" flex="15" style="display: inline">Browse Only</md-radio-button></div><div flex="100" flex-gt-md="25"><md-radio-button aria-label="Search Only" value="SEARCH" flex="15" style="display: inline">Search Only</md-radio-button></div><span flex="flex"></span></md-radio-group></div><md-divider></md-divider><div style="margin-bottom: 15px"><div class="md-caption">Collection Access</div><md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.restricted"><div flex="100" flex-gt-lg="25"><md-radio-button aria-label="Unrestricted" ng-value="false" flex="15" style="display: inline">Unrestricted</md-radio-button></div><div flex="100" flex-gt-lg="25"><md-radio-button aria-label="Restricted" ng-value="true" flex="15" style="display: inline">Restricted</md-radio-button></div><span flex="flex"></span></md-radio-group></div><md-divider></md-divider><div style="margin-bottom: 15px"><div class="md-caption">Browse Type</div><md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.browseType"><div flex="100" flex-gt-md="25"><md-radio-button aria-label="Show entire collection" value="link" flex="15" style="display: inline" ng-click="vm.setBrowseType(0)">Link to collection</md-radio-button></div><div flex="100" flex-gt-md="25"><md-radio-button aria-label="Show a selection" value="opts" flex="15" style="display: inline" ng-click="vm.setBrowseType(1)">Show option list</md-radio-button></div><span flex="flex"></span></md-radio-group></div><md-content layout="column" layout-gt-md="row" flex="flex"><div flex="5"><i class="material-icons" style="margin-top: 20px;color: rgb(63,81,181)">arrow_forward</i></div><md-content flex="95"><md-input-container style="width:100%"><label>{{vm.browseType}}</label><input type="text" ng-model="vm.collection.url"/></md-input-container></md-content></md-content></md-content><md-content class="transparent" ng-if="vm.collectionId == -1" layout-padding="layout-padding" flex="80" style="padding: 55px;padding-top: 30px;border: 1px solid #ccc;background: #fff"><div class="md-subhead grey-text" flex="85"><span>Add collection to area.</span></div></md-content></md-card-content></md-content></md-card></md-content><md-content class="transparent transparent" layout="column" flex="100" flex-gt-md="25"><md-card class="flex" flex="flex"><md-toolbar class="md_primary"><div class="md-toolbar-tools"><i class="material-icons">image</i><h3 class="md-display-1">&nbsp;Image</h3><div flex="flex"><md-button class="md-accent md-raised md-fab md-mini" ng-click="vm.showDialog($event, vm.updateImageMessage)" style="float: right"><i class="material-icons">file_upload</i></md-button></div></div></md-toolbar><md-card-content><div layout="row"><md-card flex="40" style="margin:0;max-width: 120px"><thumb-image imgname="{{vm.thumbnailImage}}"></thumb-image></md-card><md-card-content><span class="md-caption">Image size 500px wide by 600px high</span></md-card-content></div></md-card-content></md-card><subject-selector class="flex"></subject-selector><content-type-selector class="flex"></content-type-selector><area-selector flex="flex" ng-show="vm.userAreaId === 0"></area-selector></md-content></md-content>
+<md-content class="transparent" layout="column" layout-gt-md="row" layout-align="start start" ng-controller="CollectionCtrl as vm">
+  <md-content class="transparent" layout="column" flex="100" flex-gt-md="75">
+    <md-card class="flex primary-content" flex="flex" style="background: #EAEAE6">
+      <div ng-if="vm.collectionList.$resolved"></div>
+      <md-toolbar class="md_primary">
+        <div class="md-toolbar-tools">
+          <span flex="25">
+            <i class="material-icons">collections</i>
+            <span class="md-subhead responsive-heading">&nbsp;COLLECTIONS</span>
+          </span>
+          <span flex="65">
+            <h3 class="md-display-1">{{vm.collection.title}}</h3>
+          </span>
+          <span flex="flex"></span>
+          <md-button class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection" ng-click="vm.showDialog($event, vm.deleteMessage)">
+            <i class="material-icons">delete</i>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-content style="background: transparent">
+        <div layout="row" layout-align="start start">
+          <md-card-content flex="20">
+            <md-button class="md-raised md-accent responsive-button" ng-click="vm.showDialog($event, vm.addMessage)">Add Collection</md-button>
+          </md-card-content>
+          <md-card-content layout="column" layout-padding="layout-padding" flex="80" flex-gt-md="80" style="padding-left: 20px">
+            <div class="md-subhead grey-text" flex="80">
+              <span>Values must be provided for ALL of the information below, with the exception of coverage dates and item counts, which can be blank.  You can use the default image if none is available. A minimum of one content type and one subject tag should be provided.</span>
+            </div>
+          </md-card-content>
+        </div>
+        <md-card-content layout="row" layout-align="start start">
+          <md-content flex="20" style="background: transparent">
+            <div layout="column" style="height:700px">
+              <md-content flex="flex" style="background: transparent">
+                <md-list>
+                <div ng-repeat="col in vm.collectionList">
+                  <md-list-item>
+                  <md-button class="md-no-style md-button  md-default-theme nav-item-dimens" ng-class="{'md-primary': col.Collection.id==vm.collectionId}" ng-click="vm.getCollectionById(col.Collection.id);">
+                    <div class="list-group-item-text md-subhead layout-fill">{{col.Collection.title}}<div class="md-ripple-container">
+
+                    </div>
+                    </div>
+                  </md-button>
+                </md-list-item>
+                  <md-divider></md-divider>
+                </div>
+                </md-list>
+              </md-content>
+            </div>
+          </md-content>
+          <md-content ng-if="vm.collectionId &gt; -1" layout-padding="layout-padding" layout="column" flex="80" style="padding:25px;border: 1px solid #ccc;background: #fff">
+            <md-button class="md-raised md-accent large-button" ng-click="vm.updateCollection()">Update Collection</md-button>
+            <md-input-container>
+              <label>Collection Name</label>
+              <input type="text" ng-model="vm.collection.title"/>
+            </md-input-container>
+            <md-input-container>
+            <label>Collection Group</label>
+              <md-select ng-model="vm.collection.category" placeholder="Select a Collection Group">
+                <md-option ng-repeat="category in vm.categoryList" ng-value="category.id">{{category.title}}</md-option>
+              </md-select>
+            </md-input-container>
+            <md-input-container>
+              <label>Description  &nbsp;<span class="md-subhead md-default">maximum characters 450 (current {{vm.collection.description.length}})</span></label>
+              <textarea type="textarea" ng-trim="false" ng-model="vm.collection.description" maxlength="450"></textarea>
+            </md-input-container>
+            <md-input-container>
+              <label>Coverage Dates</label>
+              <input type="text" ng-model="vm.collection.dates"/>
+            </md-input-container>
+            <md-input-container>
+              <label>Item Count</label>
+              <input type="text" ng-model="vm.collection.items"/>
+            </md-input-container><div style="margin-bottom: 15px">
+            <div class="md-caption">Item Type</div>
+            <md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.ctype">
+              <div flex="100" flex-gt-md="25">
+                <md-radio-button aria-label="Unrestricted" value="dig" style="display: inline">Collection</md-radio-button>
+              </div>
+              <div flex="100" flex-gt-md="25">
+                <md-radio-button aria-label="Restricted" value="itm" style="display: inline">Single Item</md-radio-button>
+              </div>
+              <div flex="100" flex-gt-md="25">
+                <md-radio-button aria-label="Restricted" value="aid" style="display: inline">Finding Aid</md-radio-button>
+              </div>
+              <span flex="flex"></span>
+            </md-radio-group>
+          </div>
+            <md-divider>
+
+            </md-divider>
+            <div style="margin-bottom: 15px">
+              <div class="md-caption">Search Options</div>
+              <md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.repoType">
+                <div flex="100" flex-gt-md="25">
+                  <md-radio-button aria-label="Search &amp; Browse" value="DEFAULT" flex="15" style="display: inline">Search & Browse</md-radio-button>
+                </div>
+                <div flex="100" flex-gt-md="25">
+                  <md-radio-button aria-label="Browse Only" value="BROWSE" flex="15" style="display: inline">Browse Only</md-radio-button>
+                </div>
+                <div flex="100" flex-gt-md="25">
+                  <md-radio-button aria-label="Search Only" value="SEARCH" flex="15" style="display: inline">Search Only</md-radio-button>
+                </div>
+                <span flex="flex"></span>
+              </md-radio-group>
+            </div><md-divider>
+
+          </md-divider>
+            <div style="margin-bottom: 15px">
+              <div class="md-caption">Collection Access</div>
+              <md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.restricted">
+                <div flex="100" flex-gt-lg="25">
+                  <md-radio-button aria-label="Unrestricted" ng-value="false" flex="15" style="display: inline">Unrestricted</md-radio-button>
+                </div>
+                <div flex="100" flex-gt-lg="25">
+                  <md-radio-button aria-label="Restricted" ng-value="true" flex="15" style="display: inline">Restricted</md-radio-button>
+                </div>
+                <span flex="flex">
+                </span></md-radio-group>
+            </div>
+            <md-divider>
+            </md-divider>
+            <div style="margin-bottom: 15px">
+              <div class="md-caption">Browse Type</div>
+              <md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.browseType">
+                <div flex="100" flex-gt-md="25">
+                  <md-radio-button aria-label="Show entire collection" value="link" flex="15" style="display: inline" ng-click="vm.setBrowseType(0)">Link to collection</md-radio-button>
+                </div>
+                <div flex="100" flex-gt-md="25">
+                  <md-radio-button aria-label="Show a selection" value="opts" flex="15" style="display: inline" ng-click="vm.setBrowseType(1)">Show option list</md-radio-button>
+                </div>
+                <span flex="flex"></span>
+              </md-radio-group>
+            </div><md-content layout="column" layout-gt-md="row" flex="flex">
+            <div flex="5">
+              <i class="material-icons" style="margin-top: 20px;color: rgb(63,81,181)">arrow_forward</i>
+            </div>
+            <md-content flex="95">
+              <md-input-container style="width:100%">
+                <label>{{vm.browseType}}</label>
+                <input type="text" ng-model="vm.collection.url"/>
+              </md-input-container>
+            </md-content>
+          </md-content>
+          </md-content>
+          <md-content class="transparent" ng-if="vm.collectionId == -1" layout-padding="layout-padding" flex="80" style="padding: 55px;padding-top: 30px;border: 1px solid #ccc;background: #fff">
+            <div class="md-subhead grey-text" flex="85">
+              <span>Add collection to area.</span>
+            </div>
+          </md-content>
+        </md-card-content>
+      </md-content>
+    </md-card>
+  </md-content>
+  <md-content class="transparent transparent" layout="column" flex="100" flex-gt-md="25">
+    <md-card class="flex" flex="flex">
+      <md-toolbar class="md_primary">
+        <div class="md-toolbar-tools">
+          <i class="material-icons">image</i>
+          <h3 class="md-display-1">&nbsp;Image</h3>
+          <div flex="flex">
+            <md-button class="md-accent md-raised md-fab md-mini" ng-click="vm.showDialog($event, vm.updateImageMessage)" style="float: right">
+              <i class="material-icons">file_upload</i>
+            </md-button>
+          </div>
+        </div>
+        </md-toolbar>
+      <md-card-content>
+        <div layout="row">
+          <md-card flex="40" style="margin:0;max-width: 120px">
+            <thumb-image imgname="{{vm.thumbnailImage}}"></thumb-image>
+          </md-card>
+          <md-card-content>
+            <span class="md-caption">Image size 500px wide by 600px high</span>
+          </md-card-content>
+        </div>
+      </md-card-content>
+    </md-card>
+    <subject-selector class="flex"></subject-selector>
+    <content-type-selector class="flex"></content-type-selector>
+    <area-selector flex="flex" ng-show="vm.userAreaId === 0">
+    </area-selector>
+  </md-content>
+</md-content>
