@@ -165,6 +165,11 @@
 
       };
 
+      vm.$onInit = () => {
+        vm.collection.browseType = 'link';
+
+      };
+
       /**
        * Listens for event emitted after the collection has
        * been removed from and area.  This updates the collection
@@ -211,16 +216,16 @@
       /**
        * Watch for updates to the list of areas.
        */
-      $scope.$watch(function () {
-          return Data.areas;
-        },
-        function (newValue) {
-          if (newValue !== $scope.areas) {
-            vm.areas = newValue;
-          }
-        }
-
-      );
+      // $scope.$watch(function () {
+      //     return Data.areas;
+      //   },
+      //   function (newValue) {
+      //     if (newValue !== $scope.areas) {
+      //       vm.areas = newValue;
+      //     }
+      //   }
+      //
+      // );
 
       /**
        * Watch for updates to the thumbnail image.

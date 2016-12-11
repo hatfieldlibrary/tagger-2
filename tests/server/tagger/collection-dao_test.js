@@ -404,7 +404,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.repoTypeByArea(1)
+    collectionDao.repoTypesByArea(1)
       .then(_onSuccess)
       .catch(_onError);
   });

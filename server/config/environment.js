@@ -23,6 +23,7 @@ var config = {
       dialect: 'mysql'
     },
     sync: {force: false},
+    useAuth: false,
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
@@ -52,6 +53,7 @@ var config = {
       dialect: 'mysql'
     },
     sync: {force: false},
+    useAuth: false,
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
@@ -81,6 +83,7 @@ var config = {
       dialect: 'mysql'
     },
     sync: {force: true},
+    useAuth: false,
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/var/taggerImages',
@@ -99,6 +102,7 @@ var config = {
       name: 'tagger'
     },
     sync: {force: false},
+    useAuth: true,
     uid: credentials.uid,
     gid: credentials.gid,
     port: 3000,

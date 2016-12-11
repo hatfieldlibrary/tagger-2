@@ -35,7 +35,9 @@ module.exports = function(app,config,passport){
     passport.authenticate('google', { successRedirect: '/tagger/',
       failureRedirect: '/tagger/login' }));
 
-  app.use('/rest/userinfo', ensureAuthenticated, userInfo.returnUserInfo);
+  app.use('/rest/userinfo', ensureAuthenticated, (req, res) => {
+    userInfo.returnUserInfo(req, res, config);
+  });
 
   // COLLECTIONS
   app.use('/rest/collection/byId/:id', ensureAuthenticated, collection.byId);
@@ -46,8 +48,8 @@ module.exports = function(app,config,passport){
   app.post('/rest/collection/add', ensureAuthenticated, collection.add);
   app.post('/rest/collection/delete', ensureAuthenticated, collection.delete);
   app.post('/rest/collection/update', ensureAuthenticated, collection.update);
-  app.post('/tagger/collection/image', ensureAuthenticated, function (res, req) {
-    collection.updateImage(res, req, config);
+  app.post('/tagger/collection/image', ensureAuthenticated, function (req, res) {
+    collection.updateImage(req, res, config);
   });
   app.get('/rest/collection/:collId/add/area/:areaId', ensureAuthenticated, collection.addAreaTarget);
   app.get('/rest/collection/:collId/remove/area/:areaId', ensureAuthenticated, collection.removeAreaTarget);

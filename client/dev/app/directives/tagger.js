@@ -625,7 +625,7 @@
       ' <md-toolbar class="md_primary">' +
       '   <div class="md-toolbar-tools">     ' +
       '     <i class="material-icons">link</i>     ' +
-      '     <h3 class="md-display-1">&nbsp;Tags</h3>     ' +
+      '     <h3 class="md-display-1">&nbsp;Subject Tags</h3>     ' +
       '     <span flex="" class="flex"></span>   </div>' +
       ' </md-toolbar>' +
       ' <md-card-content>' +

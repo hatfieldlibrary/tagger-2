@@ -214,7 +214,7 @@ exports.removeTagTarget = function (req, res) {
  * @param areaId    the area id
  * @param res
  */
-function addArea(collId, areaId, res) {
+function _addArea(collId, areaId, res) {
 
   async.series(
     {
@@ -280,7 +280,7 @@ exports.addAreaTarget = function (req, res) {
       }
       // if new
       if (result.check === null) {
-        addArea(collId, areaId, res);
+        _addArea(collId, areaId, res);
 
       }
       // if not new, just return the current list.
@@ -504,11 +504,13 @@ exports.delete = function (req, res) {
 exports.add = function (req, res) {
   const title = req.body.title;
   const areaId = req.body.areaId;
+  const browseType = req.body.browseType;
+
   var newCollectionId;
 
   async.series({
       addCollection: function (callback) {
-        taggerDao.addNewCollection(title).then(function (coll) {
+        taggerDao.addNewCollection(title, browseType).then(function (coll) {
           newCollectionId = coll.id;
           callback(null, coll);
         }).catch(function (err) {

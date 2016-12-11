@@ -7,6 +7,7 @@
     'ngRoute',
     'ngFileUpload',
     'dndLists',
+     'rx',
     'taggerContext',
     'taggerEnvironment',
     'taggerControllers',

@@ -123,6 +123,7 @@
         TagTargetAdd,
         TaggerToast,
         Upload,
+        AreaListObserver,
         Data) {
 
         /**
@@ -319,8 +320,8 @@
           var result = AreaAdd.save({title: title});
 
           result.$promise.then(function (data) {
-
             if (data.status === 'success') {
+
               new TaggerToast('Area Added');
               // After area update succeeds, update the view.
               $scope.getAreaList(data.id);
@@ -342,6 +343,8 @@
 
           areas.$promise.then(function (data) {
             Data.areas = data;
+            //observer
+            AreaListObserver.set(data);
             if (Data.areas.length > 0) {
               if (id === null) {
                 Data.currentAreaIndex = Data.areas[0].id;
@@ -513,7 +516,7 @@
          */
         $scope.addCollection = function (title) {
 
-          var result = CollectionAdd.save({title: title, areaId: Data.currentAreaIndex});
+          var result = CollectionAdd.save({title: title, areaId: Data.currentAreaIndex, browseType: 'link'});
 
           result.$promise.then(function (data) {
 

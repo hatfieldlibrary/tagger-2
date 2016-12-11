@@ -19,6 +19,7 @@
     'TaggerToast',
     'TaggerDialog',
     '$animate',
+    'AreaListObserver',
     'Data',
 
     function(
@@ -32,6 +33,7 @@
       TaggerToast,
       TaggerDialog,
       $animate,
+      AreaListObserver,
       Data ) {
 
       var vm = this;
@@ -50,6 +52,12 @@
 
       /** @type {number */
       vm.currentAreaId = Data.currentAreaIndex;
+
+      AreaListObserver.subscribe(function onNext() {
+              console.log('area update')
+            vm.areas = AreaListObserver.get();
+
+      });
 
       /**
        * Show the $mdDialog.
@@ -96,6 +104,10 @@
             var areas = AreaList.query();
             areas.$promise.then(function(data) {
               vm.areas = data;
+
+              // observer
+              AreaListObserver.set(data);
+
               Data.areas = data;
             });
             // Toast upon success
@@ -134,6 +146,8 @@
           if (data.status === 'success') {
             var areas =  AreaList.query();
             areas.$promise.then(function(data) {
+              //observer
+              AreaListObserver.set(data);
               Data.areas = data;
               Data.currentAreaIndex = data[0].id;
             });
@@ -147,11 +161,11 @@
        * and removed in a dialog controller.  They can also
        * be reordered by the view model (see above).
        */
-      $scope.$watch(function() { return Data.areas; },
-        function(newValue) {
-          vm.areas = newValue;
-        }
-      );
+      // $scope.$watch(function() { return Data.areas; },
+      //   function(newValue) {
+      //     vm.areas = newValue;
+      //   }
+      // );
 
       /**
        * Watch for changes in the shared area index

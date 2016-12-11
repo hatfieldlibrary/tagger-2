@@ -279,10 +279,11 @@ taggerDao.deleteCollection = (collId) => {
 
 };
 
-taggerDao.addNewCollection = (title) => {
+taggerDao.addNewCollection = (title, browseType) => {
 
   return taggerSchema.Collection.create({
-    title: title
+    title: title,
+    browseType: browseType
   });
 
 };

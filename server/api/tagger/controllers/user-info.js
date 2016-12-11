@@ -10,12 +10,23 @@ const utils = require('../utils/response-utility');
  * @param req
  * @param res
  */
-exports.returnUserInfo = function (req, res) {
+exports.returnUserInfo = function (req, res, config) {
+  console.log(res)
 
-  console.log(req.user)
-  const name = req.user._json.name;
-  const picture = req.user._json.picture;
-  const areaId = req.user.areaId;
+  let name = '';
+  let picture = '';
+  let areaId = '';
+
+  if (config.isAuth) {
+    name = req.user._json.name;
+    picture = req.user._json.picture;
+    areaId = req.user.areaId;
+  }
+  else {
+    name = 'Development User';
+    picture = '/resources/images/dev/homer.jpg';
+    areaId = 0;
+  }
 
   utils.sendResponse(res, {name: name, picture: picture, areaId: areaId});
 
