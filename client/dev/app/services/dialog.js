@@ -124,6 +124,9 @@
         TaggerToast,
         Upload,
         AreaListObserver,
+        AreaObserver,
+        CollectionListObserver,
+        CollectionObserver,
         Data) {
 
         /**
@@ -516,14 +519,14 @@
          */
         $scope.addCollection = function (title) {
 
-          var result = CollectionAdd.save({title: title, areaId: Data.currentAreaIndex, browseType: 'link'});
+          var result = CollectionAdd.save({title: title, areaId: AreaObserver.get(), browseType: 'link'});
 
           result.$promise.then(function (data) {
 
             if (data.status === 'success') {
 
               new TaggerToast('Collection Added');
-              // Update the category list. The
+              // Update the collection list. The
               // id parameter will be used to select
               // the newly added category for editing.
               $scope.getCollectionList(data.id);
@@ -544,7 +547,7 @@
             if (data.status === 'success') {
 
               new TaggerToast('Collection Deleted');
-              // After retrieving new category list, we need
+              // After retrieving new collection list, we need
               // to update the category currently in view.
               // Given a null id parameter, the getCollectionList
               // function will use the id of the first collection in the
@@ -564,23 +567,28 @@
          * @param id  the collection id or null.
          */
         $scope.getCollectionList = function (id) {
+          console.log('gettingnew collection list')
 
           // Update the shared Data service
-          var result = CollectionsByArea.query({areaId: Data.currentAreaIndex});
+          var result = CollectionsByArea.query({areaId: AreaObserver.get()});
           // Wait for callback.
           result.$promise.then(function (data) {
-
-            Data.collections = data;
+            console.log('got new collectin list')
+             CollectionListObserver.set(data);
+          //  Data.collections = data;
             // Deleting a category doesn't generate
             // a new id. In that case, expect the
             // id to be null. Update the view using the
             // id of the first item in the updated category
             // list.
             if (id === null) {
-              Data.currentCollectionIndex = Data.collections[0].Collection.id;
+              console.log('addding id to observer')
+              CollectionObserver.set(Data.collections[0].Collection.id)
+             // Data.currentCollectionIndex = Data.collections[0].Collection.id;
 
             } else {
-              Data.currentCollectionIndex = id;
+              CollectionObserver.set(id);
+            //  Data.currentCollectionIndex = id;
             }
 
           });

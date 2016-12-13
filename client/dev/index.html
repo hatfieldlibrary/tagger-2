@@ -24,7 +24,7 @@
       <div ng-if="vm.userAreaId === 0">
         <md-input-container class="md-no-float">
           <md-select ng-model="vm.areas" placeholder="Select Area">
-            <md-option ng-repeat="area in vm.areas track by area.id" ng-value="area.title" ng-selected="vm.currentId == area.id"
+            <md-option ng-repeat="area in vm.areas track by area.id" ng-value="area.title" ng-selected="vm.currentAreaId == area.id"
                        ng-click="vm.updateArea(area.id, $index)">{{area.title}}
             </md-option>
           </md-select>
@@ -185,6 +185,10 @@
 <script type="text/javascript" src="bower_components/d3/d3.js"></script>
 <script type="text/javascript" src="app/common/context.js"></script>
 <script type="text/javascript" src="app/common/controllers.js"></script>
+<script type="text/javascript" src="app/common/services.js"></script>
+<script type="text/javascript" src="app/common/components.js"></script>
+<script type="text/javascript" src="app/common/directives.js"></script>
+<script type="text/javascript" src="app/common/environment.js"></script>
 <script type="text/javascript" src="app/controllers/collections.js"></script>
 <script type="text/javascript" src="app/controllers/authorization.js"></script>
 <script type="text/javascript" src="app/controllers/layout.js"></script>
@@ -194,15 +198,39 @@
 <script type="text/javascript" src="app/controllers/users.js"></script>
 <script type="text/javascript" src="app/controllers/areas.js"></script>
 <script type="text/javascript" src="app/controllers/categories.js"></script>
-<script type="text/javascript" src="app/common/services.js"></script>
-<script type="text/javascript" src="app/common/environment.js"></script>
 <script type="text/javascript" src="app/services/tagger.js"></script>
 <script type="text/javascript" src="app/services/dialog.js"></script>
-<script type="text/javascript" src="app/common/directives.js"></script>
 <script type="text/javascript" src="app/directives/tagger.js"></script>
 <script type="text/javascript" src="app/directives/charts.js"></script>
+
+<script type="text/javascript" src="app/components/collection-summary.js"></script>
+
 <script type="text/javascript" src="app/observables/current-area.js"></script>
 <script type="text/javascript" src="app/observables/areas.js"></script>
+<script type="text/javascript" src="app/observables/current-area.js"></script>
+<script type="text/javascript" src="app/observables/categories.js"></script>
+<script type="text/javascript" src="app/observables/current-category.js"></script>
+<script type="text/javascript" src="app/observables/collections.js"></script>
+<script type="text/javascript" src="app/observables/current-collection.js"></script>
+<script type="text/javascript" src="app/observables/tags-for-collection.js"></script>
+<script type="text/javascript" src="app/observables/types-for-collection.js"></script>
+<script type="text/javascript" src="app/observables/current-area-label.js"></script>
+<script type="text/javascript" src="app/observables/tags.js"></script>
+<script type="text/javascript" src="app/observables/tags-for-collection.js"></script>
+<script type="text/javascript" src="app/observables/tags-for-area.js"></script>
+<script type="text/javascript" src="app/observables/current-tag.js"></script>
+<script type="text/javascript" src="app/observables/content-types.js"></script>
+<script type="text/javascript" src="app/observables/current-content-type.js"></script>
+<script type="text/javascript" src="app/observables/is-auth.js"></script>
+<script type="text/javascript" src="app/observables/user-info.js"></script>
+<script type="text/javascript" src="app/observables/user-area-id.js"></script>
+<script type="text/javascript" src="app/observables/categories-for-area.js"></script>
+<script type="text/javascript" src="app/observables/thumb-image.js"></script>
+<script type="text/javascript" src="app/observables/total-search-options.js"></script>
+<script type="text/javascript" src="app/observables/total-collection-links.js"></script>
+<script type="text/javascript" src="app/observables/total-collection-types.js"></script>
+<script type="text/javascript" src="app/observables/total-collections.js"></script>
+
 <script type="text/javascript" src="app/app.js"></script>
 <script type="text/javascript" src="app/app.config.js"></script>
 <script type="text/javascript" src="app/app.route.js"></script>

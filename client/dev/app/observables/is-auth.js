@@ -1,28 +1,27 @@
 /**
- * Created by mspalti on 12/9/16.
+ * Created by mspalti on 12/12/16.
  */
 (function()  {
 
   'use strict';
 
-  taggerServices.factory('UserObserver', function(rx){
+  taggerServices.factory('IsAuthObserver', ['rx', function(rx){
 
     const Subject = new rx.Subject();
-    let user = {};
+    let auth = false;
 
     return {
       set: function set(update){
-        user = update;
-        Subject.onNext(user);
+        auth = update;
+        Subject.onNext(auth);
       },
       get: function get() {
-        return user;
+        return auth;
       },
       subscribe: function (o) {
         return Subject.subscribe(o);
       }
     };
-  });
-
+  }]);
 
 })();

@@ -1,18 +1,19 @@
 ;(function (ng) {
   'use strict';
 
-   ng.module('tagger', [
+  ng.module('tagger', [
 
     'ngMaterial',
     'ngRoute',
     'ngFileUpload',
     'dndLists',
-     'rx',
+    'rx',
     'taggerContext',
     'taggerEnvironment',
     'taggerControllers',
     'taggerServices',
-    'taggerDirectives'
+    'taggerDirectives',
+    'taggerComponents'
 
   ]);
 

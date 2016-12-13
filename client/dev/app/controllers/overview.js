@@ -14,6 +14,9 @@
     'CategoryCountByArea',
     'ContentTypeCount',
     'TagCountForArea',
+    'AreaLabelObserver',
+    'AreaObserver',
+    'TotalTypesObserver',
     'Data',
     function(
 
@@ -22,25 +25,48 @@
       CategoryCountByArea,
       ContentTypeCount,
       TagCountForArea,
+      AreaLabelObserver,
+      AreaObserver,
+      TotalTypesObserver,
       Data ) {
 
 
       var vm = this;
       var collectionTotal = Data.collectionsTotal;
-      var collectionTypeTotal = Data.collectionTypeTotal;
+      let collectionTypeTotal = 0;
       var searchOptionsTotal = Data.searchOptionsTotal;
       var collectionLinksTotal = Data.collectionLinksTotal;
+
+
+    TotalTypesObserver.subscribe(function onNext() {
+          collectionTypeTotal = TotalTypesObserver.get();
+    });
 
       vm.categoryCounts ={data: null};
       vm.typeCounts = {data: null};
 
       /**
+       * Watch for changes in the current area id and initialize.
+       */
+      AreaObserver.subscribe(function onNext() {
+        _init();
+      });
+      /**
+       * Watch for updates to the area label.  Assures that initialization and
+       * area context switches are recognized.
+       */
+      AreaLabelObserver.subscribe(function onNext() {
+        vm.areaLabel = AreaLabelObserver.get();
+      });
+
+      /**
        * Init function called on load and after change to
        * the selected area.
        */
-      var init = function() {
+      var _init = function() {
 
-        if (Data.currentAreaIndex !== null) {
+        const areaId = AreaObserver.get();
+        if (areaId !== null) {
 
           // initialize count checks
           vm.collectionSearchMatch = (collectionTotal === searchOptionsTotal);
@@ -51,7 +77,7 @@
           var categoryCount =
             CategoryCountByArea.query(
               {
-                areaId: Data.currentAreaIndex
+                areaId: areaId
               }
             );
           categoryCount.$promise.then(
@@ -74,7 +100,7 @@
           var contentTypeCount =
             ContentTypeCount.query(
               {
-                areaId: Data.currentAreaIndex
+                areaId: areaId
               }
             );
           contentTypeCount.$promise.then(
@@ -94,7 +120,7 @@
 
             });
 
-          var subs = TagCountForArea.query({areaId: Data.currentAreaIndex});
+          var subs = TagCountForArea.query({areaId: areaId});
           subs.$promise.then(function (data) {
 
             vm.subjects = data;
@@ -103,29 +129,6 @@
 
         }
       };
-
-      /**
-       * Watch for updates to the area label.  Assures that initialization and
-       * area context switches are recognized.
-       */
-      $scope.$watch(function() { return Data.areaLabel;},
-        function(newValue) {
-          if (newValue.length > 0) {
-            console.log('new area label ' + newValue);
-            vm.areaLabel = newValue;
-          }
-        });
-
-      /**
-       * Watch for changes in the current area id and initialize
-       * the view model.
-       */
-      $scope.$watch(function() {return Data.currentAreaIndex;},
-        function(newValue, oldValue){
-          if (newValue !== oldValue) {
-            init();
-          }
-        });
 
       /**
        * Watch for changes in the search option type total.  Update
@@ -189,7 +192,7 @@
 
         function(newValue, oldValue) {
           if (newValue !== oldValue) {
-            init();
+            _init();
             if (newValue !== 0) {
               collectionTotal = newValue;
               if ( newValue ) {
@@ -203,7 +206,7 @@
 
 
       // self-executing
-      init();
+      _init();
 
     }
   ]);

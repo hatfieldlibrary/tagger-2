@@ -27,7 +27,16 @@
     'TagsForArea',
     'getUserInfo',
     'AreaObserver',
+    'AreaLabelObserver',
     'AreaListObserver',
+    'IsAuthObserver',
+    'UserObserver',
+    'UserAreaObserver',
+    'TagsForAreaObserver',
+    'CollectionTagsObserver',
+    'CollectionTypesObserver',
+    'CollectionListObserver',
+    'CollectionObserver',
     'Data',
     function ($scope,
               $timeout,
@@ -44,8 +53,18 @@
               TagsForArea,
               getUserInfo,
               AreaObserver,
+              AreaLabelObserver,
               AreaListObserver,
+              IsAuthObserver,
+              UserObserver,
+              UserAreaObserver,
+              TagsForAreaObserver,
+              CollectionTagsObserver,
+              CollectionTypesObserver,
+              CollectionListObserver,
+              CollectionObserver,
               Data) {
+
 
       var vm = this;
 
@@ -58,54 +77,126 @@
       vm.areas = [];
 
       /** @type {number} */
-      vm.currentId = 0;
+      vm.currentAreaId = 0;
 
       /** @type {number} */
       vm.userAreaId = 0;
 
+      vm.toggleLeft = buildDelayedToggler('left');
+
+      vm.authorized = function () {
+        return vm.isAuth;
+
+      };
+      /**
+       * Update the current area.
+       * @param id the area id
+       * @param index the position of the area in the
+       *          current area array
+       */
+      vm.updateArea = function (id, index) {
+        if (UserAreaObserver.get() === 0) { // admin user
+          // update area id after user input
+          AreaObserver.set(id);
+          //Data.currentAreaIndex = id;
+          const areas = AreaListObserver.get();
+          AreaLabelObserver.set(areas[index].title);
+          updateAreaContext(id);
+        }
+      };
+
+      /**
+       * Set the selected option index.
+       * @param index
+       */
+      vm.setCurrentIndex = function (index) {
+        vm.currentIndex = index;
+
+      };
+
+
+      /**
+       * Watches for update to the user's area. Data.userAreaId should change
+       * only when the app is loaded.  The value is obtained in the Passport
+       * OAUTH login procedure and is used here to initialize state. (If only
+       * used here, why the observable?
+       */
+      UserAreaObserver.subscribe(function onNext() {
+        vm.userAreaId = UserAreaObserver.get();
+        if (vm.userAreaId === 0) {
+
+          var areas = AreaList.query();
+          areas.$promise.then(function (data) {
+            vm.areas = data;
+            AreaListObserver.set(data);
+            AreaObserver.set(data[0].id);
+            vm.currentAreaId = setAreaId(data[0].id);
+            setContext();
+
+          });
+        }
+        else {
+          vm.currentAreaId = id;
+          setContext();
+        }
+      });
 
       AreaObserver.subscribe(function onNext() {
 
-        const areaId = AreaObserver.get();
-        // The userAreaId can be zero (administrator).
-        // Set the view model user area id before continuing.
-        vm.userAreaId = areaId;
-
-        var areas = AreaList.query();
-        areas.$promise.then(function (data) {
-
-          vm.areas = data;
-          Data.areas = data;
-
-          // update list observer
-          AreaListObserver.set(data);
-
-          // Assure we have a non-zero area id.
-          // For the admin user, this method will
-          // return the id of the first area.
-          var actualId = setAreaId(areaId);
-
-          // Continue updating the context using
-          // the area id.
-          Data.currentAreaIndex = actualId;
-          vm.currentId = actualId;
-          initializeApp(actualId);
-
-        });
       });
+
+
 
       AreaListObserver.subscribe(function onNext() {
 
         const areas = AreaListObserver.get();
         console.log('got new area list');
-        vm.currentId = areas[0].id;
+        vm.currentAreaId = areas[0].id;
         vm.areas = areas;
         Data.areaLabel = areas[0].title;
-        updateAreaContext(vm.currentId);
-
+        updateAreaContext(vm.currentAreaId);
 
       });
 
+      IsAuthObserver.subscribe(function onNext() {
+
+        const auth = IsAuthObserver.get();
+        if (auth) {
+          vm.authorized = true;
+        }
+
+      });
+
+      UserObserver.subscribe(function onNext() {
+        const user = UserObserver.get();
+        vm.userName = user.name;
+        vm.userPicture = user.picture;
+      });
+
+      CollectionObserver.subscribe(function onNext() {
+
+      });
+
+      AreaLabelObserver.subscribe(function onNext() {
+
+        vm.areaLabel = AreaLabelObserver.get();
+      });
+
+      /**
+       * Administrators will be assigned to the non-existing
+       * area id of zero.  This method assigns a real area
+       * id to the administrator session, otherwise returns
+       * the area id for the collection manager.
+       * @param id
+       * @returns {*}
+       */
+      function setAreaId(id) {
+        if (id === 0) {
+          return AreaObserver.get();
+        } else {
+          return id;
+        }
+      }
 
       /**
        * Supplies a function that will continue to operate until the
@@ -140,67 +231,6 @@
         }, 200);
       }
 
-      vm.toggleLeft = buildDelayedToggler('left');
-
-      $scope.$watch(function () {
-          return Data.isAuth;
-        },
-        function (newValue, oldValue) {
-             if (newValue === true) {
-               vm.authorized = true;
-               vm.userName = Data.user.name;
-               vm.userPicture = Data.user.picture;
-             }
-
-        });
-
-      /**
-       * Watches for update to the user's area. Data.userAreaId should change
-       * only when the app is loaded.  The value is obtained in the Passport
-       * OAUTH login procedure and is used here to initialize state.
-       */
-      // $scope.$watch(function () {
-      //     return Data.userAreaId;
-      //   },
-      //   function (newValue, oldValue) {
-      //
-      //
-      //     // In initial state, userAreaId is null (object).
-      //     if (typeof(newValue) === 'number') {
-      //
-      //       // The userAreaId can be zero (administrator).
-      //       // Set the view model user area id before continuing.
-      //       vm.userAreaId = newValue;
-      //
-      //       if (newValue !== oldValue) {
-      //
-      //         var areas = AreaList.query();
-      //
-      //         areas.$promise.then(function (data) {
-      //
-      //           vm.areas = data;
-      //           Data.areas = data;
-      //
-      //           console.log(vm.areas)
-      //
-      //           // Assure we have a non-zero area id.
-      //           // For the admin user, this method will
-      //           // return the id of the first area.
-      //           var actualId = setAreaId(newValue);
-      //
-      //           // Continue updating the context using
-      //           // the area id.
-      //           Data.currentAreaIndex = actualId;
-      //           vm.currentId = actualId;
-      //           initializeApp(actualId);
-      //
-      //         });
-      //
-      //       }
-      //     }
-      //
-      //   });
-
       /**
        * Sets the role of the user based on the
        * area to which they belong. Called on the
@@ -209,17 +239,10 @@
        */
       function getRole(areaId) {
 
-        console.log('area id is ' + areaId);
-
-        // update the app state
-        Data.userAreaId = areaId;
-        //oberver test
-        AreaObserver.set(areaId);
-        // set the string
         vm.role = getUserRole(areaId);
         // set area default for non-admin user
         if (areaId > 0) {
-          Data.currentAreaIndex = areaId;
+       //   AreaObserver.set(areaId);
         }
       }
 
@@ -239,87 +262,30 @@
 
       }
 
-      vm.authorized = function () {
-
-        return vm.isAuth;
-
-      };
-
-      function retrieveUserInfo() {
-
-        var userinfo = getUserInfo.query();
-        userinfo.$promise.then(function (user) {
-          console.log(user)
-          Data.isAuth = true;
-          Data.user = user;
-          vm.userAreaId = user.areaId;
-          Data.userAreaId = user.areaId;
-          // observer test
-          AreaObserver.set(user.areaId);
-          getRole(user.areaId);
-        }).catch(function(err) {
-          console.log(err);
-        });
-
-      }
-
-      /**
-       * Convenience method for initialization.
-       */
-      function initializeApp(userAreaId) {
-
-        vm.areaLabel = getAreaLabel(userAreaId);
-        Data.areaLabel = vm.areaLabel;
-        // Continue initialization.
-        setContext(userAreaId);
-      }
-
-
       /**
        * Look up area label at initialization.
        * @param id  the area id
        */
       function getAreaLabel(id) {
-        for (var i = 0; i < Data.areas.length; i++) {
-          if (Data.areas[i].id === id) {
-            return Data.areas[i].title;
+        const areas = AreaListObserver.get();
+        for (var i = 0; i < areas.length; i++) {
+          if (areas[i].id === id) {
+            return areas[i].title;
           }
         }
         return;
       }
 
       /**
-       * Update the current area.
-       * @param id the area id
-       * @param index the position of the area in the
-       *          current area array
-       */
-      vm.updateArea = function (id, index) {
-        if (Data.userAreaId === 0) { // admin user
-          // update area id after user input
-          Data.currentAreaIndex = id;
-          Data.areaLabel = Data.areas[index].title;
-          updateAreaContext(id);
-        }
-
-
-      };
-
-      /**
-       * Set the selected option index.
-       * @param index
-       */
-      vm.setCurrentIndex = function (index) {
-        vm.currentIndex = index;
-
-      };
-
-      /**
        * Initializes the shared Data context with global
        * values not specific to the area.
        * @param id   the area id
        */
-      function setContext(id) {
+      function setContext() {
+
+        vm.areaLabel = getAreaLabel(vm.currentAreaId);
+        AreaLabelObserver.set(vm.areaLabel);
+        const id = vm.currentAreaId;
 
         if (typeof(id) === 'number') {
 
@@ -372,16 +338,22 @@
 
               if (data.length > 0) {
                 // Set the new collection information.
-                Data.collections = data;
-                Data.currentCollectionIndex = data[0].Collection.id;
-                Data.tagsForCollection =
-                  TagsForCollection.query({collId: Data.currentCollectionIndex});
-                Data.typesForCollection =
-                  TypesForCollection.query({collId: Data.currentCollectionIndex});
+                CollectionListObserver.set(data);
+                CollectionObserver.set(data[0].Collection.id);
+                TagsForCollection.query({collId: CollectionObserver.get()})
+                  .$promise.then(function (data) {
+                  CollectionTagsObserver.set(data);
+                });
+                TypesForCollection.query({collId: CollectionObserver.get()})
+                  .$promise.then(function (data) {
+                  CollectionTypesObserver.set(data);
+                });
               } else {
                 // No collections for area.  Reset.
                 Data.collections = [];
+                CollectionListObserver.set([]);
                 Data.currentCollectionIndex = -1;
+                CollectionObserver.set(-1);
               }
             }
 
@@ -391,7 +363,8 @@
           var tagsForArea = TagsForArea.query({areaId: id});
           tagsForArea.$promise.then(function (data) {
             if (data.length > 0) {
-              Data.tagsForArea = data;
+              //Data.tagsForArea = data;
+              TagsForAreaObserver.set(data);
             }
           });
           // Get collection groups for area.
@@ -404,50 +377,19 @@
         }
       }
 
-
-      /**
-       * Updates the area list and selected area id
-       * values when areas change.   Changes occur when
-       * area is added or deleted, or when the position
-       * attribute of the area is changed.
-       */
-      // $scope.$watch(function () {
-      //     return Data.areas;
-      //   },
-      //   function (newValue, oldValue) {
-      //     // Verify that the list is being update rather
-      //     // than initialized for the first time.
-      //     if (oldValue.length > 0) {
-      //       console.log('got new area list');
-      //       vm.currentId = Data.areas[0].id;
-      //       vm.areas = newValue;
-      //       console.log(vm.areas)
-      //       Data.areaLabel = Data.areas[0].title;
-      //       updateAreaContext(vm.currentId);
-      //       $scope.$apply();
-      //     }
-      //
-      //   });
-
-
-      /**
-       * Administrators will be assigned to the non-existing
-       * area id of zero.  This method assigns a real area
-       * id to the administrator session, otherwise returns
-       * the area id for the collection manager.
-       * @param id
-       * @returns {*}
-       */
-      function setAreaId(id) {
-        if (id === 0) {
-          return Data.areas[0].id;
-        } else {
-          return id;
-        }
-      }
-
       vm.$onInit = function () {
-        retrieveUserInfo();
+
+        var userinfo = getUserInfo.query();
+        userinfo.$promise.then(function (user) {
+
+          IsAuthObserver.set(true);
+          UserObserver.set(user);
+          UserAreaObserver.set(user.areaId);
+          getRole(user.areaId);
+
+        }).catch(function (err) {
+          console.log(err);
+        });
       }
 
     }]);

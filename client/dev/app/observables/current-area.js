@@ -8,7 +8,7 @@
   taggerServices.factory('AreaObserver', ['rx', function(rx){
 
     const Subject = new rx.Subject();
-    let area = 0;
+    let area = null;
 
     return {
       set: function set(update){
@@ -23,6 +23,5 @@
       }
     };
   }]);
-
 
 })();

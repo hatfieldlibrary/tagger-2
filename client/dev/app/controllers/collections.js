@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
   'use strict';
 
@@ -19,24 +19,39 @@
     'TagsForArea',
     'CategoryList',
     'CategoryByArea',
+    'AreaObserver',
+    'UserAreaObserver',
+    'CollectionObserver',
+    'CollectionListObserver',
+    'CategoryListObserver',
+    'CollectionTagsObserver',
+    'CollectionTypesObserver',
+    'ThumbImageObserver',
     'TaggerDialog',
     'TaggerToast',
     'Data',
 
-    function (
-      $scope,
-      $resource,
-      CollectionsByArea,
-      CollectionById,
-      CollectionUpdate,
-      TagsForCollection,
-      TypesForCollection,
-      TagsForArea,
-      CategoryList,
-      CategoryByArea,
-      TaggerDialog,
-      TaggerToast,
-      Data ) {
+    function ($scope,
+              $resource,
+              CollectionsByArea,
+              CollectionById,
+              CollectionUpdate,
+              TagsForCollection,
+              TypesForCollection,
+              TagsForArea,
+              CategoryList,
+              CategoryByArea,
+              AreaObserver,
+              UserAreaObserver,
+              CollectionObserver,
+              CollectionListObserver,
+              CategoryListObserver,
+              CollectionTagsObserver,
+              CollectionTypesObserver,
+              ThumbImageObserver,
+              TaggerDialog,
+              TaggerToast,
+              Data) {
 
       var vm = this;
 
@@ -66,7 +81,7 @@
       vm.updateImageMessage = 'templates/updateImageMessage.html';
 
       /** @type {number} */
-      vm.userAreaId = Data.userAreaId;
+      vm.userAreaId = UserAreaObserver.get();
 
       vm.noCollectionMessage = 'No collections for this area.';
 
@@ -76,6 +91,99 @@
       /** @type {string} */
       vm.browseType = vm.urlLabels[0];
 
+
+      ThumbImageObserver.subscribe(function onNext() {
+        vm.thumbnailImage = ThumbImageObserver.get();
+      });
+
+      AreaObserver.subscribe(function onNext() {
+
+        const areaId = AreaObserver.get();
+        vm.categoryList =
+          CategoryByArea.query({areaId: areaId});
+
+        var cats = CategoryByArea.query({areaId: areaId});
+        cats.$promise.then(function () {
+          vm.categoryList = cats;
+        });
+        var collectionList = CollectionsByArea.query(
+          {
+            areaId: areaId
+          }
+        );
+        collectionList.$promise.then(function (data) {
+          vm.collectionList = data;
+        });
+      });
+
+      CollectionObserver.subscribe(function onNext() {
+        const id = CollectionObserver.get();
+        vm.collectionId = id;
+        vm.getCollectionById(id);
+      });
+
+      CollectionListObserver.subscribe(function onNext() {
+        vm.collectionList = CollectionListObserver.get();
+      });
+
+      CollectionTagsObserver.subscribe(function onNext() {
+
+      });
+
+      CollectionTypesObserver.subscribe(function onNext() {
+
+      });
+
+      /**
+       * Watch for updates to the thumbnail image.
+       */
+      // $scope.$watch(function () {
+      //     return Data.currentThumbnailImage;
+      //   },
+      //   function (newValue) {
+      //     if (newValue !== null) {
+      //       vm.thumbnailImage = newValue;
+      //     }
+      //
+      //   });
+
+      /**
+       * Watch for updates to the current context collection
+       * id. Update the selected collection information.
+       */
+      // $scope.$watch(function () {
+      //     return Data.currentCollectionIndex;
+      //   },
+      //   function (newValue) {
+      //     if (newValue !== null) {
+      //       vm.getCollectionById(newValue);
+      //     }
+      //
+      //   });
+
+      /**
+       * Watch for updates to the current context collection
+       * list. Update the collectionList field in response.
+       */
+      // $scope.$watch(function () {
+      //     return Data.collections ;
+      //   },
+      //   function () {
+      //     vm.collectionList = Data.collections;
+      //   }
+      // );
+
+      /**
+       * Watch for updates to the collection category list
+       * that is associated with the collection area.
+       */
+      // $scope.$watch(function() {return Data.categories;},
+      //   function(newValue) {
+      //     if (newValue.length > 0) {
+      //       vm.categoryList =
+      //         CategoryByArea.query({areaId: Data.currentAreaIndex});
+      //     }
+      //   });
 
 
       /**
@@ -112,7 +220,7 @@
           if (data.status === 'success') {
             vm.collectionList = CollectionsByArea.query(
               {
-                areaId: Data.currentAreaIndex
+                areaId: AreaObserver.get()
               }
             );
             // Toast upon success
@@ -128,29 +236,28 @@
        * @param id  {number} the collection id
        */
       vm.getCollectionById = function (id) {
-        Data.currentCollectionIndex = id;
         vm.collectionId = id;
 
         var col = CollectionById.query({id: id});
-        col.$promise.then(function(data) {
+        col.$promise.then(function (data) {
           vm.collection = data;
           vm.thumbnailImage = data.image;
+          ThumbImageObserver.set(data.image);
           // Set the browse options label, ouch, looks like a directive..
           if (data.browseType === 'opts') {
             vm.browseType = vm.urlLabels[1];
           }
-
         });
         var tags = TagsForCollection
           .query({collId: id});
         tags.$promise.then(function (data) {
-          Data.tagsForCollection = data;
+          CollectionTagsObserver.set(data);
         });
 
         var types = TypesForCollection
           .query({collId: id});
         types.$promise.then(function (data) {
-          Data.typesForCollection = data;
+          CollectionTypesObserver.set(data);
         });
 
       };
@@ -160,13 +267,16 @@
        * Sets vm.browseType string for choosing the URL label.
        * @param type array index
        */
-      vm.setBrowseType = function(index) {
-          vm.browseType = vm.urlLabels[index];
+      vm.setBrowseType = function (index) {
+        vm.browseType = vm.urlLabels[index];
 
       };
 
       vm.$onInit = () => {
+        vm.collectionId = CollectionObserver.get();
+        vm.getCollectionById(vm.collectionId);
         vm.collection.browseType = 'link';
+        vm.collectionList = CollectionListObserver.get();
 
       };
 
@@ -191,27 +301,27 @@
        * Watch for changes in the shared area id and update the
        * view model collection list and category list.
        */
-      $scope.$watch(function() {
-         return Data.currentAreaIndex;
-      }, function(newValue, oldValue) {
-
-
-        if (newValue !== oldValue) {
-          var cats = CategoryByArea.query({areaId: newValue});
-          cats.$promise.then(function() {
-             vm.categoryList = cats;
-          });
-          var collectionList = CollectionsByArea.query(
-            {
-              areaId: Data.currentAreaIndex
-            }
-          );
-          collectionList.$promise.then(function(data) {
-              vm.collectionList = data;
-          });
-
-        }
-      });
+      // $scope.$watch(function () {
+      //   return Data.currentAreaIndex;
+      // }, function (newValue, oldValue) {
+      //
+      //
+      //   if (newValue !== oldValue) {
+      //     var cats = CategoryByArea.query({areaId: newValue});
+      //     cats.$promise.then(function () {
+      //       vm.categoryList = cats;
+      //     });
+      //     var collectionList = CollectionsByArea.query(
+      //       {
+      //         areaId: Data.currentAreaIndex
+      //       }
+      //     );
+      //     collectionList.$promise.then(function (data) {
+      //       vm.collectionList = data;
+      //     });
+      //
+      //   }
+      // });
 
       /**
        * Watch for updates to the list of areas.
@@ -226,57 +336,6 @@
       //   }
       //
       // );
-
-      /**
-       * Watch for updates to the thumbnail image.
-       */
-      $scope.$watch(function () {
-          return Data.currentThumbnailImage;
-        },
-        function (newValue) {
-          if (newValue !== null) {
-            vm.thumbnailImage = newValue;
-          }
-
-        });
-
-      /**
-       * Watch for updates to the current context collection
-       * id. Update the selected collection information.
-       */
-      $scope.$watch(function () {
-          return Data.currentCollectionIndex;
-        },
-        function (newValue) {
-          if (newValue !== null) {
-            vm.getCollectionById(newValue);
-          }
-
-        });
-
-      /**
-       * Watch for updates to the current context collection
-       * list. Update the collectionList field in response.
-       */
-      $scope.$watch(function () {
-          return Data.collections ;
-        },
-        function () {
-          vm.collectionList = Data.collections;
-        }
-      );
-
-      /**
-       * Watch for updates to the collection category list
-       * that is associated with the collection area.
-       */
-      $scope.$watch(function() {return Data.categories;},
-        function(newValue) {
-          if (newValue.length > 0) {
-            vm.categoryList =
-              CategoryByArea.query({areaId: Data.currentAreaIndex});
-          }
-        });
 
     }]);
 

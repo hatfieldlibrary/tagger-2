@@ -1,28 +1,30 @@
 /**
- * Created by mspalti on 12/9/16.
+ * Created by mspalti on 12/12/16.
+ */
+/**
+ * Created by mspalti on 12/11/16.
  */
 (function()  {
 
   'use strict';
 
-  taggerServices.factory('UserObserver', function(rx){
+  taggerServices.factory('ThumbImageObserver', ['rx', function(rx){
 
     const Subject = new rx.Subject();
-    let user = {};
+    let thumb = '';
 
     return {
       set: function set(update){
-        user = update;
-        Subject.onNext(user);
+        thumb = update;
+        Subject.onNext(thumb);
       },
       get: function get() {
-        return user;
+        return thumb;
       },
       subscribe: function (o) {
         return Subject.subscribe(o);
       }
     };
-  });
-
+  }]);
 
 })();

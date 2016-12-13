@@ -1,28 +1,28 @@
 /**
- * Created by mspalti on 12/9/16.
+ * Created by mspalti on 12/12/16.
  */
 (function()  {
 
   'use strict';
 
-  taggerServices.factory('UserObserver', function(rx){
+  taggerServices.factory('CategoryListObserver', ['rx', function(rx){
 
     const Subject = new rx.Subject();
-    let user = {};
+    let categories = [];
 
     return {
       set: function set(update){
-        user = update;
-        Subject.onNext(user);
+        categories = update;
+        Subject.onNext(categories);
       },
       get: function get() {
-        return user;
+        return categories;
       },
       subscribe: function (o) {
         return Subject.subscribe(o);
       }
     };
-  });
+  }]);
 
 
 })();
