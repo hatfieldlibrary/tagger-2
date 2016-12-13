@@ -37,6 +37,8 @@
     'CollectionTypesObserver',
     'CollectionListObserver',
     'CollectionObserver',
+    'TagObserver',
+    'TagsListObserver',
     'Data',
     function ($scope,
               $timeout,
@@ -63,6 +65,8 @@
               CollectionTypesObserver,
               CollectionListObserver,
               CollectionObserver,
+              TagObserver,
+              TagsListObserver,
               Data) {
 
 
@@ -154,6 +158,7 @@
         vm.currentAreaId = areas[0].id;
         vm.areas = areas;
         Data.areaLabel = areas[0].title;
+        console.log('hello')
         updateAreaContext(vm.currentAreaId);
 
       });
@@ -301,8 +306,9 @@
           tags.$promise.then(function (data) {
             if (data.length > 0) {
 
-              Data.tags = data;
-              Data.currentTagIndex = data[0].id;
+              TagsListObserver.set(data);
+              TagObserver.set(data[0].id);
+
             }
           });
 
@@ -340,10 +346,11 @@
                 // Set the new collection information.
                 CollectionListObserver.set(data);
                 CollectionObserver.set(data[0].Collection.id);
-                TagsForCollection.query({collId: CollectionObserver.get()})
-                  .$promise.then(function (data) {
-                  CollectionTagsObserver.set(data);
-                });
+                // TagsForCollection.query({collId: CollectionObserver.get()})
+                //   .$promise.then(function (data) {
+                //     alert()
+                //   CollectionTagsObserver.set(data);
+                //});
                 TypesForCollection.query({collId: CollectionObserver.get()})
                   .$promise.then(function (data) {
                   CollectionTypesObserver.set(data);

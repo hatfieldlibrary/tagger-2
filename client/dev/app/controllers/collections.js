@@ -29,7 +29,6 @@
     'ThumbImageObserver',
     'TaggerDialog',
     'TaggerToast',
-    'Data',
 
     function ($scope,
               $resource,
@@ -50,8 +49,7 @@
               CollectionTypesObserver,
               ThumbImageObserver,
               TaggerDialog,
-              TaggerToast,
-              Data) {
+              TaggerToast) {
 
       var vm = this;
 
@@ -113,6 +111,7 @@
         );
         collectionList.$promise.then(function (data) {
           vm.collectionList = data;
+          vm.collectionId = data[0].id;
         });
       });
 
@@ -238,6 +237,7 @@
       vm.getCollectionById = function (id) {
         vm.collectionId = id;
 
+
         var col = CollectionById.query({id: id});
         col.$promise.then(function (data) {
           vm.collection = data;
@@ -291,7 +291,7 @@
       $scope.$on('removedFromArea', function () {
         vm.collectionList = CollectionsByArea.query(
           {
-            areaId: Data.currentAreaIndex
+            areaId: AreaObserver.get()
           }
         );
 

@@ -5,8 +5,14 @@
 (function () {
 
 
-  function TagsCtrl(CollectionTagsObserver,
-                    TagListObserver,
+  function TagsCtrl(CollectionTagTargetAdd,
+                    CollectionTagTargetRemove,
+                    TagsForArea,
+                    CollectionTagsObserver,
+                    CollectionTagsObserver,
+                    AreaObserver,
+                    TaggerToast,
+                    CollectionObserver,
                     TagsForAreaObserver) {
 
     const ctrl = this;
@@ -14,25 +20,29 @@
     CollectionTagsObserver.subscribe(function onNext() {
 
       const tags = CollectionTagsObserver.get();
+     setTagsArray(tags);
+    });
+
+    CollectionTagsObserver.subscribe(function onNext() {
+      ctrl.tagsForArea = TagsForArea.query({areaId: AreaObserver.get()});
+    });
+
+    TagsForAreaObserver.subscribe(function onNext() {
+        ctrl.tagsForArea = TagsForAreaObserver.get();
+    });
+
+    function setTagsArray(tagset) {
       let objArray = [];
-      if (tags.length > 0) {
-        for (var i = 0; i < tags.length; i++) {
-          objArray[i] = {id: tags[i].Tag.id, name: tags[i].Tag.name};
+      if (tagset.length > 0) {
+        for (var i = 0; i < tagset.length; i++) {
+          objArray[i] = {id: tagset[i].Tag.id, name: tagset[i].Tag.name};
         }
         ctrl.tagsForCollection = objArray;
 
       } else {
         ctrl.tagsForCollection = [];
       }
-    });
-
-    TagListObserver.subscribe(function onNext() {
-      ctrl.tagsForArea = TagsForArea.query({areaId: Data.currentAreaIndex});
-    });
-
-    TagsForAreaObserver.subscribe(function onNext() {
-        ctrl.tagsForArea = TagsForAreaObserver.get();
-    });
+    }
 
 
     /**
@@ -59,14 +69,17 @@
      * @returns {{id: *, name: *}}
      */
     ctrl.addTag = function (chip) {
+
+      console.log(ctrl.collectionId)
       let chipObj = {id: chip.Tag.id, name: chip.Tag.name};
       let result = CollectionTagTargetAdd.query(
         {
-          collId: Data.currentCollectionIndex,
+          collId: ctrl.collectionId,
           tagId: chip.Tag.id
         }
       );
       result.$promise.then(function (data) {
+        console.log(data)
         if (data.status === 'success') {
           new TaggerToast('Subject Tag Added');
 
@@ -90,11 +103,12 @@
     ctrl.removeTag = function (chip) {
       const result = CollectionTagTargetRemove.query(
         {
-          collId: Data.currentCollectionIndex,
+          collId: CollectionObserver.get(),
           tagId: chip.id
         }
       );
       result.$promise.then(function (data) {
+        console.log(data)
         if (data.status === 'success') {
           new TaggerToast('Subject Tag Removed');
         } else {
@@ -165,11 +179,18 @@
       };
     }
 
+    ctrl.$onInit = function() {
+      ctrl.tagsForArea = TagsForAreaObserver.get();
+      setTagsArray(CollectionTagsObserver.get());
+    };
+
   }
 
   taggerComponents.component('subjectSelector', {
 
-
+    bindings: {
+      collectionId: '@'
+    },
     template: '<md-card flex>' +
     ' <md-toolbar class="md_primary">' +
     '   <div class="md-toolbar-tools">     ' +
@@ -183,8 +204,8 @@
     '         <div layout="column" class="chips">' +
     '           <md-container>' +
     '             <label>Add Tags</label>' +
-    '             <md-chips class="tagger-chips" ng-model="ctrl.tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="ctrl.addTag($chip)" md-on-remove="ctrl.removeType($chip)">' +
-    '               <md-autocomplete md-selected-item="ctrl.selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in ctrl.queryTags(searchText)"  md-item-text="item.tag">' +
+    '             <md-chips class="tagger-chips" ng-model="$ctrl.tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="$ctrl.addTag($chip)" md-on-remove="$ctrl.removeTag($chip)">' +
+    '               <md-autocomplete md-selected-item="$ctrl.selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in $ctrl.queryTags(searchText)"  md-item-text="item.tag.name">' +
     '                 <span md-highlight-text="searchText"> {{item.Tag.name}} </span>' +
     '               </md-autocomplete>' +
     '               <md-chip-template>' +
