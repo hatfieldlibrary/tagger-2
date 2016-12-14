@@ -19,7 +19,12 @@
     'TagsForArea',
     'TaggerToast',
     'TaggerDialog',
-    'Data',
+    'UserAreaObserver',
+    'AreaObserver',
+    'AreaLabelObserver',
+    'TagListObserver',
+    'TagObserver',
+    'UserAreaObserver',
 
     function(
       $rootScope,
@@ -31,7 +36,12 @@
       TagsForArea,
       TaggerToast,
       TaggerDialog,
-      Data  ) {
+      UserAreaObserver,
+      AreaObserver,
+      AreaLabelObserver,
+      TagListObserver,
+      TagObserver
+     ) {
 
       var vm = this;
 
@@ -39,7 +49,7 @@
       vm.currentTag = 10000;
 
       /** @type {number} */
-      vm.userAreaId = Data.userAreaId;
+      vm.userAreaId = UserAreaObserver.get();
 
       /* Tag dialog messages */
       /** @type {string} */
@@ -49,32 +59,49 @@
       vm.deleteMessage = 'templates/deleteTagMessage.html';
 
       /** @type {string} */
-      vm.areaLabel = Data.areaLabel;
+      vm.areaLabel = AreaLabelObserver.get();
 
       /** @type {number} */
-      vm.userAreaId = Data.userAreaId;
+      vm.userAreaId = UserAreaObserver.get();
 
       /** @type {Array.<Object>} */
-      vm.tags = Data.tags;
+      vm.tags = TagListObserver.get();
 
       /** @type {Object} */
-      vm.tag = Data.tags[0];
+      vm.tag = TagObserver.get();
 
       if (vm.tag) {
         /** @type {number} */
         vm.currentTag = vm.tag.id;
       }
 
+      AreaLabelObserver.subscribe(function onNext() {
+        vm.areaLabel = AreaLabelObserver.get();
+      });
+
       /**
-       * Watch for updates to the area label.  Assures changes in LayoutCtrl
-       * are registered here.
+       * Watches for new tags in the shared context. This watch
+       * should pick up area context changes and the updated tag list
+       * after adding or deleting a tag.
        */
-      $scope.$watch(function() { return Data.areaLabel;},
-        function() {
-          vm.areaLabel = Data.areaLabel;
+      AreaObserver.subscribe(function onNext() {
+        vm.resetTag(AreaObserver.get());
+      });
+
+      TagListObserver.subscribe(function onNext() {
+          vm.tags = TagListObserver.get();
+      });
+
+      TagObserver.subscribe(function onNext() {
+         vm.currentTag = TagObserver.get();
+         _setCurrentTag(vm.currentTag);
+      });
+
+      function _setCurrentTag(tagId) {
+        TagById.query({id: tagId}).$promise.then(function(data) {
+          vm.tag = data;
         });
-
-
+      }
       /**
        * Show the $mdDialog.
        * @param $event click event object (location of event used as
@@ -91,10 +118,10 @@
        */
       vm.resetTag = function(id) {
         if (id !== null) {
-          Data.currentTagIndex = id;
+          TagObserver.set(id);
           vm.currentTag = id;
         }
-        vm.tag = TagById.query({id:  Data.currentTagIndex});
+        //vm.tag = TagById.query({id:  id});
       };
 
       /**
@@ -119,22 +146,12 @@
 
       };
 
-      /**
-       * Watches for new tags in the shared context. This watch
-       * should pick up area context changes and the updated tag list
-       * after adding or deleting a tag.
-       */
-      $scope.$watch(function() { return Data.tags; },
-        function(newValue) {
-          if (newValue !== null) {
-            vm.tags = newValue;
-            if (newValue.length > 0) {
-                vm.resetTag(Data.currentTagIndex);
+      vm.$onInit = function () {
+          const tagId = TagObserver.get();
+          vm.currentTag = tagId;
+          _setCurrentTag(tagId);
+      }
 
-            }
-          }
-        }
-      );
 
     }]);
 

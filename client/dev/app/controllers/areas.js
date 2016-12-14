@@ -1,5 +1,4 @@
-
-(function() {
+(function () {
 
   'use strict';
 
@@ -20,29 +19,29 @@
     'TaggerDialog',
     '$animate',
     'AreaListObserver',
-    'Data',
+    'AreaObserver',
+    'UserAreaObserver',
 
-    function(
-
-      $rootScope,
-      $scope,
-      AreaList,
-      AreaById,
-      AreaUpdate,
-      ReorderAreas,
-      TaggerToast,
-      TaggerDialog,
-      $animate,
-      AreaListObserver,
-      Data ) {
+    function ($rootScope,
+              $scope,
+              AreaList,
+              AreaById,
+              AreaUpdate,
+              ReorderAreas,
+              TaggerToast,
+              TaggerDialog,
+              $animate,
+              AreaListObserver,
+              AreaObserver,
+              UserAreaObserver) {
 
       var vm = this;
 
       /** @type {Array.<Object>} */
-      vm.areas = [];
+      vm.areas = AreaListObserver.get();
 
       /** @type {Object} */
-      vm.area = Data.areas[0];
+      vm.area = vm.areas[0];
 
       /** @type {string} */
       vm.addMessage = 'templates/addAreaMessage.html';
@@ -51,12 +50,22 @@
       vm.deleteMessage = 'templates/deleteAreaMessage.html';
 
       /** @type {number */
-      vm.currentAreaId = Data.currentAreaIndex;
-
+      vm.currentAreaId = UserAreaObserver.get();
+      /**
+       * Watch for new areas in context.  Areas are added
+       * and removed in a dialog controller.  They can also
+       * be reordered by the view model (see above).
+       */
       AreaListObserver.subscribe(function onNext() {
-              console.log('area update')
-            vm.areas = AreaListObserver.get();
+        vm.areas = AreaListObserver.get();
 
+      });
+      /**
+       * Watch for changes in the shared area index
+       * and reset the area in the view model.
+       */
+      AreaObserver.subscribe(function onNext() {
+        vm.resetArea(AreaObserver.get());
       });
 
       /**
@@ -65,7 +74,7 @@
        *                    animation starting point)
        * @param message  html to display in dialog
        */
-      vm.showDialog = function($event, message) {
+      vm.showDialog = function ($event, message) {
         new TaggerDialog($event, message);
       };
 
@@ -74,13 +83,12 @@
        * Sets the current area in view model.
        * @param id  area id
        */
-      vm.resetArea = function(id) {
+      vm.resetArea = function (id) {
         if (id !== null) {
-          Data.currentAreaIndex = id;
           vm.currentAreaId = id;
         }
-        var ar = AreaById.query({id: Data.currentAreaIndex});
-        ar.$promise.then(function(data) {
+        var ar = AreaById.query({id: id});
+        ar.$promise.then(function (data) {
           vm.area = data;
         });
       };
@@ -89,7 +97,7 @@
        *  Updates the area information.  Updates area list
        *  upon success.
        */
-      vm.updateArea = function() {
+      vm.updateArea = function () {
         var success = AreaUpdate.save({
           id: vm.area.id,
           title: vm.area.title,
@@ -99,16 +107,14 @@
           url: vm.area.url
 
         });
-        success.$promise.then(function(data) {
+        success.$promise.then(function (data) {
           if (data.status === 'success') {
             var areas = AreaList.query();
-            areas.$promise.then(function(data) {
+            areas.$promise.then(function (data) {
               vm.areas = data;
 
               // observer
               AreaListObserver.set(data);
-
-              Data.areas = data;
             });
             // Toast upon success
             new TaggerToast('Area Updated"');
@@ -121,7 +127,7 @@
        * Updates the view model's areas array
        * @param index
        */
-      vm.orderAreaList = function(index) {
+      vm.orderAreaList = function (index) {
         vm.areas.splice(index, 1);
         // now update the database
         updatePositionsInDb();
@@ -137,47 +143,28 @@
        * the shared Data.areas array so the new order
        * is available to components.
        */
-      function updatePositionsInDb () {
+      function updatePositionsInDb() {
         var order = ReorderAreas.save(
           {
             areas: vm.areas
           });
-        order.$promise.then(function(data) {
+        order.$promise.then(function (data) {
           if (data.status === 'success') {
-            var areas =  AreaList.query();
-            areas.$promise.then(function(data) {
-              //observer
+            var areas = AreaList.query();
+            areas.$promise.then(function (data) {
               AreaListObserver.set(data);
-              Data.areas = data;
-              Data.currentAreaIndex = data[0].id;
+              AreaObserver.set(data[0].id);
             });
             new TaggerToast('Area order updated.');
           }
         });
       }
 
-      /**
-       * Watch for new areas in context.  Areas are added
-       * and removed in a dialog controller.  They can also
-       * be reordered by the view model (see above).
-       */
-      // $scope.$watch(function() { return Data.areas; },
-      //   function(newValue) {
-      //     vm.areas = newValue;
-      //   }
-      // );
-
-      /**
-       * Watch for changes in the shared area index
-       * and reset the area in the view model.
-       */
-      $scope.$watch(function() { return Data.currentAreaIndex;},
-        function(newValue) {
-          vm.resetArea(newValue);
-        });
+      vm.$onInit = function() {
+        vm.resetArea(AreaObserver.get());
+      }
 
     }]);
-
 
 })();
 

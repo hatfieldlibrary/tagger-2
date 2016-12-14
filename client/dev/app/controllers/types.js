@@ -7,18 +7,7 @@
   /**
    * Controller for content types (e.g. image, document, etc.)
    */
-  taggerControllers.controller('ContentCtrl', [
-
-    '$rootScope',
-    '$scope',
-    'TaggerToast',
-    'TaggerDialog',
-    'ContentTypeList',
-    'ContentType',
-    'ContentTypeUpdate',
-    'ContentTypeDelete',
-    'ContentTypeAdd',
-    'Data',
+  taggerControllers.controller('ContentCtrl',
 
     function(
       $rootScope,
@@ -30,15 +19,22 @@
       ContentTypeUpdate,
       ContentTypeDelete,
       ContentTypeAdd,
-      Data) {
+      ContentTypeObserver,
+      ContentTypeListObserver) {
 
       var vm = this;
 
+
+      ContentTypeListObserver.subscribe(function onNext() {
+        const list = ContentTypeListObserver.get();
+        vm.resetType(list[0].id);
+      });
+
       /** @type {Array.<Object>} */
-      vm.contentTypes = Data.contentTypes;
+      vm.contentTypes = ContentTypeListObserver.get();
 
       /** @type {number} */
-      vm.currentType = Data.currentContentIndex;
+      vm.currentType = ContentTypeObserver.get();
 
       /** @type {string} */
       vm.addMessage = 'templates/addContentMessage.html';
@@ -63,10 +59,10 @@
        */
       vm.resetType = function(id) {
         if (id !== null) {
-          Data.currentContentIndex = id;
+          ContentTypeObserver.set(id);
           vm.currentType = id;
         }
-        vm.contentType = ContentType.query({id: Data.currentContentIndex});
+        vm.contentType = ContentType.query({id: id});
 
       };
 
@@ -82,7 +78,10 @@
         });
         update.$promise.then(function(data) {
           if (data.status === 'success') {
-            Data.contentTypes = ContentTypeList.query();
+            const contentTypes = ContentTypeList.query();
+            contentTypes.$promise.then(function(data) {
+               ContentTypeListObserver.set(data);
+            });
             // Toast upon success
             new TaggerToast('Content Type Updated');
           }
@@ -90,22 +89,12 @@
 
       };
 
-      /**
-       * Watch for changes in the content type list.
-       */
-      $scope.$watch(function() { return Data.contentTypes; },
-        function(newValue) {
-          if (newValue !== null) {
-            vm.contentTypes = newValue;
-            if (newValue.length > 0) {
-              vm.resetType(newValue[0].id);
-            }
-          }
-        }
-      );
+      vm.$onInit = function() {
+        vm.currentType = ContentTypeObserver.get();
+        vm.contentType = ContentType.query({id: vm.currentType});
+      }
 
-
-    }]);
+    });
 
 
 })();

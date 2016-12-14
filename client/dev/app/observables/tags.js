@@ -5,7 +5,7 @@
 
   'use strict';
 
-  taggerServices.factory('TagsListObserver', ['rx', function(rx){
+  taggerServices.factory('TagListObserver', ['rx', function(rx){
 
     const Subject = new rx.Subject();
     let tags = [];

@@ -152,32 +152,32 @@
     </md-card>
   </md-content>
   <md-content class="transparent transparent" layout="column" flex="100" flex-gt-md="25">
-    <md-card class="flex" flex="flex">
-      <md-toolbar class="md_primary">
-        <div class="md-toolbar-tools">
-          <i class="material-icons">image</i>
-          <h3 class="md-display-1">&nbsp;Image</h3>
-          <div flex="flex">
-            <md-button class="md-accent md-raised md-fab md-mini" ng-click="vm.showDialog($event, vm.updateImageMessage)" style="float: right">
-              <i class="material-icons">file_upload</i>
-            </md-button>
-          </div>
-        </div>
-        </md-toolbar>
-      <md-card-content>
-        <div layout="row">
-          <md-card flex="40" style="margin:0;max-width: 120px">
-            <thumb-image imgname="{{vm.thumbnailImage}}"></thumb-image>
-          </md-card>
-          <md-card-content>
-            <span class="md-caption">Image size 500px wide by 600px high</span>
-          </md-card-content>
-        </div>
-      </md-card-content>
-    </md-card>
+    <image-selector></image-selector>
+    <!--<md-card class="flex" flex="flex">-->
+      <!--<md-toolbar class="md_primary">-->
+        <!--<div class="md-toolbar-tools">-->
+          <!--<i class="material-icons">image</i>-->
+          <!--<h3 class="md-display-1">&nbsp;Image</h3>-->
+          <!--<div flex="flex">-->
+            <!--<md-button class="md-accent md-raised md-fab md-mini" ng-click="vm.showDialog($event, vm.updateImageMessage)" style="float: right">-->
+              <!--<i class="material-icons">file_upload</i>-->
+            <!--</md-button>-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--</md-toolbar>-->
+      <!--<md-card-content>-->
+        <!--<div layout="row">-->
+          <!--<md-card flex="40" style="margin:0;max-width: 120px">-->
+            <!--<thumb-image imgname="{{vm.thumbnailImage}}"></thumb-image>-->
+          <!--</md-card>-->
+          <!--<md-card-content>-->
+            <!--<span class="md-caption">Image size 500px wide by 600px high</span>-->
+          <!--</md-card-content>-->
+        <!--</div>-->
+      <!--</md-card-content>-->
+    <!--</md-card>-->
     <subject-selector collection-id="{{vm.collectionId}}" class="flex"></subject-selector>
     <content-type-selector class="flex"></content-type-selector>
-    <area-selector flex="flex" ng-show="vm.userAreaId === 0">
-    </area-selector>
+    <area-selector flex="flex" ng-show="vm.userAreaId === 0"></area-selector>
   </md-content>
 </md-content>

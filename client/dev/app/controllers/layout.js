@@ -10,36 +10,8 @@
    * used by other controllers.  It effectively initializes
    * the application and updates global state.
    */
-  taggerControllers.controller('LayoutCtrl', [
+  taggerControllers.controller('LayoutCtrl',
 
-    '$scope',
-    '$timeout',
-    '$mdSidenav',
-    '$log',
-    'AreaList',
-    'CollectionsByArea',
-    'TagsForCollection',
-    'TypesForCollection',
-    'CategoryList',
-    'CategoryByArea',
-    'ContentTypeList',
-    'TagList',
-    'TagsForArea',
-    'getUserInfo',
-    'AreaObserver',
-    'AreaLabelObserver',
-    'AreaListObserver',
-    'IsAuthObserver',
-    'UserObserver',
-    'UserAreaObserver',
-    'TagsForAreaObserver',
-    'CollectionTagsObserver',
-    'CollectionTypesObserver',
-    'CollectionListObserver',
-    'CollectionObserver',
-    'TagObserver',
-    'TagsListObserver',
-    'Data',
     function ($scope,
               $timeout,
               $mdSidenav,
@@ -65,9 +37,13 @@
               CollectionTypesObserver,
               CollectionListObserver,
               CollectionObserver,
+              ContentTypeObserver,
+              ContentTypeListObserver,
+              CategoryListObserver,
+              CategoriesForAreaObserver,
+              CategoryObserver,
               TagObserver,
-              TagsListObserver,
-              Data) {
+              TagListObserver) {
 
 
       var vm = this;
@@ -149,16 +125,12 @@
 
       });
 
-
-
       AreaListObserver.subscribe(function onNext() {
 
         const areas = AreaListObserver.get();
-        console.log('got new area list');
         vm.currentAreaId = areas[0].id;
         vm.areas = areas;
-        Data.areaLabel = areas[0].title;
-        console.log('hello')
+      //  Data.areaLabel = areas[0].title;
         updateAreaContext(vm.currentAreaId);
 
       });
@@ -297,16 +269,15 @@
           // Initialize global categories.
           var categories = CategoryList.query();
           categories.$promise.then(function (data) {
-            Data.categories = data;
-            Data.currentCategoryIndex = data[0].id;
+            CategoryListObserver.set(data);
+            CategoryObserver.set(data[0].id)
           });
 
           // Initialize global tags.
           var tags = TagList.query();
           tags.$promise.then(function (data) {
             if (data.length > 0) {
-
-              TagsListObserver.set(data);
+              TagListObserver.set(data);
               TagObserver.set(data[0].id);
 
             }
@@ -316,8 +287,8 @@
           var types = ContentTypeList.query();
           types.$promise.then(function (data) {
             if (data.length > 0) {
-              Data.contentTypes = data;
-              Data.currentContentIndex = data[0].id;
+              ContentTypeListObserver.set(data);
+              ContentTypeObserver.set(data[0].id);
             }
 
           });
@@ -357,9 +328,7 @@
                 });
               } else {
                 // No collections for area.  Reset.
-                Data.collections = [];
                 CollectionListObserver.set([]);
-                Data.currentCollectionIndex = -1;
                 CollectionObserver.set(-1);
               }
             }
@@ -367,18 +336,18 @@
           });
 
           // Get subject tags for area.
-          var tagsForArea = TagsForArea.query({areaId: id});
-          tagsForArea.$promise.then(function (data) {
-            if (data.length > 0) {
-              //Data.tagsForArea = data;
-              TagsForAreaObserver.set(data);
-            }
-          });
+          // var tagsForArea = TagsForArea.query({areaId: id});
+          // tagsForArea.$promise.then(function (data) {
+          //   if (data.length > 0) {
+          //     //Data.tagsForArea = data;
+          //     TagsForAreaObserver.set(data);
+          //   }
+          //});
           // Get collection groups for area.
           var categoriesForArea = CategoryByArea.query({areaId: id});
           categoriesForArea.$promise.then(function (categories) {
             if (categories.length > 0) {
-              Data.categoriesForArea = categories;
+              CategoriesForAreaObserver.set(categories);
             }
           });
         }
@@ -393,13 +362,14 @@
           UserObserver.set(user);
           UserAreaObserver.set(user.areaId);
           getRole(user.areaId);
+          setContext();
 
         }).catch(function (err) {
           console.log(err);
         });
       }
 
-    }]);
+    });
 
 })();
 

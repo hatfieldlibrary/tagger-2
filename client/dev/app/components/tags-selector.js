@@ -4,38 +4,61 @@
 
 (function () {
 
-
   function TagsCtrl(CollectionTagTargetAdd,
                     CollectionTagTargetRemove,
                     TagsForArea,
-                    CollectionTagsObserver,
-                    CollectionTagsObserver,
+                    TagsForCollection,
                     AreaObserver,
                     TaggerToast,
-                    CollectionObserver,
-                    TagsForAreaObserver) {
+                    CollectionObserver) {
 
     const ctrl = this;
+    /**
+     * Watch for new collection id.
+     * Update the tags when collection changes.
+     */
+    CollectionObserver.subscribe(function onNext() {
+      console.log('getting tags for collection')
+      let collid = CollectionObserver.get();
+      _getTagsForCollection(collid);
 
-    CollectionTagsObserver.subscribe(function onNext() {
-
-      const tags = CollectionTagsObserver.get();
-     setTagsArray(tags);
     });
 
-    CollectionTagsObserver.subscribe(function onNext() {
-      ctrl.tagsForArea = TagsForArea.query({areaId: AreaObserver.get()});
+    /**
+     * Watch for new area id.
+     * Update the area tag list when area changes.
+     */
+    AreaObserver.subscribe(function onNext() {
+      let id = AreaObserver.get();
+     _getTagsForArea(id);
     });
 
-    TagsForAreaObserver.subscribe(function onNext() {
-        ctrl.tagsForArea = TagsForAreaObserver.get();
-    });
+    function _getTagsForArea(id) {
+      let tagsForArea = TagsForArea.query({areaId: id});
+      tagsForArea.$promise.then(function (data) {
+        ctrl.tagsForArea = data;
+      });
+    }
 
-    function setTagsArray(tagset) {
+    /**
+     * Gets the tags for this collection.
+     * @param id collection identifier
+     * @private
+     */
+    function _getTagsForCollection(id) {
+      let tags = TagsForCollection.query({collId: id});
+      tags.$promise.then(function (data) {
+        _setTagsArray(data);
+      });
+    }
+
+
+    function _setTagsArray(set) {
+      console.log('got tags ' + set.length)
       let objArray = [];
-      if (tagset.length > 0) {
-        for (var i = 0; i < tagset.length; i++) {
-          objArray[i] = {id: tagset[i].Tag.id, name: tagset[i].Tag.name};
+      if (set.length > 0) {
+        for (var i = 0; i < set.length; i++) {
+          objArray[i] = {id: set[i].Tag.id, name: set[i].Tag.name};
         }
         ctrl.tagsForCollection = objArray;
 
@@ -44,22 +67,14 @@
       }
     }
 
-
-    /**
-     * Returns filter.
-     * @param query
-     * @returns {*}
-     */
-    function queryTags(query) {
-      return query ? ctrl.tagsForArea.filter(createFilterFor(query)) : [];
-
-    }
-
     /**
      * Filter for the md-autocomplete component.
-     * @type {queryTags}
+     * @type {_queryTags}
      */
-    ctrl.queryTags = queryTags;
+    ctrl.queryTags = (query) => {
+      return query ? ctrl.tagsForArea.filter(createFilterFor(query)) : [];
+
+    };
 
 
     /**
@@ -70,7 +85,6 @@
      */
     ctrl.addTag = function (chip) {
 
-      console.log(ctrl.collectionId)
       let chipObj = {id: chip.Tag.id, name: chip.Tag.name};
       let result = CollectionTagTargetAdd.query(
         {
@@ -117,53 +131,6 @@
       });
     };
 
-
-    /**
-     * Watch for changes to the subject tags associated with
-     * the collection area.
-     */
-    // $scope.$watch(function () {
-    //     return Data.tagsForArea;
-    //   },
-    //   function (newValue) {
-    //     $scope.tagsForArea = newValue;
-    //   }
-    // );
-
-    /**
-     * Watch for changes to the subject tags associated with
-     * this collection.
-    //  */
-    // $scope.$watch(function () {
-    //     return Data.tagsForCollection;
-    //   },
-    //   function (newValue) {
-    //     if (newValue.length > 0) {
-    //       var objArray = [];
-    //       for (var i = 0; i < newValue.length; i++) {
-    //         objArray[i] = {id: newValue[i].Tag.id, name: newValue[i].Tag.name};
-    //       }
-    //       $scope.tagsForCollection = objArray;
-    //
-    //     } else {
-    //       $scope.tagsForCollection = [];
-    //     }
-    //   }
-    // );
-
-    /**
-     * Watch for changes to the list of globally available tags.
-     * On change, update the tag list for the current area.
-     */
-    // $scope.$watch(function () {
-    //     return Data.tags;
-    //   },
-    //   function () {
-    //     $scope.tagsForArea = TagsForArea.query({areaId: Data.currentAreaIndex});
-    //
-    //
-    //   });
-
     /**
      * Creates a regex filter for the search term
      * @param query {string} term to match
@@ -179,9 +146,12 @@
       };
     }
 
-    ctrl.$onInit = function() {
-      ctrl.tagsForArea = TagsForAreaObserver.get();
-      setTagsArray(CollectionTagsObserver.get());
+    ctrl.$onInit = function () {
+
+      //ctrl.tagsForArea = TagsForAreaObserver.get();
+      let id = CollectionObserver.get();
+      _getTagsForCollection(id);
+      _getTagsForArea(AreaObserver.get());
     };
 
   }
@@ -226,169 +196,3 @@
   });
 
 })();
-
-//     controller: function ($scope,
-//                           TagsForArea,
-//                           CollectionTagTargetAdd,
-//                           CollectionTagTargetRemove,
-//                           TaggerToast,
-//                           Data) {
-//
-//
-//
-//       /** @type {number} */
-//       $scope.selectedItem = null;
-//
-//       /** @type {string} */
-//       $scope.searchText = null;
-//
-//       /** @type {boolean} */
-//       $scope.isDisabled = false;
-//
-//       /** @type {Array.<Object>} */
-//       $scope.selectedTags = [];
-//
-//       /** @type {Array.<Object>} */
-//       $scope.tagsForArea = [];
-//
-//       /** @type {Array.<Object>} */
-//       $scope.tagsForCollection = [];
-//
-//       /**
-//        * Returns filter.
-//        * @param query
-//        * @returns {*}
-//        */
-//       function queryTags(query) {
-//         return query ? $scope.tagsForArea.filter(createFilterFor(query)) : [];
-//
-//       }
-//
-//       /**
-//        * Filter for the md-autocomplete component.
-//        * @type {queryTags}
-//        */
-//       $scope.queryTags = queryTags;
-//
-//
-//       /**
-//        * Function called when appending a chip.  Adds a new subject association
-//        * for the collection. Toasts response from the service.
-//        * @param chip  {Object} $chip
-//        * @returns {{id: *, name: *}}
-//        */
-//       $scope.addTag = function (chip) {
-//         var chipObj = {id: chip.Tag.id, name: chip.Tag.name};
-//         var result = CollectionTagTargetAdd.query(
-//           {
-//             collId: Data.currentCollectionIndex,
-//             tagId: chip.Tag.id
-//           }
-//         );
-//         result.$promise.then(function (data) {
-//           if (data.status === 'success') {
-//             new TaggerToast('Subject Tag Added');
-//
-//           } else {
-//             new TaggerToast('WARNING: Unable to add subject tag!');
-//             return {};
-//
-//           }
-//         });
-//
-//         return chipObj;
-//
-//       };
-//
-//       /**
-//        * Function called when deleting a subject chip.  The function
-//        * deletes the subject association with this collection
-//        * via db call. Toasts on success.
-//        * @param chip  {Object} $chip
-//        */
-//       $scope.removeTag = function (chip) {
-//         var result = CollectionTagTargetRemove.query(
-//           {
-//             collId: Data.currentCollectionIndex,
-//             tagId: chip.id
-//           }
-//         );
-//         result.$promise.then(function (data) {
-//           if (data.status === 'success') {
-//             new TaggerToast('Subject Tag Removed');
-//           } else {
-//             new TaggerToast('WARNING: Unable to remove subject tag!');
-//           }
-//         });
-//       };
-//
-//
-//       /**
-//        * Watch for changes to the subject tags associated with
-//        * the collection area.
-//        */
-//       $scope.$watch(function () {
-//           return Data.tagsForArea;
-//         },
-//         function (newValue) {
-//           $scope.tagsForArea = newValue;
-//         }
-//       );
-//
-//       /**
-//        * Watch for changes to the subject tags associated with
-//        * this collection.
-//        */
-//       $scope.$watch(function () {
-//           return Data.tagsForCollection;
-//         },
-//         function (newValue) {
-//           if (newValue.length > 0) {
-//             var objArray = [];
-//             for (var i = 0; i < newValue.length; i++) {
-//               objArray[i] = {id: newValue[i].Tag.id, name: newValue[i].Tag.name};
-//             }
-//             $scope.tagsForCollection = objArray;
-//
-//           } else {
-//             $scope.tagsForCollection = [];
-//           }
-//         }
-//       );
-//
-//       /**
-//        * Watch for changes to the list of globally available tags.
-//        * On change, update the tag list for the current area.
-//        */
-//       $scope.$watch(function () {
-//           return Data.tags;
-//         },
-//         function () {
-//           $scope.tagsForArea = TagsForArea.query({areaId: Data.currentAreaIndex});
-//
-//
-//         });
-//
-//       /**
-//        * Creates a regex filter for the search term
-//        * @param query {string} term to match
-//        * @returns {Function}
-//        */
-//       function createFilterFor(query) {
-//         var regex = new RegExp(query, 'i');
-//         return function filterFn(tagItem) {
-//           if (tagItem.Tag.name.match(regex) !== null) {
-//             return true;
-//           }
-//           return false;
-//         };
-//       }
-//
-//
-//     }
-//
-//   };
-//
-// }
-//
-// ]);

@@ -94,96 +94,50 @@
         vm.thumbnailImage = ThumbImageObserver.get();
       });
 
+
       AreaObserver.subscribe(function onNext() {
 
         const areaId = AreaObserver.get();
-        vm.categoryList =
-          CategoryByArea.query({areaId: areaId});
+        console.log('area id ' + areaId)
 
-        var cats = CategoryByArea.query({areaId: areaId});
-        cats.$promise.then(function () {
-          vm.categoryList = cats;
+        var cats = CategoryByArea.query(
+          {
+            areaId: areaId
+          }
+        );
+        cats.$promise.then(function (data) {
+          console.log('got new cats')
+          console.log(data)
+          vm.categoryList = data;
         });
+
         var collectionList = CollectionsByArea.query(
           {
             areaId: areaId
           }
         );
         collectionList.$promise.then(function (data) {
+          console.log('get new category list');
+          console.log(data)
           vm.collectionList = data;
           vm.collectionId = data[0].id;
         });
       });
 
+
       CollectionObserver.subscribe(function onNext() {
         const id = CollectionObserver.get();
         vm.collectionId = id;
-        vm.getCollectionById(id);
+        _getCollectionById(id);
       });
+
+      vm.getCollectionById = function (id) {
+        CollectionObserver.set(id);
+      };
 
       CollectionListObserver.subscribe(function onNext() {
         vm.collectionList = CollectionListObserver.get();
       });
-
-      CollectionTagsObserver.subscribe(function onNext() {
-
-      });
-
-      CollectionTypesObserver.subscribe(function onNext() {
-
-      });
-
-      /**
-       * Watch for updates to the thumbnail image.
-       */
-      // $scope.$watch(function () {
-      //     return Data.currentThumbnailImage;
-      //   },
-      //   function (newValue) {
-      //     if (newValue !== null) {
-      //       vm.thumbnailImage = newValue;
-      //     }
-      //
-      //   });
-
-      /**
-       * Watch for updates to the current context collection
-       * id. Update the selected collection information.
-       */
-      // $scope.$watch(function () {
-      //     return Data.currentCollectionIndex;
-      //   },
-      //   function (newValue) {
-      //     if (newValue !== null) {
-      //       vm.getCollectionById(newValue);
-      //     }
-      //
-      //   });
-
-      /**
-       * Watch for updates to the current context collection
-       * list. Update the collectionList field in response.
-       */
-      // $scope.$watch(function () {
-      //     return Data.collections ;
-      //   },
-      //   function () {
-      //     vm.collectionList = Data.collections;
-      //   }
-      // );
-
-      /**
-       * Watch for updates to the collection category list
-       * that is associated with the collection area.
-       */
-      // $scope.$watch(function() {return Data.categories;},
-      //   function(newValue) {
-      //     if (newValue.length > 0) {
-      //       vm.categoryList =
-      //         CategoryByArea.query({areaId: Data.currentAreaIndex});
-      //     }
-      //   });
-
 
       /**
        * Show the $mdDialog.
@@ -234,7 +188,7 @@
        * content types associated with the collection.
        * @param id  {number} the collection id
        */
-      vm.getCollectionById = function (id) {
+      function _getCollectionById(id) {
         vm.collectionId = id;
 
 
@@ -248,19 +202,8 @@
             vm.browseType = vm.urlLabels[1];
           }
         });
-        var tags = TagsForCollection
-          .query({collId: id});
-        tags.$promise.then(function (data) {
-          CollectionTagsObserver.set(data);
-        });
 
-        var types = TypesForCollection
-          .query({collId: id});
-        types.$promise.then(function (data) {
-          CollectionTypesObserver.set(data);
-        });
-
-      };
+      }
 
 
       /**
@@ -277,6 +220,7 @@
         vm.getCollectionById(vm.collectionId);
         vm.collection.browseType = 'link';
         vm.collectionList = CollectionListObserver.get();
+
 
       };
 
@@ -297,48 +241,7 @@
 
       });
 
-      /**
-       * Watch for changes in the shared area id and update the
-       * view model collection list and category list.
-       */
-      // $scope.$watch(function () {
-      //   return Data.currentAreaIndex;
-      // }, function (newValue, oldValue) {
-      //
-      //
-      //   if (newValue !== oldValue) {
-      //     var cats = CategoryByArea.query({areaId: newValue});
-      //     cats.$promise.then(function () {
-      //       vm.categoryList = cats;
-      //     });
-      //     var collectionList = CollectionsByArea.query(
-      //       {
-      //         areaId: Data.currentAreaIndex
-      //       }
-      //     );
-      //     collectionList.$promise.then(function (data) {
-      //       vm.collectionList = data;
-      //     });
-      //
-      //   }
-      // });
-
-      /**
-       * Watch for updates to the list of areas.
-       */
-      // $scope.$watch(function () {
-      //     return Data.areas;
-      //   },
-      //   function (newValue) {
-      //     if (newValue !== $scope.areas) {
-      //       vm.areas = newValue;
-      //     }
-      //   }
-      //
-      // );
-
     }]);
-
 
 })();
 

@@ -125,19 +125,19 @@
        * an area list padded with the Administrator user
        * category.
        */
-      $scope.$watch(function() { return Data.areas; },
-        function(newValue) {
-          if (newValue.length > 0) {
-            vm.areaList[0] = {id: 0, name: 'Administrator'};
-            for (var i = 0; i < newValue.length; i++) {
-              vm.areaList[i + 1] = {
-                id: newValue[i].id,
-                name: newValue[i].title
-              };
-            }
-          }
-        }
-      );
+      // $scope.$watch(function() { return Data.areas; },
+      //   function(newValue) {
+      //     if (newValue.length > 0) {
+      //       vm.areaList[0] = {id: 0, name: 'Administrator'};
+      //       for (var i = 0; i < newValue.length; i++) {
+      //         vm.areaList[i + 1] = {
+      //           id: newValue[i].id,
+      //           name: newValue[i].title
+      //         };
+      //       }
+      //     }
+      //   }
+     // );
 
     }
   ]);

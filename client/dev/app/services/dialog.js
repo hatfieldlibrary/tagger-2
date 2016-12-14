@@ -96,7 +96,6 @@
        * @param TagTargetAdd
        * @param TaggerToast
        * @param Upload
-       * @param Data
        * @constructor
        */
       function DialogController(//  $rootScope,
@@ -127,7 +126,13 @@
         AreaObserver,
         CollectionListObserver,
         CollectionObserver,
-        Data) {
+        TagObserver,
+        TagListObserver,
+        TagAreaObserver,
+        CategoryObserver,
+        CategoryListObserver,
+        ThumbImageObserver,
+        ContentTypeObserver) {
 
         /**
          * Closes the dialog
@@ -142,7 +147,7 @@
          */
         $scope.deleteTag = function () {
 
-          var result = TagDelete.save({id: Data.currentTagIndex});
+          var result = TagDelete.save({id: TagObserver.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -161,11 +166,10 @@
          * Adds tag to a collection area. Used with administrator view.
          */
         $scope.addAreaToTag = function () {
-          console.log('add to area ' + Data.currentAreaIndex);
           var result = TagTargetAdd.query(
             {
-              tagId: Data.currentTagIndex,
-              areaId: Data.currentTagAreaId
+              tagId: TagObserver.get(),
+              areaId: TagAreaObserver.get()
             }
           );
           result.$promise.then(function (data) {
@@ -187,8 +191,8 @@
         $scope.removeAreaFromTag = function () {
           var result = TagTargetRemove.query(
             {
-              tagId: Data.currentTagIndex,
-              areaId: Data.currentTagAreaId
+              tagId: TagObserver.get(),
+              areaId: TagAreaObserver.get()
             }
           );
           result.$promise.then(function (data) {
@@ -210,11 +214,11 @@
          * manager view.
          */
         $scope.addTagToArea = function () {
-          console.log('add to area ' + Data.currentAreaIndex);
+          console.log('adding tag to area')
           var result = TagTargetAdd.query(
             {
-              tagId: Data.currentTagIndex,
-              areaId: Data.currentAreaIndex
+              tagId: TagObserver.get(),
+              areaId: AreaObserver.get()
             }
           );
           result.$promise.then(function (data) {
@@ -232,8 +236,8 @@
         $scope.removeTagFromArea = function () {
           var result = TagTargetRemove.query(
             {
-              tagId: Data.currentTagIndex,
-              areaId: Data.currentAreaIndex
+              tagId: TagObserver.get(),
+              areaId: AreaObserver.get()
             }
           );
           result.$promise.then(function (data) {
@@ -276,16 +280,15 @@
          */
         $scope.getTagList = function (id) {
 
-          // Update the shared Data service
           var tags = TagList.query();
 
-          tags.$promise.then(function () {
+          tags.$promise.then(function (tags) {
             if (id === null) {
-              Data.currentTagIndex = Data.tags[0].id;
+              TagObserver.set(tags[0].id);
             } else {
-              Data.currentTagIndex = id;
+              TagObserver.set(id);
             }
-            Data.tags = tags;
+            TagListObserver.set(tags);
 
             $scope.closeDialog();
           });
@@ -299,7 +302,7 @@
          */
         $scope.deleteArea = function () {
 
-          var result = AreaDelete.save({id: Data.currentAreaIndex});
+          var result = AreaDelete.save({id: AreaObserver.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -341,18 +344,17 @@
          * @param id  the id of the current area or null.
          */
         $scope.getAreaList = function (id) {
-          // Update the shared Data service
+
           var areas = AreaList.query();
 
           areas.$promise.then(function (data) {
-            Data.areas = data;
-            //observer
+
             AreaListObserver.set(data);
-            if (Data.areas.length > 0) {
+            if (data.length > 0) {
               if (id === null) {
-                Data.currentAreaIndex = Data.areas[0].id;
+                AreaObserver.set(data[0].id);
               } else {
-                Data.currentAreaIndex = id;
+                AreaObserver.set(id);
               }
 
               $scope.closeDialog();
@@ -367,7 +369,7 @@
          */
         $scope.deleteCategory = function () {
 
-          var result = CategoryDelete.save({id: Data.currentCategoryIndex});
+          var result = CategoryDelete.save({id: CategoryObserver.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -419,20 +421,16 @@
          */
         $scope.getCategoryList = function (id) {
 
-          // Update the shared Data service
-          Data.categories = CategoryList.query();
-          Data.categories.$promise.then(function () {
+          let categories = CategoryList.query();
+          categories.$promise.then(function (data) {
+            CategoryListObserver.set(data);
             if (id === null) {
-
-              Data.currentCategoryIndex = Data.categories[0].id;
+              CategoryObserver.set(data[0].id);
 
             } else {
-
-              Data.currentCategoryIndex = id;
+              CategoryObserver.set(id);
 
             }
-
-
           });
 
         };
@@ -443,7 +441,7 @@
          */
         $scope.deleteContentType = function () {
 
-          var result = ContentTypeDelete.save({id: Data.currentContentIndex});
+          var result = ContentTypeDelete.save({id: ContentTypeObserver.get()});
 
           result.$promise.then(function (data) {
             if (data.status === 'success') {
@@ -473,14 +471,15 @@
         $scope.getContentList = function (id) {
 
           // Update the shared Data service
-          Data.contentTypes = ContentTypeList.query();
+          const contentTypes = ContentTypeList.query();
           // Wait for callback.
-          Data.contentTypes.$promise.then(function () {
+          contentTypes.$promise.then(function (data) {
+            TypeListObserver.set(data);
             if (id === null) {
-              Data.currentContentIndex = Data.contentTypes[0].id;
+              ContentTypeObserver.set(data[0].id);
 
             } else {
-              Data.currentContentIndex = id;
+             ContentTypeObserver.set(id);
             }
 
 
@@ -520,11 +519,9 @@
         $scope.addCollection = function (title) {
 
           var result = CollectionAdd.save({title: title, areaId: AreaObserver.get(), browseType: 'link'});
-
           result.$promise.then(function (data) {
 
             if (data.status === 'success') {
-
               new TaggerToast('Collection Added');
               // Update the collection list. The
               // id parameter will be used to select
@@ -541,7 +538,7 @@
          * Deletes a collection.
          */
         $scope.deleteCollection = function () {
-          var result = CollectionDelete.save({id: Data.currentCollectionIndex});
+          var result = CollectionDelete.save({id: CollectionObserver.get()});
 
           result.$promise.then(function (data) {
             if (data.status === 'success') {
@@ -567,28 +564,21 @@
          * @param id  the collection id or null.
          */
         $scope.getCollectionList = function (id) {
-          console.log('gettingnew collection list')
 
-          // Update the shared Data service
           var result = CollectionsByArea.query({areaId: AreaObserver.get()});
-          // Wait for callback.
           result.$promise.then(function (data) {
-            console.log('got new collectin list')
              CollectionListObserver.set(data);
-          //  Data.collections = data;
             // Deleting a category doesn't generate
             // a new id. In that case, expect the
             // id to be null. Update the view using the
             // id of the first item in the updated category
             // list.
             if (id === null) {
-              console.log('addding id to observer')
-              CollectionObserver.set(Data.collections[0].Collection.id)
-             // Data.currentCollectionIndex = Data.collections[0].Collection.id;
+              CollectionObserver.set(data[0].Collection.id);
 
             } else {
               CollectionObserver.set(id);
-            //  Data.currentCollectionIndex = id;
+
             }
 
           });
@@ -607,12 +597,12 @@
             Upload.upload({
               url: '/tagger/collection/image',
               file: file,
-              fields: {id: Data.currentCollectionIndex}
+              fields: {id: CollectionObserver.get()}
             }).progress(function (evt) {
               var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
               console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
             }).success(function (data, status, headers, config) {
-              Data.currentThumbnailImage = config.file.name;
+              ThumbImageObserver.set(config.file.name);
               $scope.closeDialog();
               console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
 

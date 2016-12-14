@@ -84,7 +84,7 @@ exports.update = function (req, res) {
     description: description
   };
 
-  taggerDao.Area.updateArea(data, id)
+  taggerDao.updateArea(data, id)
     .then(function (result) {
       utils.sendResponse(res, {status: 'success', id: result.id});
     }).catch(

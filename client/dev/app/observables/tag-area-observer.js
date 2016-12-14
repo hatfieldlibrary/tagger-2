@@ -1,28 +1,27 @@
 /**
- * Created by mspalti on 12/12/16.
+ * Created by mspalti on 12/13/16.
  */
 (function()  {
 
   'use strict';
 
-  taggerServices.factory('ContentTypeListObserver', ['rx', function(rx){
+  taggerServices.factory('TagAreaObserver', ['rx', function(rx){
 
     const Subject = new rx.Subject();
-    let types = [];
+    let tag = 0;
 
     return {
       set: function set(update){
-        types = update;
-        Subject.onNext(types);
+        tag = update;
+        Subject.onNext(tag);
       },
       get: function get() {
-        return types;
+        return tag;
       },
       subscribe: function (o) {
         return Subject.subscribe(o);
       }
     };
   }]);
-
 
 })();
