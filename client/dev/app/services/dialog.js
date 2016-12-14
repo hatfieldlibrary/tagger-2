@@ -102,6 +102,7 @@
         $scope,
         $mdDialog,
         $rootScope,
+        Constant,
         TagAdd,
         TagList,
         TagDelete,
@@ -132,7 +133,8 @@
         CategoryObserver,
         CategoryListObserver,
         ThumbImageObserver,
-        ContentTypeObserver) {
+        ContentTypeObserver,
+        AreaActionObserver) {
 
         /**
          * Closes the dialog
@@ -302,7 +304,7 @@
          */
         $scope.deleteArea = function () {
 
-          var result = AreaDelete.save({id: AreaObserver.get()});
+          var result = AreaDelete.save({id: AreaActionObserver.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -401,7 +403,7 @@
           result.$promise.then(function (data) {
 
             if (data.status === 'success') {
-             new  TaggerToast('Category Added');
+              new TaggerToast('Category Added');
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
@@ -479,7 +481,7 @@
               ContentTypeObserver.set(data[0].id);
 
             } else {
-             ContentTypeObserver.set(id);
+              ContentTypeObserver.set(id);
             }
 
 
@@ -518,7 +520,15 @@
          */
         $scope.addCollection = function (title) {
 
-          var result = CollectionAdd.save({title: title, areaId: AreaObserver.get(), browseType: 'link'});
+          var result = CollectionAdd.save(
+            {
+              title: title,
+              areaId: AreaObserver.get(),
+              browseType: Constant.defaultBrowseType,
+              repoType: Constant.defaultRepoType,
+              ctype: Constant.defaultCollectionType
+            }
+          );
           result.$promise.then(function (data) {
 
             if (data.status === 'success') {
@@ -567,7 +577,7 @@
 
           var result = CollectionsByArea.query({areaId: AreaObserver.get()});
           result.$promise.then(function (data) {
-             CollectionListObserver.set(data);
+            CollectionListObserver.set(data);
             // Deleting a category doesn't generate
             // a new id. In that case, expect the
             // id to be null. Update the view using the
@@ -639,7 +649,6 @@
       };
 
       return showDialog;
-
 
 
     }]);

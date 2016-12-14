@@ -13,7 +13,8 @@
     'taggerControllers',
     'taggerServices',
     'taggerDirectives',
-    'taggerComponents'
+    'taggerComponents',
+    'taggerConstants'
 
   ]);
 

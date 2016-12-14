@@ -33,7 +33,8 @@
               $animate,
               AreaListObserver,
               AreaObserver,
-              UserAreaObserver) {
+              UserAreaObserver,
+              AreaActionObserver) {
 
       var vm = this;
 
@@ -86,6 +87,8 @@
       vm.resetArea = function (id) {
         if (id !== null) {
           vm.currentAreaId = id;
+          AreaActionObserver.set(id);
+
         }
         var ar = AreaById.query({id: id});
         ar.$promise.then(function (data) {
@@ -160,7 +163,7 @@
         });
       }
 
-      vm.$onInit = function() {
+      vm.$onInit = function () {
         vm.resetArea(AreaObserver.get());
       }
 

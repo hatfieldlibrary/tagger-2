@@ -505,12 +505,14 @@ exports.add = function (req, res) {
   const title = req.body.title;
   const areaId = req.body.areaId;
   const browseType = req.body.browseType;
+  const repoType = req.body.repoType;
+  const ctype = req.body.ctype;
 
   var newCollectionId;
 
   async.series({
       addCollection: function (callback) {
-        taggerDao.addNewCollection(title, browseType).then(function (coll) {
+        taggerDao.addNewCollection(title, browseType, repoType, ctype).then(function (coll) {
           newCollectionId = coll.id;
           callback(null, coll);
         }).catch(function (err) {

@@ -40,8 +40,8 @@
               ContentTypeObserver,
               ContentTypeListObserver,
               CategoryListObserver,
-              CategoriesForAreaObserver,
               CategoryObserver,
+              CategoriesForAreaObserver,
               TagObserver,
               TagListObserver) {
 
@@ -103,22 +103,25 @@
        */
       UserAreaObserver.subscribe(function onNext() {
         vm.userAreaId = UserAreaObserver.get();
-        if (vm.userAreaId === 0) {
-
-          var areas = AreaList.query();
-          areas.$promise.then(function (data) {
-            vm.areas = data;
-            AreaListObserver.set(data);
-            AreaObserver.set(data[0].id);
-            vm.currentAreaId = setAreaId(data[0].id);
-            setContext();
-
-          });
-        }
-        else {
-          vm.currentAreaId = id;
-          setContext();
-        }
+      //  _getRole(vm.userAreaId);
+        setContext();
+        // vm.userAreaId = UserAreaObserver.get();
+        // if (vm.userAreaId === 0) {
+        //
+        //   var areas = AreaList.query();
+        //   areas.$promise.then(function (data) {
+        //     vm.areas = data;
+        //     AreaListObserver.set(data);
+        //     AreaObserver.set(data[0].id);
+        //     vm.currentAreaId = setAreaId(data[0].id);
+        //     setContext();
+        //
+        //   });
+        // }
+        // else {
+        //   vm.currentAreaId = id;
+        //   setContext();
+        // }
       });
 
       AreaObserver.subscribe(function onNext() {
@@ -214,7 +217,7 @@
        * initial page load after successful authentication.
        * @param areaId the current area id
        */
-      function getRole(areaId) {
+      function _getRole(areaId) {
 
         vm.role = getUserRole(areaId);
         // set area default for non-admin user
@@ -355,18 +358,7 @@
 
       vm.$onInit = function () {
 
-        var userinfo = getUserInfo.query();
-        userinfo.$promise.then(function (user) {
 
-          IsAuthObserver.set(true);
-          UserObserver.set(user);
-          UserAreaObserver.set(user.areaId);
-          getRole(user.areaId);
-          setContext();
-
-        }).catch(function (err) {
-          console.log(err);
-        });
       }
 
     });

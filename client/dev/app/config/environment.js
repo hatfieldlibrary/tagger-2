@@ -7,7 +7,7 @@ var taggerEnvironment = angular.module('taggerEnvironment', []);
   /**
    * Returns settings for the application environment.
    */
-  taggerEnvironment.factory('Env', function() {
+  taggerEnvironment.factory('config', function() {
 
     return {
       // include protocol and trailing forward slash

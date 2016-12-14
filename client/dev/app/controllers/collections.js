@@ -98,18 +98,7 @@
       AreaObserver.subscribe(function onNext() {
 
         const areaId = AreaObserver.get();
-        console.log('area id ' + areaId)
-
-        var cats = CategoryByArea.query(
-          {
-            areaId: areaId
-          }
-        );
-        cats.$promise.then(function (data) {
-          console.log('got new cats')
-          console.log(data)
-          vm.categoryList = data;
-        });
+        _getCategories();
 
         var collectionList = CollectionsByArea.query(
           {
@@ -117,8 +106,6 @@
           }
         );
         collectionList.$promise.then(function (data) {
-          console.log('get new category list');
-          console.log(data)
           vm.collectionList = data;
           vm.collectionId = data[0].id;
         });
@@ -183,6 +170,19 @@
 
       };
 
+      function _getCategories() {
+
+        var cats = CategoryByArea.query(
+          {
+            areaId: AreaObserver.get()
+          }
+        );
+        cats.$promise.then(function (data) {
+          vm.categoryList = data;
+        });
+
+      }
+
       /**
        * Retrieves collection information, tags and
        * content types associated with the collection.
@@ -190,7 +190,6 @@
        */
       function _getCollectionById(id) {
         vm.collectionId = id;
-
 
         var col = CollectionById.query({id: id});
         col.$promise.then(function (data) {
@@ -218,6 +217,7 @@
       vm.$onInit = () => {
         vm.collectionId = CollectionObserver.get();
         vm.getCollectionById(vm.collectionId);
+        vm.categoryList = _getCategories();
         vm.collection.browseType = 'link';
         vm.collectionList = CollectionListObserver.get();
 
@@ -231,6 +231,8 @@
        * was removed from the area currently in view.
        *
        * Updates the collection list on event.
+       *
+       * This could be observable on collection list.
        */
       $scope.$on('removedFromArea', function () {
         vm.collectionList = CollectionsByArea.query(

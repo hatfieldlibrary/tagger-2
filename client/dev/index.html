@@ -21,15 +21,7 @@
         <h2 class="md-display-1">Tagger</h2>
       </span>
       <span flex></span>
-      <div ng-if="vm.userAreaId === 0">
-        <md-input-container class="md-no-float">
-          <md-select ng-model="vm.areas" placeholder="Select Area">
-            <md-option ng-repeat="area in vm.areas track by area.id" ng-value="area.title" ng-selected="vm.currentAreaId == area.id"
-                       ng-click="vm.updateArea(area.id, $index)">{{area.title}}
-            </md-option>
-          </md-select>
-        </md-input-container>
-      </div>
+      <admin-area-selector></admin-area-selector>
       <md-container ng-if="vm.userAreaId &gt; 0">
         <span class="md-subhead">Area: &nbsp;  {{vm.areaLabel}}</span>
       </md-container>
@@ -38,29 +30,7 @@
   <div class="view-container" layout="row" flex>
     <md-sidenav class="md-sidenav-left transparent" style="height: 650px" flex="5" md-component-id="left"
                 md-is-locked-open="$mdMedia('gt-md')">
-      <md-toolbar class="md-default-theme">
-        <md-card class="local-hue-1 margin-override">
-          <md-card-content style="padding-left: 12px">
-            <md-list>
-              <md-list-item class="contact-item">
-                <!-- Passport login provides picture from Google profile-->
-                <img ng-if="vm.authorized" class="md-avatar" ng-src="{{vm.userPicture}}">
-              </md-list-item>
-              <md-list-item>
-                {{vm.userName}}
-              </md-list-item>
-              <md-list-item>
-                <!-- The user and areaId are also from passport login.-->
-                <!-- Passing the areaId to the controller will initialize-->
-                <!-- the application context.-->
-                <div class="md-subhead">
-                  <div class="md-caption">{{vm.role}}</div>
-                </div>
-              </md-list-item>
-            </md-list>
-          </md-card-content>
-        </md-card>
-      </md-toolbar>
+      <authentication-component></authentication-component>
       <md-content class="transparent">
         <md-list>
           <md-list-item hide-gt-md="true">
@@ -183,12 +153,15 @@
 <script type="text/javascript" src="bower_components/ng-file-upload-shim/ng-file-upload-shim.min.js"></script>
 <script type="text/javascript" src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
 <script type="text/javascript" src="bower_components/d3/d3.js"></script>
+
+<script type="text/javascript" src="app/modules/controllers.js"></script>
+<script type="text/javascript" src="app/modules/services.js"></script>
+<script type="text/javascript" src="app/modules/components.js"></script>
+<script type="text/javascript" src="app/modules/directives.js"></script>
+<script type="text/javascript" src="app/modules/constants.js"></script>
 <script type="text/javascript" src="app/common/context.js"></script>
-<script type="text/javascript" src="app/common/controllers.js"></script>
-<script type="text/javascript" src="app/common/services.js"></script>
-<script type="text/javascript" src="app/common/components.js"></script>
-<script type="text/javascript" src="app/common/directives.js"></script>
-<script type="text/javascript" src="app/common/environment.js"></script>
+<script type="text/javascript" src="app/common/constants.js"></script>
+<script type="text/javascript" src="app/config/environment.js"></script>
 <script type="text/javascript" src="app/controllers/collections.js"></script>
 <script type="text/javascript" src="app/controllers/authorization.js"></script>
 <script type="text/javascript" src="app/controllers/layout.js"></script>
@@ -210,6 +183,8 @@
 <script type="text/javascript" src="app/components/image-upload.js"></script>
 <script type="text/javascript" src="app/components/area-selector.js"></script>
 <script type="text/javascript" src="app/components/image-link.js"></script>
+<script type="text/javascript" src="app/components/admin-area-selector.js"></script>
+<script type="text/javascript" src="app/components/auth.js"></script>
 
 <script type="text/javascript" src="app/observables/current-area.js"></script>
 <script type="text/javascript" src="app/observables/areas.js"></script>
