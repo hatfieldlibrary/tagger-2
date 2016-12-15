@@ -18,8 +18,8 @@
      * Update the tags when collection changes.
      */
     CollectionObserver.subscribe(function onNext() {
-      console.log('getting tags for collection')
       let collid = CollectionObserver.get();
+      ctrl.collectionId = collid;
       _getTagsForCollection(collid);
 
     });

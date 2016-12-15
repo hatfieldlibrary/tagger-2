@@ -15,8 +15,8 @@
 
     const ctrl = this;
 
-    let removeMessage = 'templates/removeAreaFromTagMessage.html';
-    let addMessage = 'templates/addAreaToTagMessage.html';
+    let removeMessage = 'templates/dialog/removeAreaFromTagMessage.html';
+    let addMessage = 'templates/dialog/addAreaToTagMessage.html';
 
     ctrl.areas = AreaListObserver.get();
 

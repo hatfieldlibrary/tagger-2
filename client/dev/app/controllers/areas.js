@@ -45,10 +45,10 @@
       vm.area = vm.areas[0];
 
       /** @type {string} */
-      vm.addMessage = 'templates/addAreaMessage.html';
+      vm.addMessage = 'templates/dialog/addAreaMessage.html';
 
       /** @type {string} */
-      vm.deleteMessage = 'templates/deleteAreaMessage.html';
+      vm.deleteMessage = 'templates/dialog/deleteAreaMessage.html';
 
       /** @type {number */
       vm.currentAreaId = UserAreaObserver.get();

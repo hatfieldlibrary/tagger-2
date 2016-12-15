@@ -10,7 +10,7 @@
     const vm = this;
 
     /** @type {string} */
-    vm.updateImageMessage = 'templates/updateImageMessage.html';
+    vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
 
     ThumbImageObserver.subscribe(function onNext() {
       vm.thumbnailImage = ThumbImageObserver.get();

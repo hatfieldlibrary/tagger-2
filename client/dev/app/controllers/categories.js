@@ -33,10 +33,10 @@
 
       // Dialog Messages
       /** @type {string} */
-      vm.addMessage = 'templates/addCategoryMessage.html';
+      vm.addMessage = 'templates/dialog/addCategoryMessage.html';
 
       /** @type {string} */
-      vm.deleteMessage = 'templates/deleteCategoryMessage.html';
+      vm.deleteMessage = 'templates/dialog/deleteCategoryMessage.html';
 
       CategoryListObserver.subscribe(function onNext() {
         vm.categories = CategoryListObserver.get();

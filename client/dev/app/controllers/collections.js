@@ -70,13 +70,13 @@
 
       // Tag dialog message templates
       /** @type {string} */
-      vm.addMessage = 'templates/addCollectionMessage.html';
+      vm.addMessage = 'templates/dialog/addCollectionMessage.html';
 
       /** @type {string} */
-      vm.deleteMessage = 'templates/deleteCollectionMessage.html';
+      vm.deleteMessage = 'templates/dialog/deleteCollectionMessage.html';
 
       /** @type {string} */
-      vm.updateImageMessage = 'templates/updateImageMessage.html';
+      vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
 
       /** @type {number} */
       vm.userAreaId = UserAreaObserver.get();

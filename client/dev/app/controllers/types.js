@@ -37,10 +37,10 @@
       vm.currentType = ContentTypeObserver.get();
 
       /** @type {string} */
-      vm.addMessage = 'templates/addContentMessage.html';
+      vm.addMessage = 'templates/dialog/addContentMessage.html';
 
       /** @type {stromg} */
-      vm.deleteMessage = 'templates/deleteContentMessage.html';
+      vm.deleteMessage = 'templates/dialog/deleteContentMessage.html';
 
       /**
        * Show the $mdDialog.

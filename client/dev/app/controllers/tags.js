@@ -53,10 +53,10 @@
 
       /* Tag dialog messages */
       /** @type {string} */
-      vm.addMessage = 'templates/addTagMessage.html';
+      vm.addMessage = 'templates/dialog/addTagMessage.html';
 
       /** @type {string} */
-      vm.deleteMessage = 'templates/deleteTagMessage.html';
+      vm.deleteMessage = 'templates/dialog/deleteTagMessage.html';
 
       /** @type {string} */
       vm.areaLabel = AreaLabelObserver.get();
