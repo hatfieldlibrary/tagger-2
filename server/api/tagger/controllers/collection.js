@@ -250,8 +250,45 @@ function _addArea(collId, areaId, res) {
 }
 
 /**
+ * Returns the first collection for the area.
+ * @param req
+ * @param res
+ */
+exports.getFirstCollectionInArea = function (req, res) {
+  const areaId = req.params.areaId;
+
+  async.waterfall([
+    function (callback) {
+      taggerDao.findCollectionsInArea(areaId)
+        .then(
+          function(collections) {
+
+            callback(null, collections[0].dataValues.CollectionId);
+          }
+        )
+    },
+    function (collId, callback) {
+      taggerDao.findCollectionById(collId)
+        .then(
+          function(collection) {
+
+            callback(null, collection);
+          }
+        );
+    }
+  ], function (err, collection) {
+    if (err) {
+      console.log(err);
+    }
+    utils.sendResponse(res, collection);
+
+  });
+
+};
+
+/**
  * Adds collection to a collection area after first
- * checking for a existing associatoin then returns
+ * checking for a existing association then returns
  * new area list.
  * @param req
  * @param res
@@ -539,7 +576,7 @@ exports.add = function (req, res) {
       if (err) {
         console.log(err);
       }
-    utils.sendResponse(res, {status: 'success', id: newCollectionId, collections: results.collections});
+      utils.sendResponse(res, {status: 'success', id: newCollectionId, collections: results.collections});
     }
   );
 
@@ -589,7 +626,7 @@ exports.updateImage = function (req, res, config) {
    */
   function updateImageInDb(res, id, imageName) {
     taggerDao.updateCollectionImage(id, imageName).then(function () {
-      utils.sendResponse(res, {status: 'success'});
+        utils.sendResponse(res, {status: 'success'});
       }
     ).catch(function (err) {
         console.log(err);
@@ -738,7 +775,7 @@ exports.collectionsBySubject = function (req, res) {
   const subjectId = req.params.id;
   const areaId = req.params.areaId;
 
- taggerDao.getCollectionsBySubjectAndArea(subjectId, areaId).then(
+  taggerDao.getCollectionsBySubjectAndArea(subjectId, areaId).then(
     function (collections) {
       utils.sendResponse(res, collections);
     }).catch(function (err) {

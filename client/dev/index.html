@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <base href="/">
 </head>
-<body ng-cloak ng-controller="LayoutCtrl as vm">
+<body ng-cloak>
 <div layout-fill layout="column">
   <md-toolbar>
     <div class="md-toolbar-tools">
@@ -21,16 +21,24 @@
         <h2 class="md-display-1">Tagger</h2>
       </span>
       <span flex></span>
+
+      <!-- component -->
       <admin-area-selector></admin-area-selector>
+      <!-- This is going to be a problem.  Belongs in admin-area-selector.  -->
       <md-container ng-if="vm.userAreaId &gt; 0">
         <span class="md-subhead">Area: &nbsp;  {{vm.areaLabel}}</span>
       </md-container>
+
     </div>
   </md-toolbar>
   <div class="view-container" layout="row" flex>
     <md-sidenav class="md-sidenav-left transparent" style="height: 650px" flex="5" md-component-id="left"
                 md-is-locked-open="$mdMedia('gt-md')">
+
+      <!-- component -->
       <authentication-component></authentication-component>
+
+
       <md-content class="transparent">
         <md-list>
           <md-list-item hide-gt-md="true">
@@ -162,39 +170,48 @@
 <script type="text/javascript" src="app/common/context.js"></script>
 <script type="text/javascript" src="app/common/constants.js"></script>
 <script type="text/javascript" src="app/config/environment.js"></script>
-<script type="text/javascript" src="app/controllers/collections.js"></script>
-<script type="text/javascript" src="app/controllers/authorization.js"></script>
-<script type="text/javascript" src="app/controllers/layout.js"></script>
+
+<!--<script type="text/javascript" src="app/controllers/authorization.js"></script>-->
+<!--<script type="text/javascript" src="app/controllers/layout.js"></script>-->
 <script type="text/javascript" src="app/controllers/overview.js"></script>
-<script type="text/javascript" src="app/controllers/tags.js"></script>
-<script type="text/javascript" src="app/controllers/types.js"></script>
+<!--<script type="text/javascript" src="app/controllers/types.js"></script>-->
 <script type="text/javascript" src="app/controllers/users.js"></script>
 <script type="text/javascript" src="app/controllers/areas.js"></script>
-<script type="text/javascript" src="app/controllers/categories.js"></script>
+<!--<script type="text/javascript" src="app/controllers/categories.js"></script>-->
+
 <script type="text/javascript" src="app/services/tagger.js"></script>
 <script type="text/javascript" src="app/services/dialog.js"></script>
 <script type="text/javascript" src="app/directives/tagger.js"></script>
 <script type="text/javascript" src="app/directives/charts.js"></script>
 
 <script type="text/javascript" src="app/components/overview/collection-summary.js"></script>
-<script type="text/javascript" src="app/components/tag-area-selector.js"></script>
+<script type="text/javascript" src="app/components/tags/tag-area-selector.js"></script>
+<script type="text/javascript" src="app/components/tags/tags-list.js"></script>
+<script type="text/javascript" src="app/components/tags/tags-form.js"></script>
+<script type="text/javascript" src="app/components/tags/main.js"></script>
+<script type="text/javascript" src="app/components/types/types-list.js"></script>
+<script type="text/javascript" src="app/components/types/types-form.js"></script>
+<script type="text/javascript" src="app/components/types/main.js"></script>
 <script type="text/javascript" src="app/components/collection/types-selector.js"></script>
 <script type="text/javascript" src="app/components/collection/tags-selector.js"></script>
 <script type="text/javascript" src="app/components/collection/image-upload.js"></script>
 <script type="text/javascript" src="app/components/collection/area-selector.js"></script>
 <script type="text/javascript" src="app/components/collection/image-link.js"></script>
 <script type="text/javascript" src="app/components/collection/collection-list.js"></script>
-<script type="text/javascript" src="app/components/collection/update-form.js"></script>
+<script type="text/javascript" src="app/components/collection/collection-form.js"></script>
 <script type="text/javascript" src="app/components/collection/main.js"></script>
-<script type="text/javascript" src="app/components/admin-area-selector.js"></script>
-<script type="text/javascript" src="app/components/auth.js"></script>
+<script type="text/javascript" src="app/components/groups/main.js"></script>
+<script type="text/javascript" src="app/components/groups/groups-list.js"></script>
+<script type="text/javascript" src="app/components/groups/group-form.js"></script>
+<script type="text/javascript" src="app/components/global/admin-area-selector.js"></script>
+<script type="text/javascript" src="app/components/global/auth.js"></script>
 
 <script type="text/javascript" src="app/observables/current-area.js"></script>
 <script type="text/javascript" src="app/observables/areas.js"></script>
 <script type="text/javascript" src="app/observables/action-area.js"></script>
 <script type="text/javascript" src="app/observables/current-area.js"></script>
-<script type="text/javascript" src="app/observables/categories.js"></script>
-<script type="text/javascript" src="app/observables/current-category.js"></script>
+<script type="text/javascript" src="app/observables/groups.js"></script>
+<script type="text/javascript" src="app/observables/current-group.js"></script>
 <script type="text/javascript" src="app/observables/collections.js"></script>
 <script type="text/javascript" src="app/observables/current-collection.js"></script>
 <script type="text/javascript" src="app/observables/tags-for-collection.js"></script>
@@ -209,7 +226,7 @@
 <script type="text/javascript" src="app/observables/is-auth.js"></script>
 <script type="text/javascript" src="app/observables/user-info.js"></script>
 <script type="text/javascript" src="app/observables/user-area-id.js"></script>
-<script type="text/javascript" src="app/observables/categories-for-area.js"></script>
+<script type="text/javascript" src="app/observables/groups-for-area.js"></script>
 <script type="text/javascript" src="app/observables/thumb-image.js"></script>
 <script type="text/javascript" src="app/observables/total-search-options.js"></script>
 <script type="text/javascript" src="app/observables/total-collection-links.js"></script>

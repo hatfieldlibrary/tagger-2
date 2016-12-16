@@ -12,8 +12,10 @@
 
     return {
       set: function set(update){
-        contentType = update;
-        Subject.onNext(contentType);
+        if (update !== contentType) {
+          contentType = update;
+          Subject.onNext(contentType);
+        }
       },
       get: function get() {
         return contentType;

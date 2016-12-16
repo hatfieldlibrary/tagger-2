@@ -34,10 +34,12 @@
     });
 
     function _getTagsForArea(id) {
-      let tagsForArea = TagsForArea.query({areaId: id});
-      tagsForArea.$promise.then(function (data) {
-        ctrl.tagsForArea = data;
-      });
+      if (id) {
+        let tagsForArea = TagsForArea.query({areaId: id});
+        tagsForArea.$promise.then(function (data) {
+          ctrl.tagsForArea = data;
+        });
+      }
     }
 
     /**
@@ -54,7 +56,6 @@
 
 
     function _setTagsArray(set) {
-      console.log('got tags ' + set.length)
       let objArray = [];
       if (set.length > 0) {
         for (var i = 0; i < set.length; i++) {

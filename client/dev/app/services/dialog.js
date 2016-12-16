@@ -130,10 +130,11 @@
         TagObserver,
         TagListObserver,
         TagAreaObserver,
-        CategoryObserver,
-        CategoryListObserver,
+        GroupObserver,
+        GroupListObserver,
         ThumbImageObserver,
         ContentTypeObserver,
+        ContentTypeListObserver,
         AreaActionObserver) {
 
         /**
@@ -264,14 +265,12 @@
           var result = TagAdd.save({name: name});
 
           result.$promise.then(function (data) {
-
             if (data.status === 'success') {
               new TaggerToast('Tag Added');
               // After area update succeeds, update the view.
               $scope.getTagList(data.id);
-              //    $scope.closeDialog();
+              $scope.closeDialog();
             }
-
           });
         };
 
@@ -371,7 +370,7 @@
          */
         $scope.deleteCategory = function () {
 
-          var result = CategoryDelete.save({id: CategoryObserver.get()});
+          var result = CategoryDelete.save({id: GroupObserver.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -425,12 +424,12 @@
 
           let categories = CategoryList.query();
           categories.$promise.then(function (data) {
-            CategoryListObserver.set(data);
+            GroupListObserver.set(data);
             if (id === null) {
-              CategoryObserver.set(data[0].id);
+              GroupObserver.set(data[0].id);
 
             } else {
-              CategoryObserver.set(id);
+              GroupObserver.set(id);
 
             }
           });
@@ -476,7 +475,7 @@
           const contentTypes = ContentTypeList.query();
           // Wait for callback.
           contentTypes.$promise.then(function (data) {
-            TypeListObserver.set(data);
+            ContentTypeListObserver.set(data);
             if (id === null) {
               ContentTypeObserver.set(data[0].id);
 
@@ -500,7 +499,6 @@
           result.$promise.then(function (data) {
 
             if (data.status === 'success') {
-
               new TaggerToast('Content Type Added');
               // Update the category list. The
               // id parameter will be used to select

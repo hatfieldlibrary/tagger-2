@@ -5,15 +5,17 @@
 
   'use strict';
 
-  taggerServices.factory('CategoryObserver', ['rx', function(rx){
+  taggerServices.factory('GroupObserver', ['rx', function(rx){
 
     const Subject = new rx.Subject();
     let category = 0;
 
     return {
       set: function set(update){
-        category = update;
-        Subject.onNext(category);
+        if (update !== category) {
+          category = update;
+          Subject.onNext(category);
+        }
       },
       get: function get() {
         return category;

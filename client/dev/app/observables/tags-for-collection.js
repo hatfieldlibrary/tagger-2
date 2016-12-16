@@ -12,8 +12,10 @@
 
     return {
       set: function set(update){
-        tags = update;
-        Subject.onNext(tags);
+        if (update !== tags) {
+          tags = update;
+          Subject.onNext(tags);
+        }
       },
       get: function get() {
         return tags;

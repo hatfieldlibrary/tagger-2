@@ -37,7 +37,6 @@
      * Update the tags when collection changes.
      */
     CollectionObserver.subscribe(function onNext() {
-      console.log('getting types for collection')
       let collid = CollectionObserver.get();
       _getTypesForCollection(collid);
 

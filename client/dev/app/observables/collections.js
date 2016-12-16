@@ -12,8 +12,10 @@
 
     return {
       set: function set(update){
-        collections = update;
-        Subject.onNext(collections);
+        if (update !== collections) {
+          collections = update;
+          Subject.onNext(collections);
+        }
       },
       get: function get() {
         return collections;

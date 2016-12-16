@@ -5,18 +5,18 @@
 
   'use strict';
 
-  taggerServices.factory('CategoryListObserver', ['rx', function(rx){
+  taggerServices.factory('GroupsForAreaObserver', ['rx', function(rx){
 
     const Subject = new rx.Subject();
-    let categories = [];
+    let catgories = [];
 
     return {
       set: function set(update){
-        categories = update;
-        Subject.onNext(categories);
+        catgories = update;
+        Subject.onNext(catgories);
       },
       get: function get() {
-        return categories;
+        return catgories;
       },
       subscribe: function (o) {
         return Subject.subscribe(o);

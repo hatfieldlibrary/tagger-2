@@ -14,7 +14,6 @@
     /** @type {number} */
     vm.userAreaId = UserAreaObserver.get();
 
-    // Tag dialog message templates
     /** @type {string} */
     vm.addMessage = 'templates/dialog/addCollectionMessage.html';
 

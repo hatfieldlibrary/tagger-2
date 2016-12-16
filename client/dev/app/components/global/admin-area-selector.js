@@ -1,14 +1,16 @@
 /**
  * Created by mspalti on 12/14/16.
  */
-
 (function () {
+
   'use strict';
 
   function AreasController(UserAreaObserver,
+                           CollectionObserver,
                            AreaObserver,
                            AreaListObserver,
                            AreaLabelObserver,
+                           CollectionsByArea,
                            AreaList) {
 
     const vm = this;
@@ -28,22 +30,40 @@
           AreaListObserver.set(data);
           AreaObserver.set(data[0].id);
           vm.currentAreaId = setAreaId(data[0].id);
-
+          _setInitialCollection(data[0].id);
         });
       }
       else {
-        vm.currentAreaId = id;
+        // this is meant to handle collection managers.
       }
     });
 
     AreaListObserver.subscribe(function onNext() {
       const areas = AreaListObserver.get();
-      console.log('got new area')
-     // AreaObserver.set(vm.currentAreaId);
+      AreaObserver.set(vm.currentAreaId);
       vm.areas = areas;
-      console.log(areas[0].id)
       vm.currentAreaId = setAreaId(areas[0].id);
     });
+
+    /**
+     * Set the inital collection for the area.
+     * @param id   the area id
+     */
+    function _setInitialCollection(id) {
+
+      if (typeof(id) === 'number') {
+        var collections = CollectionsByArea.query({areaId: id});
+        collections.$promise.then(function (data) {
+          if (data !== undefined) {
+            if (data.length > 0) {
+              CollectionObserver.set(data[0].Collection.id);
+            } else {
+              CollectionObserver.set(-1);
+            }
+          }
+        });
+      }
+    }
 
     /**
      * Administrators will be assigned to the non-existing
@@ -69,18 +89,12 @@
      */
     vm.updateArea = function (id, index) {
       if (UserAreaObserver.get() === 0) { // admin user
-        // update area id after user input
         AreaObserver.set(id);
-        //Data.currentAreaIndex = id;
         const areas = AreaListObserver.get();
         AreaLabelObserver.set(areas[index].title);
+        _setInitialCollection(id);
       }
     };
-
-    vm.$onInit = () => {
-
-
-    }
 
   }
 
@@ -90,7 +104,7 @@
     '<div ng-if="vm.userAreaId === 0">  ' +
     ' <md-input-container class="md-no-float"> ' +
     '   <md-select ng-model="vm.areas" placeholder="Select Area"> ' +
-    '     <md-option ng-repeat="area in vm.areas track by area.id" ng-value="area.title" ng-selected="vm.currentAreaId == area.id"ng-click="vm.updateArea(area.id, $index)">{{area.title}} ' +
+    '     <md-option ng-repeat="area in vm.areas" ng-value="area.title" ng-selected="vm.currentAreaId == area.id"ng-click="vm.updateArea(area.id, $index)">{{area.title}} ' +
     '     </md-option> ' +
     '   </md-select> ' +
     ' </md-input-container> ' +

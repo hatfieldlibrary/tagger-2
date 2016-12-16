@@ -12,8 +12,10 @@
 
     return {
       set: function set(update){
-        types = update;
-        Subject.onNext(types);
+        if (update !== types) {
+          types = update;
+          Subject.onNext(types);
+        }
       },
       get: function get() {
         return types;

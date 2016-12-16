@@ -101,6 +101,14 @@
       return $resource(config.restHost + 'users/update');
     }
   ]);
+
+  taggerServices.factory('FirstCollectionInArea', ['$resource', 'config',
+    function ($resource, config) {
+      return $resource(config.restHost + 'collection/first/inArea/:areaId', {}, {
+        query: {method: 'GET', isArray: false}
+      });
+    }
+  ]);
   /**
    * Maps to controller: collection.repoTypeByArea
    */

@@ -15,6 +15,7 @@
                           UserAreaObserver,
                           CollectionObserver,
                           CollectionListObserver,
+                          FirstCollectionInArea,
                           ThumbImageObserver,
                           TaggerToast) {
 
@@ -50,7 +51,7 @@
 
       const areaId = AreaObserver.get();
       _getCategories();
-
+      _getCollectionForNewArea(areaId);
       // var collectionList = CollectionsByArea.query(
       //   {
       //     areaId: areaId
@@ -87,14 +88,21 @@
 
     }
 
+    function _getCollectionForNewArea(areaId) {
+      const first = FirstCollectionInArea.query({areaId: areaId});
+      first.$promise.then(function (data) {
+        vm.collection = data;
+        vm.thumbnailImage = data.image;
+        ThumbImageObserver.set(data.image);
+      });
+    }
+
     /**
      * Retrieves collection information, tags and
      * content types associated with the collection.
      * @param id  {number} the collection id
      */
     function _getCollectionById(id) {
-      vm.collectionId = id;
-
       var col = CollectionById.query({id: id});
       col.$promise.then(function (data) {
         vm.collection = data;
@@ -104,9 +112,6 @@
 
     }
 
-    // vm.getCollectionById = function (id) {
-    //   CollectionObserver.set(id);
-    // };
 
 
     /**
@@ -173,9 +178,9 @@
 
     vm.$onInit = function () {
       vm.collectionId = CollectionObserver.get();
+      _getCollectionById(vm.collectionId);
       vm.categoryList = _getCategories();
       vm.collection.browseType = 'link';
-      vm.collectionList = CollectionListObserver.get();
     }
   }
 

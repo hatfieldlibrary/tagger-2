@@ -9,19 +9,6 @@
    */
   taggerControllers.controller('AreaCtrl', [
 
-    '$rootScope',
-    '$scope',
-    'AreaList',
-    'AreaById',
-    'AreaUpdate',
-    'ReorderAreas',
-    'TaggerToast',
-    'TaggerDialog',
-    '$animate',
-    'AreaListObserver',
-    'AreaObserver',
-    'UserAreaObserver',
-
     function ($rootScope,
               $scope,
               AreaList,

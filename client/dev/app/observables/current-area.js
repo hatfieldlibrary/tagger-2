@@ -12,8 +12,10 @@
 
     return {
       set: function set(update){
-        area = update;
-        Subject.onNext(area);
+        if (update !== area) {
+          area = update;
+          Subject.onNext(area);
+        }
       },
       get: function get() {
         return area;

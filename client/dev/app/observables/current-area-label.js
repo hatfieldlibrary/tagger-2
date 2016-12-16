@@ -12,8 +12,10 @@
 
     return {
       set: function set(update){
-        label = update;
-        Subject.onNext(label);
+        if (update !== label) {
+          label = update;
+          Subject.onNext(label);
+        }
       },
       get: function get() {
         return label;
