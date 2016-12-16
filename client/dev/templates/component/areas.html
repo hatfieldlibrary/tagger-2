@@ -1,0 +1,36 @@
+<md-content class="transparent" flex="100">
+  <md-content class="transparent" layout="column" flex="100" flex-gt-lg="75">
+    <md-card class="flex">
+      <div ng-if="vm.area.$resolved"></div>
+      <md-toolbar class="md_primary">
+        <div class="md-toolbar-tools">
+          <span flex="20">
+            <i class="material-icons">public</i>
+            <span class="md-subhead">&nbsp;AREAS</span>
+          </span><span flex="70">
+          <h2 class="md-display-2">{{area.title}}</h2>
+        </span>
+          <span flex="flex"></span>
+          <md-button class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="vm.showDialog($event, vm.deleteMessage)">
+            <i class="material-icons">delete</i>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-content>
+        <div layout="row" layout-align="start start">
+          <md-card-content flex="20"><md-button class="md-raised md-accent" ng-click="vm.showDialog($event, vm.addMessage)">Add Area</md-button>
+          </md-card-content>
+          <md-card-content layout="column" layout-padding="layout-padding" flex="80" flex-gt-md="80" style="padding-left: 20px">
+            <div class="md-subhead grey-text" flex="80">
+              <span><em>Areas</em> are the most general way to group collections. A collection can be assigned to multiple Areas.</span>
+            </div>
+          </md-card-content>
+        </div>
+      </md-content>
+      <md-content layout="row" layout-align="start start">
+        <areas-list flex="20"></areas-list>
+        <area-form flex="80"></area-form>
+      </md-content>
+    </md-card>
+  </md-content>
+</md-content>

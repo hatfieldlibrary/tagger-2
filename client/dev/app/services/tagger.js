@@ -72,7 +72,6 @@
    */
   taggerServices.factory('UserList', ['$resource', 'config',
     function ($resource, config) {
-      console.log(config);
       return $resource(config.restHost + 'users/list');
     }
   ])

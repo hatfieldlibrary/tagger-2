@@ -29,10 +29,16 @@
         vm.menu({id: vm.category.id, title: vm.category.title});
       });
 
+    }
+
+    function _getAreas() {
+
       let areas = AreaList.query();
       areas.$promise.then(function(data) {
-           vm.areas = data;
+        console.log(data)
+        vm.areas = data;
       });
+
     }
 
     vm.updateGroup = function () {
@@ -64,10 +70,12 @@
     vm.$onInit = function () {
       vm.userAreaId = UserAreaObserver.get();
       vm.categories = GroupListObserver.get();
+      _getAreas();
       let groupId = GroupObserver.get();
       if (groupId) {
-    //    _getGroupInfo(groupId);
+        _getGroupInfo(groupId);
       }
+
     }
 
   }

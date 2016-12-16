@@ -353,6 +353,7 @@
             AreaListObserver.set(data);
             if (data.length > 0) {
               if (id === null) {
+                AreaActionObserver.set(data[0].id);
                 AreaObserver.set(data[0].id);
               } else {
                 AreaObserver.set(id);
