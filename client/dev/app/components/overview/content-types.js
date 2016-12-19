@@ -1,7 +1,6 @@
 /**
- * Created by mspalti on 12/12/16.
+ * Created by mspalti on 12/19/16.
  */
-
 (function () {
 
   'use strict';
@@ -13,12 +12,12 @@
     let ctrl = this;
 
     AreaObserver.subscribe(function onNext() {
-        _init(AreaObserver.get());
+      _init(AreaObserver.get());
 
     });
 
     ctrl.$onInit = function() {
-        _init(AreaObserver.get());
+      _init(AreaObserver.get());
 
     };
 
@@ -45,27 +44,27 @@
   }
 
 
-   taggerComponents.component('collectionSummary', {
+  taggerComponents.component('collectionSummary', {
 
-     template: '<md-list style="width:100%;margin-top: 40px;">' +
-     '   <md-list-item>' +
-     '     <p class="grey-label"> Restricted</p>' +
-     '       <p class="list-alignment"> {{$ctrl.restricted}}</p>' +
-     '   </md-list-item>' +
-     '   <md-divider/>' +
-     '   <md-list-item>' +
-     '     <p class="grey-label"> Public</p>' +
-     '     <p class="list-alignment"> {{$ctrl.public}}</p>' +
-     '   </md-list-item>' +
-     '   <md-divider/>' +
-     '   <md-list-item>' +
-     '     <p class="grey-label">Total</p>' +
-     '       <p class="list-alignment"> {{$ctrl.collectionsCount}}</p>' +
-     '   </md-list-item>' +
-     '   <md-divider/>' +
-     '</md-list>',
-     controller: CollectionCtrl
+    template: '<md-list style="width:100%;margin-top: 40px;">' +
+    '   <md-list-item>' +
+    '     <p class="grey-label"> Restricted</p>' +
+    '       <p class="list-alignment"> {{$ctrl.restricted}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '   <md-list-item>' +
+    '     <p class="grey-label"> Public</p>' +
+    '     <p class="list-alignment"> {{$ctrl.public}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '   <md-list-item>' +
+    '     <p class="grey-label">Total</p>' +
+    '       <p class="list-alignment"> {{$ctrl.collectionsCount}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '</md-list>',
+    controller: CollectionCtrl
 
-   });
+  });
 
 })();

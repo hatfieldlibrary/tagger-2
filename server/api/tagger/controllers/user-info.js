@@ -11,7 +11,6 @@ const utils = require('../utils/response-utility');
  * @param res
  */
 exports.returnUserInfo = function (req, res, config) {
-  console.log(res)
 
   let name = '';
   let picture = '';

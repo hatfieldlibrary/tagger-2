@@ -123,7 +123,6 @@
         }
       );
       result.$promise.then(function (data) {
-        console.log(data)
         if (data.status === 'success') {
           new TaggerToast('Subject Tag Removed');
         } else {

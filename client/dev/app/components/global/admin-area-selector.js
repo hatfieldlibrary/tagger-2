@@ -24,11 +24,14 @@
     UserAreaObserver.subscribe(function onNext() {
       vm.userAreaId = UserAreaObserver.get();
       if (vm.userAreaId === 0) {
+        alert()
         var areas = AreaList.query();
         areas.$promise.then(function (data) {
           vm.areas = data;
           AreaListObserver.set(data);
           AreaObserver.set(data[0].id);
+
+          console.log(data)
           vm.currentAreaId = setAreaId(data[0].id);
           _setInitialCollection(data[0].id);
         });
@@ -89,14 +92,27 @@
      */
     vm.updateArea = function (id, index) {
       if (UserAreaObserver.get() === 0) { // admin user
+        console.log('got area id ' + id)
         AreaObserver.set(id);
         const areas = AreaListObserver.get();
+        console.log(id)
+        console.log(areas)
+        console.log(areas[index].title)
         AreaLabelObserver.set(areas[index].title);
         _setInitialCollection(id);
       }
     };
 
+    // vm.$onInit = function () {
+    //   const area = AreaObserver.get();
+    //   if(area) {
+    //     _setInitialCollection(area);
+    //   }
+    //
+    // };
+
   }
+
 
   taggerComponents.component('adminAreaSelector', {
 
@@ -104,7 +120,7 @@
     '<div ng-if="vm.userAreaId === 0">  ' +
     ' <md-input-container class="md-no-float"> ' +
     '   <md-select ng-model="vm.areas" placeholder="Select Area"> ' +
-    '     <md-option ng-repeat="area in vm.areas" ng-value="area.title" ng-selected="vm.currentAreaId == area.id"ng-click="vm.updateArea(area.id, $index)">{{area.title}} ' +
+    '     <md-option ng-repeat="area in vm.areas" ng-value="area.title" ng-selected="vm.currentAreaId == area.id" ng-click="vm.updateArea(area.id, $index)">{{area.title}}' +
     '     </md-option> ' +
     '   </md-select> ' +
     ' </md-input-container> ' +

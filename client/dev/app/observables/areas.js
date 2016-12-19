@@ -13,7 +13,6 @@
     return {
       set: function set(update){
         if (update !== areas) {
-          console.log(update)
           areas = update;
           Subject.onNext(areas);
         }

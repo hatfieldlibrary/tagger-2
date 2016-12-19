@@ -35,7 +35,6 @@
 
       let areas = AreaList.query();
       areas.$promise.then(function(data) {
-        console.log(data)
         vm.areas = data;
       });
 

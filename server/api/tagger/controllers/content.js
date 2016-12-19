@@ -80,7 +80,6 @@ exports.add = function (req, res) {
         // Add new content type
         taggerDao.createContentType(name)
           .then(function (result) {
-            console.log(result)
             utils.sendResponse(res, {status: 'success', id: result.id});
           })
           .catch(function (err) {
