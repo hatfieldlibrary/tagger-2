@@ -3,12 +3,12 @@
  */
 (function () {
 
-  function AreaController($rootScope,
-                          TaggerToast,
+  function AreaController(TaggerToast,
                           AreaTargetAdd,
                           AreaTargetRemove,
                           AreasForCollection,
                           CollectionObserver,
+                          CollectionAreasObserver,
                           AreaListObserver) {
 
     const ctrl = this;
@@ -85,8 +85,8 @@
               if (data.status === 'success') {
                 ctrl.areaTargets = result.areaTargets;
 
-                // probably some way to avoid this
-                $rootScope.$broadcast('removedFromArea');
+                // Update the collections list (one collection has just been removed from the area).
+                CollectionAreasObserver.set();
 
                 new TaggerToast('Collection removed from area.');
               }

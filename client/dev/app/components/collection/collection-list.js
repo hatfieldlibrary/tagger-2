@@ -9,27 +9,31 @@
   function ListController(CollectionObserver,
                           CollectionListObserver,
                           CollectionsByArea,
+                          CollectionAreasObserver,
                           AreaObserver) {
 
     const vm = this;
 
     AreaObserver.subscribe(function onNext() {
-
       _getCollections(AreaObserver.get());
 
     });
 
     CollectionObserver.subscribe(function onNext() {
-      const list = CollectionListObserver.get();
-      vm.collectionList = list;
       vm.collectionId = CollectionObserver.get();
     });
 
+    CollectionListObserver.subscribe(function onNext() {
+      vm.collectionList = CollectionListObserver.get();
+    });
+
+    CollectionAreasObserver.subscribe(function onNext() {
+         _getCollections(AreaObserver.get());
+    });
+
     vm.getCollectionById = function (id) {
-      vm.collectionId = id;
       CollectionObserver.set(id);
     };
-
 
     /**
      * Get collection list after an area change.
@@ -39,16 +43,15 @@
     function _getCollections(areaId) {
 
       if (areaId) {
-
         const collectionList = CollectionsByArea.query(
           {
             areaId: areaId
           });
-
         collectionList.$promise.then(function (data) {
           vm.collectionList = data;
           vm.collectionId = data[0].Collection.id;
           CollectionListObserver.set(data);
+          CollectionObserver.set(vm.collectionId);
         });
       }
     }
@@ -61,21 +64,22 @@
     function _initCollections(areaId) {
 
       if (areaId) {
-        const collectionList = CollectionsByArea.query(
+        let list = CollectionsByArea.query(
           {
             areaId: areaId
           });
-
-        collectionList.$promise.then(function (data) {
-          vm.collectionList = data;
+        list.$promise.then(function (data) {
+          CollectionObserver.set(data[0].Collection.id);
           CollectionListObserver.set(data);
-
+          // Verify that the selected collection id is
+          // set.
+          vm.collectionId = CollectionObserver.get();
         });
       }
     }
 
     vm.$onInit = function () {
-      vm.collectionId = CollectionObserver.get();
+
       _initCollections(AreaObserver.get());
 
     };
@@ -85,8 +89,7 @@
 
   taggerComponents.component('collectionList', {
 
-    template:
-    '<md-content flex style="background: transparent"> ' +
+    template: '<md-content flex style="background: transparent"> ' +
     ' <div layout="column" style="height:700px"> ' +
     '   <md-content flex="flex" style="background: transparent"> ' +
     '     <md-list> ' +

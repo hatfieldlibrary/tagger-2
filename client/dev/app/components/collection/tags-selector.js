@@ -13,6 +13,7 @@
                     CollectionObserver) {
 
     const ctrl = this;
+
     /**
      * Watch for new collection id.
      * Update the tags when collection changes.
@@ -94,7 +95,6 @@
         }
       );
       result.$promise.then(function (data) {
-        console.log(data)
         if (data.status === 'success') {
           new TaggerToast('Subject Tag Added');
 
@@ -147,8 +147,7 @@
     }
 
     ctrl.$onInit = function () {
-
-      //ctrl.tagsForArea = TagsForAreaObserver.get();
+      // Need to set at init to cover all cases.
       let id = CollectionObserver.get();
       _getTagsForCollection(id);
       _getTagsForArea(AreaObserver.get());

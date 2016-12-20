@@ -11,9 +11,6 @@
 
     const vm = this;
 
-    /** @type {number} */
-    vm.userAreaId = UserAreaObserver.get();
-
     /** @type {string} */
     vm.addMessage = 'templates/dialog/addCollectionMessage.html';
 
@@ -32,6 +29,11 @@
     vm.showDialog = function ($event, message) {
       new TaggerDialog($event, message);
     };
+
+    vm.$onInit = function() {
+      /** @type {number} */
+      vm.userAreaId = UserAreaObserver.get();
+    }
 
   }
 

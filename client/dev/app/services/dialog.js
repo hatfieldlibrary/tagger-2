@@ -217,7 +217,6 @@
          * manager view.
          */
         $scope.addTagToArea = function () {
-          console.log('adding tag to area')
           var result = TagTargetAdd.query(
             {
               tagId: TagObserver.get(),

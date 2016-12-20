@@ -1,7 +1,6 @@
 /**
  * Created by mspalti on 12/13/16.
  */
-
 (function () {
   'use strict';
 
@@ -41,20 +40,6 @@
       _getTypesForCollection(collid);
 
     });
-
-    /**
-     * Watch for new area id.
-     * Update the area tag list when area changes.
-     */
-    // AreaObserver.subscribe(function onNext() {
-    //   let id = AreaObserver.get();
-    //   console.log('getting tags for this area using ' + id)
-    //   let tagsForArea = TagsForArea.query({areaId: id});
-    //   tagsForArea.$promise.then(function (data) {
-    //
-    //     ctrl.types = data;
-    //   });
-    // });
 
     function _getTypesForCollection(id) {
       var types = TypesForCollection
@@ -156,6 +141,7 @@
     }
 
     ctrl.$onInit = function () {
+      // Need to set at init to cover all cases.
       let id = CollectionObserver.get();
       _getTypesForCollection(id);
     }

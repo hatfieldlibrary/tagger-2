@@ -5,6 +5,9 @@
 
   'use strict';
 
+  /**
+   * Used by areas component.
+   */
   taggerServices.factory('AreaActionObserver', ['rx', function(rx){
 
     const Subject = new rx.Subject();

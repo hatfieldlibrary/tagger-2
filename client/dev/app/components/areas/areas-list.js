@@ -86,7 +86,7 @@
     '<md-content class="sortable-list" flex="flex">' +
     '<div class="md-caption" style="margin-top: 10px">Drag item to reorder</div>' +
     '<md-list dnd-list="vm.areas">' +
-    '<md-list-item ng-repeat="area in vm.areas" dnd-draggable="area" dnd-moved="vm.orderAreaList($index, area.id)" dnd-effect-allowed="move">' +
+    '<md-list-item ng-repeat="area in vm.areas" dnd-draggable="area" dnd-moved="vm.orderAreaList($index, area.id)" dnd-effect-allowed="move" class="tagger-reorder-button">' +
     '<md-button class="md-no-style md-button nav-item-dimens md-default-theme" ng-class="{\'md-primary\': area.id==vm.currentAreaId}" ng-click="vm.resetArea(area.id);"> ' +
     '<div class="list-group-item-text md-subhead layout-fill">{{area.title}}' +
     '<div class="md-ripple-container"></div>' +
