@@ -30,6 +30,17 @@ taggerDao.categoryCountByArea = (areaId) => {
 
 };
 
+taggerDao.categoriesByCollectionId = (collId) => {
+
+  return taggerSchema.CategoryTarget.findAll({
+    where: {
+           CollectionId: collId
+    },
+    include: [taggerSchema.Category]
+  });
+
+};
+
 
 taggerDao.listByArea = (areaId) => {
 

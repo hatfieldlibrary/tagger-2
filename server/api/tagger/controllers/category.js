@@ -34,6 +34,13 @@ exports.categoryCountByArea = function (req, res) {
 
 };
 
+exports.collectionsByCategory = function (req, res) {
+   var collId = req.params.collId;
+  taggerDao.categoriesByCollectionId(collId).then(function(categories) {
+    utils.sendResponse(res, categories)
+  })
+};
+
 /**
  * Retrieves list of collection groups by area.
  * @param req

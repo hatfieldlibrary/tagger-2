@@ -11,6 +11,7 @@
                           CollectionById,
                           CollectionUpdate,
                           CategoryByArea,
+                          CategoriesByCollection,
                           AreaObserver,
                           UserAreaObserver,
                           CollectionObserver,
@@ -48,7 +49,6 @@
 
     AreaObserver.subscribe(function onNext() {
       const areaId = AreaObserver.get();
-      _getCategories();
       _getCollectionForNewArea(areaId);
       // var collectionList = CollectionsByArea.query(
       //   {
@@ -67,6 +67,7 @@
       const id = CollectionObserver.get();
       vm.collectionId = id;
       _getCollectionById(id);
+      _checkCategory(id)
     });
 
 
@@ -104,7 +105,40 @@
         vm.collection = data;
         vm.thumbnailImage = data.image;
         ThumbImageObserver.set(data.image);
+
       });
+
+    }
+
+    /**
+     * Checks the status of the category, if one has
+     * been assigned previously.  Categories are specific
+     * to an area. Collections can live in more than
+     * one area.
+     * @param id
+     * @private
+     */
+    function _checkCategory(id) {
+      if (id > 0) {
+        var categories = CategoriesByCollection.query({collId: id});
+        categories.$promise.then(function (cats) {
+          if (cats.length > 0) {
+            let area = AreaObserver.get();
+            if (cats[0].Category.areaId == area) {
+              // The current category belongs to this area.
+              _getCategories();
+              vm.showCollectionCategories = true;
+            } else {
+              // The current category belongs to a different area.
+              // Do not offer edit option.
+              vm.showCollectionCategories = false;
+            }
+          } else {
+            // Not category has been chosen yet for this collection.
+            vm.showCollectionCategories = true;
+          }
+        });
+      }
 
     }
 
@@ -182,7 +216,7 @@
       } else {
         _getCollectionForNewArea(AreaObserver.get());
       }
-      vm.categoryList = _getCategories();
+      _checkCategory(collection);
     }
   }
 

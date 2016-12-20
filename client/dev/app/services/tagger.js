@@ -337,6 +337,14 @@
       });
     }
   ]);
+
+  taggerServices.factory('CategoriesByCollection', ['$resource', 'config',
+  function ($resource, config) {
+    return $resource(config.restHost + 'category/getCollections/:collId', {}, {
+      query: {method: 'GET', isArray: true}
+    });
+  }]);
+
   /**
    * Maps to controller: category.list
    */
