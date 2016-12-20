@@ -143,6 +143,9 @@
     }
 
 
+    vm.overrideCategory = function() {
+      vm.showCollectionCategories = true;
+    };
 
     /**
      * Updates the collection and reloads the collection

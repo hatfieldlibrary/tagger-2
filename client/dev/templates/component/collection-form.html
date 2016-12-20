@@ -12,7 +12,7 @@
     </md-select>
   </md-input-container>
   <md-input-container ng-if="!vm.showCollectionCategories">
-    <h4 style="margin: 0;">Collection group defined in another area.</h4>
+    <h4 style="margin: 0;">Collection group defined in another area. <a href="" ng-click="vm.overrideCategory()">(Override)</a></h4>
   </md-input-container>
   <md-input-container>
     <label>Description  &nbsp;<span class="md-subhead md-default">maximum characters 450 (current {{vm.collection.description.length}})</span></label>
