@@ -32,7 +32,7 @@
           }
           ctrl.restricted = restrictedCount;
           ctrl.public = data.length - restrictedCount;
-
+          ctrl.actualCount = ctrl.restricted + ctrl.public;
         });
       }
     }
@@ -45,7 +45,9 @@
   }
 
   taggerComponents.component('collectionGroupSummary', {
-
+    bindings: {
+      collectionCount: '<'
+    },
     template:
     '<md-grid-tile-header>' +
     '<h3>Entries</h3>' +

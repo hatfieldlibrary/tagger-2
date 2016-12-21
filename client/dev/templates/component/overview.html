@@ -16,21 +16,21 @@
         <md-grid-list md-cols-sm="1" md-cols-md="2" md-cols-lg="4" md-cols-gt-lg="4" md-row-height="196px" md-gutter="12px" md-gutter-gt-sm="8px">
           <md-grid-tile class="blue">
             <div flex layout="row" layout-align="start start" style="height:100%;width:100%;background: #f9f9f9;border-bottom: 1px solid #eee">
-              <collection-group-summary flex></collection-group-summary>
+              <collection-group-summary collectionCount="$ctrl.collectionCount" flex></collection-group-summary>
             </div>
           </md-grid-tile>
           <md-grid-tile class="blue">
             <div flex layout="row" layout-align="start start" style="height:100%;width:100%;background: #f9f9f9;border-bottom: 1px solid #eee">
-              <item-type-summary flex></item-type-summary>
+              <item-type-summary collectionCount="$ctrl.collectionCount" flex></item-type-summary>
             </div>
           </md-grid-tile>
           <md-grid-tile class="blue">
             <div flex="flex" layout="row" layout-align="start start" style="height:100%;width:100%;background: #f9f9f9;border-bottom: 1px solid #eee">
-              <search-options-summary flex></search-options-summary></div>
+              <search-options-summary collectionCount="$ctrl.collectionCount" flex></search-options-summary></div>
           </md-grid-tile>
           <md-grid-tile class="blue">
             <div flex="flex" layout="row" layout-align="start start" style="height:100%;width:100%; background: #f9f9f9;border-bottom: 1px solid #eee">
-              <link-type-summary flex></link-type-summary>
+              <link-type-summary collectionCount="$ctrl.collectionCount" flex></link-type-summary>
             </div>
           </md-grid-tile>
 
@@ -38,15 +38,15 @@
             <md-grid-tile-header>
               <h3>Collection Categories</h3>
             </md-grid-tile-header>
-            <div class="svg-container" id="categoryChart" flex="flex" style="min-height: 200px;width:96%;padding-top: 50px;position: inherit;margin-left: -50%;margin-top: 20px" d3-pie="d3-pie" label="categorySVG" data="vm.categoryCounts"></div>
+            <div class="svg-container" id="categoryChart" flex="flex" style="min-height: 200px;width:96%;padding-top: 50px;position: inherit;margin-top: 20px" d3-pie="d3-pie" label="categorySVG" data="$ctrl.categoryCounts"></div>
           </md-grid-tile><md-grid-tile class="blue" md-rowspan="2" md-colspan-gt-md="2" md-colspan-md="1" md-colspan-sm="1">
           <md-grid-tile-header><h3>Content Types</h3>
-          </md-grid-tile-header><div class="svg-container" id="typeChart" flex="flex" style="min-height: 200px;width:96%;padding-top: 50px;position: inherit;margin-left: -50%;margin-top: 20px" d3-pie="d3-pie" label="typesSVG" data="vm.typeCounts"></div>
+          </md-grid-tile-header><div class="svg-container" id="typeChart" flex="flex" style="min-height: 200px;width:96%;padding-top: 50px;position: inherit;margin-top: 20px" d3-pie="d3-pie" label="typesSVG" data="$ctrl.typeCounts"></div>
         </md-grid-tile>
           <md-grid-tile class="blue" md-rowspan="2" md-colspan-gt-lg="4" md-colspan-lg="4" md-colspan-md="1" md-colspan-sm="1"><md-grid-tile-header>
             <h3>Collection Totals by Subject</h3>
           </md-grid-tile-header>
-            <div class="svg-container" id="subjectBar" flex="flex" style="min-height: 300px; width:96%;padding-top: 50px;position: inherit;margin-left: -50%" d3-bar="d3-bar" label="typesSVG" data="vm.subjects"></div>
+            <div class="svg-container" id="subjectBar" flex="flex" style="min-height: 300px; width:96%;padding-top: 50px;position: inherit;" d3-bar="d3-bar" label="typesSVG" data="$ctrl.subjects"></div>
           </md-grid-tile>
         </md-grid-list>
 

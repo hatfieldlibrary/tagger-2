@@ -5,11 +5,14 @@
 
   'use strict';
 
-  function ItemTypeCtrl(TotalTypesObserver,
-                        CollectionTypeCount,
+  function ItemTypeCtrl(CollectionTypeCount,
                         AreaObserver) {
 
     let ctrl = this;
+
+    ctrl.digCount = 0;
+    ctrl.itmCount = 0;
+    ctrl.eadCount = 0;
 
     AreaObserver.subscribe(function onNext() {
       _init(AreaObserver.get());
@@ -19,8 +22,9 @@
     function _init(areaId) {
 
       if (areaId) {
-        var types = CollectionTypeCount.query({areaId: areaId});
+        const types = CollectionTypeCount.query({areaId: areaId});
         types.$promise.then(function (data) {
+
           for (var i = 0; i < data.length; i++) {
             if (data[i].ctype === 'dig') {
               ctrl.digCount = data[i].count;
@@ -30,7 +34,8 @@
               ctrl.eadCount = data[i].count;
             }
           }
-          TotalTypesObserver.set(ctrl.digCount + ctrl.itmCount + ctrl.eadCount);
+          ctrl.actualCount = ctrl.digCount + ctrl.itmCount + ctrl.eadCount;
+
         });
       }
     }
@@ -43,27 +48,28 @@
   }
 
   taggerComponents.component('itemTypeSummary', {
-
-    template:
-    '<md-grid-tile-header class="flex"> ' +
+    bindings: {
+      collectionCount: '<'
+    },
+    template: '<md-grid-tile-header class="flex"> ' +
     '<h3>Item Types' +
-    '<span class="alert-color" style="float:right" ng-if="!vm.collectionTypeMatch">' +
+    '<span class="alert-color" style="float:right" ng-if="$ctrl.actualCount == $ctrl.collectionCount">' +
     '<i class="material-icons">warning</i>' +
     '</span></h3></md-grid-tile-header>' +
     '<md-list style="width:100%;margin-top: 40px;">' +
     '   <md-list-item>' +
     '     <p class="grey-label">Collection</p>' +
-    '       <p class="list-alignment"> {{ctrl.digCount}}</p>' +
+    '       <p class="list-alignment"> {{$ctrl.digCount}}</p>' +
     '   </md-list-item>' +
     '   <md-divider/>' +
     '   <md-list-item>' +
     '     <p class="grey-label">Single Item</p>' +
-    '       <p class="list-alignment"> {{ctrl.itmCount}}</p>' +
+    '       <p class="list-alignment"> {{$ctrl.itmCount}}</p>' +
     '   </md-list-item>' +
     '   <md-divider/>' +
     '   <md-list-item>' +
     '     <p class="grey-label">Finding Aid</p>' +
-    '     <p class="list-alignment"> {{ctrl.eadCount}}</p>' +
+    '     <p class="list-alignment"> {{$ctrl.eadCount}}</p>' +
     '   </md-list-item>' +
     '   <md-divider/>' +
     '</md-list>',

@@ -5,11 +5,14 @@
 
   'use strict';
 
-  function CollectionCtrl(TotalLinksObserver,
-                          CollectionLinkCount,
+  function CollectionCtrl(CollectionLinkCount,
                           AreaObserver) {
 
     let ctrl = this;
+
+    ctrl.linkCount = 0;
+
+    ctrl.selectCount = 0;
 
     AreaObserver.subscribe(function onNext() {
       _init(AreaObserver.get());
@@ -33,7 +36,8 @@
               ctrl.selectCount = data[i].count;
             }
           }
-          TotalLinksObserver.set(ctrl.linkCount + ctrl.selectCount);
+          ctrl.actualCount = ctrl.linkCount + ctrl.selectCount;
+
         });
       }
     }
@@ -42,19 +46,22 @@
 
   taggerComponents.component('linkTypeSummary', {
 
+    bindings: {
+       collectionCount: '<'
+    },
     template: '<md-grid-tile-header class="flex">' +
-    '<h3>Link Types<span class="alert-color" style="float:right" ng-if="!vm.collectionLinksMatch">' +
+    '<h3>Link Types<span class="alert-color" style="float:right" ng-if="$ctrl.actualCount == $ctrl.collectionCount">' +
     '<i class="material-icons">warning</i></span>' +
     '</h3>' +
     '</md-grid-tile-header><md-list style="width:100%;margin-top: 40px;">' +
     '   <md-list-item>' +
     '     <p class="grey-label"> Link</p>' +
-    '       <p class="list-alignment"> {{linkCount}}</p>' +
+    '       <p class="list-alignment"> {{$ctrl.linkCount}}</p>' +
     '   </md-list-item>' +
     '   <md-divider/>' +
     '   <md-list-item>' +
     '     <p class="grey-label"> Selection Menu</p>' +
-    '     <p class="list-alignment"> {{selectCount}}</p>' +
+    '     <p class="list-alignment"> {{$ctrl.selectCount}}</p>' +
     '   </md-list-item>' +
     '   <md-divider/>' +
     '</md-list>',
