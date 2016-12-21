@@ -247,6 +247,10 @@ figcaption .alert-color .material-icons {
   box-sizing: border-box;
 }
 
+.svg-container .material-icons {
+  font-size: 0.9rem;
+}
+
 .svg-container body {
   font-size: 14px;
   font-family: sans-serif;

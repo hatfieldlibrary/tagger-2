@@ -12,6 +12,7 @@
 
     const ctrl = this;
 
+
     AreaObserver.subscribe(() => {
       let area = AreaObserver.get();
       _setCollections(area);
@@ -28,6 +29,7 @@
     }
 
     function _getCategories(areaId) {
+      ctrl.categoriesReady = false;
       let categories = CategoryCountByArea.query({areaId: areaId});
       categories.$promise.then((categories) => {
         var catCount = 0;
@@ -42,45 +44,49 @@
           total: catCount,
           data: data
         };
+        ctrl.categoriesReady = true;
 
       });
 
     }
 
+    ctrl.getCategoryCounts = function () {
+      return ctrl.categoryCounts;
+    };
+
     function _getTypes(areaId) {
-
-      const contentTypeCount = ContentTypeCount.query(
-          {
-            areaId: areaId
-          }
-        );
+      ctrl.typesReady = false;
+      const contentTypeCount = ContentTypeCount.query({areaId: areaId});
       contentTypeCount.$promise.then(function (types) {
-          var count = 0;
-          var data = [];
-          for (var i = 0; i < types.length; i++) {
-            count = count + types[i].count;
-          }
-          for (i = 0; i < types.length; i++) {
-            data[i] = {title: types[i].name, value: types[i].count};
-          }
-          ctrl.typeCounts = {
-            total: count,
-            data: data
-          };
+        var count = 0;
+        var data = [];
+        for (var i = 0; i < types.length; i++) {
+          count = count + types[i].count;
+        }
+        for (i = 0; i < types.length; i++) {
+          data[i] = {title: types[i].name, value: types[i].count};
+        }
+        ctrl.typeCounts = {
+          total: count,
+          data: data
+        };
+        ctrl.typesReady = true;
+      });
 
-        });
     }
 
     function _getTagCounts(areaId) {
+      ctrl.subjectsReady = false;
       var subs = TagCountForArea.query({areaId: areaId});
       subs.$promise.then(function (data) {
 
         ctrl.subjects = data;
+        ctrl.subjectsReady = true;
       });
 
     }
 
-    ctrl.$onInit = function () {
+    ctrl.$postLink = function () {
       ctrl.collectionCount = 0;
       let area = AreaObserver.get();
       _setCollections(area);

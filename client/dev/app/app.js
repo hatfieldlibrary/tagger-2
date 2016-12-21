@@ -12,7 +12,6 @@
     'taggerEnvironment',
     'taggerControllers',
     'taggerServices',
-    'taggerDirectives',
     'taggerComponents',
     'taggerConstants'
 
