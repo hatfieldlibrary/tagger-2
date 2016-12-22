@@ -13,6 +13,8 @@
 
     const vm = this;
 
+    vm.currentCollection = {};
+
     PublicationStatusObserver.subscribe(function onNext() {
       vm.isPublished = PublicationStatusObserver.get();
     });
@@ -37,11 +39,16 @@
       new TaggerDialog($event, message);
     };
 
+    vm.menuUpdate = function(id, title) {
+      vm.currentCollection.title = title;
+      vm.currentCollection.id = id;
+    };
+
     vm.$onInit = function () {
       /** @type {number} */
       vm.userAreaId = UserAreaObserver.get();
 
-    }
+    };
 
   }
 

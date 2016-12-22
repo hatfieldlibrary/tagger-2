@@ -9,6 +9,8 @@
 
     const vm = this;
 
+    vm.currentTag = {};
+
     /** @type {number} */
     vm.userAreaId = UserAreaObserver.get();
 
@@ -28,6 +30,11 @@
         }
       });
     }
+
+    vm.menuUpdate = function(id, title) {
+      vm.currentTag.title = title;
+      vm.currentTag.id = id;
+    };
 
     /**
      * Show the $mdDialog.

@@ -8,7 +8,7 @@
         <span class="md-subhead">&nbsp;TAGS</span>
       </span>
         <span flex="70">
-        <h2 class="md-display-2" ng-if="vm.userAreaId==0">{{vm.tag.name}}</h2>
+        <h2 class="md-display-2" ng-if="vm.userAreaId==0">{{vm.currentTag.title}} (ID: {{vm.currentTag.id}})</h2>
         <h2 class="md-display-2" ng-if="vm.userAreaId&gt;0">{{vm.areaLabel}}</h2>
       </span>
         <span flex="flex"></span>
@@ -39,7 +39,7 @@
       </div>
       <md-content layout="row" layout-align="start start">
         <tags-list flex="20"></tags-list>
-        <tags-form flex="80"></tags-form>
+        <tags-form menu="vm.menuUpdate(id, title)" flex="80"></tags-form>
       </md-content>
     </md-content>
   </md-card>

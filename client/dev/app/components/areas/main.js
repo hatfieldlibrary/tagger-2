@@ -5,19 +5,13 @@
 
   'use strict';
 
-  function GroupController($rootScope,
-                           $scope,
-                           AreaList,
-                           AreaById,
-                           AreaUpdate,
+  function GroupController(AreaList,
                            ReorderAreas,
                            TaggerToast,
                            TaggerDialog,
-                           $animate,
                            AreaListObserver,
                            AreaObserver,
-                           UserAreaObserver,
-                           AreaActionObserver) {
+                           UserAreaObserver) {
 
     var vm = this;
 
@@ -26,6 +20,8 @@
 
     /** @type {Object} */
     vm.area = vm.areas[0];
+
+    vm.currentArea = {};
 
     /** @type {string} */
     vm.addMessage = 'templates/dialog/addAreaMessage.html';
@@ -44,13 +40,22 @@
       vm.areas = AreaListObserver.get();
 
     });
-    // /**
-    //  * Watch for changes in the shared area index
-    //  * and reset the area in the view model.
-    //  */
-    // AreaObserver.subscribe(function onNext() {
-    //   vm.resetArea(AreaObserver.get());
-    // });
+
+    vm.menuUpdate = function(id, title) {
+      vm.currentArea.title = title;
+      vm.currentArea.id = id;
+    };
+
+
+    function _initAreaList() {
+      var areas = AreaList.query();
+      areas.$promise.then(function (data) {
+        if (data.length > 0) {
+          AreaListObserver.set(data);
+          AreaObserver.set(data[0].id);
+        }
+      });
+    }
 
     /**
      * Show the $mdDialog.
@@ -61,36 +66,6 @@
     vm.showDialog = function ($event, message) {
       new TaggerDialog($event, message);
     };
-
-    // /**
-    //  *  Updates the area information.  Updates area list
-    //  *  upon success.
-    //  */
-    // vm.updateArea = function () {
-    //   var success = AreaUpdate.save({
-    //     id: vm.area.id,
-    //     title: vm.area.title,
-    //     description: vm.area.description,
-    //     searchUrl: vm.area.areaId,
-    //     linkLabel: vm.area.linkLabel,
-    //     url: vm.area.url
-    //
-    //   });
-    //   success.$promise.then(function (data) {
-    //     if (data.status === 'success') {
-    //       var areas = AreaList.query();
-    //       areas.$promise.then(function (data) {
-    //         vm.areas = data;
-    //
-    //         // observer
-    //         AreaListObserver.set(data);
-    //       });
-    //       // Toast upon success
-    //       new TaggerToast('Area Updated"');
-    //     }
-    //   });
-    //
-    // };
 
     /**
      * Updates the view model's areas array
@@ -119,60 +94,17 @@
         });
       order.$promise.then(function (data) {
         if (data.status === 'success') {
-          var areas = AreaList.query();
-          areas.$promise.then(function (data) {
-            AreaListObserver.set(data);
-            AreaObserver.set(data[0].id);
-          });
+          _initAreaList();
           new TaggerToast('Area order updated.');
         }
       });
     }
 
     vm.$onInit = function () {
-    //  vm.resetArea(AreaObserver.get());
+      _initAreaList();
     }
 
-    // vm.currentCategory = {};
-    //
-    // /** @type {number} */
-    // vm.userAreaId = UserAreaObserver.get();
-    //
-    // /** @type {string} */
-    // vm.addMessage = 'templates/dialog/addCategoryMessage.html';
-    //
-    // /** @type {string} */
-    // vm.deleteMessage = 'templates/dialog/deleteCategoryMessage.html';
-    //
-    // function _initTagList() {
-    //   var tags = CategoryList.query();
-    //   tags.$promise.then(function (data) {
-    //     if (data.length > 0) {
-    //       GroupListObserver.set(data);
-    //       GroupObserver.set(data[0].id);
-    //
-    //     }
-    //   });
-    // }
-    //
-    // vm.menuUpdate = function(id, title) {
-    //   vm.currentCategory.title = title;
-    //   vm.currentCategory.id = id;
-    // };
-    //
-    // /**
-    //  * Show the $mdDialog.
-    //  * @param $event click event object (location of event used as
-    //  *                    animation starting point)
-    //  * @param message  html template to display in dialog
-    //  */
-    // vm.showDialog = function ($event, message) {
-    //   new TaggerDialog($event, message);
-    // };
 
-    vm.$onInit = function () {
-
-    }
   }
 
   taggerComponents.component('areasComponent', {

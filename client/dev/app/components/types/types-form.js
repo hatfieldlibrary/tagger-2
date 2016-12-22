@@ -17,7 +17,6 @@
 
     ContentTypeObserver.subscribe(function onNext() {
       const typeId = ContentTypeObserver.get();
-
       _getTypeInfo(typeId);
     });
 
@@ -25,6 +24,7 @@
       const type = ContentType.query({id: typeId});
       type.$promise.then(function (data) {
         vm.contentType = data;
+        vm.menu({id: vm.contentType.id, title: vm.contentType.name});
       });
     }
 
@@ -62,6 +62,9 @@
 
   taggerComponents.component('typesForm', {
 
+    bindings: {
+      menu: '&'
+    },
     template:
     '<md-card-content layout-padding="layout-padding" layout="column" flex="80" style="padding-left: 20px"> ' +
     ' <md-button class="md-raised md-accent large-button" ng-click="vm.updateContentType()">Update Content Type</md-button> ' +

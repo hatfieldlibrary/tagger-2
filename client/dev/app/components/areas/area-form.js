@@ -22,10 +22,9 @@
       var ar = AreaById.query({id: AreaActionObserver.get()});
       ar.$promise.then(function (data) {
         vm.area = data;
+        vm.menu({id: vm.area.id, title: vm.area.title});
       });
     });
-
-
 
     /**
      *  Updates the area information.  Updates area list
@@ -45,7 +44,6 @@
         if (data.status === 'success') {
           var areas = AreaList.query();
           areas.$promise.then(function (data) {
-
             // observer
             AreaListObserver.set(data);
           });
@@ -55,9 +53,6 @@
       });
 
     };
-    vm.$onInit = function () {
-
-    }
 
   }
 

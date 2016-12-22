@@ -13,6 +13,8 @@
 
     const vm = this;
 
+    vm.currentType = {};
+
     /** @type {number} */
     vm.userAreaId = UserAreaObserver.get();
 
@@ -32,6 +34,12 @@
         }
       });
     }
+
+
+    vm.menuUpdate = function(id, title) {
+      vm.currentType.title = title;
+      vm.currentType.id = id;
+    };
 
     /**
      * Show the $mdDialog.

@@ -25,6 +25,7 @@
       const tag = TagById.query({id: tagId});
       tag.$promise.then(function (data) {
         vm.tag = data;
+        vm.menu({id: vm.tag.id, title: vm.tag.name});
       });
     }
 
@@ -61,6 +62,9 @@
 
   taggerComponents.component('tagsForm', {
 
+    bindings: {
+      menu: '&'
+    },
     template: '<md-content layout="row" layout-align="start start">' +
     '<tag-list></tag-list>' +
     '<md-card-content class="md-subhead grey-text" flex="80" layout="column">' +

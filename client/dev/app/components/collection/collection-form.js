@@ -90,6 +90,7 @@
         vm.collectionId = data.id;
         vm.thumbnailImage = data.image;
         ThumbImageObserver.set(data.image);
+        vm.menu({id: vm.collection.id, title: vm.collection.title});
       });
     }
 
@@ -104,7 +105,7 @@
         vm.collection = data;
         vm.thumbnailImage = data.image;
         ThumbImageObserver.set(data.image);
-
+        vm.menu({id: vm.collection.id, title: vm.collection.title});
       });
 
     }
@@ -142,7 +143,7 @@
     }
 
 
-    vm.overrideCategory = function() {
+    vm.overrideCategory = function () {
       vm.showCollectionCategories = true;
     };
 
@@ -224,7 +225,9 @@
 
 
   taggerComponents.component('collectionForm', {
-
+    bindings: {
+      menu: '&'
+    },
     templateUrl: 'templates/component/collection-form.html',
     controller: FormController,
     controllerAs: 'vm'

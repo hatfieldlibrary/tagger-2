@@ -4,12 +4,12 @@
       <div ng-if="vm.collectionList.$resolved"></div>
       <md-toolbar class="md_primary" ng-class="{'is-not-published': !vm.isPublished}">
         <div class="md-toolbar-tools">
-          <span flex="25">
+          <span flex="20">
             <i class="material-icons">collections</i>
             <span class="md-subhead responsive-heading">&nbsp;COLLECTIONS</span>
           </span>
-          <span flex="65">
-            <h3 class="md-display-1">{{vm.collection.title}}</h3>
+          <span flex="70">
+            <h3 class="md-display-1">{{vm.currentCollection.title}} (ID: {{vm.currentCollection.id}})</h3>
           </span>
           <span flex="flex"></span>
           <md-button class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection" ng-click="vm.showDialog($event, vm.deleteMessage)">
@@ -31,7 +31,7 @@
         <md-card-content layout="row" layout-align="start start">
 
           <collection-list flex="20"></collection-list>
-          <collection-form flex="80" style="padding:25px;border: 1px solid #ccc;background: #fff"></collection-form>
+          <collection-form menu="vm.menuUpdate(id, title)" flex="80" style="padding:25px;border: 1px solid #ccc;background: #fff"></collection-form>
 
           <md-content class="transparent" ng-if="vm.collectionId == -1" layout-padding="layout-padding" flex="80" style="padding: 55px;padding-top: 30px;border: 1px solid #ccc;background: #fff">
             <div class="md-subhead grey-text" flex="85">
