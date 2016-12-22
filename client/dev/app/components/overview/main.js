@@ -5,6 +5,7 @@
   'use strict';
 
   function OverviewController(AreaObserver,
+                              AreaById,
                               CollectionsByArea,
                               CategoryCountByArea,
                               ContentTypeCount,
@@ -12,13 +13,13 @@
 
     const ctrl = this;
 
-
     AreaObserver.subscribe(() => {
-      let area = AreaObserver.get();
-      _setCollections(area);
-      _getCategories(area);
-      _getTypes(area);
-      _getTagCounts(area);
+      let areaId = AreaObserver.get();
+      _setCollections(areaId);
+      _getCategories(areaId);
+      _getTypes(areaId);
+      _getTagCounts(areaId);
+      _getAreaInfo(areaId);
     });
 
     function _setCollections(areaId) {
@@ -79,20 +80,28 @@
       ctrl.subjectsReady = false;
       var subs = TagCountForArea.query({areaId: areaId});
       subs.$promise.then(function (data) {
-
         ctrl.subjects = data;
         ctrl.subjectsReady = true;
       });
 
     }
 
+    function _getAreaInfo(areaId) {
+      const area = AreaById.query({id: areaId});
+      area.$promise.then((data) => {
+        ctrl.areaLabel = data.title;
+        ctrl.areaId = areaId;
+      });
+    }
+
     ctrl.$postLink = function () {
       ctrl.collectionCount = 0;
-      let area = AreaObserver.get();
-      _setCollections(area);
-      _getCategories(area);
-      _getTypes(area);
-      _getTagCounts(area);
+      let areaId = AreaObserver.get();
+      _setCollections(areaId);
+      _getCategories(areaId);
+      _getTypes(areaId);
+      _getTagCounts(areaId);
+      _getAreaInfo(areaId);
     };
 
   }

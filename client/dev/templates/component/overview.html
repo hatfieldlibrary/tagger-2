@@ -2,12 +2,12 @@
   <md-content class="transparent" layout="column" flex="flex">
 
     <md-card class="flex" flex="flex" style="min-height: 990px">
-      <div ng-if="vm.category.$resolved"></div>
+      <div ng-if="$ctrl.category.$resolved"></div>
       <md-toolbar class="md_primary">
         <div class="md-toolbar-tools">
           <span flex="50">
             <i class="material-icons">home</i>
-            <span class="md-headline">&nbsp; {{vm.areaLabel}}</span>
+            <span class="md-headline">&nbsp; {{$ctrl.areaLabel}} (ID: {{$ctrl.areaId}})</span>
           </span>
         </div>
       </md-toolbar>
