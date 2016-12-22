@@ -3,7 +3,8 @@
  */
 import db from '../_helpers/db';
 import  areaDao from '../../../server/api/tagger/dao/area-dao';
-import categoryDao from '../../../server/api/tagger/dao/category-dao'
+import categoryDao from '../../../server/api/tagger/dao/category-dao';
+import collectionDao from '../../../server/api/tagger/dao/collection-dao';
 import {expect} from 'chai';
 import async from 'async';
 
@@ -132,8 +133,6 @@ describe('Category creation', () => {
 });
 
 
-
-
 describe('Category operations', () => {
 
   // Don't use fat arrow. We need this binding for timeout.
@@ -200,6 +199,17 @@ describe('Category operations', () => {
             .then(callback(null))
             .catch((err) => callback(err));
 
+        },
+        (callback) => {
+          collectionDao
+            .addNewCollection('test collection')
+            .then(callback(null))
+            .catch((err) => callback(err));
+        },
+        (callback) => {
+          collectionDao.addCollectionToCategory(1, 1)
+            .then(callback(null))
+            .catch((err) => callback(err))
         }
       ],
       (err) => {
@@ -285,6 +295,25 @@ describe('Category operations', () => {
       .then(_onSuccess)
       .catch(_onError);
 
+  });
+
+
+  it('should return something.', (done) => {
+    let _onSuccess = (category) => {
+      expect(category).to.be.defined;
+      expect(category.length).to.equal(1);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    categoryDao
+      .categoriesByCollectionId(1)
+      .then(_onSuccess)
+      .catch(_onError);
   });
 
 
