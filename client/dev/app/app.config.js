@@ -22,20 +22,6 @@
         .accentPalette('amber');
 
     }
-  ).config(['$provide', function ($provide) {
-      var customDecorator = function ($delegate) {
-        var d3Service = $delegate;
-        /*jshint unused: false*/
-        d3Service.d3().then(function (d3) {
-          // this space available for building custom functions
-          // on the d3 object.
-        });
-        return d3Service;
-      };
-
-      $provide.decorator('d3Service', customDecorator);
-
-    }]
   ).config(function($mdIconProvider) {
     $mdIconProvider.fontSet('fa', 'fontawesome');
     $mdIconProvider.icon('md-clear', '/resources/icons/ic_clear_black_24px.svg', 24);

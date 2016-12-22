@@ -13,7 +13,7 @@ var config = {
     },
     uid: credentials.develuid,
     gid: credentials.develgid,
-    port: 3000,
+    port: 3333,
     mysql: {
       db: 'acomtags_development',
       user: credentials.develdbuser,
