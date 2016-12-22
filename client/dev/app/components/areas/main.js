@@ -5,12 +5,10 @@
 
   'use strict';
 
-  function GroupController(AreaList,
-                           ReorderAreas,
+  function GroupController(ReorderAreas,
                            TaggerToast,
                            TaggerDialog,
                            AreaListObserver,
-                           AreaObserver,
                            UserAreaObserver) {
 
     var vm = this;
@@ -45,17 +43,6 @@
       vm.currentArea.title = title;
       vm.currentArea.id = id;
     };
-
-
-    function _initAreaList() {
-      var areas = AreaList.query();
-      areas.$promise.then(function (data) {
-        if (data.length > 0) {
-          AreaListObserver.set(data);
-          AreaObserver.set(data[0].id);
-        }
-      });
-    }
 
     /**
      * Show the $mdDialog.
@@ -99,11 +86,6 @@
         }
       });
     }
-
-    vm.$onInit = function () {
-      _initAreaList();
-    }
-
 
   }
 
