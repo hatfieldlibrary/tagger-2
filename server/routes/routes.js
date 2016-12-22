@@ -61,6 +61,8 @@ module.exports = function(app,config,passport){
   app.get('/rest/collection/count/types/byArea/:areaId', ensureAuthenticated, collection.countCTypesByArea);
   app.get('/rest/collection/count/linkTypes/byArea/:areaId', ensureAuthenticated, collection.browseTypesByArea);
   app.get('/rest/collection/first/inArea/:areaId', ensureAuthenticated, collection.getFirstCollectionInArea);
+  app.get('/rest/collection/:collId/pubstatus/:status', ensureAuthenticated, collection.setPublicationStatus);
+  app.get('/rest/collection/:collId/pubstatus', ensureAuthenticated, collection.getPublicationStatus);
 
   // AREAS
   app.use('/rest/area/byId/:id', area.byId);  // used by public and admin views, no authentication

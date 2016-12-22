@@ -7,9 +7,16 @@
 
   'use strict';
 
-  function CollectionController(TaggerDialog, UserAreaObserver) {
+  function CollectionController(TaggerDialog,
+                                UserAreaObserver,
+                                PublicationStatusObserver) {
 
     const vm = this;
+
+    PublicationStatusObserver.subscribe(function onNext() {
+      vm.isPublished = PublicationStatusObserver.get();
+    });
+
 
     /** @type {string} */
     vm.addMessage = 'templates/dialog/addCollectionMessage.html';
@@ -30,9 +37,10 @@
       new TaggerDialog($event, message);
     };
 
-    vm.$onInit = function() {
+    vm.$onInit = function () {
       /** @type {number} */
       vm.userAreaId = UserAreaObserver.get();
+
     }
 
   }

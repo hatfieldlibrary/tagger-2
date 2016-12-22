@@ -524,7 +524,8 @@
               areaId: AreaObserver.get(),
               browseType: Constant.defaultBrowseType,
               repoType: Constant.defaultRepoType,
-              ctype: Constant.defaultCollectionType
+              ctype: Constant.defaultCollectionType,
+              published: false
             }
           );
           result.$promise.then(function (data) {

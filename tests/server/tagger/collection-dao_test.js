@@ -46,7 +46,7 @@ const updateCollectionData = {
   browseType: 'test',
   repoType: 'search',
   restricted: 1,
-  published: 0
+  published: 1
 
 };
 
@@ -110,6 +110,40 @@ describe('Collection init', () => {
       .catch(_onError);
   });
 
+  it('should update the publication status of the collection', (done) => {
+    let _onSuccess = (collection) => {
+      expect(collection).to.be.defined;
+      expect(collection[0]).to.equal(1);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    collectionDao.setPublicationStatus(true, 1)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+  it('should get the new publication status for the collection', (done) => {
+    let _onSuccess = (collection) => {
+      expect(collection).to.be.defined;
+      expect(collection.dataValues.published).to.be.true
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    collectionDao.getPublicationStatus(1)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
 });
 
 describe('Collection operations', () => {
@@ -125,7 +159,7 @@ describe('Collection operations', () => {
             .then(() => {
               callback(null);
             }).catch(function (err) {
-            console.log(err);
+            callback(err);
           });
         },
         (callback) => {
@@ -139,7 +173,7 @@ describe('Collection operations', () => {
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
-              callback(null,);
+              callback(null);
             }).catch(function (err) {
             callback(err);
           });
@@ -203,14 +237,22 @@ describe('Collection operations', () => {
         (callback) => {
           collectionDao
             .addNewCollection(initCollections[0])
-            .then(callback(null))
+            .then( () => {
+              collectionDao.setPublicationStatus(true, 1)
+                .then(callback(null))
+                .catch((err) => callback(err));
+            })
             .catch((err) => callback(err));
 
         },
         (callback) => {
           collectionDao
             .addNewCollection(initCollections[1])
-            .then(callback(null))
+            .then( () => {
+              collectionDao.setPublicationStatus(true, 2)
+                .then(callback(null))
+                .catch((err) => callback(err));
+            })
             .catch((err) => callback(err));
         }
       ],
@@ -224,10 +266,9 @@ describe('Collection operations', () => {
   });
 
 
-  it('should list three collections.', (done) => {
+  it('should find collection with id 1.', (done) => {
 
     let _onSuccess = (collections) => {
-
       expect(collections).to.be.defined;
       expect(collections.dataValues.title).to.have.string(initCollections[0]);
       done();
@@ -350,6 +391,40 @@ describe('Collection operations', () => {
     };
 
     collectionDao.updateCollection(updateCollectionData, 2)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+
+  it('should return collections for area.', (done) => {
+    let _onSuccess = (collections) => {
+      expect(collections).to.be.defined;
+      expect(collections.length).to.equal(1);
+      done();
+    };
+
+    let _onError = (err) => {
+      expect(true).to.be.false; // should not come here
+    };
+
+    collectionDao.getCollectionsByArea(1)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+  it('should get the publication status of the collection', (done) => {
+    let _onSuccess = (collection) => {
+      expect(collection).to.be.defined;
+      expect(collection.dataValues.published).to.be.true;
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    collectionDao.getPublicationStatus(1)
       .then(_onSuccess)
       .catch(_onError);
   });

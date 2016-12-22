@@ -39,6 +39,34 @@ exports.browseTypesByArea = function (req, res) {
   });
 };
 
+exports.setPublicationStatus = function (req, res) {
+  const pubStatus = req.params.status;
+  const collectionId = req.params.collId;
+  console.log(pubStatus)
+
+  taggerDao.setPublicationStatus(pubStatus, collectionId).then(
+    function(collection) {
+      console.log(collection)
+      utils.sendResponse(res, {status: 'success'})
+    }).error(function(err) {
+      console.log(err)
+  })
+
+};
+
+exports.getPublicationStatus = function (req, res) {
+  const collectionId = req.params.collId;
+
+  taggerDao.getPublicationStatus(collectionId).then(
+    function(collection) {
+      utils.sendResponse(res, collection)
+    }).error(function(err) {
+    console.log(err)
+  })
+
+};
+
+
 /**
  * Returns repoType (search option) counts for the overview
  * dashboard.

@@ -46,7 +46,6 @@
       vm.thumbnailImage = ThumbImageObserver.get();
     });
 
-
     AreaObserver.subscribe(function onNext() {
       const areaId = AreaObserver.get();
       _getCollectionForNewArea(areaId);

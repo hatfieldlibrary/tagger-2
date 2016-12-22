@@ -2,7 +2,7 @@
   <md-content class="transparent" layout="column" flex="100" flex-gt-md="75">
     <md-card class="flex primary-content" flex="flex" style="background: #EAEAE6">
       <div ng-if="vm.collectionList.$resolved"></div>
-      <md-toolbar class="md_primary">
+      <md-toolbar class="md_primary" ng-class="{'is-not-published': !vm.isPublished}">
         <div class="md-toolbar-tools">
           <span flex="25">
             <i class="material-icons">collections</i>
@@ -43,7 +43,7 @@
     </md-card>
   </md-content>
   <md-content class="transparent transparent" layout="column" flex="100" flex-gt-md="25">
-
+     <pub-status-switch collection-id="{{vm.collectionId}}"></pub-status-switch>
     <image-selector></image-selector>
     <subject-selector collection-id="{{vm.collectionId}}" class="flex"></subject-selector>
     <content-type-selector class="flex"></content-type-selector>

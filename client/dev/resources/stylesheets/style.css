@@ -35,17 +35,24 @@ body {
     margin-left: 0px;
   }
 }
+
 .large-button {
   padding-top: 10px;
   padding-bottom: 10px;
   margin-bottom: 30px;
 }
+
 .nav-item-dimens {
   padding-left: 5px !important;
   min-height: 47px !important;
 }
- md-list-item.tagger-reorder-button:before {
 
+md-list-item.tagger-reorder-button:before {
+
+}
+
+.is-not-published {
+     background: #c5c5c5 !important;
 }
 
 md-radio-button:focus {
@@ -151,66 +158,71 @@ figcaption .alert-color .material-icons {
 }
 
 /*.md-chips {*/
-  /*position: relative;*/
-  /*padding-right: 55px;*/
-  /*font-size: 0.8rem;*/
+/*position: relative;*/
+/*padding-right: 55px;*/
+/*font-size: 0.8rem;*/
 /*}*/
 
 /*.md-chips .md-chip-content {*/
-  /*padding-right: 10px;*/
+/*padding-right: 10px;*/
 /*}*/
 
 /*.md-chips {*/
-  /*!*position: absolute;*!*/
-  /*right: 6px;*/
-  /*top: 6px;*/
-  /*margin-right: 0;*/
-  /*margin-left: 20px;*/
-  /*height: 20px;*/
+/*!*position: absolute;*!*/
+/*right: 6px;*/
+/*top: 6px;*/
+/*margin-right: 0;*/
+/*margin-left: 20px;*/
+/*height: 20px;*/
 /*}*/
 
 /*.md-chips button.taggerchip {*/
-  /*position: relative;*/
-  /*height: 20px;*/
-  /*width: 20px;*/
-  /*line-height: 30px;*/
-  /*text-align: center;*/
-  /*background: rgba(0, 0, 0, 0.3);*/
-  /*border-radius: 50%;*/
-  /*border: none;*/
-  /*box-shadow: none;*/
-  /*padding: 0;*/
-  /*margin: 0;*/
-  /*transition: background 0.15s linear;*/
-  /*display: block;*/
+/*position: relative;*/
+/*height: 20px;*/
+/*width: 20px;*/
+/*line-height: 30px;*/
+/*text-align: center;*/
+/*background: rgba(0, 0, 0, 0.3);*/
+/*border-radius: 50%;*/
+/*border: none;*/
+/*box-shadow: none;*/
+/*padding: 0;*/
+/*margin: 0;*/
+/*transition: background 0.15s linear;*/
+/*display: block;*/
 /*}*/
 
 /*.md-chips  button.taggerchip md-icon {*/
-  /*!*position: absolute;*!*/
-  /*top: 50%;*/
-  /*left: 50%;*/
-  /*transform: translate3d(-50%, -50%, 0) scale(0.7);*/
-  /*color: white;*/
-  /*fill: white;*/
+/*!*position: absolute;*!*/
+/*top: 50%;*/
+/*left: 50%;*/
+/*transform: translate3d(-50%, -50%, 0) scale(0.7);*/
+/*color: white;*/
+/*fill: white;*/
 /*}*/
 
 /*.chips .md-chip .md-chip-remove-container button.taggerchip:hover, .chips .md-chip .md-chip-remove-container button.taggerchip:focus {*/
-  /*!*background: rgba(255, 0, 0, 0.8);*!*/
+/*!*background: rgba(255, 0, 0, 0.8);*!*/
 /*}*/
 
 .tagger-chips .errors {
   font-size: 12px;
   color: #dd2c00;
-  margin-top: 10px; }
+  margin-top: 10px;
+}
 
-.tagger-chips   {
-  position: relative; }
-.tagger-chips    {
+.tagger-chips {
+  position: relative;
+}
+
+.tagger-chips {
   position: relative;
   right: 4px;
   top: 4px;
   margin-right: 0;
-  height: 24px; }
+  height: 24px;
+}
+
 .tagger-chips button.taggerchip {
   position: relative;
   height: 24px;
@@ -225,20 +237,25 @@ figcaption .alert-color .material-icons {
   padding: 0;
   margin: 3px 3px 0 0;
   transition: background 0.15s linear;
-  display: block; }
-.tagger-chips  button.taggerchip md-icon {
+  display: block;
+}
+
+.tagger-chips button.taggerchip md-icon {
   position: absolute;
   top: 56%;
   left: 50%;
   transform: translate3d(-50%, -50%, 0) scale(0.7);
   color: white;
-  fill: white; }
-.tagger-chips  md-chipbutton.taggerchip:hover,  .md-chip-remove-container button.taggerchip:focus {
-  background: rgba(255, 0, 0, 0.8); }
+  fill: white;
+}
 
-.tagger-chips md-chips-wrap.md-removable  md-chip-template {
-  padding-right: 5px; }
+.tagger-chips md-chipbutton.taggerchip:hover, .md-chip-remove-container button.taggerchip:focus {
+  background: rgba(255, 0, 0, 0.8);
+}
 
+.tagger-chips md-chips-wrap.md-removable md-chip-template {
+  padding-right: 5px;
+}
 
 /* D3  chart */
 

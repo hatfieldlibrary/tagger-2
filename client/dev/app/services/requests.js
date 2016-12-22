@@ -59,6 +59,22 @@
     }
   ]);
 
+  taggerServices.factory('UpdatePublicationStatus', ['$resource', 'config',
+    function ($resource, config) {
+      return $resource(config.restHost + 'collection/:collId/pubstatus/:status', {}, {
+        query: {method: 'GET', isArray: false}
+      });
+    }
+  ]);
+
+  taggerServices.factory('GetPublicationStatus', ['$resource', 'config',
+    function ($resource, config) {
+      return $resource(config.restHost + 'collection/:collId/pubstatus', {}, {
+        query: {method: 'GET', isArray: false}
+      });
+    }
+  ]);
+
   taggerServices.factory('CollectionLinkCount', ['$resource', 'config',
     function ($resource, config) {
       return $resource(config.restHost + 'collection/count/linkTypes/byArea/:areaId', {}, {

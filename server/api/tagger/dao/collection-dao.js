@@ -237,7 +237,28 @@ taggerDao.getCategoryForCollection = (collId) => {
 
 };
 
+taggerDao.setPublicationStatus = (status, collId) => {
 
+  return taggerSchema.Collection.update({
+      published: status
+    },
+    {
+      where: {
+        id: collId
+      }
+    });
+};
+
+taggerDao.getPublicationStatus = (collId) => {
+
+  return taggerSchema.Collection.find(
+    {
+      where: {
+        id: collId
+      },
+      attributes: ['published']
+    });
+};
 
 taggerDao.updateCollection = (update, id) => {
 
@@ -320,7 +341,7 @@ taggerDao.findTagsForCollection = (collId) => {
 
 taggerDao.getCollectionsByArea = (areaId) => {
 
-  return taggerSchema.sequelize.query('Select * from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where at.AreaId = ? order by c.title',
+  return taggerSchema.sequelize.query('Select * from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where at.AreaId = ? AND c.published = true order by c.title',
     {
       replacements: [areaId],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -331,7 +352,7 @@ taggerDao.getCollectionsByArea = (areaId) => {
 taggerDao.getCollectionsBySubjectAndArea = (subjectId, areaId) => {
 
   return taggerSchema.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
-    'on tt.CollectionId = c.id LEFT JOIN AreaTargets at on c.id=at.CollectionId where tt.TagId = ? and at.AreaId = ? ' +
+    'on tt.CollectionId = c.id LEFT JOIN AreaTargets at on c.id=at.CollectionId where tt.TagId = ? and at.AreaId = ? and c.published = true ' +
     'order by c.title',
     {
       replacements: [subjectId, areaId],
@@ -343,7 +364,7 @@ taggerDao.getCollectionsBySubjectAndArea = (subjectId, areaId) => {
 taggerDao.getCollectionsBySubject = (subjectId) => {
 
   return taggerSchema.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
-    'on tt.CollectionId = c.id where tt.TagId = ? order by c.title',
+    'on tt.CollectionId = c.id where tt.TagId = ? and c.published = true order by c.title',
     {
       replacements: [subjectId],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -354,7 +375,7 @@ taggerDao.getCollectionsBySubject = (subjectId) => {
 
 taggerDao.getCollectionsByCategory = (categoryId) => {
 
-  return taggerSchema.sequelize.query('Select * from Collections c left join CategoryTargets ct on ct.CollectionId = c.id where ct.CategoryId = ? order by c.title',
+  return taggerSchema.sequelize.query('Select * from Collections c left join CategoryTargets ct on ct.CollectionId = c.id where ct.CategoryId = ? and c.published = true order by c.title',
     {
       replacements: [categoryId],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
