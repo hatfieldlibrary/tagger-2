@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 'use strict';
 
 const async = require('async');
@@ -5,12 +22,12 @@ const utils = require('../utils/response-utility');
 const taggerDao = require('../dao/tagtarget-dao');
 
 /**
- * Local function for adding association between tag and area.
+ * Private function for adding association between tag and area.
  * @param tagId   the id of the tag
  * @param areaId   the id of the area
  * @param res      response object
  */
-function addArea(tagId, areaId, res) {
+function _addArea(tagId, areaId, res) {
 
   async.series(
     {
@@ -45,8 +62,7 @@ function addArea(tagId, areaId, res) {
 }
 
 /**
- * Retrieves list of subject areas associated with a a
- *  tag.
+ * Retrieves list of subject areas associated with a tag.
  * @param req
  * @param res
  */
@@ -92,7 +108,7 @@ exports.addTarget = function (req, res) {
       }
       // if new
       if (result.check === null) {
-        addArea(tagId, areaId, res);
+        _addArea(tagId, areaId, res);
 
       }
       // if not new, just return the current list.

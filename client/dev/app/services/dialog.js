@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Material design dialog and toast.
  */
@@ -5,35 +22,29 @@
 
   'use strict';
 
-  /*globals taggerServices*/
-
   /**
    * Using the Angular Material mdToast
-   * directive throughout the application.
-   * This toast service takes a single
+   * directive. This toast service accepts a single
    * parameter containing the toast message.
    */
-  taggerServices.factory('TaggerToast', [
-
-    '$mdToast',
+  taggerServices.factory('TaggerToast', ['$mdToast',
 
     function ($mdToast) {
-
       /**
-       * The factory returns the configured Toast object literal
-       * that takes a message content parameter.
+       * The factory returns the Toast object literal
+       * that takes a message parameter.
        * @param content  the message to show in the toast.
        */
-      function toast(content) {
+      function _toast(content) {
 
-        var toastPosition = {
+        const toastPosition = {
           bottom: false,
           top: true,
           left: true,
           right: false
         };
 
-        var getToastPosition = function () {
+        const getToastPosition = function () {
           return Object.keys(toastPosition)
             .filter(function (pos) {
               return toastPosition[pos];
@@ -50,14 +61,13 @@
 
       }
 
-      return toast;
+      return _toast;
 
     }]);
 
-
   /**
-   * Using the Angular Material mdDialog directive for add, delete and
-   * image upload operations.
+   * Using the Angular Material mdDialog directive for add, delete
+   * and image upload.
    */
   taggerServices.factory('TaggerDialog', [
 
@@ -68,14 +78,10 @@
     function (UpLoad,
               $rootScope,
               $mdDialog) {
-
-
       /**
-       * The DialogController handles all actions required by the various
-       * dialog templates.  The injected services do the work.
-       * @param $scope
        * @param $mdDialog
        * @param $rootScope
+       * @param Constant
        * @param TagAdd
        * @param TagList
        * @param TagDelete
@@ -96,10 +102,22 @@
        * @param TagTargetAdd
        * @param TaggerToast
        * @param Upload
+       * @param AreaListObserver
+       * @param AreaObserver
+       * @param CollectionListObserver
+       * @param CollectionObserver
+       * @param TagObserver
+       * @param TagListObserver
+       * @param TagAreaObserver
+       * @param GroupObserver
+       * @param GroupListObserver
+       * @param ThumbImageObserver
+       * @param ContentTypeObserver
+       * @param ContentTypeListObserver
+       * @param AreaActionObserver
        * @constructor
        */
-      function DialogController(//  $rootScope,
-        $scope,
+      function DialogController(
         $mdDialog,
         $rootScope,
         Constant,
@@ -137,28 +155,29 @@
         ContentTypeListObserver,
         AreaActionObserver) {
 
+        const vm = this;
+
         /**
          * Closes the dialog
          */
-        $scope.closeDialog = function () {
+        vm.closeDialog = function () {
           $mdDialog.hide();
         };
-
 
         /**
          * Handles tag deletion.
          */
-        $scope.deleteTag = function () {
+        vm.deleteTag = function () {
 
-          var result = TagDelete.save({id: TagObserver.get()});
+          const result = TagDelete.save({id: TagObserver.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
               new TaggerToast('Tag Deleted');
               // after retrieving new area list, we need
               // to update the areas currently in view.
-              $scope.getTagList(null);
-              $scope.closeDialog();
+              vm.getTagList(null);
+              vm.closeDialog();
             }
 
           });
@@ -168,8 +187,8 @@
         /**
          * Adds tag to a collection area. Used with administrator view.
          */
-        $scope.addAreaToTag = function () {
-          var result = TagTargetAdd.query(
+        vm.addAreaToTag = function () {
+          const result = TagTargetAdd.query(
             {
               tagId: TagObserver.get(),
               areaId: TagAreaObserver.get()
@@ -183,7 +202,7 @@
               // Using event emitter communicates the update information without
               // adding this essentially local and temporary to shared context.
               $rootScope.$broadcast('addedAreaToTag', {areaTargets: result.areaTargets});
-              $scope.closeDialog();
+              vm.closeDialog();
             }
           });
         };
@@ -191,8 +210,8 @@
         /**
          * Remove tag from area. Used with collection administrator view.
          */
-        $scope.removeAreaFromTag = function () {
-          var result = TagTargetRemove.query(
+        vm.removeAreaFromTag = function () {
+          const result = TagTargetRemove.query(
             {
               tagId: TagObserver.get(),
               areaId: TagAreaObserver.get()
@@ -206,7 +225,7 @@
               // Using event emitter communicates the update information without
               // adding this essentially local and temporary to shared context.
               $rootScope.$broadcast('removedAreaFromTag', {areaTargets: result.areaTargets});
-              $scope.closeDialog();
+              vm.closeDialog();
             }
 
           });
@@ -216,8 +235,8 @@
          * Adds tag to a collection area. Used with collection
          * manager view.
          */
-        $scope.addTagToArea = function () {
-          var result = TagTargetAdd.query(
+        vm.addTagToArea = function () {
+          const result = TagTargetAdd.query(
             {
               tagId: TagObserver.get(),
               areaId: AreaObserver.get()
@@ -226,8 +245,8 @@
           result.$promise.then(function (data) {
             if (data.status === 'success') {
               new TaggerToast('Tag Added area.');
-              $scope.getTagList(data.id);
-              $scope.closeDialog();
+              vm.getTagList(data.id);
+              vm.closeDialog();
             }
           });
         };
@@ -235,8 +254,8 @@
         /**
          * Remove tag from area. Used with collection manager view.
          */
-        $scope.removeTagFromArea = function () {
-          var result = TagTargetRemove.query(
+        vm.removeTagFromArea = function () {
+          const result = TagTargetRemove.query(
             {
               tagId: TagObserver.get(),
               areaId: AreaObserver.get()
@@ -245,7 +264,7 @@
           result.$promise.then(function (data) {
             if (data.status === 'success') {
               new TaggerToast('Tag removed from Area.');
-              $scope.getTagList(data.id);
+              vm.getTagList(data.id);
               // broadcast successful deletion.
 
               $rootScope.$broadcast('removedFromArea');
@@ -259,16 +278,15 @@
          * Adds a new tag.  Used by administrative view.
          * @param name  the tag name
          */
-        $scope.addTag = function (name) {
+        vm.addTag = function (name) {
 
-          var result = TagAdd.save({name: name});
-
+          const result = TagAdd.save({name: name});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
               new TaggerToast('Tag Added');
               // After area update succeeds, update the view.
-              $scope.getTagList(data.id);
-              $scope.closeDialog();
+              vm.getTagList(data.id);
+              vm.closeDialog();
             }
           });
         };
@@ -278,10 +296,9 @@
          * used to optionally set the current tag.
          * @param id  id of current tag or null
          */
-        $scope.getTagList = function (id) {
+        vm.getTagList = function (id) {
 
-          var tags = TagList.query();
-
+          const tags = TagList.query();
           tags.$promise.then(function (tags) {
             if (id === null) {
               TagObserver.set(tags[0].id);
@@ -290,26 +307,25 @@
             }
             TagListObserver.set(tags);
 
-            $scope.closeDialog();
+            vm.closeDialog();
           });
 
         };
-
 
         /**
          * Delete collection area from Tagger.  Used by administrative view.
          * @param id
          */
-        $scope.deleteArea = function () {
+        vm.deleteArea = function () {
 
-          var result = AreaDelete.save({id: AreaActionObserver.get()});
+          const result = AreaDelete.save({id: AreaActionObserver.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
               new TaggerToast('Area Deleted');
               // after retrieving new area list, we need
               // to update the areas currently in view.
-              $scope.getAreaList(null);
+              vm.getAreaList(null);
 
             }
 
@@ -321,17 +337,16 @@
          * Add new area to Tagger.
          * @param title
          */
-        $scope.addArea = function (title) {
+        vm.addArea = function (title) {
 
-          var result = AreaAdd.save({title: title});
-
+          const result = AreaAdd.save({title: title});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
               new TaggerToast('Area Added');
               // After area update succeeds, update the view.
-              $scope.getAreaList(data.id);
-              $scope.closeDialog();
+              vm.getAreaList(data.id);
+              vm.closeDialog();
 
             }
 
@@ -343,10 +358,9 @@
          * id parameter.
          * @param id  the id of the current area or null.
          */
-        $scope.getAreaList = function (id) {
+        vm.getAreaList = function (id) {
 
-          var areas = AreaList.query();
-
+          const areas = AreaList.query();
           areas.$promise.then(function (data) {
 
             AreaListObserver.set(data);
@@ -357,34 +371,29 @@
               } else {
                 AreaObserver.set(id);
               }
-
-              $scope.closeDialog();
+              vm.closeDialog();
             }
           });
-
 
         };
 
         /**
          * Deletes a collection group from Tagger.
          */
-        $scope.deleteCategory = function () {
+        vm.deleteCategory = function () {
 
-          var result = CategoryDelete.save({id: GroupObserver.get()});
+          const result = CategoryDelete.save({id: GroupObserver.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
               new TaggerToast('Category Deleted');
               // After retrieving new category list, we need
               // to update the category currently in view.
-              // This method is designed to take an id
-              // parameter.  But if this is null, it
-              // uses the id of the first category in the
-              // updated list. That's what we want in the
-              // case of deletions.
-              $scope.getCategoryList(null);
-              $scope.closeDialog();
-
+              // When the parameter is null, the method will
+              // use the id of the first category in the
+              // list. That's what we want in the case of deletions.
+              vm.getCategoryList(null);
+              vm.closeDialog();
             }
 
           });
@@ -395,20 +404,18 @@
          * Add a collection group to Tagger.
          * @param title
          */
-        $scope.addCategory = function (title) {
+        vm.addCategory = function (title) {
 
-          var result = CategoryAdd.save({title: title});
-
+          const result = CategoryAdd.save({title: title});
           result.$promise.then(function (data) {
-
             if (data.status === 'success') {
               new TaggerToast('Category Added');
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
-              $scope.getCategoryList(data.id);
+              vm.getCategoryList(data.id);
               // Does what you'd expect.
-              $scope.closeDialog();
+              vm.closeDialog();
 
             }
 
@@ -420,9 +427,9 @@
          * id parameter.
          * @param id  id of the current collection group or null.
          */
-        $scope.getCategoryList = function (id) {
+        vm.getCategoryList = function (id) {
 
-          let categories = CategoryList.query();
+          const categories = CategoryList.query();
           categories.$promise.then(function (data) {
             GroupListObserver.set(data);
             if (id === null) {
@@ -440,10 +447,9 @@
          * Deletes a content type from Tagger.
          * @param id
          */
-        $scope.deleteContentType = function () {
+        vm.deleteContentType = function () {
 
-          var result = ContentTypeDelete.save({id: ContentTypeObserver.get()});
-
+          const result = ContentTypeDelete.save({id: ContentTypeObserver.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -455,13 +461,11 @@
               // uses the id of the first category in the
               // updated list. That's what we want in the
               // case of deletions.
-              $scope.getContentList(null);
-              $scope.closeDialog();
-
+              vm.getContentList(null);
+              vm.closeDialog();
             }
 
           });
-
         };
 
         /**
@@ -469,7 +473,7 @@
          * parameter.
          * @param id  the id of the current content type or null.
          */
-        $scope.getContentList = function (id) {
+        vm.getContentList = function (id) {
 
           // Update the shared Data service
           const contentTypes = ContentTypeList.query();
@@ -483,7 +487,6 @@
               ContentTypeObserver.set(id);
             }
 
-
           });
 
         };
@@ -492,10 +495,9 @@
          * Add content type to Tagger.
          * @param title
          */
-        $scope.addContentType = function (title) {
+        vm.addContentType = function (title) {
 
-          var result = ContentTypeAdd.save({title: title});
-
+          const result = ContentTypeAdd.save({title: title});
           result.$promise.then(function (data) {
 
             if (data.status === 'success') {
@@ -503,9 +505,9 @@
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
-              $scope.getContentList(data.id);
+              vm.getContentList(data.id);
               // Does what you'd expect.
-              $scope.closeDialog();
+              vm.closeDialog();
 
             }
 
@@ -516,9 +518,9 @@
          * Adds new collection to area.
          * @param title the collection's title.
          */
-        $scope.addCollection = function (title) {
+        vm.addCollection = function (title) {
 
-          var result = CollectionAdd.save(
+          const result = CollectionAdd.save(
             {
               title: title,
               areaId: AreaObserver.get(),
@@ -529,15 +531,14 @@
             }
           );
           result.$promise.then(function (data) {
-
             if (data.status === 'success') {
               new TaggerToast('Collection Added');
               // Update the collection list. The
               // id parameter will be used to select
               // the newly added category for editing.
-              $scope.getCollectionList(data.id);
+              vm.getCollectionList(data.id);
               // Does what you'd expect.
-              $scope.closeDialog();
+              vm.closeDialog();
 
             }
           });
@@ -546,9 +547,9 @@
         /**
          * Deletes a collection.
          */
-        $scope.deleteCollection = function () {
-          var result = CollectionDelete.save({id: CollectionObserver.get()});
+        vm.deleteCollection = function () {
 
+          const result = CollectionDelete.save({id: CollectionObserver.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -558,8 +559,8 @@
               // Given a null id parameter, the getCollectionList
               // function will use the id of the first collection in the
               // updated list.
-              $scope.getCollectionList(null);
-              $scope.closeDialog();
+              vm.getCollectionList(null);
+              vm.closeDialog();
 
             }
 
@@ -572,9 +573,9 @@
          * id.
          * @param id  the collection id or null.
          */
-        $scope.getCollectionList = function (id) {
+        vm.getCollectionList = function (id) {
 
-          var result = CollectionsByArea.query({areaId: AreaObserver.get()});
+          const result = CollectionsByArea.query({areaId: AreaObserver.get()});
           result.$promise.then(function (data) {
             CollectionListObserver.set(data);
             // Deleting a category doesn't generate
@@ -594,12 +595,11 @@
 
         };
 
-
         /**
          * Upload image to Tagger's image processing service.
          * @param file the image file
          */
-        $scope.uploadImage = function (file) {
+        vm.uploadImage = function (file) {
 
           if (file !== undefined) {
             /* jshint unused: false */
@@ -612,7 +612,7 @@
               console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
             }).success(function (data, status, headers, config) {
               ThumbImageObserver.set(config.file.name);
-              $scope.closeDialog();
+              vm.closeDialog();
               console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
 
             }).error(function (data, status, headers, config) {
@@ -623,34 +623,31 @@
 
       }
 
-
       /**
-       * Function returns an object literal for a function that
-       * configures an $mdDialog directory with input params.
-       * (The event param is used by the $mdDialog to set the
-       * starting location of the dialog animation.)
+       * Returns a dialog using predefined options and
+       * the provided message param. The event param is used by
+       *  $mdDialog to set the starting location of the animation.
        *
-       * @param $event  the AngularJs event object
+       * @param $event  the Angular event object
        * @param message  the template defining the dialog content
        */
-      var showDialog = function ($event, message) {
+      const _showDialog = function ($event, message) {
 
-        var parentEl = angular.element(document.body);
+        let parentEl = angular.element(document.body);
 
         // Show a dialog with the specified options.
         $mdDialog.show({
           parent: parentEl,
           targetEvent: $event,
           templateUrl: message,
-          controller: DialogController
+          controller: DialogController,
+          controllerAs: 'vm'
         });
 
       };
 
-      return showDialog;
-
+      return _showDialog;
 
     }]);
-
 
 })();

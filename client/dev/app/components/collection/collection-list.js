@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Created by mspalti on 12/14/16.
  */
@@ -64,7 +81,7 @@
     function _initCollections(areaId) {
 
       if (areaId) {
-        let list = CollectionsByArea.query(
+        const list = CollectionsByArea.query(
           {
             areaId: areaId
           });
@@ -84,28 +101,27 @@
 
     };
 
-
   }
 
   taggerComponents.component('collectionList', {
 
-    template: '<md-content flex style="background: transparent"> ' +
-    ' <div layout="column" style="height:700px"> ' +
-    '   <md-content flex="flex" style="background: transparent"> ' +
-    '     <md-list> ' +
-    '       <div ng-repeat="col in vm.collectionList"> ' +
-    '         <md-list-item> ' +
-    '           <md-button class="md-no-style md-button  md-default-theme nav-item-dimens" ng-class="{\'md-primary\': col.Collection.id==vm.collectionId}" ng-click="vm.getCollectionById(col.Collection.id);"> ' +
+    template: '<md-content flex style="background: transparent">' +
+    ' <div layout="column" style="height:700px">' +
+    '   <md-content flex="flex" style="background: transparent">' +
+    '     <md-list>' +
+    '       <div ng-repeat="col in vm.collectionList">' +
+    '         <md-list-item>' +
+    '           <md-button class="md-no-style md-button  md-default-theme nav-item-dimens" ng-class="{\'md-primary\': col.Collection.id==vm.collectionId}" ng-click="vm.getCollectionById(col.Collection.id);">' +
     '             <div class="list-group-item-text md-subhead layout-fill">{{col.Collection.title}}' +
-    '               <div class="md-ripple-container"></div> ' +
-    '             </div> ' +
-    '           </md-button> ' +
-    '         </md-list-item> ' +
-    '         <md-divider></md-divider> ' +
-    '       </div> ' +
-    '     </md-list> ' +
-    '   </md-content> ' +
-    ' </div> ' +
+    '               <div class="md-ripple-container"></div>' +
+    '             </div>' +
+    '           </md-button>' +
+    '         </md-list-item>' +
+    '         <md-divider></md-divider>' +
+    '       </div>' +
+    '     </md-list>' +
+    '   </md-content>' +
+    ' </div>' +
     '</md-content>',
     controller: ListController,
     controllerAs: 'vm'

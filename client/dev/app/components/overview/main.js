@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Created by mspalti on 12/19/16.
  */
@@ -33,12 +50,12 @@
       ctrl.categoriesReady = false;
       let categories = CategoryCountByArea.query({areaId: areaId});
       categories.$promise.then((categories) => {
-        var catCount = 0;
-        var data = [];
-        for (var i = 0; i < categories.length; i++) {
+        let catCount = 0;
+        let data = [];
+        for (let i = 0; i < categories.length; i++) {
           catCount = catCount + categories[i].count;
         }
-        for (i = 0; i < categories.length; i++) {
+        for (let i = 0; i < categories.length; i++) {
           data[i] = {title: categories[i].title, value: categories[i].count};
         }
         ctrl.categoryCounts = {
@@ -59,12 +76,12 @@
       ctrl.typesReady = false;
       const contentTypeCount = ContentTypeCount.query({areaId: areaId});
       contentTypeCount.$promise.then(function (types) {
-        var count = 0;
-        var data = [];
-        for (var i = 0; i < types.length; i++) {
+        let count = 0;
+        let data = [];
+        for (let i = 0; i < types.length; i++) {
           count = count + types[i].count;
         }
-        for (i = 0; i < types.length; i++) {
+        for (let i = 0; i < types.length; i++) {
           data[i] = {title: types[i].name, value: types[i].count};
         }
         ctrl.typeCounts = {
@@ -78,7 +95,7 @@
 
     function _getTagCounts(areaId) {
       ctrl.subjectsReady = false;
-      var subs = TagCountForArea.query({areaId: areaId});
+      let subs = TagCountForArea.query({areaId: areaId});
       subs.$promise.then(function (data) {
         ctrl.subjects = data;
         ctrl.subjectsReady = true;

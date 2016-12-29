@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 'use strict';
 
 const taggerDao = require('../dao/category-dao');
@@ -24,7 +41,7 @@ exports.list = function (req, res) {
  * @param res
  */
 exports.categoryCountByArea = function (req, res) {
-  var areaId = req.params.areaId;
+  const areaId = req.params.areaId;
 
   taggerDao.categoryCountByArea(areaId).then(function (categories) {
     utils.sendResponse(res, categories);
@@ -35,8 +52,8 @@ exports.categoryCountByArea = function (req, res) {
 };
 
 exports.collectionsByCategory = function (req, res) {
-   var collId = req.params.collId;
-  taggerDao.categoriesByCollectionId(collId).then(function(categories) {
+  const collId = req.params.collId;
+  taggerDao.categoriesByCollectionId(collId).then(function (categories) {
     utils.sendResponse(res, categories)
   })
 };
@@ -47,7 +64,7 @@ exports.collectionsByCategory = function (req, res) {
  * @param res
  */
 exports.listByArea = function (req, res) {
-  var areaId = req.params.areaId;
+  const areaId = req.params.areaId;
 
   taggerDao.listByArea(areaId).then(function (categories) {
     utils.sendResponse(res, categories);
@@ -62,7 +79,7 @@ exports.listByArea = function (req, res) {
  * @param res
  */
 exports.byId = function (req, res) {
-  var categoryId = req.params.id;
+  const categoryId = req.params.id;
 
   taggerDao.byId(categoryId).then(function (category) {
     utils.sendResponse(res, category);
@@ -78,7 +95,7 @@ exports.byId = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
-  var title = req.body.title;
+  const title = req.body.title;
 
   taggerDao.add(title).then(function (result) {
     utils.sendResponse(res, {status: 'success', id: result.id});
@@ -95,14 +112,14 @@ exports.add = function (req, res) {
  */
 exports.update = function (req, res) {
 
-  var title = req.body.title;
-  var url = req.body.url;
-  var description = req.body.description;
-  var linkLabel = req.body.linkLabel;
-  var id = req.body.id;
-  var areaId = req.body.areaId;
+  const title = req.body.title;
+  const url = req.body.url;
+  const description = req.body.description;
+  const linkLabel = req.body.linkLabel;
+  const id = req.body.id;
+  const areaId = req.body.areaId;
 
-  const data =  {
+  const data = {
     title: title,
     url: url,
     linkLabel: linkLabel,
@@ -125,7 +142,7 @@ exports.update = function (req, res) {
  */
 exports.delete = function (req, res) {
 
-  var catId = req.body.id;
+  const catId = req.body.id;
 
   taggerDao.delete(catId).then(function () {
     utils.sendResponse(res, {status: 'success', id: catId});

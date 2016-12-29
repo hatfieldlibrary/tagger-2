@@ -1,4 +1,5 @@
 .idea
+client/dist
 server/config/credentials.js
 coverage
 node_modules

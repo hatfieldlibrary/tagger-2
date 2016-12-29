@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2016.
  *
@@ -16,10 +15,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
+/**
+ * Tagger
+ * 12/29/16
+ *
+ * @author Michael Spalti
+ */
 
-/*jshint unused: false*/
-var taggerControllers = angular.module('taggerControllers', []);
+import gulp from 'gulp';
+import babel from 'gulp-babel';
+import {path, tasks} from './const';
 
+const JS = [
+  path.DIST + '**/*.js',
+  '!' + path.DIST + 'bower_components/**/*'
+];
 
-
+gulp.task(tasks.CLIENT_BABEL_JS, () => {
+  return gulp.src(JS, {base: path.DIST})
+    .pipe(babel())
+    .pipe(gulp.dest(path.DIST));
+});
