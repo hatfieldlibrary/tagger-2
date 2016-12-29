@@ -1,6 +1,6 @@
 .idea
 client/dist
-server/config/credentials.js
+server/credentials/credentials.js
 coverage
 node_modules
 unit_coverage
