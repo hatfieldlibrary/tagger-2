@@ -22,9 +22,7 @@
 
   'use strict';
 
-  function GroupController(ReorderAreas,
-                           TaggerToast,
-                           TaggerDialog,
+  function GroupController(TaggerDialog,
                            AreaListObserver,
                            UserAreaObserver) {
 
@@ -56,7 +54,7 @@
 
     });
 
-    vm.menuUpdate = function(id, title) {
+    vm.menuUpdate = function (id, title) {
       vm.currentArea.title = title;
       vm.currentArea.id = id;
     };
@@ -70,39 +68,6 @@
     vm.showDialog = function ($event, message) {
       new TaggerDialog($event, message);
     };
-
-    /**
-     * Updates the view model's areas array
-     * @param index
-     */
-    vm.orderAreaList = function (index) {
-      vm.areas.splice(index, 1);
-      // now update the database
-      updatePositionsInDb();
-
-    };
-
-    /**
-     * Updates the area position attribute for
-     * all areas after they have been reordered
-     * in the UI.  The new position attribute is
-     * based on the new index positions in the areas
-     * array. The promise callback function updates
-     * the shared Data.areas array so the new order
-     * is available to components.
-     */
-    function updatePositionsInDb() {
-      var order = ReorderAreas.save(
-        {
-          areas: vm.areas
-        });
-      order.$promise.then(function (data) {
-        if (data.status === 'success') {
-          _initAreaList();
-          new TaggerToast('Area order updated.');
-        }
-      });
-    }
 
   }
 
