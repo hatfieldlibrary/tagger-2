@@ -58,6 +58,8 @@
 
     vm.noCollectionMessage = 'No collections for this area.';
 
+    /** @type {[string]} */
+    const placeholder = ['Add the collection URL, e.g.: http://host.domain.edu/wombats?type=hungry', 'Add the collection name for select option, e.g. wallulah'];
 
     ThumbImageObserver.subscribe(function onNext() {
       vm.thumbnailImage = ThumbImageObserver.get();
@@ -66,15 +68,6 @@
     AreaObserver.subscribe(function onNext() {
       const areaId = AreaObserver.get();
       _getCollectionForNewArea(areaId);
-      // var collectionList = CollectionsByArea.query(
-      //   {
-      //     areaId: areaId
-      //   }
-      // );
-      // collectionList.$promise.then(function (data) {
-      //   vm.collectionList = data;
-      //   vm.collectionId = data[0].id;
-      // });
     });
 
 
@@ -89,7 +82,7 @@
 
     function _getCategories() {
 
-      var cats = CategoryByArea.query(
+      const cats = CategoryByArea.query(
         {
           areaId: AreaObserver.get()
         }
@@ -117,14 +110,24 @@
      * @param id  {number} the collection id
      */
     function _getCollectionById(id) {
-      var col = CollectionById.query({id: id});
+      const col = CollectionById.query({id: id});
       col.$promise.then(function (data) {
+
         vm.collection = data;
         vm.thumbnailImage = data.image;
         ThumbImageObserver.set(data.image);
         vm.menu({id: vm.collection.id, title: vm.collection.title});
+        _setBrowseTypeLabel(data.browseType)
       });
 
+    }
+
+    function _setBrowseTypeLabel(type) {
+        if (type === 'link') {
+          vm.browsePlaceholder = placeholder[0];
+        } else {
+          vm.browsePlaceholder = placeholder[1];
+        }
     }
 
     /**
@@ -137,7 +140,7 @@
      */
     function _checkCategory(id) {
       if (id > 0) {
-        var categories = CategoriesByCollection.query({collId: id});
+        const categories = CategoriesByCollection.query({collId: id});
         categories.$promise.then(function (cats) {
           if (cats.length > 0) {
             let area = AreaObserver.get();
@@ -159,7 +162,6 @@
 
     }
 
-
     vm.overrideCategory = function () {
       vm.showCollectionCategories = true;
     };
@@ -170,7 +172,7 @@
      */
     vm.updateCollection = function () {
 
-      var update = CollectionUpdate.save({
+      const update = CollectionUpdate.save({
         id: vm.collection.id,
         title: vm.collection.title,
         url: vm.collection.url,
@@ -222,14 +224,11 @@
      * @param type array index
      */
     vm.setBrowseType = function (index) {
-      vm.browseType = vm.urlLabels[index];
-
+      vm.browsePlaceholder = placeholder[index];
     };
 
     vm.$onInit = function () {
-
       let collection = CollectionObserver.get();
-
       if (collection) {
         vm.collectionId = collection;
         _getCollectionById(collection);
