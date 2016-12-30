@@ -19,14 +19,12 @@
  * Created by mspalti on 12/6/16.
  */
 'use strict';
-
 /**
- * Update credentials, user names, and passwords here.  This file is included in .gitignore. Do not track in VCS.
+ * Credential and path definitions.
  *
- * @type {{develuid: string, develgid: string, develdbuser: string, develdbpassword: string, googleClientId: string, googleClientSecret: string, googleCallback: string, uid: string, gid: string, user: string, password: string, productiondbhost: string}}
+ * @type {{develuid: string, develgid: string, develdbuser: string, develdbpassword: string, googleClientId: string, googleClientSecret: string, googleCallback: string, uid: string, gid: string, user: string, password: string, productiondbhost: string, externalHostA: {host: string, port: string, path: string}}}
  */
-
-var credentials = {
+const credentials = {
 
   develuid: 'mspalti',
   develgid: 'staff',
@@ -39,7 +37,12 @@ var credentials = {
   gid: 'node',
   user: 'tagger',
   password: 'c0fFee12',
-  productiondbhost: 'libdb.willamette.edu'
+  productiondbhost: 'libdb.willamette.edu',
+  externalHostA: {
+    host: 'exist.willamette.edu',
+    port: '8080',
+    path: '/exist/apps/METSALTO/api/BrowseList.xquery?collection='
+  }
 
 };
 

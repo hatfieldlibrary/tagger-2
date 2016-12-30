@@ -33,9 +33,7 @@
      * Update the tags when collection changes.
      */
     CollectionObserver.subscribe(function onNext() {
-      let collid = CollectionObserver.get();
-      ctrl.collectionId = collid;
-      const status = GetPublicationStatus.query({collId: ctrl.collectionId});
+      const status = GetPublicationStatus.query({collId: CollectionObserver.get()});
       status.$promise.then(function (pub) {
         ctrl.pubstatus = pub.published;
         _setPubMessage(pub.published);
@@ -44,8 +42,6 @@
 
     });
 
-    ctrl.pubstatus = false;
-
     ctrl.onChange = function (state) {
       if (state) {
         ctrl.message = 'Published';
@@ -53,7 +49,7 @@
       else {
         ctrl.message = 'Unpublished';
       }
-      const update = UpdatePublicationStatus.query({collId: ctrl.collectionId, status: state});
+      const update = UpdatePublicationStatus.query({collId: CollectionObserver.get(), status: state});
       update.$promise.then(function (data) {
         if (data.status === 'success') {
           new TaggerToast('Publication Status Changed.');
@@ -74,10 +70,8 @@
     }
 
     ctrl.$onInit = function () {
-      let id = CollectionObserver.get();
-      const status = GetPublicationStatus.query({collId: id});
+      const status = GetPublicationStatus.query({collId: CollectionObserver.get()});
       status.$promise.then(function (pub) {
-        console.log(pub);
         ctrl.pubstatus = pub.published;
         _setPubMessage(pub.published);
         PublicationStatusObserver.set(pub.published);

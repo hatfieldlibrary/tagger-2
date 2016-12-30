@@ -59,11 +59,9 @@ exports.browseTypesByArea = function (req, res) {
 exports.setPublicationStatus = function (req, res) {
   const pubStatus = req.params.status;
   const collectionId = req.params.collId;
-  console.log(pubStatus)
 
   taggerDao.setPublicationStatus(pubStatus, collectionId).then(
-    function(collection) {
-      console.log(collection)
+    function() {
       utils.sendResponse(res, {status: 'success'})
     }).error(function(err) {
       console.log(err)

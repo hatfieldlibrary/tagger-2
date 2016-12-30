@@ -48,7 +48,6 @@
       labelsEl = container.select('.chart-data');
 
     AreaObserver.subscribe(function onNext() {
-      console.log('observe')
       $element.ready(function () {
         _initChart();
       });
@@ -56,7 +55,6 @@
     });
 
     ctrl.$onInit = function () {
-      console.log('init')
       $element.ready(function () {
         _initChart();
       });

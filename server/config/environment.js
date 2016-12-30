@@ -24,7 +24,7 @@ var env = process.env.NODE_ENV || 'development';
 var config = {
 
   development: {
-    root: rootPath,
+   // root: rootPath,
     app: {
       name: 'tagger'
     },
@@ -48,13 +48,13 @@ var config = {
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: 'http://localhost:3000/auth/google/callback',
-    externalHostA: '',
+    externalHostA: credentials.externalHostA,
     externalHostB: '', // not in use
     nodeEnv: env
   },
 
   runlocal: {
-    root: rootPath,
+  //  root: rootPath,
     app: {
       name: 'acomtags'
     },
@@ -84,7 +84,7 @@ var config = {
   },
 
   test: {
-    root: rootPath,
+   // root: rootPath,
     app: {
       name: 'tagger'
     },
@@ -109,12 +109,12 @@ var config = {
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: 'http://localhost:3000/auth/google/callback',
     externalHostA: credentials.externalHostA,
-    externalHostB: credentials.externalHostB, // not in use
+    externalHostB: '', // not in use
     nodeEnv: env
   },
 
   production: {
-    root: rootPath,
+   // root: rootPath,
     app: {
       name: 'tagger'
     },
@@ -140,7 +140,7 @@ var config = {
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: credentials.googleCallback,
     externalHostA: credentials.externalHostA,
-    externalHostB: credentials.externalHostB, // not in use
+    externalHostB: '', // not in use
     nodeEnv: env
   }
 };
