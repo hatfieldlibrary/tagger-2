@@ -17,13 +17,11 @@
 
 'use strict';
 
-let server;
-
-const express = require('express'),
-  http = require('http'),
-  passport = require('passport'),
+const express = require('express');
+const  http = require('http');
+const  passport = require('passport');
   /* jshint unused:false */
-  multiparty = require('multiparty');
+const  multiparty = require('multiparty');
 
 const config = require('./config/environment');
 const app = express();
@@ -45,13 +43,7 @@ require('./routes/routes')(app, config, passport);
 
 function startServer() {
 
-  // stop annoying error message when testing.
-  if (server !== undefined) {
-    server.close();
-  }
-
-  // start server
-  server = http.createServer(app).listen(config.port, function () {
+  const server = http.createServer(app).listen(config.port, function () {
 
     if (config.nodeEnv !== 'development') {
       try {
@@ -127,7 +119,7 @@ if (config.nodeEnv !== 'test') {
   });
 }
 else {
-  // Doing integration tests. No need to sync.
+  // Integration tests. No need to sync.
   startServer();
 }
 

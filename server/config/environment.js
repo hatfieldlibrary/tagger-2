@@ -15,16 +15,13 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var path = require('path'),
-  rootPath = path.normalize(__dirname + '/../../'),
-  credentials = require('../credentials/credentials');
+const path = require('path');
+const credentials = require('../credentials/credentials');
+const env = process.env.NODE_ENV || 'development';
 
-var env = process.env.NODE_ENV || 'development';
-
-var config = {
+const config = {
 
   development: {
-   // root: rootPath,
     app: {
       name: 'tagger'
     },
@@ -54,7 +51,6 @@ var config = {
   },
 
   runlocal: {
-  //  root: rootPath,
     app: {
       name: 'acomtags'
     },
@@ -84,7 +80,6 @@ var config = {
   },
 
   test: {
-   // root: rootPath,
     app: {
       name: 'tagger'
     },
@@ -114,7 +109,6 @@ var config = {
   },
 
   production: {
-   // root: rootPath,
     app: {
       name: 'tagger'
     },
