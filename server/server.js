@@ -22,10 +22,8 @@ const  http = require('http');
 const  passport = require('passport');
   /* jshint unused:false */
 const  multiparty = require('multiparty');
-
 const config = require('./config/environment');
 const app = express();
-
 // initialize database.
 const taggerSchema = require('./api/tagger/models/index');
 

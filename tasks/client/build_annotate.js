@@ -15,22 +15,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Tagger
+ * 12/31/16
+ *
+ * @author Michael Spalti
+ */
+
 import gulp from 'gulp';
-import runSequence from 'run-sequence';
+import ngAnnotate from 'gulp-ng-annotate';
 import {path, tasks} from './const';
 
-gulp.task(tasks.CLIENT_BUILD_DIST, () => {
-  return new Promise((resolve, reject) => {
-    runSequence(
-      //  tasks.CLIENT_UNIT_TEST,
-      tasks.CLIENT_DEL_DIST,
-      tasks.CLIENT_COPY,
-      tasks.CLIENT_BABEL_JS,
-      tasks.CLIENT_ANNOTATE_JS,
-      tasks.CLIENT_IMAGE_DIST,
-      tasks.CLIENT_VIEWS_PREPARE,
-      resolve
-    );
-  });
-});
+const JS = [
+  path.DIST + '**/*.js',
+  '!' + path.DIST + 'bower_components/**/*'
+];
 
+gulp.task(tasks.CLIENT_ANNOTATE_JS, () => {
+  return gulp.src(JS, {base: path.DIST})
+    .pipe(ngAnnotate())
+    .pipe(gulp.dest(path.DIST));
+});

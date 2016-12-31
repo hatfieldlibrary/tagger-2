@@ -19,7 +19,7 @@
 
 const async = require('async');
 const utils = require('../utils/response-utility');
-const taggerDao = require('../dao/tagtarget-dao');
+const taggerDao = require('../dao/tag-target-dao');
 
 /**
  * Private function for adding association between tag and area.

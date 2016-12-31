@@ -20,7 +20,7 @@
  */
 import areaDao from '../../../server/api/tagger/dao/area-dao';
 import tagDao from  '../../../server/api/tagger/dao/tags-dao';
-import targetDao from '../../../server/api/tagger/dao/tagtarget-dao';
+import targetDao from '../../../server/api/tagger/dao/tag-target-dao';
 import collectionDao from '../../../server/api/tagger/dao/collection-dao';
 import db from '../_helpers/db';
 import {expect} from 'chai';

@@ -28,12 +28,11 @@ import usemin from 'gulp-usemin';
 import uglify from 'gulp-uglify';
 import cssmin from 'gulp-clean-css';
 import htmlmin from 'gulp-htmlmin';
-import ngAnnotate from 'gulp-ng-annotate';
 import rev from 'gulp-rev-append';
 
 const VIEWS = [
   path.DIST + '**/*.html',
-  '!' + path.DIST + 'bower_components/**/*.html'
+  '!' + path.DIST + 'bower_components/**/*'
 ];
 
 gulp.task(tasks.CLIENT_VIEWS_PREPARE, () => {
@@ -49,7 +48,6 @@ gulp.task(tasks.CLIENT_VIEWS_PREPARE, () => {
             })
           ],
            js: [
-             ngAnnotate(),
              uglify(),
              rev()
            ],

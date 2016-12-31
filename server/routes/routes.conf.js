@@ -27,6 +27,7 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
 
+
 module.exports = function(app, config) {
 
 
@@ -40,7 +41,8 @@ module.exports = function(app, config) {
 
   app.use(cors(corsOptions));
 
-  let _root = process.cwd();
+  let _root = path.normalize(__dirname + '/../..');
+
   let _nodeModules = '/node_modules/';
   let _clientFiles = (process.env.NODE_ENV === 'production') ? '/client/dist/' : '/client/dev/';
   app.use(express.static(_root + _nodeModules));
