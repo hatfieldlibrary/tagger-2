@@ -47,11 +47,15 @@ gulp.task(tasks.CLIENT_VIEWS_PREPARE, () => {
               caseSensitive: true
             })
           ],
-           js: [
-             uglify({mangle: false}),
-             rev()
-           ],
-          inlinejs: [ uglify() ],
+          jsApp: [
+            uglify(),
+            rev()
+          ],
+          jsLib: [
+            'concat',
+            rev()
+          ],
+          inlinejs: [uglify()],
           inlinecss: [cssmin(), 'concat']
         }
       )

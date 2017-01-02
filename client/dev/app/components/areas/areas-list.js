@@ -63,9 +63,7 @@
      * all areas after they have been reordered
      * in the UI.  The new position attribute is
      * based on the new index positions in the areas
-     * array. The promise callback function updates
-     * the shared Data.areas array so the new order
-     * is available to components.
+     * array.
      */
     function _updatePositionsInDb() {
       var order = ReorderAreas.save(

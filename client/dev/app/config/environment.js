@@ -27,8 +27,11 @@ var taggerEnvironment = angular.module('taggerEnvironment', []);
   taggerEnvironment.factory('config', function() {
 
     return {
-      // include protocol and trailing forward slash
+      // If you need to define full path to the host, include the
+      // protocol and trailing forward slash
       //restHost: 'http://localhost:3000/rest/'
+
+      // Relative paths also work.
       restHost: '/rest/'
 
     };

@@ -71,10 +71,6 @@
    */
   taggerServices.factory('TaggerDialog', [
 
-    'Upload',
-    '$rootScope',
-    '$mdDialog',
-
     function (UpLoad,
               $rootScope,
               $mdDialog) {
@@ -475,7 +471,6 @@
          */
         vm.getContentList = function (id) {
 
-          // Update the shared Data service
           const contentTypes = ContentTypeList.query();
           // Wait for callback.
           contentTypes.$promise.then(function (data) {

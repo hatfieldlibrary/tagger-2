@@ -71,8 +71,7 @@
       }
 
       /**
-       * Initializes the shared Data context with global
-       * values not specific to the area.
+       * Initializes global values not specific to the area.
        * @param id   the area id
        */
       function _initGlobals(id) {

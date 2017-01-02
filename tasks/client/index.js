@@ -25,8 +25,8 @@ gulp.task(tasks.CLIENT_BUILD_DIST, () => {
       //  tasks.CLIENT_UNIT_TEST,
       tasks.CLIENT_DEL_DIST,
       tasks.CLIENT_COPY,
-      tasks.CLIENT_BABEL_JS,
       tasks.CLIENT_ANNOTATE_JS,
+      tasks.CLIENT_BABEL_JS,
       tasks.CLIENT_IMAGE_DIST,
       tasks.CLIENT_VIEWS_PREPARE,
       resolve

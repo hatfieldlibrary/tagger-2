@@ -25,7 +25,6 @@
     'ngFileUpload',
     'dndLists',
     'rx',
-    'taggerContext',
     'taggerEnvironment',
     'taggerControllers',
     'taggerServices',
@@ -33,6 +32,7 @@
     'taggerConstants'
 
   ]);
+
 
   /**
    * Bootstrap Angular.

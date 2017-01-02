@@ -31,8 +31,7 @@
     const vm = this;
 
     /**
-     * Watches for update to the user's area. Data.userAreaId should change
-     * only when the app is loaded.  The value is obtained in the Passport
+     * Watches for update to the user's area. The value is obtained in the Passport
      * OAUTH login procedure and is used here to initialize state. (If only
      * used here, why the observable?
      */
