@@ -28,8 +28,8 @@ var taggerEnvironment = angular.module('taggerEnvironment', []);
 
     return {
       // include protocol and trailing forward slash
-      restHost: 'http://localhost:3000/rest/'
-      //restHost: 'http://libapps.willamette.edu:3000/rest/'
+      //restHost: 'http://localhost:3000/rest/'
+      restHost: '/rest/'
 
     };
 

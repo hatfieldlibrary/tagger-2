@@ -33,6 +33,6 @@ const JS = [
 
 gulp.task(tasks.CLIENT_ANNOTATE_JS, () => {
   return gulp.src(JS, {base: path.DIST})
-    .pipe(ngAnnotate())
+    .pipe(ngAnnotate({singleQuotes: true}))
     .pipe(gulp.dest(path.DIST));
 });

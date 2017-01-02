@@ -32,7 +32,7 @@ import rev from 'gulp-rev-append';
 
 const VIEWS = [
   path.DIST + '**/*.html',
-  '!' + path.DIST + 'bower_components/**/*'
+  '!' + path.DIST + 'bower_components/**/*.html'
 ];
 
 gulp.task(tasks.CLIENT_VIEWS_PREPARE, () => {
@@ -48,7 +48,7 @@ gulp.task(tasks.CLIENT_VIEWS_PREPARE, () => {
             })
           ],
            js: [
-             uglify(),
+             uglify({mangle: false}),
              rev()
            ],
           inlinejs: [ uglify() ],
