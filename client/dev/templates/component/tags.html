@@ -27,6 +27,7 @@
         <span flex="70">
         <h2 class="md-display-2" ng-if="vm.userAreaId==0">{{vm.currentTag.title}} (ID: {{vm.currentTag.id}})</h2>
         <h2 class="md-display-2" ng-if="vm.userAreaId&gt;0">{{vm.areaLabel}}</h2>
+
       </span>
         <span flex="flex"></span>
         <md-button class="md-warn md-raised md-fab md-mini" ng-show="vm.userAreaId==0" aria-label="Delete Tag"
@@ -47,8 +48,8 @@
           <div class="md-subhead grey-text" flex="80">
             <span ng-show="vm.userAreaId==0">Collections can be associated with one or more <em>Subject Tags</em>. A single Subject Tag can be used across multiple Areas. A Tag must be assigned to at least one Area.</span>
             <div style="width: 70%" ng-show="vm.userAreaId &gt; 0">Add or remove <em>Subject Tags</em> from your
-              collection area. Note that when you add a tag it may immediately appear in the public display. If you add
-              a tag, be sure to use it by linking it to one or more of your collections. If you delete a tag from this
+              collection area. If you add
+              a tag, you must use it with one or more of your collections. If you delete a tag from this
               collection area, all references to it will be removed from your collections.
             </div>
           </div>

@@ -69,11 +69,10 @@
    * Using the Angular Material mdDialog directive for add, delete
    * and image upload.
    */
-  taggerServices.factory('TaggerDialog', [
+  taggerServices.factory('TaggerDialog',
 
-    function (UpLoad,
-              $rootScope,
-              $mdDialog) {
+    function ($mdDialog) {
+
       /**
        * @param $mdDialog
        * @param $rootScope
@@ -640,9 +639,8 @@
         });
 
       };
-
       return _showDialog;
 
-    }]);
+    });
 
 })();

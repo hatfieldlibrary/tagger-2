@@ -32,8 +32,7 @@
 
     /**
      * Watches for update to the user's area. The value is obtained in the Passport
-     * OAUTH login procedure and is used here to initialize state. (If only
-     * used here, why the observable?
+     * OAUTH login procedure and is used here to initialize state.
      */
     UserAreaObserver.subscribe(function onNext() {
 
@@ -48,7 +47,7 @@
         });
       }
       else {
-        // this is meant to handle collection managers.
+        AreaObserver.set(vm.userAreaId);
       }
     });
 

@@ -38,6 +38,15 @@
       _getTagInfo(tagId);
     });
 
+    UserAreaObserver.subscribe(function onNext() {
+      vm.userAreaId = UserAreaObserver.get();
+    });
+
+    // TagListObserver.subscribe(function onNext() {
+    //   vm.tags = TagListObserver.get();
+    //   console.log(vm.tags)
+    // });
+
     function _getTagInfo(tagId) {
       const tag = TagById.query({id: tagId});
       tag.$promise.then(function (data) {
@@ -70,6 +79,8 @@
     vm.$onInit = function () {
       vm.userAreaId = UserAreaObserver.get();
       let tagId = TagObserver.get();
+      vm.tags = TagListObserver.get();
+
       if (tagId) {
         _getTagInfo(tagId);
       }
@@ -89,11 +100,11 @@
     '<md-input-container ng-show="vm.userAreaId==0">' +
     '<label>Tag Name</label> ' +
     '<input type="text" ng-model="vm.tag.name"/>' +
-    '</md-input-container> ' +
+    '</md-input-container>' +
     '<div style="height: 507px; margin-bottom: 40px;overflow: auto;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc" flex="100" ng-show="vm.userAreaId &gt; 0">' +
     '<md-content flex="flex"> ' +
     '<md-list>' +
-    '<md-list-item ng-repeat="tag in vm.tags"> ' +
+    '<md-list-item ng-repeat="tag in vm.tags">' +
     '<toggle-tag-area-button flex="100" tag-id="{{tag.id}}" tag-name="{{tag.name}}" area-id="vm.currentAreaIndex" ng-click="showDialog($event, vm.deleteMessage)"></toggle-tag-area-button>' +
     '</md-list-item>' +
     '</md-list>' +

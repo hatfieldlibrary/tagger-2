@@ -33,7 +33,6 @@ exports.returnUserInfo = function (req, res, config) {
   let picture = '';
   let areaId = '';
 
-
   if (config.useAuth) {
     name = req.user._json.name;
     picture = req.user._json.picture;

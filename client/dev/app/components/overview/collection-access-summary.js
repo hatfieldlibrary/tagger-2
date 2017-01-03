@@ -33,14 +33,11 @@
 
     });
 
-    ctrl.$onInit = function() {
-      _init(AreaObserver.get());
-
-    };
-
     function _init(areaId) {
 
       let restrictedCount = 0;
+      let publicCount = 0;
+      let unpublishedCount = 0;
       if (areaId !== null) {
         let collections =
           CollectionsByArea.query({areaId: areaId});
@@ -48,22 +45,43 @@
           TotalCollectionsObserver.set(data.length);
           ctrl.collectionsCount = data.length;
           for (var i = 0; i < data.length; i++) {
+            if (data[i].Collection.restricted !== true) {
+              if (data[i].Collection.published == true) {
+                publicCount++;
+              }
+            }
             if (data[i].Collection.restricted !== false) {
-              restrictedCount++;
+              if (data[i].Collection.published == true) {
+                restrictedCount++;
+              }
+            }
+            if (data[i].Collection.published == false) {
+              unpublishedCount++;
             }
           }
           ctrl.restricted = restrictedCount;
-          ctrl.public = data.length - restrictedCount;
-
+          ctrl.public = publicCount;
+          ctrl.unpublished = unpublishedCount;
         });
       }
     }
+
+    ctrl.$onInit = function() {
+      _init(AreaObserver.get());
+
+    };
+
   }
 
-
-  taggerComponents.component('collectionSummary', {
-
-    template: '<md-list style="width:100%;margin-top: 40px;">' +
+  taggerComponents.component('collectionGroupSummary', {
+    bindings: {
+      collectionCount: '<'
+    },
+    template:
+    '<md-grid-tile-header>' +
+    '<h3>Entries</h3>' +
+    '</md-grid-tile-header>' +
+    '<md-list style="width:100%;margin-top: 40px;">' +
     '   <md-list-item>' +
     '     <p class="grey-label"> Restricted</p>' +
     '       <p class="list-alignment"> {{$ctrl.restricted}}</p>' +
@@ -75,8 +93,8 @@
     '   </md-list-item>' +
     '   <md-divider/>' +
     '   <md-list-item>' +
-    '     <p class="grey-label">Total</p>' +
-    '       <p class="list-alignment"> {{$ctrl.collectionsCount}}</p>' +
+    '     <p class="grey-label">Unpublished</p>' +
+    '       <p class="list-alignment"> {{$ctrl.unpublished}}</p>' +
     '   </md-list-item>' +
     '   <md-divider/>' +
     '</md-list>',

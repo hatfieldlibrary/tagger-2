@@ -14,6 +14,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * Controllers for the Tagger administrative API and for external clients.
+ *
+ * @author Michael Spalti
+ */
 
 'use strict';
 
@@ -22,7 +27,6 @@ const utils = require('../utils/response-utility');
 const imageConvert = require('../utils/image-convert');
 const taggerDao = require('../dao/collection-dao');
 const config = require('../../../config/environment');
-
 
 /**
  * Returns ctype (item type) counts for the overview
@@ -80,7 +84,6 @@ exports.getPublicationStatus = function (req, res) {
   })
 
 };
-
 
 /**
  * Returns repoType (search option) counts for the overview
@@ -474,7 +477,6 @@ exports.byId = function (req, res) {
     });
 };
 
-
 /**
  * Updates metadata and associations for a single collection.
  * @param req
@@ -573,7 +575,6 @@ exports.delete = function (req, res) {
 
 };
 
-
 /**
  * Adds a new collection with title field metadata
  * and creates the collection association with the
@@ -625,7 +626,6 @@ exports.add = function (req, res) {
 
 };
 
-
 /**
  * Image upload. Reads multipart form data and creates
  * thumbnail image. Writes thumbnail and full size image to
@@ -661,7 +661,6 @@ exports.updateImage = function (req, res, config) {
     }
   });
 
-
   /**
    * Updates the data base with new image information.
    * @param id
@@ -678,9 +677,8 @@ exports.updateImage = function (req, res, config) {
   }
 };
 
+// The following are rest endpoints for external clients (e.g. Academic Commons).
 
-// The following used by the Tagger application and as
-// rest endpoints for external clients (e.g. Academic Commons).
 /**
  * Retrieves the tags associated with a single collection. Used by
  * both admin interface and public REST API.
@@ -717,9 +715,6 @@ exports.typesForCollection = function (req, res) {
     });
 
 };
-
-// The following are used exclusively for requests from
-// external clients (e.g. Academic Commons).
 
 /**
  * Retrieves a list of all collections for the public API.
@@ -827,6 +822,11 @@ exports.collectionsBySubject = function (req, res) {
 
 };
 
+/**
+ * Retrieves a list of collections by category for the public API.
+ * @param req
+ * @param res
+ */
 exports.allCollectionsByCategory = function (req, res) {
   const categoryId = req.params.id;
 
@@ -851,7 +851,6 @@ exports.allCollectionsBySubject = function (req, res) {
     console.log(err);
   });
 };
-
 
 /**
  * Used by the Academic Commons.  Returns a JSON list of
