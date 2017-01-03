@@ -1,0 +1,68 @@
+<!--
+  ~ Copyright (c) 2016.
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<md-content class="transparent" layout="column" layout-gt-md="row" style="overflow: auto" layout-align="start start"
+            flex="100">
+  <md-card class="flex" flex="100" flex-gt-md="75" style="height: 900px">
+    <md-toolbar class="md_primary">
+      <div class="md-toolbar-tools">
+      <span flex="20">
+        <i class="material-icons">link</i>
+        <span class="md-subhead">&nbsp;TAGS</span>
+      </span>
+        <span flex="70">
+        <h2 class="md-display-2" ng-if="vm.userAreaId==0">{{vm.currentTag.title}} (ID: {{vm.currentTag.id}})</h2>
+        <h2 class="md-display-2" ng-if="vm.userAreaId&gt;0">{{vm.areaLabel}}</h2>
+
+      </span>
+        <span flex="flex"></span>
+        <md-button class="md-warn md-raised md-fab md-mini" ng-show="vm.userAreaId==0" aria-label="Delete Tag"
+                   ng-click="vm.showDialog($event, vm.deleteMessage)">
+          <i class="material-icons">delete</i>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-content>
+      <div layout="row" layout-align="start start">
+        <md-card-content flex="20">
+          <md-button class="md-raised md-accent responsive-button" ng-show="vm.userAreaId==0"
+                     ng-click="vm.showDialog($event, vm.addMessage)">Add Tag
+          </md-button>
+        </md-card-content>
+        <md-card-content layout="column" layout-padding="layout-padding" flex="80" flex-gt-md="80"
+                         style="padding-left: 20px">
+          <div class="md-subhead grey-text" flex="80">
+            <span ng-show="vm.userAreaId==0">Collections can be associated with one or more <em>Subject Tags</em>. A single Subject Tag can be used across multiple Areas. A Tag must be assigned to at least one Area.</span>
+            <div style="width: 70%" ng-show="vm.userAreaId &gt; 0">Add or remove <em>Subject Tags</em> from your
+              collection area. If you add
+              a tag, you must use it with one or more of your collections. If you delete a tag from this
+              collection area, all references to it will be removed from your collections.
+            </div>
+          </div>
+        </md-card-content>
+      </div>
+      <md-content layout="row" layout-align="start start">
+        <tags-list flex="20"></tags-list>
+        <tags-form menu="vm.menuUpdate(id, title)" flex="80"></tags-form>
+      </md-content>
+    </md-content>
+  </md-card>
+  <md-content class="transparent" flex="100" flex-gt-md="25">
+    <tag-area-selector flex="flex" ng-show="vm.userAreaId==0">
+    </tag-area-selector>
+  </md-content>
+</md-content>

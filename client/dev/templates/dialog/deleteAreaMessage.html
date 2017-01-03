@@ -1,0 +1,36 @@
+<!--
+  ~ Copyright (c) 2016.
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<md-dialog aria-label="Add dialog" class="dialogs">
+    <md-dialog-content>
+        <h3 class="md-title">Delete Area</h3>
+      {{area}}
+          <md-input-container>
+             WARNING: Deleting this Area will remove any Collection that is exclusively associated with it
+              from the administrative and public views. Do not delete this Area unless you understand what you are doing.
+              Are you sure you want to delete this Area?
+          </md-input-container>
+      </md-dialog-content>
+    <md-dialog-actions>
+        <md-button ng-click="vm.closeDialog()">
+            Cancel
+          </md-button>
+        <md-button ng-click="vm.deleteArea()">
+            Delete Area
+          </md-button>
+      </md-dialog-actions>
+  </md-dialog>

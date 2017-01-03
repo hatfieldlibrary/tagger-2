@@ -1,0 +1,103 @@
+<md-content class="transparent">
+  <md-list>
+    <md-list-item hide-gt-md="true">
+      <md-button class=" md-button md-default-theme" ng-click="vm.toggleLeft();">
+        <div class="md-list-item-inner">
+          <div class="list-group-item-text">HIDE MENU
+            <div class="md-ripple-container"></div>
+          </div>
+        </div>
+      </md-button>
+    </md-list-item>
+    <md-list-item ng-class="{selected: vm.currentIndex===0}">
+      <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(0);vm.toggleLeft();"
+                 href="/tagger/overview">
+        <div class="md-list-item-inner">
+          <md-icon aria-hidden="true" style="margin: 10px">
+            <i class="material-icons">home</i>
+          </md-icon>
+          <div class="list-group-item-text">Overview
+            <div class="md-ripple-container"></div>
+          </div>
+        </div>
+      </md-button>
+    </md-list-item>
+    <md-list-item ng-class="{selected: vm.currentIndex===1}">
+      <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(1); vm.toggleLeft();"
+                 ng-href="/tagger/collections">
+        <div class="md-list-item-inner">
+          <md-icon aria-hidden="true" style="margin: 10px"><i class="material-icons">collections</i></md-icon>
+          <div class="list-group-item-text">Collections
+            <div class="md-ripple-container"></div>
+          </div>
+        </div>
+      </md-button>
+    </md-list-item>
+    <md-list-item ng-class="{selected: vm.currentIndex===2}">
+      <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(2); vm.toggleLeft();"
+                 href="/tagger/tags" tabindex="0">
+        <div class="md-list-item-inner">
+          <md-icon aria-hidden="true" style="margin: 10px">
+            <i class="material-icons">link</i>
+          </md-icon>
+          <div class="list-group-item-text">Subject Tags
+            <div class="md-ripple-container"></div>
+          </div>
+        </div>
+      </md-button>
+    </md-list-item>
+    <md-list-item ng-class="{selected: vm.currentIndex===3}">
+      <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(3); vm.toggleLeft();"
+                 ng-disabled="vm.userAreaId &gt; 0" href="/tagger/contentTypes" tabindex="0">
+        <div class="md-list-item-inner">
+          <md-icon aria-hidden="true" style="margin: 10px">
+            <i class="material-icons">local_movies</i>
+          </md-icon>
+          <div class="list-group-item-text">Content Types
+            <div class="md-ripple-container"></div>
+          </div>
+        </div>
+      </md-button>
+    </md-list-item>
+    <md-list-item ng-class="{selected: vm.currentIndex===4}">
+      <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(4); vm.toggleLeft();"
+                 ng-disabled="vm.userAreaId &gt; 0" href="/tagger/categories" tabindex="0">
+        <div class="md-list-item-inner">
+          <md-icon aria-hidden="true" style="margin: 10px">
+            <i class="material-icons">library_books</i>
+          </md-icon>
+          <div class="list-group-item-text">Collection Groups
+            <div class="md-ripple-container"></div>
+          </div>
+        </div>
+      </md-button>
+    </md-list-item>
+    <md-list-item ng-class="{selected: vm.currentIndex===5}">
+      <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(5); vm.toggleLeft();"
+                 ng-disabled="vm.userAreaId &gt; 0" href="/tagger/areas" tabindex="0">
+        <div class="md-list-item-inner">
+          <md-icon aria-hidden="true" style="margin: 10px">
+            <i class="material-icons">public</i>
+          </md-icon>
+          <div class="list-group-item-text">Areas
+            <div class="md-ripple-container">
+            </div>
+          </div>
+        </div>
+      </md-button>
+    </md-list-item>
+    <md-list-item ng-class="{selected: vm.currentIndex===6}">
+      <md-button class="md-no-style md-button md-default-theme" ng-click="vm.setCurrentIndex(6); vm.toggleLeft();"
+                 ng-disabled="vm.userAreaId &gt; 0" href="/tagger/users" tabindex="0">
+        <div class="md-list-item-inner">
+          <md-icon aria-hidden="true" style="margin: 10px">
+            <i class="material-icons">group</i>
+          </md-icon>
+          <div class="list-group-item-text">Users
+            <div class="md-ripple-container"></div>
+          </div>
+        </div>
+      </md-button>
+    </md-list-item>
+  </md-list>
+</md-content>

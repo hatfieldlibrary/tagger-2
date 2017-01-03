@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2016.
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html>
+<head>
+  <title>Tagger</title>
+  <link rel="stylesheet" href="/resources/stylesheets/jquery-ui-1.11.2-min.css">
+  <link rel="stylesheet" href="/bower_components/angular-material/angular-material.min.css">
+  <link rel="stylesheet" href="/resources/stylesheets/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <base href="/">
+</head>
+<body ng-cloak>
+<div layout-fill layout="column">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button" style="padding-top: 8px" aria-label="Settings" ng-click="vm.toggleLeft()"
+                 hide-gt-md="true">
+        <i class="material-icons">menu</i>
+      </md-button>
+      <span>
+        <h2 class="md-display-1">Tagger</h2>
+      </span>
+      <span flex></span>
+
+      <!-- component -->
+      <admin-area-selector></admin-area-selector>
+
+    </div>
+  </md-toolbar>
+  <div class="view-container" layout="row" flex>
+    <md-sidenav class="md-sidenav-left transparent" style="height: 650px" flex="5" md-component-id="left"
+                md-is-locked-open="$mdMedia('gt-md')">
+
+      <!-- components -->
+      <authentication-component></authentication-component>
+      <side-navigation-component></side-navigation-component>
+
+    </md-sidenav>
+    <div ng-view style="overflow:auto" layout="row" layout-gt-md="column" flex></div>
+  </div>
+</div>
+</body>
+<!-- build:jsLib app/lib.min.js -->
+<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="bower_components/rxjs/dist/rx.lite.min.js"></script>
+<script type="text/javascript" src="bower_components/rx-angular/dist/rx.angular.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-route/angular-route.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-animate/angular-animate.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-resource/angular-resource.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-aria/angular-aria.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-material/angular-material.min.js"></script>
+<script type="text/javascript" src="bower_components/ng-file-upload-shim/ng-file-upload-shim.min.js"></script>
+<script type="text/javascript" src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
+<script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+<!-- endbuild -->
+
+<!-- build:jsApp app/app.min.js -->
+<script type="text/javascript" src="app/modules/controllers.js"></script>
+<script type="text/javascript" src="app/modules/services.js"></script>
+<script type="text/javascript" src="app/modules/components.js"></script>
+<script type="text/javascript" src="app/modules/constants.js"></script>
+<script type="text/javascript" src="app/common/constants.js"></script>
+<script type="text/javascript" src="app/config/environment.js"></script>
+<script type="text/javascript" src="app/services/requests.js"></script>
+<script type="text/javascript" src="app/services/dialog.js"></script>
+<script type="text/javascript" src="app/components/overview/main.js"></script>
+<script type="text/javascript" src="app/components/overview/link-types-summary.js"></script>
+<script type="text/javascript" src="app/components/overview/search-options-summary.js"></script>
+<script type="text/javascript" src="app/components/overview/item-types-summary.js"></script>
+<script type="text/javascript" src="app/components/overview/collection-access-summary.js"></script>
+<script type="text/javascript" src="app/components/tags/tag-area-selector.js"></script>
+<script type="text/javascript" src="app/components/tags/tags-list.js"></script>
+<script type="text/javascript" src="app/components/tags/tags-form.js"></script>
+<script type="text/javascript" src="app/components/tags/tag-area-button.js"></script>
+<script type="text/javascript" src="app/components/tags/main.js"></script>
+<script type="text/javascript" src="app/components/types/types-list.js"></script>
+<script type="text/javascript" src="app/components/types/types-form.js"></script>
+<script type="text/javascript" src="app/components/types/main.js"></script>
+<script type="text/javascript" src="app/components/collection/types-selector.js"></script>
+<script type="text/javascript" src="app/components/collection/tags-selector.js"></script>
+<script type="text/javascript" src="app/components/collection/image-upload.js"></script>
+<script type="text/javascript" src="app/components/collection/area-selector.js"></script>
+<script type="text/javascript" src="app/components/collection/image-link.js"></script>
+<script type="text/javascript" src="app/components/collection/collection-list.js"></script>
+<script type="text/javascript" src="app/components/collection/collection-form.js"></script>
+<script type="text/javascript" src="app/components/collection/publication-status.js"></script>
+<script type="text/javascript" src="app/components/collection/main.js"></script>
+<script type="text/javascript" src="app/components/groups/main.js"></script>
+<script type="text/javascript" src="app/components/groups/groups-list.js"></script>
+<script type="text/javascript" src="app/components/groups/group-form.js"></script>
+<script type="text/javascript" src="app/components/areas/main.js"></script>
+<script type="text/javascript" src="app/components/areas/areas-list.js"></script>
+<script type="text/javascript" src="app/components/areas/area-form.js"></script>
+<script type="text/javascript" src="app/components/users/main.js"></script>
+<script type="text/javascript" src="app/components/visualization/d3pie.js"></script>
+<script type="text/javascript" src="app/components/visualization/d3bar.js"></script>
+<script type="text/javascript" src="app/components/global/admin-area-selector.js"></script>
+<script type="text/javascript" src="app/components/global/auth.js"></script>
+<script type="text/javascript" src="app/components/global/side-navigation.js"></script>
+<script type="text/javascript" src="app/observables/current-area.js"></script>
+<script type="text/javascript" src="app/observables/areas.js"></script>
+<script type="text/javascript" src="app/observables/action-area.js"></script>
+<script type="text/javascript" src="app/observables/publication-status.js"></script>
+<script type="text/javascript" src="app/observables/current-area.js"></script>
+<script type="text/javascript" src="app/observables/groups.js"></script>
+<script type="text/javascript" src="app/observables/current-group.js"></script>
+<script type="text/javascript" src="app/observables/collections.js"></script>
+<script type="text/javascript" src="app/observables/current-collection.js"></script>
+<script type="text/javascript" src="app/observables/collection-area-update.js"></script>
+<script type="text/javascript" src="app/observables/tags-for-collection.js"></script>
+<script type="text/javascript" src="app/observables/types-for-collection.js"></script>
+<script type="text/javascript" src="app/observables/current-area-label.js"></script>
+<script type="text/javascript" src="app/observables/tags.js"></script>
+<script type="text/javascript" src="app/observables/tags-for-collection.js"></script>
+<script type="text/javascript" src="app/observables/tags-for-area.js"></script>
+<script type="text/javascript" src="app/observables/current-tag.js"></script>
+<script type="text/javascript" src="app/observables/content-types.js"></script>
+<script type="text/javascript" src="app/observables/current-content-type.js"></script>
+<script type="text/javascript" src="app/observables/is-auth.js"></script>
+<script type="text/javascript" src="app/observables/user-info.js"></script>
+<script type="text/javascript" src="app/observables/user-area-id.js"></script>
+<script type="text/javascript" src="app/observables/groups-for-area.js"></script>
+<script type="text/javascript" src="app/observables/thumb-image.js"></script>
+<script type="text/javascript" src="app/observables/total-search-options.js"></script>
+<script type="text/javascript" src="app/observables/total-collection-links.js"></script>
+<script type="text/javascript" src="app/observables/total-collection-types.js"></script>
+<script type="text/javascript" src="app/observables/total-collections.js"></script>
+<script type="text/javascript" src="app/observables/tag-area-observer.js"></script>
+<script type="text/javascript" src="app/app.js"></script>
+<script type="text/javascript" src="app/app.config.js"></script>
+<script type="text/javascript" src="app/app.route.js"></script>
+
+<!-- endbuild -->
+
+</html>
