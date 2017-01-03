@@ -42,11 +42,6 @@
       <!-- component -->
       <admin-area-selector></admin-area-selector>
 
-      <!-- This is going to be a problem.  Belongs in admin-area-selector.  -->
-      <md-container ng-if="vm.userAreaId &gt; 0">
-        <span class="md-subhead">Area: &nbsp;  {{vm.areaLabel}}</span>
-      </md-container>
-
     </div>
   </md-toolbar>
   <div class="view-container" layout="row" flex>
@@ -55,7 +50,6 @@
 
       <!-- component -->
       <authentication-component></authentication-component>
-
 
       <md-content class="transparent">
         <md-list>
