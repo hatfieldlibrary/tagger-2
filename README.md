@@ -13,11 +13,11 @@ information about the collections managed in Tagger.
  
 ## Area Overview
  
-![Area Overview Page](client/dev/resources/images/docs/overview.png "Area Overview Page")
+![Area Overview Page](client/dev/resources/images/docs/overview_page.png "Area Overview Page")
  
 ## Collections Page
  
-![Collections Page](client/dev/resources/images/docs/collections.png "Collections Page")
+![Collections Page](client/dev/resources/images/docs/collection_view.png "Collections Page")
  
 ## Getting started
  
