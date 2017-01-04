@@ -41,7 +41,6 @@ const config = {
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
-    adminPath: '/server/views',
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: 'http://localhost:3000/auth/google/callback',
