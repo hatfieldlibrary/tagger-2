@@ -45,7 +45,9 @@ Access the database by setting the user name and password the the project config
  
 ## Configuration
  
-Configuration for development, production, and test run environments is provided by `server/config/environmentjs`.  This file relies in turn
+Configuration for development, production, and test environments is provided by `server/config/environmentjs`.  
+
+This file relies in turn
 on `server/credentials/credentials.js`. Two configuration files are needed to separate sensitive credentials from shared code.  This means 
 you will need to create your own `server/credentials/credentials.js` file.  A sample is provided.
  
@@ -125,14 +127,14 @@ the program.  This can be useful when testing with a tool like [supertest](https
  
  ```
   
-### User Permission
+## User Authentication
  
-Tagger uses Google OAUTH2 for authentication.  Authorized users are  identified by their Google profile email id (e.g. userh@wu.edu).  
+Tagger uses Google OAUTH2 for authentication.  Authorized users are identified by their Google profile email id (e.g. userh@wu.edu).  
  
 Currently, we are not creating a default administrator account.  Before logging into Tagger for the first time, you first must add 
 yourself to the database Users table.  Insert values for name, email, area (0 is administrator), createdAt and updatedAt.
  
-### Development
+## Development
  
 To start the development server, type:
   
@@ -148,7 +150,7 @@ The grunt `watch` task doesn't update the browser window automatically with file
 my attempt to use livereload with the Jade templates ran into a problem with conditional logic in the templates (much of that is now removed).  So, when coding you'll need to manually refresh the browser.
  
  
-### Production
+## Production
  
 The procedure for deploying the application is basic and a bit cumbersome.  We are on the lookout for a better strategy.
  
