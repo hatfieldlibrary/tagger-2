@@ -26,7 +26,8 @@ information about the collections managed in Tagger.
 To get started with development, clone the project into your working directory.
  
  
-Next, install the dependencies:
+Next, install the dependencies using [npm](https://www.npmjs.com/) and [bower](https://bower.io/).  Node, npm and bower need to be installed
+if they you do not have them already.
  
      npm install
  
