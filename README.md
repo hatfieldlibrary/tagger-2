@@ -53,11 +53,11 @@ the program.  This can be useful for testing.
 
 ## Configuration
  
-Configuration for development, production, and test environments is provided by `server/config/environmentjs`.  
+Configuration for development, production, and test environments is provided by `server/config/environmentjs`.  This file relies in turn
+on `server/credentials/credentials.js`. 
 
-This file relies in turn
-on `server/credentials/credentials.js`. Two configuration files are needed to separate sensitive credentials from shared code.  This means 
-you will need to create your own `server/credentials/credentials.js` file.  A sample is provided.
+Two configuration files are required to separate sensitive credentials from shared code.  This means 
+you need to create your own `server/credentials/credentials.js` file.  A sample file is provided.
  
 
 ### Environment
