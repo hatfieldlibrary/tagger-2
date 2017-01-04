@@ -169,8 +169,4 @@ This executes all `gulp` build tasks and copies the new code into the `dist` dir
 It's a good idea to remove development dependencies.  A convenient way to do this is with the [Strongloop command line tool](https://docs.strongloop.com/display/SLC/Building+applications+with+slc).  You can install this via `npm install -g strongloop`.
 Then build the zipped tar file using the `slc` command line tool: `slc build --install --pack`.  
  
-### Oauth2 Authentication Configuration
- 
-Access to the Tagger module is controlled by Google OAuth2.  After a successful OAuth2 login, the user's email address returned in the OAuth2 user profile is used for authorization.  
- 
 
