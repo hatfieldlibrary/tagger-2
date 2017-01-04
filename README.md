@@ -19,7 +19,7 @@ information about the collections managed in Tagger.
  
 ![Collections Page](client/dev/resources/images/docs/collections.png "Collections Page")
  
-### Setup
+## Getting started
  
 To get started with development, clone the project into your working directory.
  
