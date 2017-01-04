@@ -36,8 +36,9 @@ if you do not have them already.
 
 ## Mysql/MariaDb
  
-The application requires mysql or MariaDb.  For development, you need to install mysql on your machine and create databases 
-(Note that acomtags is the production database; you don't it for local development work.):
+The application requires mysql or MariaDb.  For development, you need to install mysql on your machine and create databases. The database names 
+are set in configuration and can be whatever you like so long as separate databases are created for development, testing and production.
+(Note that in this example acomtags is the production database; you don't it for local development work.)
  
      acomtags_development
      acomtags_test
