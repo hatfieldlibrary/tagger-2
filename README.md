@@ -6,7 +6,7 @@
  
 Tagger is backend service for publishing digital collections, exhibits and other online resources.  It offers a way to describe and organize these 
 resources by content type and by subject tags.  Areas and collection groups provide an additional layer of organization that can be 
-used to link back to the departments and parent organizations that produce and own the digital content.
+used to highlight the departments and parent organizations that produce and own the digital content.
  
 Tagger is an Angular, Express, NodeJs application that persists collection information in a Mysql/MariaDb database.  It provides a public REST API for creating clients that use
 information about the collections managed in Tagger.
