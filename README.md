@@ -11,6 +11,7 @@ used to link back to the departments and parent organizations that produce and o
 Tagger is an Angular, Express, NodeJs application that persists collection information in a Mysql/MariaDb database.  It provides a public REST API for creating clients that use
 information about the collections managed in Tagger.
  
+ 
 ## Area Overview
  
 ![Area Overview Page](client/dev/resources/images/docs/overview_page.png "Area Overview Page")
@@ -18,6 +19,7 @@ information about the collections managed in Tagger.
 ## Collections Page
  
 ![Collections Page](client/dev/resources/images/docs/collection_view.png "Collections Page")
+ 
  
 ## Getting started
  
@@ -30,6 +32,7 @@ Next, install the dependencies:
  
      bower install
      
+
 ## Mysql/MariaDb
  
 The application requires mysql or MariaDb.  For development, you need to install mysql on your machine and create databases 
@@ -45,6 +48,7 @@ The application uses [Sequelize](http://docs.sequelizejs.com/en/v3/).  Tagger da
 needed.  Note that if you set the sync parameter to be `{force: true}` then the database will be recreated entirely each time you start
 the program.  This can be useful when testing with a tool like [supertest](https://github.com/visionmedia/supertest). 
  
+
 ## Configuration
  
 Configuration for development, production, and test environments is provided by `server/config/environmentjs`.  
@@ -53,6 +57,7 @@ This file relies in turn
 on `server/credentials/credentials.js`. Two configuration files are needed to separate sensitive credentials from shared code.  This means 
 you will need to create your own `server/credentials/credentials.js` file.  A sample is provided.
  
+
 ### Environment
  
 The `/server/config/environment.js` file provides values for the current environment (development, production or test). Many of the actual
@@ -128,12 +133,14 @@ You will need to provide a `config/credentials.js` file.  Sample:
  module.exports = credentials;
 ```
   
+  
 ## User Authentication
  
 Tagger uses Google OAUTH2 for authentication.  Authorized users are identified by their Google profile email id.  
  
 Currently, we are not creating a default administrator account.  Before logging into Tagger for the first time, you first must add 
 yourself to the database Users table.  Insert values for name, email, area (0 is administrator), createdAt and updatedAt.
+ 
  
 ## Development Server
  
@@ -146,6 +153,7 @@ The first time you start the application in development mode, Sequelize will cre
 The Express server will run on the development port configured in `config/environment.js` (e.g. 3333). This project uses [browser-sync](https://www.browsersync.io/) for synchronized browser testing, including automatic page 
 refresh on code changes.
  
+ 
 ## Integration Tests
 
 Mocha integration tests run against the test database.  To execute tests with full reporting, use this `gulp` task:
@@ -155,6 +163,7 @@ Mocha integration tests run against the test database.  To execute tests with fu
 For quicker tests with minimal reporting, use this npm script:
 
    `npm run test-server`
+ 
  
 ## Production Build
  
