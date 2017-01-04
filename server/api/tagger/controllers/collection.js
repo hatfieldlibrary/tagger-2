@@ -891,7 +891,9 @@ exports.browseList = function (req, res) {
     });
 
     response.on('end', function () {
-      utils.sendResponse(res, str);
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(str);
 
     });
   }
