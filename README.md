@@ -6,7 +6,7 @@
  
 Tagger is backend service for publishing digital collections, exhibits and other online resources.  It offers a way to describe and organize these 
 resources by content type and by subject tags.  Areas and collection groups provide an additional layer of organization that can be 
-used to link back to the departments and parent organizations that produce and own the digital content.
+used to highlight the departments and parent organizations that produce and own the digital content.
  
 Tagger is an Angular, Express, NodeJs application that persists collection information in a Mysql/MariaDb database.  It provides a public REST API for creating clients that use
 information about the collections managed in Tagger.
@@ -36,8 +36,9 @@ if you do not have them already.
 
 ## Mysql/MariaDb
  
-The application requires mysql or MariaDb.  For development, you need to install mysql on your machine and create databases 
-(Note that acomtags is the production database; you don't it for local development work.):
+The application requires mysql or MariaDb.  For development, you need to install mysql on your machine and create databases. The database names 
+are set in configuration and can be whatever you like so long as separate databases are created for development, testing and production.
+(Note that in this example acomtags is the production database; you don't it for local development work.)
  
      acomtags_development
      acomtags_test
@@ -52,11 +53,11 @@ the program.  This can be useful for testing.
 
 ## Configuration
  
-Configuration for development, production, and test environments is provided by `server/config/environmentjs`.  
+Configuration for development, production, and test environments is provided by `server/config/environmentjs`.  This file relies in turn
+on `server/credentials/credentials.js`. 
 
-This file relies in turn
-on `server/credentials/credentials.js`. Two configuration files are needed to separate sensitive credentials from shared code.  This means 
-you will need to create your own `server/credentials/credentials.js` file.  A sample is provided.
+Two configuration files are required to separate sensitive credentials from shared code.  This means 
+you need to create your own `server/credentials/credentials.js` file.  A sample file is provided.
  
 
 ### Environment
