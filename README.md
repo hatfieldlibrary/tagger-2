@@ -132,7 +132,7 @@ the program.  This can be useful when testing with a tool like [supertest](https
   
 ## User Authentication
  
-Tagger uses Google OAUTH2 for authentication.  Authorized users are identified by their Google profile email id (e.g. userh@wu.edu).  
+Tagger uses Google OAUTH2 for authentication.  Authorized users are identified by their Google profile email id.  
  
 Currently, we are not creating a default administrator account.  Before logging into Tagger for the first time, you first must add 
 yourself to the database Users table.  Insert values for name, email, area (0 is administrator), createdAt and updatedAt.

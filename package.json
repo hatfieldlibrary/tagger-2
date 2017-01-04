@@ -83,14 +83,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mspalti/test-app.git"
+    "url": "https://github.com/hatfieldlibrary/tagger-2"
   },
-  "author": "mspalti",
+  "author": "Michael Spalti",
   "license": "GNU",
   "bugs": {
-    "url": "https://github.com/mspalti/test-app/issues"
+    "url": "https://github.com/hatfieldlibrary/tagger-2/issues"
   },
-  "homepage": "https://github.com/mspalti/test-app",
+  "homepage": "https://github.com/hatfieldlibrary/tagger-2",
   "engines": {
     "node": "stable"
   }
