@@ -39,9 +39,7 @@ The application requires mysql or MariaDb.  For development, you need to install
      acomtags_test
      acomtags
  
-Assign access permissions to the empty databases. 
- 
-Access the database by setting the user name and password the the project configuration described below. 
+Assign access permissions to the empty databases using the development credentials described below. 
  
 ## Configuration
  
@@ -106,7 +104,7 @@ the program.  This can be useful when testing with a tool like [supertest](https
  You will need to provide a `config/credentials.js` file.  Sample:
  
  ```javascript
- ''use strict';
+ 'use strict';
   
   var credentials = { 
     develuid: <your system uid>,
@@ -120,7 +118,12 @@ the program.  This can be useful when testing with a tool like [supertest](https
     gid: <node gid>,
     user: <production database user>,
     password: <production database password>,
-    productiondbhost: <production database host> 
+    productiondbhost: <production database host>,
+    externalHostA: {  // This is optional path to external host.
+        host: <external host name>,
+        port: <external host port>,
+        path: <external host api query path>
+      }
   };
  
  module.exports = credentials;
@@ -134,70 +137,40 @@ Tagger uses Google OAUTH2 for authentication.  Authorized users are identified b
 Currently, we are not creating a default administrator account.  Before logging into Tagger for the first time, you first must add 
 yourself to the database Users table.  Insert values for name, email, area (0 is administrator), createdAt and updatedAt.
  
-## Development
+## Development Server
  
 To start the development server, type:
   
   `npm run dev`
  
-When you first start the application in development mode, Sequelize will create tables in the `acomtags_development` database.
+The first time you start the application in development mode, Sequelize will create tables in the `acomtags_development` database.
  
-The Express server will run on the development port configured in `config/environment.js` (e.g. 3000).  A browser window is opened on start and the watch service should restart the Express server and compiles sass whenever files are updated.  
+The Express server will run on the development port configured in `config/environment.js` (e.g. 3333). This project uses [browser-sync](https://www.browsersync.io/) for synchronized browser testing, including automatic page 
+refresh on code changes.
  
-The Tagger application uses Jade templates. 
+## Integration Tests
+
+Mocha integration tests run against the test database.  To execute tests with full reporting, use this `gulp` task:
+
+  `gulp server.integration_test`
+  
+For quicker tests with minimal reporting, use this npm script:
+
+   `npm run test-server`
  
-The grunt `watch` task doesn't update the browser window automatically with file edits.  This might be possible, but
-my attempt to use livereload with the Jade templates ran into a problem with conditional logic in the templates (much of that is now removed).  So, when coding you'll need to manually refresh the browser.
+## Production Build
  
- 
-## Production
- 
-The procedure for deploying the application is basic and a bit cumbersome.  We are on the lookout for a better strategy.
- 
-First, the prerequisites: make sure nodejs is installed on the server. It's wise to use the identical nodejs version that you are using in your development environment.
- 
-You need to decide how to manage the application runtime on your server. Currently, we use the `forever` CLI to launch and keep the Express application online. Install `forever` globally as follows:
- 
-     sudo npm install forever -g
-     
-Create an init.d script that launches the application using `forever` as well as a second init.d script that starts the `redis` session store. Add these two startup tasks to your system runlevels. 
- 
-Create a `node` user on the system. Next, verify that your init.d startup script sets the `NODE_ENV` value to 'production.' Example: `NODE_ENV=production $DAEMON $DAEMONOPTS start $NODEAPP`. 
- 
-The following deployment assumes that you have previously built and tested the application on your development machine. 
- 
-    1. Copy the project to the production host. If you know what you are doing, you can omit unnecessary development files.
-    2. Update the details of the NodeJs production environment in `config/credentials.js` and `config/environment.js`, including database access credentials, paths, and Google OAUTH2 credentials.
-    3. Update the AngularJs `public/javascripts/app/environment.js` object with the production host REST path.
-    4. If you are updating an existing installation, stop `forever` via the init script (e.g.  /sbin/service acomtagger start).
-    5. Copy the application directory to the production directory.
-    6. Set the owner and group for project all files (including .* files) to the `node` user.  
-    7. Start `forever` via the init.d script (e.g. /sbin/service acomtagger start). 
+To build the optimized version of client code, use this command:
+
+`npm run build-dist`
+
+This executes all `gulp` build tasks and copies the new code into the `dist` directory.
+
+It's a good idea to remove development dependencies.  A convenient way to do this is with the [Strongloop command line tool](https://docs.strongloop.com/display/SLC/Building+applications+with+slc).  You can install this via `npm install -g strongloop`.
+Then build the zipped tar file using the `slc` command line tool: `slc build --install --pack`.  
  
 ### Oauth2 Authentication Configuration
  
- Access to the Tagger module is controlled by Google OAuth2.  After a successful OAuth2 login, the `Users` table of the Tagger database is queried by the email address returned in the OAuth2 user profile.  To access Tagger, the email address 
-  must be in the database.  You will need to add this manually.
+Access to the Tagger module is controlled by Google OAuth2.  After a successful OAuth2 login, the user's email address returned in the OAuth2 user profile is used for authorization.  
  
-### Configuration Params
- 
- Configuration file: config/environment.js
- 
- - root: path set by module
- - port: Express port
- - uid: Express system user
- - gid: Express system group
- - redisPort: port used by the redis session store (production environment only)
- - mysql.db: database name
- - mysql.user: database user
- - mysql.password: database password
- - mysql.host: host name (e.g. libdb.willamette.edu)
- - mysql.dialect: the client type (mysql or mariadb)
- - convert: location of ImageMagick convert library
- - identify: location of ImageMagick identify library
- - taggerImageDir: path to tagger images
- - adminPath: path to jade files
- - googleClientId: the Google ID for this application (used by OAUTH2)
- - googleClientSecrect: Google secret (used by OAUTH2)
- - nodeEnv: current node environment (startup setting or default)
- 
+
