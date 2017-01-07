@@ -51,7 +51,7 @@
       if (typeList) {
         vm.types = typeList;
       }
-    }
+    };
   }
 
   taggerComponents.component('typesList', {

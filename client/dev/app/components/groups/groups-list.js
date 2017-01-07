@@ -26,7 +26,7 @@
                           GroupObserver,
                           UserAreaObserver) {
 
-    var vm = this;
+    const vm = this;
 
     GroupListObserver.subscribe(function onNext() {
       vm.categories = GroupListObserver.get();
@@ -51,7 +51,7 @@
       if (groupList) {
         vm.categories = groupList;
       }
-    }
+    };
   }
 
   taggerComponents.component('groupsList', {

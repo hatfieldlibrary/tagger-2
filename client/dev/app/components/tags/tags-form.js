@@ -84,7 +84,7 @@
       if (tagId) {
         _getTagInfo(tagId);
       }
-    }
+    };
 
   }
 

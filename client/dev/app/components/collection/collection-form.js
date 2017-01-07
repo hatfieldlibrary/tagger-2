@@ -76,7 +76,7 @@
       const id = CollectionObserver.get();
       vm.collectionId = id;
       _getCollectionById(id);
-      _checkCategory(id)
+      _checkCategory(id);
     });
 
 
@@ -117,7 +117,7 @@
         vm.thumbnailImage = data.image;
         ThumbImageObserver.set(data.image);
         vm.menu({id: vm.collection.id, title: vm.collection.title});
-        _setBrowseTypeLabel(data.browseType)
+        _setBrowseTypeLabel(data.browseType);
       });
 
     }
@@ -144,7 +144,7 @@
         categories.$promise.then(function (cats) {
           if (cats.length > 0) {
             let area = AreaObserver.get();
-            if (cats[0].Category.areaId == area) {
+            if (cats[0].Category.areaId === area) {
               // The current category belongs to this area.
               _getCategories();
               vm.showCollectionCategories = true;
@@ -236,7 +236,7 @@
         _getCollectionForNewArea(AreaObserver.get());
       }
       _checkCategory(collection);
-    }
+    };
   }
 
 

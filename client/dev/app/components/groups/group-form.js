@@ -92,7 +92,7 @@
         _getGroupInfo(groupId);
       }
 
-    }
+    };
 
   }
 

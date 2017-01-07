@@ -23,19 +23,19 @@
 
   'use strict';
 
-  function tagAreaCtrl($scope,
+  function TagAreaCtrl($scope,
                        TaggerDialog,
                        TagTargets,
                        TagObserver,
                        TagAreaObserver,
                        AreaListObserver) {
 
-    const ctrl = this;
+    const vm = this;
 
     let removeMessage = 'templates/dialog/removeAreaFromTagMessage.html';
     let addMessage = 'templates/dialog/addAreaToTagMessage.html';
 
-    ctrl.areas = AreaListObserver.get();
+    vm.areas = AreaListObserver.get();
 
     /**
      * Watch updates the current list of area targets
@@ -49,24 +49,24 @@
      * area list on change.
      */
     AreaListObserver.subscribe(function onNext() {
-      ctrl.areas = AreaListObserver.get();
+      vm.areas = AreaListObserver.get();
     });
 
 
     /** @type {Array.<Object>} */
-    ctrl.areas = AreaListObserver.get()
+    vm.areas = AreaListObserver.get();
 
     /** @type {Array.<Object>} */
-    ctrl.areaTargets = [];
+    vm.areaTargets = [];
 
     /**
      * Retrieve the areas for the current tag.
      * @param id the id of the tag
      */
     function _getCurrentAreaTargets(id) {
-      ctrl.areaTargets = TagTargets.query({tagId: id});
+      vm.areaTargets = TagTargets.query({tagId: id});
 
-    };
+    }
 
     /**
      * Test whether an area is in the list of areas selected
@@ -74,8 +74,8 @@
      * test.
      * @param areaId the area id
      */
-    ctrl.isChosen = function (areaId) {
-      return _findArea(areaId, ctrl.areaTargets);
+    vm.isChosen = function (areaId) {
+      return _findArea(areaId, vm.areaTargets);
 
     };
 
@@ -85,11 +85,11 @@
      *                    animation starting point)
      * @param message  html to display in dialog
      */
-    ctrl.showDialog = function ($event, areaId) {
+    vm.showDialog = function ($event, areaId) {
 
       let message = '';
       TagAreaObserver.set(areaId);
-      if (_findArea(areaId, ctrl.areaTargets)) {
+      if (_findArea(areaId, vm.areaTargets)) {
         message = removeMessage;
       }
       else {
@@ -101,12 +101,12 @@
     };
 
     $scope.$on('removedAreaFromTag', function (event, message) {
-      ctrl.areaTargets = message.areaTargets;
+      vm.areaTargets = message.areaTargets;
 
     });
 
     $scope.$on('addedAreaToTag', function (event, message) {
-      ctrl.areaTargets = message.areaTargets;
+      vm.areaTargets = message.areaTargets;
 
     });
 
@@ -117,7 +117,7 @@
      * @param target  {Array.<Object>} the areas associated with the collection.
      * @returns {boolean}
      */
-    var _findArea = function (areaId, targets) {
+    function _findArea(areaId, targets) {
 
       for (var i = 0; i < targets.length; i++) {
         if (targets[i].AreaId === areaId) {
@@ -125,12 +125,12 @@
         }
       }
       return false;
-    };
+    }
 
-    ctrl.$onInit = function() {
+    vm.$onInit = function() {
       let id = TagObserver.get();
       _getCurrentAreaTargets(id);
-    }
+    };
 
 
   }
@@ -147,12 +147,13 @@
     '   <md-card-content>' +
     '      <div layout="column" class="md-subhead">Select the Areas in which this Tag will appear.' +
     '        <md-container layout="column">' +
-    '           <md-checkbox ng-repeat="area in $ctrl.areas" aria-label="Areas" value="area.id" ng-checked="$ctrl.isChosen(area.id)" ng-click="$ctrl.showDialog($event, area.id)">{{area.title}}</md-checkbox>' +
+    '           <md-checkbox ng-repeat="area in vm.areas" aria-label="Areas" value="area.id" ng-checked="vm.isChosen(area.id)" ng-click="vm.showDialog($event, area.id)">{{area.title}}</md-checkbox>' +
     '        </md=container>' +
     '      </div>' +
     '   </md-content>' +
     '</md-card>',
-    controller: tagAreaCtrl
+    controller: TagAreaCtrl,
+    controllerAs: 'vm'
 
   });
 

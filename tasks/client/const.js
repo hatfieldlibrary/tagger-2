@@ -27,6 +27,7 @@ export const tasks = {
   CLIENT_BABEL_JS: 'client.babel:dist',
   CLIENT_IMAGE_DIST: 'client.imgs:dist',
   CLIENT_DEL_DIST: 'client.del:dist',
+  CLIENT_LINT_JS: 'client.lint',
 
   CLIENT_COPY: 'client.copy',
 

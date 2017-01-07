@@ -22,7 +22,7 @@
 
   'use strict';
 
-  function GroupController(TaggerDialog,
+  function AreasController(TaggerDialog,
                            AreaListObserver,
                            UserAreaObserver) {
 
@@ -54,6 +54,11 @@
 
     });
 
+    /**
+     * Updates the title and id in view.
+     * @param id  area id
+     * @param title   area title
+     */
     vm.menuUpdate = function (id, title) {
       vm.currentArea.title = title;
       vm.currentArea.id = id;
@@ -74,7 +79,7 @@
   taggerComponents.component('areasComponent', {
 
     templateUrl: 'templates/component/areas.html',
-    controller: GroupController,
+    controller: AreasController,
     controllerAs: 'vm'
 
   });

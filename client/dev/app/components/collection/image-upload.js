@@ -39,7 +39,7 @@
 
     vm.$onInit = function () {
 
-    }
+    };
   }
 
   taggerComponents.component('imageSelector', {
