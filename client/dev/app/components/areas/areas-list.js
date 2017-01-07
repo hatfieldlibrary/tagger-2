@@ -39,7 +39,7 @@
      * Sets the current area in view model.
      * @param id  area id
      */
-    vm.resetArea = function (id) {
+    vm.resetArea = (id) => {
       if (id !== null) {
         vm.currentAreaId = id;
         AreaActionObserver.set(id);
@@ -85,13 +85,13 @@
 
     vm.$onInit = function () {
 
-      var ar = AreaList.query();
-      ar.$promise.then(function (data) {
+      let areas = AreaList.query();
+      areas.$promise.then(function (data) {
         vm.areas = data;
         vm.currentAreaId = data[0].id;
         AreaActionObserver.set(vm.currentAreaId);
       });
-    }
+    };
   }
 
   taggerComponents.component('areasList', {

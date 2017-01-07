@@ -52,7 +52,7 @@
       if (tagList) {
         vm.tags = tagList;
       }
-    }
+    };
   }
 
   taggerComponents.component('tagsList', {

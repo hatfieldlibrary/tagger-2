@@ -73,7 +73,7 @@
       if (typeId) {
         _getTypeInfo(typeId);
       }
-    }
+    };
 
   }
 

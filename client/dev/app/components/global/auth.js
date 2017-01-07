@@ -82,7 +82,7 @@
           var categories = CategoryList.query();
           categories.$promise.then(function (data) {
             GroupListObserver.set(data);
-            GroupObserver.set(data[0].id)
+            GroupObserver.set(data[0].id);
           });
 
           // Initialize global tags.
@@ -126,7 +126,7 @@
           vm.authorized = false;
           console.log(err);
         });
-      }
+      };
 
     }
 

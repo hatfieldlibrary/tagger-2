@@ -65,7 +65,7 @@
 
     vm.$onInit = function () {
       _initTagList();
-    }
+    };
   }
 
   taggerComponents.component('tagsComponent', {

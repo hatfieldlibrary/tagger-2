@@ -30,15 +30,18 @@
     let areas = [];
 
     return {
+
       set: function set(update){
         if (update !== areas) {
           areas = update;
           Subject.onNext(areas);
         }
       },
+
       get: function get() {
         return areas;
       },
+
       subscribe: function (o) {
         return Subject.subscribe(o);
       }

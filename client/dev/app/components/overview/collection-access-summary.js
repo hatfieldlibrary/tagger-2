@@ -46,16 +46,16 @@
           ctrl.collectionsCount = data.length;
           for (var i = 0; i < data.length; i++) {
             if (data[i].Collection.restricted !== true) {
-              if (data[i].Collection.published == true) {
+              if (data[i].Collection.published === true) {
                 publicCount++;
               }
             }
             if (data[i].Collection.restricted !== false) {
-              if (data[i].Collection.published == true) {
+              if (data[i].Collection.published === true) {
                 restrictedCount++;
               }
             }
-            if (data[i].Collection.published == false) {
+            if (data[i].Collection.published === false) {
               unpublishedCount++;
             }
           }

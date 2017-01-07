@@ -20,6 +20,8 @@
  */
 (function () {
 
+  'use strict';
+
   function AreaController(TaggerToast,
                           AreaTargetAdd,
                           AreaTargetRemove,
@@ -128,7 +130,7 @@
    ctrl.$onInit = function () {
        ctrl.areas = AreaListObserver.get();
        ctrl.areaTargets =  _getCurrentAreaTargets(CollectionObserver.get());
-   }
+   };
 
   }
 

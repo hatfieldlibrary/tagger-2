@@ -4,6 +4,8 @@
 
 (function () {
 
+  'use strict';
+
   function ToggleController(TagTargets,
                             TagObserver,
                             AreaObserver,
@@ -84,8 +86,8 @@
     }
 
     vm.$onInit = () => {
-      _getTagList()
-    }
+      _getTagList();
+    };
   }
 
   taggerComponents.component('toggleTagAreaButton', {

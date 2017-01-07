@@ -77,8 +77,7 @@
         vm.area = data;
         vm.menu({id: vm.area.id, title: vm.area.title});
       });
-    }
-
+    };
   }
 
   taggerComponents.component('areaForm', {

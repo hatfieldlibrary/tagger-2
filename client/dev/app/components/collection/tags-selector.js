@@ -21,6 +21,8 @@
 
 (function () {
 
+  'use strict';
+
   function TagsCtrl(CollectionTagTargetAdd,
                     CollectionTagTargetRemove,
                     TagsForArea,
