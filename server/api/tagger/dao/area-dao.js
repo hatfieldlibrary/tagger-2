@@ -18,7 +18,8 @@
 /**
  * Created by mspalti on 12/1/16.
  */
-'use strict';
+
+// jshint strict:false
 
 const taggerSchema = require('../models/index');
 const taggerDao = {};

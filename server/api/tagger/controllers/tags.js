@@ -143,7 +143,7 @@ exports.update = function (req, res) {
   const name = req.body.name;
 
   taggerDao.updateTag(name, id).then(function () {
-    utils.sendResponse(res, {status: 'success'});
+    utils.sendSuccessJson(res);
   }).catch(function (err) {
     console.log(err);
   });
@@ -159,25 +159,10 @@ exports.delete = function (req, res) {
   const id = req.body.id;
 
   taggerDao.deleteTag(id).then(function () {
-    utils.sendResponse(res, {status: 'success'});
+    utils.sendSuccessJson(res);
   });
 
 };
 
 
-/**
- * Retrieves a list of subjects by area for the public API.
- * @param req
- * @param res
- */
-exports.subjectsByArea = function (req, res) {
-  const id = req.params.id;
-
-  taggerDao.findTagsInArea(id).then(function (tags) {
-    utils.sendResponse(res, tags);
-  }).catch(function (err) {
-    console.log(err);
-  });
-
-};
 

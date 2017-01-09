@@ -46,7 +46,7 @@ exports.add = function (req, res) {
   const area = req.body.area;
 
   taggerDao.createNewUser(name, email, area).then(function () {
-    utils.sendResponse(res, {status: 'success'});
+    utils.sendSuccessJson(res);
   }).catch(function (e) {
     console.log(e);
   });
@@ -62,7 +62,7 @@ exports.delete = function (req, res) {
   const id = req.body.id;
 
   taggerDao.deleteUser(id).then(function () {
-    utils.sendResponse(res, {status: 'success'});
+    utils.sendSuccessJson(res);
   }).catch(function (err) {
     console.log(err);
   });

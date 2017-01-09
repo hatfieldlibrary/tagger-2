@@ -120,7 +120,7 @@ exports.update = function (req, res) {
   const icon = req.body.icon;
 
   taggerDao.updateContentType(name, icon, id).then(function () {
-    utils.sendResponse(res, {status: 'success'});
+    utils.sendSuccessJson(res);
   }).catch(function (err) {
     console.log(err);
   });

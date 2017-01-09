@@ -22,6 +22,9 @@
 //https://github.com/danialfarid/ng-file-upload
 //https://github.com/danialfarid/ng-file-upload/wiki/node.js-example
 
+
+//jshint strict:false
+
 const convert = (res, files, fields, config, callback) => {
 
   const fs = require('fs'),
@@ -34,7 +37,7 @@ const convert = (res, files, fields, config, callback) => {
   magick.identify.path = identify;
   magick.convert.path = convert;
 
-  var imageName;
+  let imageName;
 
 // read in the temp file from the upload
   fs.readFile(files.file[0].path, function (err, data) {
@@ -42,15 +45,15 @@ const convert = (res, files, fields, config, callback) => {
       return err;
     }
     imageName = files.file[0].originalFilename;
-    id = fields.id;
+    let id = fields.id;
     if (!imageName) {
-      return new Error("Image name not found");
+      return new Error('Image name not found');
 
     } else {
       // use imagemagick to transform the full image to thumbnail.
       // write to thumb directory
-      var fullPath = imagePath + '/full/' + imageName;
-      var thumbPath = imagePath + '/thumb/' + imageName;
+      let fullPath = imagePath + '/full/' + imageName;
+      let thumbPath = imagePath + '/thumb/' + imageName;
       fs.writeFile(fullPath, data, function (err) {
         if (err) {
           return err;
