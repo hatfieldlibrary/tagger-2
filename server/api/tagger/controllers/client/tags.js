@@ -2,6 +2,8 @@
  * Created by mspalti on 1/9/17.
  */
 
+'use strict';
+
 const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/collection-dao');
 

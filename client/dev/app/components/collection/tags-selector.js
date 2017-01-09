@@ -39,7 +39,6 @@
      */
     CollectionObserver.subscribe(function onNext() {
       let collid = CollectionObserver.get();
-      ctrl.collectionId = collid;
       _getTagsForCollection(collid);
 
     });
