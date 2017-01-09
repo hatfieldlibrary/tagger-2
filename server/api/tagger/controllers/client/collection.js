@@ -2,6 +2,8 @@
  * Created by mspalti on 1/9/17.
  */
 
+'use strict';
+
 const async = require('async');
 const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/collection-dao');
@@ -237,6 +239,3 @@ exports.browseList = function (req, res) {
 
   request.end();
 };
-
-
-
