@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const path = require('path');
+//const path = require('path');
 const credentials = require('../credentials/credentials');
 const env = process.env.NODE_ENV || 'development';
 

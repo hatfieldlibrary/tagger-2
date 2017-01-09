@@ -54,8 +54,8 @@ exports.categoryCountByArea = function (req, res) {
 exports.collectionsByCategory = function (req, res) {
   const collId = req.params.collId;
   taggerDao.categoriesByCollectionId(collId).then(function (categories) {
-    utils.sendResponse(res, categories)
-  })
+    utils.sendResponse(res, categories);
+  });
 };
 
 /**
@@ -128,7 +128,7 @@ exports.update = function (req, res) {
   };
 
   taggerDao.update(data, id).then(function () {
-    utils.sendResponse(res, {status: 'success'});
+    utils.sendSuccessJson(res);
   }).catch(function (err) {
     console.log(err);
   });

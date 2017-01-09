@@ -20,11 +20,11 @@
  */
 export const path = {
   ROOT: './',
-  DEV: './client/dev/',
-  DIST: './client/dist/'
-}
+  DEV: './server/'
+};
 
 export const tasks = {
   SERVER_INTEGRATION_TEST: 'server.integration_test',
+  SERVER_LINT_JS: 'server.lint'
 };
 

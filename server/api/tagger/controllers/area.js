@@ -68,7 +68,7 @@ exports.add = function (req, res) {
       taggerDao.addArea(title, result[0].dataValues.count + 1)
         .then(
           function () {
-            utils.sendResponse(res, {status: 'success'});
+            utils.sendSuccessJson(res)
           })
         .catch(function (err) {
           console.log(err);

@@ -26,11 +26,16 @@
 
   function CollectionController(TaggerDialog,
                                 UserAreaObserver,
+                                CollectionObserver,
                                 PublicationStatusObserver) {
 
     const vm = this;
 
     vm.currentCollection = {};
+
+    CollectionObserver.subscribe(function onNext() {
+       vm.collectionId = CollectionObserver.get();
+    });
 
     PublicationStatusObserver.subscribe(function onNext() {
       vm.isPublished = PublicationStatusObserver.get();
@@ -64,6 +69,8 @@
     vm.$onInit = function () {
       /** @type {number} */
       vm.userAreaId = UserAreaObserver.get();
+
+      vm.collectionId = CollectionObserver.get();
 
     };
 
