@@ -24,7 +24,8 @@
   'use strict';
 
   function TagAreaCtrl($scope,
-                       TaggerDialog,
+                       ShowDialog,
+                       TagDialog,
                        TagTargets,
                        TagObserver,
                        TagAreaObserver,
@@ -96,7 +97,7 @@
         message = addMessage;
       }
 
-      new TaggerDialog($event, message);
+      new ShowDialog.showDialog($event, message,TagDialog);
 
     };
 
@@ -119,9 +120,11 @@
      */
     function _findArea(areaId, targets) {
 
-      for (var i = 0; i < targets.length; i++) {
-        if (targets[i].AreaId === areaId) {
-          return true;
+      if (targets) {
+        for (var i = 0; i < targets.length; i++) {
+          if (targets[i].AreaId === areaId) {
+            return true;
+          }
         }
       }
       return false;

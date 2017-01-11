@@ -72,11 +72,14 @@
     };
 
     vm.$onInit = function() {
-      var ar = AreaById.query({id: AreaActionObserver.get()});
-      ar.$promise.then(function (data) {
-        vm.area = data;
-        vm.menu({id: vm.area.id, title: vm.area.title});
-      });
+      let areaId = AreaActionObserver.get();
+      if (areaId) {
+        var ar = AreaById.query({id: AreaActionObserver.get()});
+        ar.$promise.then(function (data) {
+          vm.area = data;
+          vm.menu({id: vm.area.id, title: vm.area.title});
+        });
+      }
     };
   }
 

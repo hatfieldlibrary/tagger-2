@@ -117,9 +117,8 @@
           new TaggerToast('Subject Tag Added');
 
         } else {
-          new TaggerToast('WARNING: Unable to add subject tag!');
+          new TaggerToast('WARNING: Unable to add subject tag! ' + data.status);
           return {};
-
         }
       });
 

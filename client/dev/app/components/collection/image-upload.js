@@ -22,7 +22,8 @@
   'use strict';
 
   function ImageController(ThumbImageObserver,
-                           TaggerDialog) {
+                           ShowDialog,
+                           ImageDialog) {
 
     const vm = this;
 
@@ -34,7 +35,7 @@
     });
 
     vm.showDialog = function ($event, message) {
-      new TaggerDialog($event, message);
+      new ShowDialog.showDialog($event, message, ImageDialog);
     };
 
     vm.$onInit = function () {

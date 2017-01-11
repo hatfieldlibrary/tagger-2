@@ -22,7 +22,8 @@
 
   'use strict';
 
-  function AreasController(TaggerDialog,
+  function AreasController(ShowDialog,
+                           AreaDialog,
                            AreaListObserver,
                            UserAreaObserver) {
 
@@ -71,7 +72,7 @@
      * @param message  html to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new TaggerDialog($event, message);
+      new ShowDialog.showDialog($event, message, AreaDialog);
     };
 
   }

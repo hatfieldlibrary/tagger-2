@@ -33,6 +33,10 @@
       vm.currentCategory = vm.categories[0].id;
     });
 
+    GroupObserver.subscribe((id) => {
+        vm.currentCategory = id;
+    });
+
     vm.resetCategory = function (tagId) {
       GroupObserver.set(tagId);
       vm.currentCategory = tagId;

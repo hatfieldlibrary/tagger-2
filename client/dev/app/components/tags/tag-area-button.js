@@ -10,7 +10,8 @@
                             TagObserver,
                             AreaObserver,
                             TagListObserver,
-                            TaggerDialog) {
+                            ShowDialog,
+                            TagDialog) {
 
     const vm = this;
 
@@ -41,7 +42,7 @@
         message = addMessage;
       }
 
-      new TaggerDialog($event, message);
+      new ShowDialog.showDialog($event, message, TagDialog);
 
     };
 
