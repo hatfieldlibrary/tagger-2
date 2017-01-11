@@ -21,7 +21,7 @@
 const async = require('async');
 const utils = require('../utils/response-utility');
 const taggerDao = require('../dao/content-dao');
-const logger = require('winston');
+const logger = require('../utils/error-logger');
 
 /**
  * Retrieves content type by id
@@ -34,7 +34,7 @@ exports.byId = function (req, res) {
   taggerDao.retrieveContentTypeById(id).then(function (type) {
     utils.sendResponse(res, type);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -49,7 +49,7 @@ exports.list = function (req, res) {
   taggerDao.getContentTypes().then(function (types) {
     utils.sendResponse(res, types);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -66,7 +66,7 @@ exports.countByArea = function (req, res) {
   taggerDao.getAreaContentTypeSummary(areaId).then(function (types) {
     utils.sendResponse(res, types);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -87,13 +87,13 @@ exports.add = function (req, res) {
           .then(function (result) {
             callback(null, result);
           }).catch(function (err) {
-            logger.log('warn', err.message);
+          logger.dao(err);
           });
       }
     },
     function (err, result) {
       if (err) {
-        logger.log('warn', err.message);
+        logger.dao(err);
       }
       if (result.check === null) {
         // Add new content type
@@ -101,7 +101,7 @@ exports.add = function (req, res) {
           .then(function (result) {
             utils.sendResponse(res, {status: 'success', id: result.id});
           }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
 
       } else {
@@ -123,7 +123,7 @@ exports.update = function (req, res) {
   taggerDao.updateContentType(name, icon, id).then(function () {
     utils.sendSuccessJson(res);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 };
 
@@ -138,7 +138,7 @@ exports.delete = function (req, res) {
   taggerDao.deleteContentType(contentId).then(function () {
     utils.sendResponse(res, {status: 'success'});
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };

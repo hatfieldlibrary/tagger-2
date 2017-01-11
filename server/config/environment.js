@@ -17,7 +17,6 @@
 
 'use strict';
 
-//const path = require('path');
 const credentials = require('../credentials/credentials');
 const env = process.env.NODE_ENV || 'development';
 
@@ -39,7 +38,7 @@ const config = {
       dialect: 'mysql'
     },
     logLevel: 'debug',
-    dbLog: true,
+    dbLog: console.log,
     sync: {force: false},
     useAuth: false,
     convert: '/usr/local/bin/convert',
@@ -69,7 +68,7 @@ const config = {
       dialect: 'mysql'
     },
     logLevel: 'debug',
-    dbLog: true,
+    dbLog: console.log,
     sync: {force: false},
     useAuth: false,
     convert: '/usr/local/bin/convert',
@@ -100,7 +99,7 @@ const config = {
       dialect: 'mysql'
     },
     logLevel: 'debug',
-    dbLog: true,
+    dbLog: console.log,
     sync: {force: true},
     useAuth: false,
     convert: '/usr/local/bin/convert',

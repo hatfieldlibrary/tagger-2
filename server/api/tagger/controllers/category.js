@@ -19,7 +19,7 @@
 
 const taggerDao = require('../dao/category-dao');
 const utils = require('../utils/response-utility');
-const logger = require('winston');
+const logger = require('../utils/error-logger');
 
 /**
  * Retrieves the list of all collection groups.
@@ -31,7 +31,7 @@ exports.list = function (req, res) {
   taggerDao.findAll().then(function (categories) {
     utils.sendResponse(res, categories);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -47,7 +47,7 @@ exports.categoryCountByArea = function (req, res) {
   taggerDao.categoryCountByArea(areaId).then(function (categories) {
     utils.sendResponse(res, categories);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -57,7 +57,7 @@ exports.collectionsByCategory = function (req, res) {
   taggerDao.categoriesByCollectionId(collId).then(function (categories) {
     utils.sendResponse(res, categories);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 };
 
@@ -72,7 +72,7 @@ exports.listByArea = function (req, res) {
   taggerDao.listByArea(areaId).then(function (categories) {
     utils.sendResponse(res, categories);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 };
 
@@ -87,7 +87,7 @@ exports.byId = function (req, res) {
   taggerDao.byId(categoryId).then(function (category) {
     utils.sendResponse(res, category);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -103,7 +103,7 @@ exports.add = function (req, res) {
   taggerDao.add(title).then(function (result) {
     utils.sendResponse(res, {status: 'success', id: result.id});
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -133,7 +133,7 @@ exports.update = function (req, res) {
   taggerDao.update(data, id).then(function () {
     utils.sendSuccessJson(res);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -150,7 +150,7 @@ exports.delete = function (req, res) {
   taggerDao.delete(catId).then(function () {
     utils.sendResponse(res, {status: 'success', id: catId});
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };

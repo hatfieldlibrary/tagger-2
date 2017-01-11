@@ -20,7 +20,7 @@
 const async = require('async');
 const utils = require('../utils/response-utility');
 const taggerDao = require('../dao/tag-target-dao');
-const logger = require('winston');
+const logger = require('../utils/error-logger');
 
 /**
  * Private function for adding association between tag and area.
@@ -37,7 +37,7 @@ function _addArea(tagId, areaId, res) {
           .then(function (result) {
             callback(null, result);
           }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
 
       },
@@ -45,7 +45,7 @@ function _addArea(tagId, areaId, res) {
         taggerDao.findAreasForTag(tagId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       }
     },
@@ -69,7 +69,7 @@ exports.getAreaTargets = function (req, res) {
     .then(function (areas) {
       utils.sendResponse(res, areas);
     }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 };
 
@@ -99,7 +99,7 @@ exports.addTarget = function (req, res) {
     },
     function (err, result) {
       if (err) {
-        logger.log('warn', err.message);
+        logger.dao(err);
       }
       // if new
       if (result.check === null) {
@@ -111,7 +111,7 @@ exports.addTarget = function (req, res) {
         taggerDao.listTagAssociations(tagId).then(function (areas) {
           utils.sendResponse(res, {status: 'exists', areaTargets: areas});
         }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       }
 
@@ -134,7 +134,9 @@ exports.removeTarget = function (req, res) {
         taggerDao.removeTagFromCollections(areaId, tagId)
           .then(function (result) {
             callback(null, result);
-          });
+          }).catch(function (err) {
+          logger.dao(err);
+        });
       },
       // Remove the tag from the area.
       delete: function (callback) {
@@ -142,7 +144,7 @@ exports.removeTarget = function (req, res) {
           .then(function (result) {
             callback(null, result);
           }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       },
       // Get the updated tag list for the area
@@ -150,13 +152,13 @@ exports.removeTarget = function (req, res) {
         taggerDao.findAreasForTag(tagId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       }
     },
     function (err, result) {
       if (err) {
-        logger.log('warn', err.message);
+        logger.dao(err);
       }
       utils.sendResponse(res, {
         status: 'success',

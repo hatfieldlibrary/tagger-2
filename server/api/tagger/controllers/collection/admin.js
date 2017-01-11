@@ -27,7 +27,7 @@ const utils = require('../../utils/response-utility');
 const imageConvert = require('../../utils/image-convert');
 const taggerDao = require('../../dao/collection-dao');
 const config = require('../../../../config/environment');
-const logger = require('winston');
+const logger = require('../../utils/error-logger');
 
 /**
  * Returns ctype (item type) counts for the overview
@@ -41,7 +41,7 @@ exports.countCTypesByArea = function (req, res) {
   taggerDao.countCTypesByArea(areaId).then(function (types) {
     utils.sendResponse(res, types);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 };
 
@@ -57,7 +57,7 @@ exports.browseTypesByArea = function (req, res) {
     function (collections) {
       utils.sendResponse(res, collections);
     }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 };
 
@@ -69,7 +69,7 @@ exports.setPublicationStatus = function (req, res) {
     function() {
       utils.sendSuccessJson(res);
     }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -81,7 +81,7 @@ exports.getPublicationStatus = function (req, res) {
     function(collection) {
       utils.sendResponse(res, collection);
     }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -98,7 +98,7 @@ exports.repoTypesByArea = function (req, res) {
   taggerDao.repoTypesByArea(areaId).then(function (types) {
     utils.sendResponse(res, types);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 };
 
@@ -115,7 +115,7 @@ exports.list = function (req, res) {
     utils.sendResponse(res, collections);
 
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 };
 
@@ -134,20 +134,20 @@ exports.addTypeTarget = function (req, res) {
         taggerDao.findItemContentTarget(collId, typeId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
-            logger.log('warn', err.message);
+          logger.dao(err);
           });
       }
     },
     function (err, result) {
       if (err) {
-        logger.log('warn', err.message);
+        logger.dao(err);
       }
       if (result.check === null) {
 
         taggerDao.createItemContentTarget(collId, typeId).then(function () {
           utils.sendResponse(res, {status: 'success'});
         }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
 
       } else {
@@ -170,7 +170,7 @@ exports.removeTypeTarget = function (req, res) {
   taggerDao.deleteItemContentTarget(collId, typeId).then(function () {
     utils.sendSuccessJson(res);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -193,13 +193,13 @@ exports.addTagTarget = function (req, res) {
           .then(function (result) {
             callback(null, result);
           }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       }
     },
     function (err, result) {
       if (err) {
-        logger.log('warn', err.message);
+        logger.dao(err);
       }
       // if new, add target
       if (result.check === null) {
@@ -208,7 +208,7 @@ exports.addTagTarget = function (req, res) {
           .then(function () {
             utils.sendResponse(res, {status: 'success'});
           }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
 
       } else {
@@ -231,7 +231,7 @@ exports.removeTagTarget = function (req, res) {
   taggerDao.deleteTagTarget(collId, tagId).then(function () {
     utils.sendSuccessJson(res);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -248,7 +248,7 @@ exports.areas = function (req, res) {
   taggerDao.findAreasForCollection(collId).then(function (areas) {
     utils.sendResponse(res, areas);
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -260,7 +260,7 @@ function _areaIdsForCollection (collId, callback) {
   taggerDao.getAreaIdsForCollection(collId).then(function (result) {
     callback(null, result);
   }).catch(function (err) {
-      logger.log('warn', err.message);
+    logger.dao(err);
     });
 }
 
@@ -279,7 +279,7 @@ function _addArea(collId, areaId, res) {
           .then(function (result) {
             callback(null, result);
           }).catch(function (err) {
-            logger.log('warn', err.message);
+          logger.dao(err);
           });
       },
       areaList: function (callback) {
@@ -310,7 +310,7 @@ exports.getFirstCollectionInArea = function (req, res) {
 
           }
         ).catch(function (err) {
-        logger.log('warn', err.message);
+        logger.dao(err);
       });
     },
     function (collId, callback) {
@@ -322,9 +322,10 @@ exports.getFirstCollectionInArea = function (req, res) {
           }
         );
     }
-  ], function (err, collection) {
+  ],
+    function (err, collection) {
     if (err) {
-      logger.log('warn', err.message);
+      logger.dao(err);
     }
     utils.sendResponse(res, collection);
 
@@ -352,13 +353,13 @@ exports.addAreaTarget = function (req, res) {
         taggerDao.checkAreaAssociation(collId, areaId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       }
     },
     function (err, result) {
       if (err) {
-        logger.log('warn', err.message);
+        logger.dao(err);
       }
       // if new
       if (result.check === null) {
@@ -393,7 +394,7 @@ exports.removeAreaTarget = function (req, res) {
         taggerDao.removeCollectionFromArea(areaId, collId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       },
       areaList: function (callback) {
@@ -421,27 +422,27 @@ exports.byId = function (req, res) {
         taggerDao.findCollectionById(collId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       },
       getCategory: function (callback) {
         taggerDao.findCategoryAssociation(collId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       },
       getAreas: function (callback) {
         taggerDao.findAreasForCollection(collId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       }
     },
     function (err, result) {
       if (err !== null) {
-        logger.log('warn', err.message);
+        logger.dao(err);
       }
 
       var response = {};
@@ -511,14 +512,14 @@ exports.update = function (req, res) {
           .then(function (result) {
             callback(null, result);
           }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       },
       checkCategory: function (callback) {
         taggerDao.findCategoryAssociation(id).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       }
     },
@@ -536,7 +537,7 @@ exports.update = function (req, res) {
             utils.sendSuccessJson(res);
 
           }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
         // If category does exist, update to the current value.
       } else {
@@ -546,7 +547,7 @@ exports.update = function (req, res) {
 
           }).catch(
           function (err) {
-            logger.log('warn', err.message);
+            logger.dao(err);
           });
       }
     });
@@ -564,7 +565,7 @@ exports.delete = function (req, res) {
   taggerDao.deleteCollection(id).then(function () {
     utils.sendResponse(res, {status: 'success'});
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -591,7 +592,7 @@ exports.add = function (req, res) {
           newCollectionId = coll.id;
           callback(null, coll);
         }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       },
       addArea: function (callback) {
@@ -599,7 +600,7 @@ exports.add = function (req, res) {
           .then(function (result) {
             callback(null, result);
           }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       },
       collections: function (callback) {
@@ -607,12 +608,12 @@ exports.add = function (req, res) {
           .then(function (colls) {
             callback(null, colls);
           }).catch(function (err) {
-          logger.log('warn', err.message);
+          logger.dao(err);
         });
       }
     }, function (err, results) {
       if (err) {
-        logger.log('warn', err.message);
+        logger.dao(err);
       }
       utils.sendResponse(res, {status: 'success', id: newCollectionId, collections: results.collections});
     }
@@ -637,7 +638,7 @@ exports.updateImage = function (req, res, config) {
   form.parse(req, function (err, fields, files) {
 
     if (err) {
-      console.log(err);
+      logger.form(err);
       res.end();
     }
 
@@ -645,12 +646,12 @@ exports.updateImage = function (req, res, config) {
       try {
         imageConvert(res, files, fields, config, updateImageInDb);
       } catch (err) {
-        logger.log('warn', err.message);
+        logger.image(err);
         res.end();
       }
     }
     else {
-      logger.log('warn', 'No image files were received. Aborting upload.');
+      logger.missing('No image files were received. Aborting upload.');
       res.end();
     }
   });
@@ -665,7 +666,7 @@ exports.updateImage = function (req, res, config) {
       utils.sendSuccessJson(res);
       }
     ).catch(function (err) {
-      logger.log('warn', err.message);
+      logger.dao(err);
     });
   }
 };

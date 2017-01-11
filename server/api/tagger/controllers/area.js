@@ -19,7 +19,7 @@
 
 const taggerDao = require('../dao/area-dao');
 const utils = require('../utils/response-utility');
-const logger = require('winston');
+const logger = require('../utils/error-logger');
 
 /**
  * Retrieves area information by area id.
@@ -33,7 +33,7 @@ exports.byId = function (req, res) {
     utils.sendResponse(res, areas);
 
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 };
 
@@ -48,7 +48,7 @@ exports.list = function (req, res) {
     utils.sendResponse(res, areas);
 
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
@@ -70,11 +70,11 @@ exports.add = function (req, res) {
           function () {
             utils.sendSuccessJson(res)
           }).catch(function (err) {
-          logger.log('warn', err.message);
+        logger.dao(err);
         });
     })
     .catch(function (err) {
-      logger.log('warn', err.message);
+      logger.dao(err);
     });
 
 };
@@ -104,7 +104,7 @@ exports.update = function (req, res) {
     .then(function (result) {
       utils.sendResponse(res, {status: 'success', id: result.id});
     }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 };
 
@@ -122,7 +122,7 @@ exports.reorder = function (req, res) {
     .then(function () {
       utils.sendResponse(res, {status: 'success'});
     }).catch(function (err) {
-      logger.log('warn', err.message);
+    logger.dao(err);
     });
 };
 
@@ -137,7 +137,7 @@ exports.delete = function (req, res) {
   taggerDao.deleteArea(id).then(function () {
     utils.sendResponse(res, {status: 'success'});
   }).catch(function (err) {
-    logger.log('warn', err.message);
+    logger.dao(err);
   });
 
 };
