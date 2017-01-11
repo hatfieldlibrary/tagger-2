@@ -65,10 +65,15 @@
             areaId: areaId
           });
         collectionList.$promise.then(function (data) {
-          vm.collectionList = data;
-          vm.collectionId = data[0].Collection.id;
-          CollectionListObserver.set(data);
-          CollectionObserver.set(vm.collectionId);
+          if (data[0]) {
+            vm.collectionList = data;
+            vm.collectionId = data[0].Collection.id;
+            CollectionListObserver.set(data);
+            CollectionObserver.set(vm.collectionId);
+          }  else {
+            CollectionListObserver.set([]);
+            CollectionObserver.set(-1);
+          }
         });
       }
     }
@@ -86,11 +91,17 @@
             areaId: areaId
           });
         list.$promise.then(function (data) {
-          CollectionObserver.set(data[0].Collection.id);
-          CollectionListObserver.set(data);
-          // Verify that the selected collection id is
-          // set.
-          vm.collectionId = CollectionObserver.get();
+          if (data[0]) {
+            CollectionObserver.set(data[0].Collection.id);
+            CollectionListObserver.set(data);
+            // Verify that the selected collection id is
+            // set.
+            vm.collectionId = CollectionObserver.get();
+          } else {
+            alert()
+            CollectionListObserver.set([]);
+            CollectionObserver.set(-1);
+          }
         });
       }
     }

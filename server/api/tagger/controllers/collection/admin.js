@@ -288,7 +288,10 @@ function _addArea(collId, areaId, res) {
     },
 
     function (err, result) {
-      utils.sendAreaTargetsReponse(res, err, result);
+      if (err) {
+        utils.sendErrorJson(res, err);
+      }
+      utils.sendSuccessAndDataJson(res, result);
     }
   );
 }
@@ -327,6 +330,7 @@ exports.getFirstCollectionInArea = function (req, res) {
     if (err) {
       logger.dao(err);
     }
+    console.log(collection)
     utils.sendResponse(res, collection);
 
   });
@@ -403,7 +407,10 @@ exports.removeAreaTarget = function (req, res) {
     },
 
     function (err, result) {
-      utils.sendAreaTargetsReponse(res, err, result);
+      if (err) {
+        utils.sendErrorJson(res, err)
+      }
+      utils.sendSuccessAndDataJson(res, result);
 
     });
 };

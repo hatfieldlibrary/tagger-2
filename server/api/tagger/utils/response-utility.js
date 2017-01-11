@@ -30,26 +30,13 @@ utils.sendResponse = function(res, data) {
 
 };
 
-/**
- * Multiple components return area targets.  This utility provides
- * a uniform interface.
- * @param res
- * @param err
- * @param areas
- */
-utils.sendAreaTargetsReponse = function (res, err, areas) {
-  if (err) {
-    console.log(err);
-  }
-  utils.sendResponse(res, {status: 'success', areaTargets: areas.areaList});
-};
 
 /**
  * Provides uniform API for unadorned error responses.
  * @param res
  */
 utils.sendErrorJson = function (res, err) {
-  utils.sendResponse(res, {status: 'failed', reason: err.message});
+  utils.sendResponse(res, {status: 'Server Error', reason: err.message});
 
 };
 
@@ -60,6 +47,15 @@ utils.sendErrorJson = function (res, err) {
 utils.sendSuccessJson = function (res) {
   utils.sendResponse(res, {status: 'success'});
 
+};
+
+/**
+ * Send json success response that includes data.
+ * @param res
+ * @param data
+ */
+utils.sendSuccessAndDataJson = function (res, data) {
+  utils.sendResponse(res, {status: 'success', data: data});
 };
 
 module.exports = utils;

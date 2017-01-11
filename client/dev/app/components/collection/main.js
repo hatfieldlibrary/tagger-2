@@ -24,9 +24,9 @@
 
   'use strict';
 
-  function CollectionController(TaggerDialog,
+  function CollectionController(ShowDialog,
+                                CollectionDialog,
                                 UserAreaObserver,
-                                CollectionObserver,
                                 PublicationStatusObserver) {
 
     const vm = this;
@@ -54,7 +54,7 @@
      * @param message  html template to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new TaggerDialog($event, message);
+      new ShowDialog.showDialog($event, message,CollectionDialog);
     };
 
     vm.menuUpdate = function(id, title) {

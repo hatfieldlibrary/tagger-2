@@ -18,6 +18,8 @@
 'use strict';
 /**
  * Created by mspalti on 7/7/15.
+ *
+ * TODO: areaId should be type INTEGER(2). Looks like a dangerous change now.
  */
 
 module.exports = function(sequelize, DataTypes) {

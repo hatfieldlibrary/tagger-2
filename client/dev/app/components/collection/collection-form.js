@@ -28,7 +28,7 @@
                           CollectionById,
                           CollectionUpdate,
                           CategoryByArea,
-                          CategoriesByCollection,
+                          CategoryForCollection,
                           AreaObserver,
                           UserAreaObserver,
                           CollectionObserver,
@@ -123,11 +123,39 @@
     }
 
     function _setBrowseTypeLabel(type) {
-        if (type === 'link') {
-          vm.browsePlaceholder = placeholder[0];
+      if (type === 'link') {
+        vm.browsePlaceholder = placeholder[0];
+      } else {
+        vm.browsePlaceholder = placeholder[1];
+      }
+    }
+
+    /**
+     * Sets the category form input.
+     * @param categories
+     * @private
+     */
+    function _setCategoryView(categories) {
+
+      let area = AreaObserver.get();
+      // Collection has category assigned
+      if (categories[0].Category !== null) {
+        // The assigned category belongs to this area. Fill input options.
+        // Using unary operator to force integer comparison.
+        if (+categories[0].Category.areaId === area) {
+          _getCategories();
+          vm.showCollectionCategories = true;
         } else {
-          vm.browsePlaceholder = placeholder[1];
+          // The current category belongs to a different area.
+          // Do not offer input option.
+          vm.showCollectionCategories = false;
         }
+      }
+      // No category assigned yet. Fill input options.
+      else {
+        _getCategories();
+        vm.showCollectionCategories = true;
+      }
     }
 
     /**
@@ -140,22 +168,14 @@
      */
     function _checkCategory(id) {
       if (id > 0) {
-        const categories = CategoriesByCollection.query({collId: id});
+        const categories = CategoryForCollection.query({collId: id});
         categories.$promise.then(function (cats) {
-          if (cats.length > 0) {
-            let area = AreaObserver.get();
-            if (cats[0].Category.areaId === area) {
-              // The current category belongs to this area.
-              _getCategories();
-              vm.showCollectionCategories = true;
-            } else {
-              // The current category belongs to a different area.
-              // Do not offer edit option.
-              vm.showCollectionCategories = false;
-            }
-          } else {
-            // Not category has been chosen yet for this collection.
-            vm.showCollectionCategories = true;
+          // Returns an array length zero or one
+          if (cats.length === 1) {
+           _setCategoryView(cats);
+          }
+          else {
+            console.log('Collection not found');
           }
         });
       }

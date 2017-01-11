@@ -51,7 +51,10 @@ function _addArea(tagId, areaId, res) {
     },
 
     function (err, result) {
-      utils.sendAreaTargetsReponse(res, err, result);
+      if (err) {
+        utils.sendErrorJson(res, err);
+      }
+      utils.sendSuccessAndDataJson(res, result);
 
     }
   );

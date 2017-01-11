@@ -22,7 +22,12 @@
 
   'use strict';
 
-  function TagController(TaggerDialog, UserAreaObserver,TagList, TagListObserver, TagObserver) {
+  function TagController(ShowDialog,
+                         TagDialog,
+                         UserAreaObserver,
+                         TagList,
+                         TagListObserver,
+                         TagObserver) {
 
     const vm = this;
 
@@ -60,7 +65,7 @@
      * @param message  html template to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new TaggerDialog($event, message);
+      new ShowDialog.showDialog($event, message, TagDialog);
     };
 
     vm.$onInit = function () {

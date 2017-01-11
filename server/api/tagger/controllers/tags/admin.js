@@ -115,7 +115,8 @@ exports.add = function (req, res) {
     },
     function (err, result) {
       if (err) {
-        console.log(err);
+        utils.sendErrorJson(res, err);
+        logger.dao(err);
       }
       if (result.check === null) {
         // Add new content type
@@ -123,11 +124,12 @@ exports.add = function (req, res) {
           utils.sendResponse(res, {status: 'success', id: result.id});
         })
           .catch(function (err) {
+            utils.sendErrorJson(res, err);
             logger.dao(err);
           });
 
       } else {
-        utils.sendResponse(res, {status: 'failure'});
+        utils.sendErrorJson(res, {message: 'Unable to add tag.'});
       }
     }
   );

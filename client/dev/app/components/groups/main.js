@@ -22,7 +22,8 @@
 
   'use strict';
 
-  function GroupController(TaggerDialog,
+  function GroupController(ShowDialog,
+                           CollectionGroupDialog,
                            UserAreaObserver,
                            CategoryList,
                            GroupListObserver,
@@ -64,7 +65,7 @@
      * @param message  html template to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new TaggerDialog($event, message);
+      new ShowDialog.showDialog($event, message, CollectionGroupDialog);
     };
 
     vm.$onInit = function () {

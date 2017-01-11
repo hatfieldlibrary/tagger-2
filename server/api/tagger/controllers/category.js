@@ -52,6 +52,19 @@ exports.categoryCountByArea = function (req, res) {
 
 };
 
+/**
+ * Requests the category associated with a collection. The model allows
+ * for many-to-many relationships between collections and categories.
+ * This is incorrect.  The relationship should be one-to-many.
+ *
+ * The method returns an array of length one if the collection exists.
+ * The join will return Category information or null.
+ *
+ * TODO: The model could be refactored for one-to-many. Dangerous for existing data, however.
+ *
+ * @param req
+ * @param res
+ */
 exports.collectionsByCategory = function (req, res) {
   const collId = req.params.collId;
   taggerDao.categoriesByCollectionId(collId).then(function (categories) {

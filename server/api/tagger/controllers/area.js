@@ -68,15 +68,17 @@ exports.add = function (req, res) {
       taggerDao.addArea(title, result[0].dataValues.count + 1)
         .then(
           function () {
-            utils.sendSuccessJson(res)
+            utils.sendSuccessJson(res);
           }).catch(function (err) {
+        utils.sendErrorJson(res, err);
         logger.dao(err);
-        });
+      });
     })
     .catch(function (err) {
+      utils.sendErrorJson(res, err);
       logger.dao(err);
-    });
 
+    });
 };
 
 /**
@@ -123,7 +125,7 @@ exports.reorder = function (req, res) {
       utils.sendResponse(res, {status: 'success'});
     }).catch(function (err) {
     logger.dao(err);
-    });
+  });
 };
 
 /**

@@ -33,6 +33,8 @@
 
     AreaListObserver.subscribe(function onNext() {
          vm.areas = AreaListObserver.get();
+         console.log(vm.areas)
+         AreaObserver.set(vm.areas[0].id);
     });
 
     /**
