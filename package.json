@@ -35,7 +35,8 @@
     "pug": "^2.0.0-beta6",
     "redis": "^2.6.3",
     "sequelize": "^3.13.0",
-    "serve-favicon": "^2.3.2"
+    "serve-favicon": "^2.3.2",
+    "winston": "^2.3.0"
   },
   "devDependencies": {
     "aliv": "^1.2.0",

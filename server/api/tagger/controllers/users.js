@@ -19,6 +19,7 @@
 
 const utils = require('../utils/response-utility');
 const taggerDao = require('../dao/users.dao');
+const logger = require('../utils/error-logger');
 
 /**
  * Retrieves list of current users.
@@ -29,8 +30,8 @@ exports.list = function (req, res) {
 
   taggerDao.findAllUsers().then(function (users) {
     utils.sendResponse(res, users);
-  }).catch(function (e) {
-    console.log(e);
+  }).catch(function (err) {
+    logger.dao(err);
   });
 
 };
@@ -47,8 +48,8 @@ exports.add = function (req, res) {
 
   taggerDao.createNewUser(name, email, area).then(function () {
     utils.sendSuccessJson(res);
-  }).catch(function (e) {
-    console.log(e);
+  }).catch(function (err) {
+    logger.dao(err);
   });
 
 };
@@ -64,7 +65,7 @@ exports.delete = function (req, res) {
   taggerDao.deleteUser(id).then(function () {
     utils.sendSuccessJson(res);
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
   });
 
 };
@@ -83,7 +84,7 @@ exports.update = function (req, res) {
   taggerDao.updateUser(name, email, area, id).then(function () {
     utils.sendResponse(res, {status: 'success'});
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
   });
 
 };

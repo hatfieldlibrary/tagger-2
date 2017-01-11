@@ -6,6 +6,7 @@
 
 const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/collection-dao');
+const logger = require('../../utils/error-logger');
 
 /**
  * Retrieves a list of subjects by area for the public API.
@@ -18,7 +19,8 @@ exports.subjectsByArea = function (req, res) {
   taggerDao.findTagsInArea(id).then(function (tags) {
     utils.sendResponse(res, tags);
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
+    utils.sendErrorJson(res, err);
   });
 
 };

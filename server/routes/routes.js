@@ -20,13 +20,13 @@ module.exports = function(app,config,passport){
   'use strict';
 
   const userInfo = require('../../server/api/tagger/controllers/user-info');
-  const tag = require('../../server/api/tagger/controllers/tags');
-  const apiTag = require('../../server/api/tagger/controllers/client/tags');
+  const tag = require('../../server/api/tagger/controllers/tags/admin');
+  const apiTag = require('../api/tagger/controllers/tags/public');
   const tagTarget = require('../../server/api/tagger/controllers/tag-target.js');
   const area = require('../../server/api/tagger/controllers/area');
   const content = require('../../server/api/tagger/controllers/content');
-  const collection = require('../../server/api/tagger/controllers/collection');
-  const apiCollection = require('../../server/api/tagger/controllers/client/collection');
+  const collection = require('../api/tagger/controllers/collection/admin');
+  const apiCollection = require('../api/tagger/controllers/collection/public');
   const category = require('../../server/api/tagger/controllers/category');
   const users = require('../../server/api/tagger/controllers/users');
   /**

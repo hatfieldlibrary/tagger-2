@@ -8,6 +8,7 @@ const async = require('async');
 const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/collection-dao');
 const config = require('../../../../config/environment');
+const logger = require('../../utils/error-logger');
 
 // The following are rest endpoints for external clients (e.g. Academic Commons).
 
@@ -23,7 +24,7 @@ exports.tagsForCollection = function (req, res) {
   taggerDao.findTagsForCollection(collId).then(function (tags) {
     utils.sendResponse(res, tags);
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
     utils.sendErrorJson(res, err);
   });
 
@@ -40,11 +41,10 @@ exports.typesForCollection = function (req, res) {
 
   taggerDao.findContentTypesForCollection(collId).then(function (types) {
     utils.sendResponse(res, types);
-  })
-    .catch(function (err) {
-      console.log(err);
-      utils.sendResponse(res, {status: 'failed'});
-    });
+  }).catch(function (err) {
+    logger.dao(err);
+    utils.sendErrorJson(res, err);
+  });
 
 };
 
@@ -59,8 +59,8 @@ exports.allCollections = function (req, res) {
     utils.sendResponse(res, collections);
 
   }).catch(function (err) {
-    console.log(err);
-
+    logger.dao(err);
+    utils.sendErrorJson(res, err);
   });
 };
 
@@ -109,8 +109,8 @@ exports.collectionById = function (req, res) {
     },
     function (err, result) {
       if (err) {
-        console.log(err);
-        utils.sendErrorJson(res, err)
+        logger.dao(err);
+        utils.sendErrorJson(res, err);
       } else {
         utils.sendResponse(res, result);
       }
@@ -132,7 +132,8 @@ exports.collectionsByArea = function (req, res) {
       utils.sendResponse(res, collections);
 
     }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
+    utils.sendErrorJson(res, err);
   });
 };
 
@@ -149,7 +150,8 @@ exports.collectionsBySubject = function (req, res) {
     function (collections) {
       utils.sendResponse(res, collections);
     }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
+    utils.sendErrorJson(res, err);
   });
 
 };
@@ -165,7 +167,8 @@ exports.allCollectionsByCategory = function (req, res) {
   taggerDao.getCollectionsByCategory(categoryId).then(function (collections) {
     utils.sendResponse(res, collections);
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
+    utils.sendErrorJson(res, err);
   });
 
 };
@@ -180,7 +183,8 @@ exports.allCollectionsBySubject = function (req, res) {
     function (collections) {
       utils.sendResponse(res, collections);
     }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
+    utils.sendErrorJson(res, err);
   });
 };
 
@@ -233,7 +237,7 @@ exports.browseList = function (req, res) {
   const request = http.request(options, handleResponse);
 
   request.on('error', function (e) {
-    console.log(e);
+    logger.dao(err);
     request.end();
   });
 

@@ -38,8 +38,8 @@
      * Update the tags when collection changes.
      */
     CollectionObserver.subscribe(function onNext() {
-      let collid = CollectionObserver.get();
-      _getTagsForCollection(collid);
+      ctrl.collectionId = CollectionObserver.get();
+      _getTagsForCollection(ctrl.collectionId);
 
     });
 
@@ -165,9 +165,8 @@
     }
 
     ctrl.$onInit = function () {
-      // Need to set at init to cover all cases.
-      let id = CollectionObserver.get();
-      _getTagsForCollection(id);
+      ctrl.collectionId = CollectionObserver.get();
+      _getTagsForCollection(ctrl.collectionId);
       _getTagsForArea(AreaObserver.get());
     };
 
@@ -175,9 +174,7 @@
 
   taggerComponents.component('subjectSelector', {
 
-    bindings: {
-      collectionId: '@'
-    },
+
     template: '<md-card flex>' +
     ' <md-toolbar class="md_primary">' +
     '   <div class="md-toolbar-tools">     ' +

@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * Controllers for the Tagger administrative API and external clients.
+ * Controllers for the Tagger administrative API.
  *
  * @author Michael Spalti
  */
@@ -23,10 +23,11 @@
 'use strict';
 
 const async = require('async');
-const utils = require('../utils/response-utility');
-const imageConvert = require('../utils/image-convert');
-const taggerDao = require('../dao/collection-dao');
-const config = require('../../../config/environment');
+const utils = require('../../utils/response-utility');
+const imageConvert = require('../../utils/image-convert');
+const taggerDao = require('../../dao/collection-dao');
+const config = require('../../../../config/environment');
+const logger = require('../../utils/error-logger');
 
 /**
  * Returns ctype (item type) counts for the overview
@@ -39,8 +40,8 @@ exports.countCTypesByArea = function (req, res) {
 
   taggerDao.countCTypesByArea(areaId).then(function (types) {
     utils.sendResponse(res, types);
-  }).error(function (err) {
-    console.log(err);
+  }).catch(function (err) {
+    logger.dao(err);
   });
 };
 
@@ -55,8 +56,8 @@ exports.browseTypesByArea = function (req, res) {
   taggerDao.browseTypesByArea(areaId).then(
     function (collections) {
       utils.sendResponse(res, collections);
-    }).error(function (err) {
-    console.log(err);
+    }).catch(function (err) {
+    logger.dao(err);
   });
 };
 
@@ -67,8 +68,8 @@ exports.setPublicationStatus = function (req, res) {
   taggerDao.setPublicationStatus(pubStatus, collectionId).then(
     function() {
       utils.sendSuccessJson(res);
-    }).error(function(err) {
-      console.log(err);
+    }).catch(function (err) {
+    logger.dao(err);
   });
 
 };
@@ -79,8 +80,8 @@ exports.getPublicationStatus = function (req, res) {
   taggerDao.getPublicationStatus(collectionId).then(
     function(collection) {
       utils.sendResponse(res, collection);
-    }).error(function(err) {
-    console.log(err);
+    }).catch(function (err) {
+    logger.dao(err);
   });
 
 };
@@ -96,8 +97,8 @@ exports.repoTypesByArea = function (req, res) {
 
   taggerDao.repoTypesByArea(areaId).then(function (types) {
     utils.sendResponse(res, types);
-  }).error(function (err) {
-    console.log(err);
+  }).catch(function (err) {
+    logger.dao(err);
   });
 };
 
@@ -113,8 +114,8 @@ exports.list = function (req, res) {
   taggerDao.findCollectionsInArea(areaId).then(function (collections) {
     utils.sendResponse(res, collections);
 
-  }).error(function (err) {
-    console.log(err);
+  }).catch(function (err) {
+    logger.dao(err);
   });
 };
 
@@ -132,22 +133,21 @@ exports.addTypeTarget = function (req, res) {
       check: function (callback) {
         taggerDao.findItemContentTarget(collId, typeId).then(function (result) {
           callback(null, result);
-        })
-          .error(function (err) {
-            console.log(err);
+        }).catch(function (err) {
+          logger.dao(err);
           });
       }
     },
     function (err, result) {
       if (err) {
-        console.log(err);
+        logger.dao(err);
       }
       if (result.check === null) {
 
         taggerDao.createItemContentTarget(collId, typeId).then(function () {
           utils.sendResponse(res, {status: 'success'});
-        }).error(function (e) {
-          console.log(e);
+        }).catch(function (err) {
+          logger.dao(err);
         });
 
       } else {
@@ -169,8 +169,8 @@ exports.removeTypeTarget = function (req, res) {
 
   taggerDao.deleteItemContentTarget(collId, typeId).then(function () {
     utils.sendSuccessJson(res);
-  }).error(function (e) {
-    console.log(e);
+  }).catch(function (err) {
+    logger.dao(err);
   });
 
 };
@@ -192,15 +192,14 @@ exports.addTagTarget = function (req, res) {
         taggerDao.checkForExistingTagTarget(collId, tagId)
           .then(function (result) {
             callback(null, result);
-          })
-          .error(function (err) {
-            console.log(err);
-          });
+          }).catch(function (err) {
+          logger.dao(err);
+        });
       }
     },
     function (err, result) {
       if (err) {
-        console.log(err);
+        logger.dao(err);
       }
       // if new, add target
       if (result.check === null) {
@@ -208,8 +207,8 @@ exports.addTagTarget = function (req, res) {
         taggerDao.addTagTarget(collId, tagId)
           .then(function () {
             utils.sendResponse(res, {status: 'success'});
-          }).error(function (e) {
-          console.log(e);
+          }).catch(function (err) {
+          logger.dao(err);
         });
 
       } else {
@@ -231,8 +230,8 @@ exports.removeTagTarget = function (req, res) {
 
   taggerDao.deleteTagTarget(collId, tagId).then(function () {
     utils.sendSuccessJson(res);
-  }).error(function (e) {
-    console.log(e);
+  }).catch(function (err) {
+    logger.dao(err);
   });
 
 };
@@ -248,8 +247,8 @@ exports.areas = function (req, res) {
 
   taggerDao.findAreasForCollection(collId).then(function (areas) {
     utils.sendResponse(res, areas);
-  }).error(function (err) {
-    console.log(err);
+  }).catch(function (err) {
+    logger.dao(err);
   });
 
 };
@@ -260,9 +259,8 @@ function _areaIdsForCollection (collId, callback) {
 
   taggerDao.getAreaIdsForCollection(collId).then(function (result) {
     callback(null, result);
-  })
-    .error(function (err) {
-      console.log(err);
+  }).catch(function (err) {
+    logger.dao(err);
     });
 }
 
@@ -280,11 +278,9 @@ function _addArea(collId, areaId, res) {
         taggerDao.addCollectionToArea(collId, areaId)
           .then(function (result) {
             callback(null, result);
-          })
-          .error(function (err) {
-            console.log(err);
+          }).catch(function (err) {
+          logger.dao(err);
           });
-
       },
       areaList: function (callback) {
         _areaIdsForCollection(collId, callback);
@@ -313,7 +309,9 @@ exports.getFirstCollectionInArea = function (req, res) {
             callback(null, collections[0].dataValues.CollectionId);
 
           }
-        );
+        ).catch(function (err) {
+        logger.dao(err);
+      });
     },
     function (collId, callback) {
       taggerDao.findCollectionById(collId)
@@ -324,9 +322,10 @@ exports.getFirstCollectionInArea = function (req, res) {
           }
         );
     }
-  ], function (err, collection) {
+  ],
+    function (err, collection) {
     if (err) {
-      console.log(err);
+      logger.dao(err);
     }
     utils.sendResponse(res, collection);
 
@@ -353,15 +352,14 @@ exports.addAreaTarget = function (req, res) {
 
         taggerDao.checkAreaAssociation(collId, areaId).then(function (result) {
           callback(null, result);
-        })
-          .error(function (err) {
-            console.log(err);
-          });
+        }).catch(function (err) {
+          logger.dao(err);
+        });
       }
     },
     function (err, result) {
       if (err) {
-        console.log(err);
+        logger.dao(err);
       }
       // if new
       if (result.check === null) {
@@ -395,10 +393,9 @@ exports.removeAreaTarget = function (req, res) {
       create: function (callback) {
         taggerDao.removeCollectionFromArea(areaId, collId).then(function (result) {
           callback(null, result);
-        })
-          .error(function (err) {
-            console.log(err);
-          });
+        }).catch(function (err) {
+          logger.dao(err);
+        });
       },
       areaList: function (callback) {
         _areaIdsForCollection(collId, callback);
@@ -424,22 +421,28 @@ exports.byId = function (req, res) {
       getCollection: function (callback) {
         taggerDao.findCollectionById(collId).then(function (result) {
           callback(null, result);
+        }).catch(function (err) {
+          logger.dao(err);
         });
       },
       getCategory: function (callback) {
         taggerDao.findCategoryAssociation(collId).then(function (result) {
           callback(null, result);
+        }).catch(function (err) {
+          logger.dao(err);
         });
       },
       getAreas: function (callback) {
         taggerDao.findAreasForCollection(collId).then(function (result) {
           callback(null, result);
+        }).catch(function (err) {
+          logger.dao(err);
         });
       }
     },
     function (err, result) {
       if (err !== null) {
-        console.log(err);
+        logger.dao(err);
       }
 
       var response = {};
@@ -508,19 +511,16 @@ exports.update = function (req, res) {
         taggerDao.updateCollection(update, id)
           .then(function (result) {
             callback(null, result);
-          }).error(function (err) {
-          callback(err, null);
-          console.log(err);
+          }).catch(function (err) {
+          logger.dao(err);
         });
       },
       checkCategory: function (callback) {
         taggerDao.findCategoryAssociation(id).then(function (result) {
           callback(null, result);
-        })
-          .error(function (err) {
-            callback(err, null);
-            console.log(err);
-          });
+        }).catch(function (err) {
+          logger.dao(err);
+        });
       }
     },
     function (err, result) {
@@ -537,7 +537,7 @@ exports.update = function (req, res) {
             utils.sendSuccessJson(res);
 
           }).catch(function (err) {
-          console.log(err);
+          logger.dao(err);
         });
         // If category does exist, update to the current value.
       } else {
@@ -547,7 +547,7 @@ exports.update = function (req, res) {
 
           }).catch(
           function (err) {
-            console.log(err);
+            logger.dao(err);
           });
       }
     });
@@ -565,7 +565,7 @@ exports.delete = function (req, res) {
   taggerDao.deleteCollection(id).then(function () {
     utils.sendResponse(res, {status: 'success'});
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
   });
 
 };
@@ -592,7 +592,7 @@ exports.add = function (req, res) {
           newCollectionId = coll.id;
           callback(null, coll);
         }).catch(function (err) {
-          console.log(err);
+          logger.dao(err);
         });
       },
       addArea: function (callback) {
@@ -600,7 +600,7 @@ exports.add = function (req, res) {
           .then(function (result) {
             callback(null, result);
           }).catch(function (err) {
-          callback(err);
+          logger.dao(err);
         });
       },
       collections: function (callback) {
@@ -608,12 +608,12 @@ exports.add = function (req, res) {
           .then(function (colls) {
             callback(null, colls);
           }).catch(function (err) {
-          callback(err);
+          logger.dao(err);
         });
       }
     }, function (err, results) {
       if (err) {
-        console.log(err);
+        logger.dao(err);
       }
       utils.sendResponse(res, {status: 'success', id: newCollectionId, collections: results.collections});
     }
@@ -638,7 +638,7 @@ exports.updateImage = function (req, res, config) {
   form.parse(req, function (err, fields, files) {
 
     if (err) {
-      console.log(err);
+      logger.form(err);
       res.end();
     }
 
@@ -646,12 +646,12 @@ exports.updateImage = function (req, res, config) {
       try {
         imageConvert(res, files, fields, config, updateImageInDb);
       } catch (err) {
-        console.log(err);
+        logger.image(err);
         res.end();
       }
     }
     else {
-      console.log('No image files were received. Aborting upload.');
+      logger.missing('No image files were received. Aborting upload.');
       res.end();
     }
   });
@@ -666,9 +666,8 @@ exports.updateImage = function (req, res, config) {
       utils.sendSuccessJson(res);
       }
     ).catch(function (err) {
-        console.log(err);
-      }
-    );
+      logger.dao(err);
+    });
   }
 };
 
