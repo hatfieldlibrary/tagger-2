@@ -27,6 +27,9 @@ const app = express();
 // initialize database.
 const taggerSchema = require('./api/tagger/models/index');
 
+const logger = require('winston');
+logger.level = config.logLevel;
+
 // // configure express
 // require('./config/')(app, config);
 

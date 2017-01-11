@@ -19,6 +19,7 @@
 
 const taggerDao = require('../dao/area-dao');
 const utils = require('../utils/response-utility');
+const logger = require('winston');
 
 /**
  * Retrieves area information by area id.
@@ -31,10 +32,9 @@ exports.byId = function (req, res) {
   taggerDao.findAreaById(areaId).then(function (areas) {
     utils.sendResponse(res, areas);
 
-  }).catch(
-    function (err) {
-      console.log(err);
-    });
+  }).catch(function (err) {
+    logger.log('warn', err.message);
+  });
 };
 
 /**
@@ -48,7 +48,7 @@ exports.list = function (req, res) {
     utils.sendResponse(res, areas);
 
   }).catch(function (err) {
-    console.log(err);
+    logger.log('warn', err.message);
   });
 
 };
@@ -69,13 +69,12 @@ exports.add = function (req, res) {
         .then(
           function () {
             utils.sendSuccessJson(res)
-          })
-        .catch(function (err) {
-          console.log(err);
+          }).catch(function (err) {
+          logger.log('warn', err.message);
         });
     })
     .catch(function (err) {
-      console.log(err);
+      logger.log('warn', err.message);
     });
 
 };
@@ -104,10 +103,9 @@ exports.update = function (req, res) {
   taggerDao.updateArea(data, id)
     .then(function (result) {
       utils.sendResponse(res, {status: 'success', id: result.id});
-    }).catch(
-    function (err) {
-      console.log(err);
-    });
+    }).catch(function (err) {
+    logger.log('warn', err.message);
+  });
 };
 
 /**
@@ -123,9 +121,8 @@ exports.reorder = function (req, res) {
   taggerDao.reorder(areas, areaCount)
     .then(function () {
       utils.sendResponse(res, {status: 'success'});
-    })
-    .catch(function (err) {
-      console.log(err);
+    }).catch(function (err) {
+      logger.log('warn', err.message);
     });
 };
 
@@ -139,10 +136,9 @@ exports.delete = function (req, res) {
 
   taggerDao.deleteArea(id).then(function () {
     utils.sendResponse(res, {status: 'success'});
-  }).catch(
-    function (err) {
-      console.log(err);
-    });
+  }).catch(function (err) {
+    logger.log('warn', err.message);
+  });
 
 };
 

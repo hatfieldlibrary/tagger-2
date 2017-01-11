@@ -20,6 +20,7 @@
 const async = require('async');
 const utils = require('../utils/response-utility');
 const taggerDao = require('../dao/tag-target-dao');
+const logger = require('winston');
 
 /**
  * Private function for adding association between tag and area.
@@ -35,19 +36,17 @@ function _addArea(tagId, areaId, res) {
         taggerDao.addTagToArea(tagId, areaId)
           .then(function (result) {
             callback(null, result);
-          })
-          .error(function (err) {
-            console.log(err);
-          });
+          }).catch(function (err) {
+          logger.log('warn', err.message);
+        });
 
       },
       areaList: function (callback) {
         taggerDao.findAreasForTag(tagId).then(function (result) {
           callback(null, result);
-        })
-          .error(function (err) {
-            console.log(err);
-          });
+        }).catch(function (err) {
+          logger.log('warn', err.message);
+        });
       }
     },
 
@@ -70,7 +69,7 @@ exports.getAreaTargets = function (req, res) {
     .then(function (areas) {
       utils.sendResponse(res, areas);
     }).catch(function (err) {
-    console.log(err);
+    logger.log('warn', err.message);
   });
 };
 
@@ -93,15 +92,14 @@ exports.addTarget = function (req, res) {
         taggerDao.findTagAreaAssociation(tagId, areaId)
           .then(function (result) {
             callback(null, result);
-          })
-          .catch(function (err) {
+          }).catch(function (err) {
             callback(err);
           });
       }
     },
     function (err, result) {
       if (err) {
-        console.log(err);
+        logger.log('warn', err.message);
       }
       // if new
       if (result.check === null) {
@@ -113,7 +111,7 @@ exports.addTarget = function (req, res) {
         taggerDao.listTagAssociations(tagId).then(function (areas) {
           utils.sendResponse(res, {status: 'exists', areaTargets: areas});
         }).catch(function (err) {
-          console.log(err);
+          logger.log('warn', err.message);
         });
       }
 
@@ -143,24 +141,22 @@ exports.removeTarget = function (req, res) {
         taggerDao.removeTagFromArea(areaId, tagId)
           .then(function (result) {
             callback(null, result);
-          })
-          .error(function (err) {
-            console.log(err);
-          });
+          }).catch(function (err) {
+          logger.log('warn', err.message);
+        });
       },
       // Get the updated tag list for the area
       areaList: function (callback) {
         taggerDao.findAreasForTag(tagId).then(function (result) {
           callback(null, result);
-        })
-          .error(function (err) {
-            console.log(err);
-          });
+        }).catch(function (err) {
+          logger.log('warn', err.message);
+        });
       }
     },
     function (err, result) {
       if (err) {
-        console.log(err);
+        logger.log('warn', err.message);
       }
       utils.sendResponse(res, {
         status: 'success',

@@ -21,6 +21,7 @@
 const async = require('async');
 const utils = require('../utils/response-utility');
 const taggerDao = require('../dao/content-dao');
+const logger = require('winston');
 
 /**
  * Retrieves content type by id
@@ -33,7 +34,7 @@ exports.byId = function (req, res) {
   taggerDao.retrieveContentTypeById(id).then(function (type) {
     utils.sendResponse(res, type);
   }).catch(function (err) {
-    console.log(err);
+    logger.log('warn', err.message);
   });
 
 };
@@ -48,7 +49,7 @@ exports.list = function (req, res) {
   taggerDao.getContentTypes().then(function (types) {
     utils.sendResponse(res, types);
   }).catch(function (err) {
-    console.log(err);
+    logger.log('warn', err.message);
   });
 
 };
@@ -64,6 +65,8 @@ exports.countByArea = function (req, res) {
 
   taggerDao.getAreaContentTypeSummary(areaId).then(function (types) {
     utils.sendResponse(res, types);
+  }).catch(function (err) {
+    logger.log('warn', err.message);
   });
 
 };
@@ -83,25 +86,23 @@ exports.add = function (req, res) {
         taggerDao.findContentTypeByName(name)
           .then(function (result) {
             callback(null, result);
-          })
-          .catch(function (err) {
-            callback(err);
+          }).catch(function (err) {
+            logger.log('warn', err.message);
           });
       }
     },
     function (err, result) {
       if (err) {
-        console.log(err);
+        logger.log('warn', err.message);
       }
       if (result.check === null) {
         // Add new content type
         taggerDao.createContentType(name)
           .then(function (result) {
             utils.sendResponse(res, {status: 'success', id: result.id});
-          })
-          .catch(function (err) {
-            console.log(err);
-          });
+          }).catch(function (err) {
+          logger.log('warn', err.message);
+        });
 
       } else {
         utils.sendResponse(res, {status: 'failure'});
@@ -122,7 +123,7 @@ exports.update = function (req, res) {
   taggerDao.updateContentType(name, icon, id).then(function () {
     utils.sendSuccessJson(res);
   }).catch(function (err) {
-    console.log(err);
+    logger.log('warn', err.message);
   });
 };
 
@@ -137,7 +138,7 @@ exports.delete = function (req, res) {
   taggerDao.deleteContentType(contentId).then(function () {
     utils.sendResponse(res, {status: 'success'});
   }).catch(function (err) {
-    console.log(err);
+    logger.log('warn', err.message);
   });
 
 };

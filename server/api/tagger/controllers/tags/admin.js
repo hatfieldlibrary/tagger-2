@@ -22,8 +22,9 @@
  */
 
 const async = require('async');
-const utils = require('../utils/response-utility');
-const taggerDao = require('../dao/tags-dao');
+const utils = require('../../utils/response-utility');
+const taggerDao = require('../../dao/tags-dao');
+const logger = require('winston');
 
 
 /**
@@ -36,9 +37,8 @@ exports.list = function (req, res) {
   taggerDao.findAllTags().then(function (tags) {
     utils.sendResponse(res, tags);
   }).catch(function (err) {
-    console.log(err);
+    logger.log('warn', err.message);
   });
-
 };
 
 /**
@@ -52,7 +52,7 @@ exports.byId = function (req, res) {
   taggerDao.findTagById(id).then(function (tag) {
     utils.sendResponse(res, tag);
   }).catch(function (err) {
-    console.log(err);
+    logger.log('warn', err.message);
   });
 
 };
@@ -70,7 +70,7 @@ exports.tagByArea = function (req, res) {
   taggerDao.findTagsInArea(areaId).then(function (tags) {
     utils.sendResponse(res, tags);
   }).catch(function (err) {
-    console.log(err);
+    logger.log('warn', err.message);
   });
 };
 
@@ -87,7 +87,7 @@ exports.tagByAreaCount = function (req, res) {
   taggerDao.getTagCountByArea(areaId).then(function (tags) {
     utils.sendResponse(res, tags);
   }).catch(function (err) {
-    console.log(err);
+    logger.log('warn', err.message);
   });
 };
 
@@ -123,7 +123,7 @@ exports.add = function (req, res) {
           utils.sendResponse(res, {status: 'success', id: result.id});
         })
           .catch(function (err) {
-            console.log(err);
+              logger.log('warn', err.message);
           });
 
       } else {
@@ -145,7 +145,7 @@ exports.update = function (req, res) {
   taggerDao.updateTag(name, id).then(function () {
     utils.sendSuccessJson(res);
   }).catch(function (err) {
-    console.log(err);
+    logger.log('warn', err.message);
   });
 
 };
@@ -160,6 +160,8 @@ exports.delete = function (req, res) {
 
   taggerDao.deleteTag(id).then(function () {
     utils.sendSuccessJson(res);
+  }).catch(function (err) {
+    logger.log('warn', err.message);
   });
 
 };
