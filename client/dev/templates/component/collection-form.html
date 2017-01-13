@@ -24,12 +24,12 @@
   </md-input-container>
   <md-input-container ng-if="vm.showCollectionCategories">
     <label>Collection Group</label>
-    <md-select ng-model="vm.collection.category" placeholder="Select a Collection Group">
+    <md-select ng-model="vm.category" placeholder="Select a Collection Group">
       <md-option ng-repeat="category in vm.categoryList track by $index" ng-value="category.id">{{category.title}}</md-option>
     </md-select>
   </md-input-container>
   <md-input-container ng-if="!vm.showCollectionCategories">
-    <h4 style="margin: 0;">Collection group defined in another area. <a href="" ng-click="vm.overrideCategory()">(Override)</a></h4>
+    <h4 style="margin: 0;">Shared collection. The collection group defined in another area. <a href="" ng-click="vm.overrideCategory()">(Override)</a></h4>
   </md-input-container>
   <md-input-container>
     <label>Description  &nbsp;<span class="md-subhead md-default">maximum characters 450 (current {{vm.collection.description.length}})</span></label>

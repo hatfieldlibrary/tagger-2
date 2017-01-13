@@ -35,7 +35,7 @@ const config = {
       password: credentials.develdbpassword,
       host: 'localhost',
       port: 3306,
-      dialect: 'mysql'
+      dialect: 'mariadb'
     },
     logLevel: 'debug',
     dbLog: console.log,
