@@ -2,6 +2,8 @@
  * Created by mspalti on 1/5/17.
  */
 
+'use strict';
+
 describe('Area Main Component', () => {
 
   let parentScope;

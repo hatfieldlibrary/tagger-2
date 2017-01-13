@@ -15,8 +15,10 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var invalidInput = (function() {
-  var _invalidStrings = [1, 0, function() {}, true, false, {}, []];
+'use strict';
+
+(function() {
+  const _invalidStrings = [1, 0, function() {}, true, false, {}, []];
 
   return {
     invalidStrings: _invalidStrings
