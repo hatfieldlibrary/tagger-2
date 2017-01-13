@@ -13,6 +13,10 @@ addons:
     packages:
       - xvfb
 
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y libxml2-dev
+
 before_script:
   - npm install -g bower gulp-cli mocha
   - npm run-script test-on-travis
