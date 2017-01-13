@@ -21,6 +21,8 @@
 
 (function () {
 
+  'use strict';
+
   function TagsCtrl(CollectionTagTargetAdd,
                     CollectionTagTargetRemove,
                     TagsForArea,
@@ -36,9 +38,8 @@
      * Update the tags when collection changes.
      */
     CollectionObserver.subscribe(function onNext() {
-      let collid = CollectionObserver.get();
-      ctrl.collectionId = collid;
-      _getTagsForCollection(collid);
+      ctrl.collectionId = CollectionObserver.get();
+      _getTagsForCollection(ctrl.collectionId);
 
     });
 
@@ -116,9 +117,8 @@
           new TaggerToast('Subject Tag Added');
 
         } else {
-          new TaggerToast('WARNING: Unable to add subject tag!');
+          new TaggerToast('WARNING: Unable to add subject tag! ' + data.status);
           return {};
-
         }
       });
 
@@ -164,9 +164,8 @@
     }
 
     ctrl.$onInit = function () {
-      // Need to set at init to cover all cases.
-      let id = CollectionObserver.get();
-      _getTagsForCollection(id);
+      ctrl.collectionId = CollectionObserver.get();
+      _getTagsForCollection(ctrl.collectionId);
       _getTagsForArea(AreaObserver.get());
     };
 
@@ -174,9 +173,7 @@
 
   taggerComponents.component('subjectSelector', {
 
-    bindings: {
-      collectionId: '@'
-    },
+
     template: '<md-card flex>' +
     ' <md-toolbar class="md_primary">' +
     '   <div class="md-toolbar-tools">     ' +

@@ -76,7 +76,7 @@
             vm.categories = list;
             GroupListObserver.set(list);
             // Toast upon success
-            new TaggerToast('Tag Updated');
+            new TaggerToast('Category Updated');
           });
 
         }
@@ -92,7 +92,7 @@
         _getGroupInfo(groupId);
       }
 
-    }
+    };
 
   }
 

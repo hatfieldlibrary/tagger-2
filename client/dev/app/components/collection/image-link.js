@@ -32,7 +32,7 @@
         return '/resources/img/thumb/' + ctrl.imgname;
       }
       return '';
-    }
+    };
   }
 
   taggerComponents.component('thumbImageLink', {
@@ -41,6 +41,6 @@
     },
     template: '<img style="max-width: 120px;" ng-src="{{$ctrl.getLink()}}">',
     controller: LinkCtrl
-  })
+  });
 
 })();

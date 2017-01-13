@@ -26,11 +26,15 @@
                           GroupObserver,
                           UserAreaObserver) {
 
-    var vm = this;
+    const vm = this;
 
     GroupListObserver.subscribe(function onNext() {
       vm.categories = GroupListObserver.get();
       vm.currentCategory = vm.categories[0].id;
+    });
+
+    GroupObserver.subscribe((id) => {
+        vm.currentCategory = id;
     });
 
     vm.resetCategory = function (tagId) {
@@ -51,7 +55,7 @@
       if (groupList) {
         vm.categories = groupList;
       }
-    }
+    };
   }
 
   taggerComponents.component('groupsList', {

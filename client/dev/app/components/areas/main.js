@@ -22,7 +22,8 @@
 
   'use strict';
 
-  function GroupController(TaggerDialog,
+  function AreasController(ShowDialog,
+                           AreaDialog,
                            AreaListObserver,
                            UserAreaObserver) {
 
@@ -54,6 +55,11 @@
 
     });
 
+    /**
+     * Updates the title and id in view.
+     * @param id  area id
+     * @param title   area title
+     */
     vm.menuUpdate = function (id, title) {
       vm.currentArea.title = title;
       vm.currentArea.id = id;
@@ -66,7 +72,7 @@
      * @param message  html to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new TaggerDialog($event, message);
+      new ShowDialog.showDialog($event, message, AreaDialog);
     };
 
   }
@@ -74,7 +80,7 @@
   taggerComponents.component('areasComponent', {
 
     templateUrl: 'templates/component/areas.html',
-    controller: GroupController,
+    controller: AreasController,
     controllerAs: 'vm'
 
   });

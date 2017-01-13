@@ -22,8 +22,9 @@
  */
 
 const async = require('async');
-const utils = require('../utils/response-utility');
-const taggerDao = require('../dao/tags-dao');
+const utils = require('../../utils/response-utility');
+const taggerDao = require('../../dao/tags-dao');
+const logger = require('../../utils/error-logger');
 
 
 /**
@@ -36,9 +37,8 @@ exports.list = function (req, res) {
   taggerDao.findAllTags().then(function (tags) {
     utils.sendResponse(res, tags);
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
   });
-
 };
 
 /**
@@ -52,7 +52,7 @@ exports.byId = function (req, res) {
   taggerDao.findTagById(id).then(function (tag) {
     utils.sendResponse(res, tag);
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
   });
 
 };
@@ -70,7 +70,7 @@ exports.tagByArea = function (req, res) {
   taggerDao.findTagsInArea(areaId).then(function (tags) {
     utils.sendResponse(res, tags);
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
   });
 };
 
@@ -87,7 +87,7 @@ exports.tagByAreaCount = function (req, res) {
   taggerDao.getTagCountByArea(areaId).then(function (tags) {
     utils.sendResponse(res, tags);
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
   });
 };
 
@@ -115,7 +115,8 @@ exports.add = function (req, res) {
     },
     function (err, result) {
       if (err) {
-        console.log(err);
+        utils.sendErrorJson(res, err);
+        logger.dao(err);
       }
       if (result.check === null) {
         // Add new content type
@@ -123,11 +124,12 @@ exports.add = function (req, res) {
           utils.sendResponse(res, {status: 'success', id: result.id});
         })
           .catch(function (err) {
-            console.log(err);
+            utils.sendErrorJson(res, err);
+            logger.dao(err);
           });
 
       } else {
-        utils.sendResponse(res, {status: 'failure'});
+        utils.sendErrorJson(res, {message: 'Unable to add tag.'});
       }
     }
   );
@@ -143,9 +145,9 @@ exports.update = function (req, res) {
   const name = req.body.name;
 
   taggerDao.updateTag(name, id).then(function () {
-    utils.sendResponse(res, {status: 'success'});
+    utils.sendSuccessJson(res);
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
   });
 
 };
@@ -159,25 +161,12 @@ exports.delete = function (req, res) {
   const id = req.body.id;
 
   taggerDao.deleteTag(id).then(function () {
-    utils.sendResponse(res, {status: 'success'});
-  });
-
-};
-
-
-/**
- * Retrieves a list of subjects by area for the public API.
- * @param req
- * @param res
- */
-exports.subjectsByArea = function (req, res) {
-  const id = req.params.id;
-
-  taggerDao.findTagsInArea(id).then(function (tags) {
-    utils.sendResponse(res, tags);
+    utils.sendSuccessJson(res);
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
   });
 
 };
+
+
 

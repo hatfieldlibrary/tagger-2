@@ -44,7 +44,7 @@
 
     vm.$onInit = () => {
       vm.userAreaId = UserAreaObserver.get();
-    }
+    };
 
   }
 

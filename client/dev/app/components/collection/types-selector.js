@@ -161,7 +161,7 @@
       // Need to set at init to cover all cases.
       let id = CollectionObserver.get();
       _getTypesForCollection(id);
-    }
+    };
   }
 
   taggerComponents.component('contentTypeSelector', {

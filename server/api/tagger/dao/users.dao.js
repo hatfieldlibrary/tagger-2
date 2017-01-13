@@ -19,6 +19,8 @@
  * Created by mspalti on 12/1/16.
  */
 
+// jshint strict:false
+
 const taggerSchema = require('../models/index');
 const taggerDao = {};
 
@@ -40,7 +42,7 @@ taggerDao.createNewUser = (name, email, area) => {
       email: email,
       area: area
     }
-  )
+  );
 };
 
 taggerDao.deleteUser = (id) => {

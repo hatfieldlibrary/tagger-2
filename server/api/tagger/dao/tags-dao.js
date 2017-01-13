@@ -19,6 +19,8 @@
  * Created by mspalti on 12/1/16.
  */
 
+// jshint strict:false
+
 const taggerSchema = require('../models/index');
 const taggerDao = {};
 
@@ -84,7 +86,7 @@ taggerDao.findTagsInArea = (areaId) => {
     attributes: ['"Tags.name"', 'TagId'],
     order: [[taggerSchema.Tag, 'name', 'ASC']],
     include: [taggerSchema.Tag]
-  })
+  });
 
 };
 
@@ -99,7 +101,7 @@ taggerDao.getTagCountByArea = (areaId) => {
       replacements: [areaId],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     }
-  )
+  );
 };
 
 taggerDao.findTagByName = (name) => {

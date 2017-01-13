@@ -19,6 +19,7 @@
 
 const taggerDao = require('../dao/area-dao');
 const utils = require('../utils/response-utility');
+const logger = require('../utils/error-logger');
 
 /**
  * Retrieves area information by area id.
@@ -31,10 +32,9 @@ exports.byId = function (req, res) {
   taggerDao.findAreaById(areaId).then(function (areas) {
     utils.sendResponse(res, areas);
 
-  }).catch(
-    function (err) {
-      console.log(err);
-    });
+  }).catch(function (err) {
+    logger.dao(err);
+  });
 };
 
 /**
@@ -48,7 +48,7 @@ exports.list = function (req, res) {
     utils.sendResponse(res, areas);
 
   }).catch(function (err) {
-    console.log(err);
+    logger.dao(err);
   });
 
 };
@@ -68,16 +68,17 @@ exports.add = function (req, res) {
       taggerDao.addArea(title, result[0].dataValues.count + 1)
         .then(
           function () {
-            utils.sendResponse(res, {status: 'success'});
-          })
-        .catch(function (err) {
-          console.log(err);
-        });
+            utils.sendSuccessJson(res);
+          }).catch(function (err) {
+        utils.sendErrorJson(res, err);
+        logger.dao(err);
+      });
     })
     .catch(function (err) {
-      console.log(err);
-    });
+      utils.sendErrorJson(res, err);
+      logger.dao(err);
 
+    });
 };
 
 /**
@@ -104,10 +105,9 @@ exports.update = function (req, res) {
   taggerDao.updateArea(data, id)
     .then(function (result) {
       utils.sendResponse(res, {status: 'success', id: result.id});
-    }).catch(
-    function (err) {
-      console.log(err);
-    });
+    }).catch(function (err) {
+    logger.dao(err);
+  });
 };
 
 /**
@@ -123,10 +123,9 @@ exports.reorder = function (req, res) {
   taggerDao.reorder(areas, areaCount)
     .then(function () {
       utils.sendResponse(res, {status: 'success'});
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
+    }).catch(function (err) {
+    logger.dao(err);
+  });
 };
 
 /**
@@ -139,10 +138,9 @@ exports.delete = function (req, res) {
 
   taggerDao.deleteArea(id).then(function () {
     utils.sendResponse(res, {status: 'success'});
-  }).catch(
-    function (err) {
-      console.log(err);
-    });
+  }).catch(function (err) {
+    logger.dao(err);
+  });
 
 };
 

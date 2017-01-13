@@ -20,6 +20,8 @@
  */
 (function () {
 
+  'use strict';
+
   function PublicationController(UpdatePublicationStatus,
                                  GetPublicationStatus,
                                  CollectionObserver,
@@ -76,7 +78,7 @@
         _setPubMessage(pub.published);
         PublicationStatusObserver.set(pub.published);
       });
-    }
+    };
 
   }
 

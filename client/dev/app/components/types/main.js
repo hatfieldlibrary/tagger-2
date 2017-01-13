@@ -22,7 +22,8 @@
 
   'use strict';
 
-  function TypeController(TaggerDialog,
+  function TypeController(ShowDialog,
+                          ContentTypeDialog,
                           UserAreaObserver,
                           TagList,
                           TagListObserver,
@@ -65,12 +66,12 @@
      * @param message  html template to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new TaggerDialog($event, message);
+      new ShowDialog.showDialog($event, message,ContentTypeDialog);
     };
 
     vm.$onInit = function () {
       _initTagList();
-    }
+    };
   }
 
   taggerComponents.component('typesComponent', {

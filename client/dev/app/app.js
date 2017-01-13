@@ -26,7 +26,7 @@
     'dndLists',
     'rx',
     'taggerEnvironment',
-    'taggerControllers',
+   // 'taggerControllers',
     'taggerServices',
     'taggerComponents',
     'taggerConstants'

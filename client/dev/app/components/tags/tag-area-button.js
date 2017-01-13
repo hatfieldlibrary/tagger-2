@@ -4,11 +4,14 @@
 
 (function () {
 
+  'use strict';
+
   function ToggleController(TagTargets,
                             TagObserver,
                             AreaObserver,
                             TagListObserver,
-                            TaggerDialog) {
+                            ShowDialog,
+                            TagDialog) {
 
     const vm = this;
 
@@ -39,7 +42,7 @@
         message = addMessage;
       }
 
-      new TaggerDialog($event, message);
+      new ShowDialog.showDialog($event, message, TagDialog);
 
     };
 
@@ -84,8 +87,8 @@
     }
 
     vm.$onInit = () => {
-      _getTagList()
-    }
+      _getTagList();
+    };
   }
 
   taggerComponents.component('toggleTagAreaButton', {

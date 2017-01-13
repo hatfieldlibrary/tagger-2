@@ -20,11 +20,13 @@ module.exports = function(app,config,passport){
   'use strict';
 
   const userInfo = require('../../server/api/tagger/controllers/user-info');
-  const tag = require('../../server/api/tagger/controllers/tags');
+  const tag = require('../../server/api/tagger/controllers/tags/admin');
+  const apiTag = require('../api/tagger/controllers/tags/public');
   const tagTarget = require('../../server/api/tagger/controllers/tag-target.js');
   const area = require('../../server/api/tagger/controllers/area');
   const content = require('../../server/api/tagger/controllers/content');
-  const collection = require('../../server/api/tagger/controllers/collection');
+  const collection = require('../api/tagger/controllers/collection/admin');
+  const apiCollection = require('../api/tagger/controllers/collection/public');
   const category = require('../../server/api/tagger/controllers/category');
   const users = require('../../server/api/tagger/controllers/users');
   /**
@@ -38,9 +40,11 @@ module.exports = function(app,config,passport){
   // Use passport.authenticate() as middleware. The first step in Google authentication
   // redirects the user to google.com.  After authorization, Google
   // will redirect the user back to the callback URL /auth/google/callback
+  // jshint unused: false
   app.get('/auth/google',
     passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
       'https://www.googleapis.com/auth/userinfo.email'] }),
+
     function(req, res){
       // The request will be redirected to Google for authentication, so this
       // function will not be called.
@@ -59,8 +63,8 @@ module.exports = function(app,config,passport){
   // COLLECTIONS
   app.use('/rest/collection/byId/:id', ensureAuthenticated, collection.byId);
   app.use('/rest/collection/show/list/:areaId', ensureAuthenticated, collection.list);
-  app.use('/rest/collection/tags/:collId', collection.tagsForCollection); // public
-  app.use('/rest/collection/types/:collId', collection.typesForCollection);  // public
+  app.use('/rest/collection/tags/:collId', apiCollection.tagsForCollection); // public
+  app.use('/rest/collection/types/:collId', apiCollection.typesForCollection);  // public
   app.use('/rest/collection/areas/:collId', ensureAuthenticated, collection.areas);
   app.post('/rest/collection/add', ensureAuthenticated, collection.add);
   app.post('/rest/collection/delete', ensureAuthenticated, collection.delete);
@@ -126,16 +130,16 @@ module.exports = function(app,config,passport){
   app.post('/rest/users/update', ensureAuthenticated, users.update);
 
   // Public API routes
-  app.use('/rest/collection/info/byId/:id',      collection.collectionById);
-  app.use('/rest/getBrowseList/:collection', collection.browseList);
-  app.use('/rest/collections/all',          collection.allCollections);
-  app.use('/rest/collection/byArea/:id',    collection.collectionsByArea);
-  app.use('/rest/collection/bySubject/:id/area/:areaId', collection.collectionsBySubject);
-  app.use('/rest/collection/byCategory/:id', collection.allCollectionsByCategory);
-  app.use('/rest/collection/bySubject/:id', collection.allCollectionsBySubject);
-  app.use('/rest/subjects/byArea/:id',      tag.subjectsByArea);
-  app.use('/rest/collection/tags/:id',   collection.tagsForCollection);
-  app.use('/rest/collection/types/:id',   collection.typesForCollection);
+  app.use('/rest/collection/info/byId/:id',      apiCollection.collectionById);
+  app.use('/rest/getBrowseList/:collection', apiCollection.browseList);
+  app.use('/rest/collections/all',          apiCollection.allCollections);
+  app.use('/rest/collection/byArea/:id',    apiCollection.collectionsByArea);
+  app.use('/rest/collection/bySubject/:id/area/:areaId', apiCollection.collectionsBySubject);
+  app.use('/rest/collection/byCategory/:id', apiCollection.allCollectionsByCategory);
+  app.use('/rest/collection/bySubject/:id', apiCollection.allCollectionsBySubject);
+  app.use('/rest/subjects/byArea/:id',      apiTag.subjectsByArea);
+  app.use('/rest/collection/tags/:id',   apiCollection.tagsForCollection);
+  app.use('/rest/collection/types/:id',   apiCollection.typesForCollection);
 
   // HTML5 MODE ROUTING
   /**

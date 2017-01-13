@@ -72,6 +72,7 @@
     vm.updateArea = function (id, index) {
 
       if (UserAreaObserver.get() === 0) { // admin user
+        console.log('setting area observer ' + id)
         AreaObserver.set(id);
         vm.currentAreaId = id;
         const areas = AreaListObserver.get();
@@ -86,8 +87,8 @@
     template:
     '<div ng-if="vm.userAreaId === 0">' +
     '<md-input-container class="md-no-float">' +
-    '<md-select ng-model="vm.areas" placeholder="Select Area">' +
-    '<md-option ng-value="area.title" ng-selected="vm.currentAreaId == area.id" ng-click="vm.updateArea(area.id, $index)" ng-repeat="area in vm.areas track by area.id">{{ area.title }}</md-option>' +
+    '<md-select ng-model="vm.currentAreaId" placeholder="Select Area">' +
+    '<md-option ng-value="area.id" ng-selected="vm.currentAreaId == area.id" ng-click="vm.updateArea(area.id, $index)" ng-repeat="area in vm.areas track by $index">{{ area.title }}</md-option>' +
     '</md-select>' +
     '</md-input-container>' +
     '</div>',

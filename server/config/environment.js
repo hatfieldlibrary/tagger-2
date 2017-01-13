@@ -15,7 +15,8 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const path = require('path');
+'use strict';
+
 const credentials = require('../credentials/credentials');
 const env = process.env.NODE_ENV || 'development';
 
@@ -34,8 +35,10 @@ const config = {
       password: credentials.develdbpassword,
       host: 'localhost',
       port: 3306,
-      dialect: 'mysql'
+      dialect: 'mariadb'
     },
+    logLevel: 'debug',
+    dbLog: console.log,
     sync: {force: false},
     useAuth: false,
     convert: '/usr/local/bin/convert',
@@ -64,6 +67,8 @@ const config = {
       port: 3306,
       dialect: 'mysql'
     },
+    logLevel: 'debug',
+    dbLog: console.log,
     sync: {force: false},
     useAuth: false,
     convert: '/usr/local/bin/convert',
@@ -93,6 +98,8 @@ const config = {
       port: 3306,
       dialect: 'mysql'
     },
+    logLevel: 'debug',
+    dbLog: console.log,
     sync: {force: true},
     useAuth: false,
     convert: '/usr/local/bin/convert',
@@ -111,6 +118,8 @@ const config = {
     app: {
       name: 'tagger'
     },
+    logLevel: 'info',
+    dbLog: false,
     sync: {force: false},
     useAuth: true,
     uid: credentials.uid,

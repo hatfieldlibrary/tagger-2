@@ -50,7 +50,7 @@
       areas.$promise.then(function (data) {
         data.unshift({id: 0, title: 'Administrator'});
         vm.areaList = data;
-      })
+      });
     }
 
     /**
@@ -131,7 +131,7 @@
     vm.$onInit = function () {
       _setUsers();
       _setAreas();
-    }
+    };
   }
 
   taggerComponents.component('usersComponent', {
