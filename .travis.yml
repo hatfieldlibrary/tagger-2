@@ -3,6 +3,16 @@ language: node_js
 node_js:
   - "7"
 
+addons:
+  apt:
+    sources:
+       - ubuntu-toolchain-r-test
+       - libgnome-keyring-dev
+    packages:
+      - g++-4.8
+    packages:
+      - xvfb
+
 before_script:
   - npm install -g bower gulp-cli mocha
   - npm run-script test-on-travis
