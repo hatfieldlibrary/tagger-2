@@ -297,7 +297,6 @@
     vm.$onInit = function () {
       areaId = AreaObserver.get();
       let collection = CollectionObserver.get();
-      console.log(collection)
       if (collection) {
         vm.collectionId = collection;
         _getCollectionById(collection);

@@ -28,7 +28,8 @@
     "taggerServices": false,
     "taggerComponents": false,
     "taggerConstants": false,
-    "angular": false
+    "angular": false,
+    "d3": false
   },
   "latedef": "nofunc"
 }

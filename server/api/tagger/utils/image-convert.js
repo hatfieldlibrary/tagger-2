@@ -23,7 +23,7 @@
 //https://github.com/danialfarid/ng-file-upload/wiki/node.js-example
 
 
-//jshint strict:false
+'use strict';
 
 const convert = (res, files, fields, config, callback) => {
 

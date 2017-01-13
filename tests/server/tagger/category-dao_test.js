@@ -18,6 +18,9 @@
 /**
  * Created by mspalti on 12/6/16.
  */
+
+'use strict';
+
 import db from '../_helpers/db';
 import  areaDao from '../../../server/api/tagger/dao/area-dao';
 import categoryDao from '../../../server/api/tagger/dao/category-dao';

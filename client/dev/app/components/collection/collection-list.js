@@ -98,7 +98,6 @@
             // set.
             vm.collectionId = CollectionObserver.get();
           } else {
-            alert()
             CollectionListObserver.set([]);
             CollectionObserver.set(-1);
           }

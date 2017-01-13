@@ -26,7 +26,6 @@ const async = require('async');
 const utils = require('../../utils/response-utility');
 const imageConvert = require('../../utils/image-convert');
 const taggerDao = require('../../dao/collection-dao');
-const config = require('../../../../config/environment');
 const logger = require('../../utils/error-logger');
 
 /**
@@ -330,7 +329,6 @@ exports.getFirstCollectionInArea = function (req, res) {
     if (err) {
       logger.dao(err);
     }
-    console.log(collection)
     utils.sendResponse(res, collection);
 
   });
@@ -408,7 +406,7 @@ exports.removeAreaTarget = function (req, res) {
 
     function (err, result) {
       if (err) {
-        utils.sendErrorJson(res, err)
+        utils.sendErrorJson(res, err);
       }
       utils.sendSuccessAndDataJson(res, result);
 

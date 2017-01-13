@@ -26,6 +26,8 @@ import db from '../_helpers/db';
 import {expect} from 'chai';
 import async from 'async';
 
+'use strict';
+
 const initAreas = [
   'Init Area One',
   'Init Area Two'
