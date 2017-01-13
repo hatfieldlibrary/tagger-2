@@ -24,6 +24,8 @@ import  areaDao from '../../../server/api/tagger/dao/area-dao';
 import {expect} from 'chai';
 import async from 'async';
 
+'use strict';
+
 /** Test area names. */
 const areas = [
   'Area Stub One',

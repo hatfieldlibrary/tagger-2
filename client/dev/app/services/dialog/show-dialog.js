@@ -6,7 +6,7 @@
 
   'use strict';
 
-  taggerServices.factory('ShowDialog',
+  taggerServices.service('ShowDialog',
 
     function ($mdDialog) {
       /**

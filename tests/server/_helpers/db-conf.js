@@ -19,11 +19,9 @@
  * Created by mspalti on 12/3/16.
  */
 
-import path from 'path';
+'use strict';
 
 import credentials from '../../../server/credentials/credentials';
-
-//let rootPath = path.normalize(__dirname + '/../../../server');
 
 exports.config = {
   test: {

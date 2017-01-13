@@ -2,11 +2,13 @@
  * Created by mspalti on 1/10/17.
  */
 
+'use strict';
+
 const logger = require('winston');
 
 const logLevel = 'warn';
 
-errorLoggers = {};
+let errorLoggers = {};
 
 /**
  * Error returned from data access object.

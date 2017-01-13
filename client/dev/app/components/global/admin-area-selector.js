@@ -72,7 +72,6 @@
     vm.updateArea = function (id, index) {
 
       if (UserAreaObserver.get() === 0) { // admin user
-        console.log('setting area observer ' + id)
         AreaObserver.set(id);
         vm.currentAreaId = id;
         const areas = AreaListObserver.get();

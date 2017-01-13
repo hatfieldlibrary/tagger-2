@@ -15,6 +15,8 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 import {config} from './db-conf';
 import fs from 'fs';
 import path  from 'path';
