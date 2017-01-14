@@ -45,6 +45,13 @@
 
     /** @type {number */
     vm.currentAreaId = UserAreaObserver.get();
+
+    /**
+     * Compose the dialog object for this component.
+     * @type {*}
+     */
+    const dialog =  Object.assign({}, ShowDialog, AreaDialog);
+
     /**
      * Watch for new areas in context.  Areas are added
      * and removed in a dialog controller.  They can also
@@ -72,7 +79,7 @@
      * @param message  html to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new ShowDialog.showDialog($event, message, AreaDialog);
+       dialog.showDialog($event, message);
     };
 
   }

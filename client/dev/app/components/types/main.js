@@ -42,6 +42,12 @@
     /** @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteContentMessage.html';
 
+    /**
+     * Compose the dialog object for this component.
+     * @type {*}
+     */
+    const dialog =  Object.assign({}, ShowDialog, ContentTypeDialog);
+
     function _initTagList() {
       var tags = TagList.query();
       tags.$promise.then(function (data) {
@@ -66,7 +72,7 @@
      * @param message  html template to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new ShowDialog.showDialog($event, message,ContentTypeDialog);
+      dialog.showDialog($event, message);
     };
 
     vm.$onInit = function () {

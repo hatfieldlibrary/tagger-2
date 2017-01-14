@@ -9,7 +9,7 @@
   taggerServices.service('TagDialog',
 
     function ($rootScope,
-              ShowDialog,
+              $mdDialog,
               TagDelete,
               TagTargetAdd,
               TagTargetRemove,
@@ -21,7 +21,7 @@
               AreaObserver,
               TaggerToast) {
 
-    return function() {
+    const _controller = function() {
 
       const vm = this;
 
@@ -29,7 +29,7 @@
        * Closes the dialog
        */
       vm.closeDialog = function () {
-        ShowDialog.hideDialog();
+        $mdDialog.hide();
       };
 
       /**
@@ -180,7 +180,12 @@
         });
 
       };
+    };
+
+    return {
+      controller: _controller
     }
+
   });
 
 })();

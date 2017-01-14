@@ -8,7 +8,7 @@
 
   taggerServices.service('ContentTypeDialog',
 
-    function (ShowDialog,
+    function ($mdDialog,
               ContentTypeDelete,
               ContentTypeList,
               ContentTypeAdd,
@@ -16,12 +16,12 @@
               ContentTypeListObserver,
               TaggerToast) {
 
-      return function() {
+      const _controller = function() {
 
         const vm = this;
 
         vm.closeDialog = function() {
-          ShowDialog.hideDialog();
+          $mdDialog.hide();
         };
 
         /**
@@ -94,6 +94,10 @@
           });
         };
 
+      };
+
+      return {
+        controller: _controller
       }
 
     });

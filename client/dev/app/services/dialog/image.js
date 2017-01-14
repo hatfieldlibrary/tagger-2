@@ -8,12 +8,12 @@
 
   taggerServices.service('ImageDialog',
 
-    function (ShowDialog,
+    function ($mdDialog,
               Upload,
               CollectionObserver,
               ThumbImageObserver) {
 
-      return function () {
+      const _controller = function () {
 
         const vm = this;
 
@@ -21,7 +21,7 @@
          * Closes the dialog
          */
         vm.closeDialog = function () {
-          ShowDialog.hideDialog();
+          $mdDialog.hide();
         };
 
         /**
@@ -49,6 +49,10 @@
             });
           }
         };
+      };
+
+      return {
+        controller: _controller
       }
 
     });
