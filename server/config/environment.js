@@ -21,10 +21,13 @@ let credentials;
 
 try {
   credentials = require('../credentials/credentials');
+
 } catch (ex) {
+
   console.log('Using travis credentials');
   credentials = require('../credentials/travis-credentials')
 }
+
 const env = process.env.NODE_ENV || 'development';
 
 const config = {
