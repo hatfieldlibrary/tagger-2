@@ -13,7 +13,7 @@
 const credentials = {
   develgid: 'staff',
   develdbuser: 'travis',
-  develdbpassword: 'supersecret',
+  develdbpassword: '1234',
   googleClientId: '',
   googleClientSecret: '',
   googleCallback: 'http://localhost:3000/auth/google/callback',
