@@ -47,10 +47,6 @@
     vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
 
     /**
-     * Compose the dialog object for this component.
-     * @type {*}
-     */
-    /**
      * Get the dialog object for this controller.
      * @type {*}
      */

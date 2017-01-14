@@ -42,7 +42,7 @@
     vm.deleteMessage = 'templates/dialog/deleteTagMessage.html';
 
     /**
-     * Compose the dialog object for this component.
+     * Get the dialog object for this component.
      * @type {*}
      */
     const dialog =  GetDialog(vm);
