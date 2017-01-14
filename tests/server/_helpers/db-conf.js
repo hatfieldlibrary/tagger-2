@@ -25,11 +25,11 @@
   let credentials;
 
   try {
-    credentials = require('../credentials/credentials');
+    credentials = require('../../../server/credentials/credentials');
   } catch (ex) {
 
     console.log('Using travis credentials');
-    credentials = require('../credentials/travis-credentials')
+    credentials = require('../../../server/credentials/travis-credentials')
   }
 
   exports.config = {
