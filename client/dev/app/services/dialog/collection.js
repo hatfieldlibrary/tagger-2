@@ -6,9 +6,9 @@
 
   'use strict';
 
-  taggerServices.service('CollectionDialog',
+  taggerServices.factory('CollectionDialog',
 
-    function (ShowDialog,
+    function ($mdDialog,
               Constant,
               CollectionAdd,
               CollectionDelete,
@@ -19,7 +19,7 @@
               TaggerToast) {
 
 
-    return function() {
+    const _controller = function() {
 
       const vm = this;
 
@@ -27,7 +27,7 @@
        * Closes the dialog
        */
       vm.closeDialog = function () {
-        ShowDialog.hideDialog();
+       $mdDialog.hide();
       };
 
       /**
@@ -111,26 +111,10 @@
 
       };
 
+    };
 
-      vm.$onInit = function() {
-        alert()
-        if (ShowDialog.hasOwnProperty('showDialog')) {
-          alert()
-          vm.showDialog = ShowDialog.showDialog;
-        } else {
-          console.log('Dialog service has no showDialog method,');
-        }
-
-        if (ShowDialog.hasOwnProperty('hideDialog')) {
-          vm.hideDialog = ShowDialog.hideDialog();
-        } else {
-          console.log('Dialog service has no hideDialog method.');
-        }
-      }
-
-
-
-
+    return {
+      controller: _controller
     }
 
   });

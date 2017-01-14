@@ -3,25 +3,27 @@ language: node_js
 node_js:
   - "7"
 
+env:
+  - CXX=g++-4.8
+
 addons:
   apt:
     sources:
-       - ubuntu-toolchain-r-test
-       - libgnome-keyring-dev
+      - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
-    packages:
-      - xvfb
+
+before_install:
+  - mysql -e 'CREATE DATABASE acomtags_test;'
+  - mysql -uroot -e 'GRANT ALL PRIVILEGES ON acomtags_test.* TO "test_user"@"localhost" identified by "1234";'
 
 before_script:
   - npm install -g bower gulp-cli mocha
-  - npm run-script test-on-travis
   - bower install
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 
 script:
-  - gulp coverage_frontend
-  - npm run-script test-on-travis
+  - npm run-script test-server
 
 services: mysql

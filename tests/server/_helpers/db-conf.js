@@ -20,20 +20,31 @@
  */
 
 'use strict';
+(function () {
 
-import credentials from '../../../server/credentials/credentials';
+  let credentials;
 
-exports.config = {
-  test: {
-    mysql: {
-      db: 'acomtags_test',
-      user: credentials.develdbuser,
-      password: credentials.develdbpassword,
-      host: 'localhost',
-      port: 3306,
-      dialect: 'mysql'
-    },
-    nodeEnv: 'test'
+  try {
+    credentials = require('../../../server/credentials/credentials');
+  } catch (ex) {
+
+    console.log('Using travis credentials');
+    credentials = require('../../../server/credentials/travis-credentials')
   }
 
-};
+  exports.config = {
+    test: {
+      mysql: {
+        db: 'acomtags_test',
+        user: credentials.develdbuser,
+        password: credentials.develdbpassword,
+        host: 'localhost',
+        port: 3306,
+        dialect: 'mysql'
+      },
+      nodeEnv: 'test'
+    }
+
+  };
+
+})();

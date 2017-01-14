@@ -1,11 +1,7 @@
 ## Dialog Directive and Controllers
 
-The `show-dialog.js` file contains the `$mdDialog` service used throughout Tagger. The dialog service's `showDialog`
-function takes a controller as a parameter.  Controllers for different activities are
-defined here as services that return the controller function.
+The service defined in `show-dialog.js` provides a method for invoking `$mdDialog.show()` with options. 
 
-Sample usage: 
-
-```javascript
-new ShowDialog.showDialog($event, message, CollectionDialog);
-```
+The `$mdDialog` directive requires a controller.  Controllers are provided via the other services defined in 
+this directory. To use a dialog within a component, inject the necessary services and combine using composition
+to create the component's dialog object.

@@ -24,8 +24,7 @@
 
   'use strict';
 
-  function CollectionController(ShowDialog,
-                                CollectionDialog,
+  function CollectionController(GetDialog,
                                 UserAreaObserver,
                                 PublicationStatusObserver) {
 
@@ -48,13 +47,19 @@
     vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
 
     /**
+     * Get the dialog object for this controller.
+     * @type {*}
+     */
+    const dialog =  GetDialog(vm);
+
+    /**
      * Show the $mdDialog.
      * @param $event click event object (location of event used as
      *                    animation starting point)
      * @param message  html template to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new ShowDialog.showDialog($event, message,CollectionDialog);
+      dialog.showDialog($event, message);
     };
 
     vm.menuUpdate = function(id, title) {
