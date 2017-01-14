@@ -19,12 +19,30 @@ import gulp from 'gulp';
 import {tasks} from './const';
 import mocha from 'gulp-mocha';
 import util from 'gulp-util';
+import coveralls from 'gulp-coveralls';
+import istanbul from 'gulp-istanbul'
 
 // set the test environment variable.
 process.env.NODE_ENV = "test";
 
-gulp.task(tasks.SERVER_INTEGRATION_TEST, function () {
+gulp.task(tasks.SERVER_PRETEST, () => {
+  return gulp.src('test/**/*.js')
+    .pipe(istanbul())
+    // This overwrites `require` so it returns covered files
+    .pipe(istanbul.hookRequire());
+});
+
+gulp.task(tasks.SERVER_INTEGRATION_TEST,  [tasks.SERVER_PRETEST], function () {
   return gulp.src(['tests/server/tagger/**/*.js'], { read: false })
     .pipe(mocha({ reporter: 'spec', timeout: 3000, globals: ['recursive','async-only'] }))
+    .pipe(istanbul.writeReports())
     .on('error', util.log);
 });
+
+gulp.task('coveralls', [tasks.SERVER_INTEGRATION_TEST], function() {
+  // lcov.info is the file which has the coverage information we wan't to upload
+  return gulp.src(__dirname + '/coverage/lcov.info')
+    .pipe(coveralls());
+});
+
+

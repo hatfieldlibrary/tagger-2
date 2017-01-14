@@ -24,6 +24,8 @@ export const path = {
 };
 
 export const tasks = {
+  SERVER_BUILD_TEST: 'server.build_test',
+  SERVER_PRETEST: 'server.pretest_test',
   SERVER_INTEGRATION_TEST: 'server.integration_test',
   SERVER_LINT_JS: 'server.lint'
 };
