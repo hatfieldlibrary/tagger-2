@@ -16,7 +16,6 @@
      ContentTypeListObserver,
      ContentTypeObserver) => {
 
-
       /**
        * Initializes global values not specific to the area.
        */
