@@ -12,12 +12,12 @@
  */
 const credentials = {
   develgid: 'staff',
-  develdbuser: 'mspalti',
-  develdbpassword: 'coffee',
-  googleClientId: '85240803633-joprl8lodm1h0p1qcm0aau1eie8ng4h6.apps.googleusercontent.com',
-  googleClientSecret: 'jJHJydky3wtmXixsEJ37CEXR',
+  develdbuser: 'travis',
+  develdbpassword: 'supersecret',
+  googleClientId: '',
+  googleClientSecret: '',
   googleCallback: 'http://localhost:3000/auth/google/callback',
-  externalHostA: {  // This is the browse-by-year API for exist collections.
+  externalHostA: {
     host: '',
     port: '',
     path: ''

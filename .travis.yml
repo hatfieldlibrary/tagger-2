@@ -5,12 +5,17 @@ node_js:
 
 env:
   - CXX=g++-4.8
+
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
+
+before_install:
+  - mysql -e 'CREATE DATABASE acomtags_test;'
+  - mysql -e 'GRANT ALL PRIVILEGES on acomtags_test.* to "mspalti"@"localhost";'
 
 before_script:
   - npm install -g bower gulp-cli mocha
