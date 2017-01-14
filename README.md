@@ -1,6 +1,6 @@
 #  Tagger
  
-[![Build Status](https://secure.travis-ci.org/mspalti/test-app.png?branch=master)](https://travis-ci.org/mspalti/test-app)
+[![Build Status](https://travis-ci.org/hatfieldlibrary/tagger-2.svg?branch=master)](https://travis-ci.org/hatfieldlibrary/tagger-2)
 [![Coverage Status](https://coveralls.io/repos/mspalti/test-app/badge.svg?branch=master)](https://coveralls.io/r/mspalti/test-app/?branch=master)
 [![bitHound Dependencies](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/dependencies.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2/master/dependencies/npm)
 [![bitHound Code](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/code.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
