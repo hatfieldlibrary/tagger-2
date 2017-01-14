@@ -15,7 +15,7 @@ addons:
 
 before_install:
   - mysql -e 'CREATE DATABASE acomtags_test;'
-  - mysql -e 'GRANT ALL PRIVILEGES on acomtags_test.* to "mspalti"@"localhost";'
+  - mysql -e 'GRANT ALL PRIVILEGES on acomtags_test.* to "travis"@"localhost";'
 
 before_script:
   - npm install -g bower gulp-cli mocha

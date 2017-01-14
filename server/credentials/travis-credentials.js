@@ -12,7 +12,7 @@
  */
 const credentials = {
   develgid: 'staff',
-  develdbuser: 'mspalti',
+  develdbuser: 'travis',
   develdbpassword: 'supersecret',
   googleClientId: '',
   googleClientSecret: '',
