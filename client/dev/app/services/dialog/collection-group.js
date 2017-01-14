@@ -6,7 +6,7 @@
 
   'use strict';
 
-  taggerServices.service('CollectionGroupDialog',
+  taggerServices.factory('CollectionGroupDialog',
 
     function ($mdDialog,
               CategoryDelete,

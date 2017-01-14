@@ -6,7 +6,7 @@
 
   'use strict';
 
-  taggerServices.service('CollectionDialog',
+  taggerServices.factory('CollectionDialog',
 
     function ($mdDialog,
               Constant,

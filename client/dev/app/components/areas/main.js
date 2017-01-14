@@ -22,8 +22,7 @@
 
   'use strict';
 
-  function AreasController(ShowDialog,
-                           AreaDialog,
+  function AreasController(GetDialog,
                            AreaListObserver,
                            UserAreaObserver) {
 
@@ -47,10 +46,10 @@
     vm.currentAreaId = UserAreaObserver.get();
 
     /**
-     * Compose the dialog object for this component.
+     * Get the dialog object for this controller.
      * @type {*}
      */
-    const dialog =  Object.assign({}, ShowDialog, AreaDialog);
+    const dialog =  GetDialog(vm);
 
     /**
      * Watch for new areas in context.  Areas are added

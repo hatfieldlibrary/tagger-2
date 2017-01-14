@@ -6,7 +6,7 @@
 
   'use strict';
 
-  taggerServices.service('TagDialog',
+  taggerServices.factory('TagDialog',
 
     function ($rootScope,
               $mdDialog,

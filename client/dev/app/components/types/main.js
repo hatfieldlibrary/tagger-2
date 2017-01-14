@@ -22,14 +22,15 @@
 
   'use strict';
 
-  function TypeController(ShowDialog,
-                          ContentTypeDialog,
+  function TypeController(GetDialog,
                           UserAreaObserver,
                           TagList,
                           TagListObserver,
                           TagObserver) {
 
     const vm = this;
+
+    console.log(vm.constructor.name)
 
     vm.currentType = {};
 
@@ -46,7 +47,7 @@
      * Compose the dialog object for this component.
      * @type {*}
      */
-    const dialog =  Object.assign({}, ShowDialog, ContentTypeDialog);
+    const dialog =  GetDialog(vm);
 
     function _initTagList() {
       var tags = TagList.query();

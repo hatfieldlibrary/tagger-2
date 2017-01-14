@@ -6,7 +6,7 @@
 
   'use strict';
 
-  taggerServices.service('ContentTypeDialog',
+  taggerServices.factory('ContentTypeDialog',
 
     function ($mdDialog,
               ContentTypeDelete,

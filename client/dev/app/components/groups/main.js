@@ -22,8 +22,7 @@
 
   'use strict';
 
-  function GroupController(ShowDialog,
-                           CollectionGroupDialog,
+  function GroupController(GetDialog,
                            UserAreaObserver,
                            CategoryList,
                            GroupListObserver,
@@ -46,7 +45,7 @@
      * Compose the dialog object for this component.
      * @type {*}
      */
-    const dialog =  Object.assign({}, ShowDialog, CollectionGroupDialog);
+    const dialog =  GetDialog(vm);
 
     function _initTagList() {
       var tags = CategoryList.query();

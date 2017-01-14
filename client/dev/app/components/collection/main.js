@@ -24,8 +24,7 @@
 
   'use strict';
 
-  function CollectionController(ShowDialog,
-                                CollectionDialog,
+  function CollectionController(GetDialog,
                                 UserAreaObserver,
                                 PublicationStatusObserver) {
 
@@ -51,7 +50,11 @@
      * Compose the dialog object for this component.
      * @type {*}
      */
-    const dialog =  Object.assign({}, ShowDialog, CollectionDialog);
+    /**
+     * Get the dialog object for this controller.
+     * @type {*}
+     */
+    const dialog =  GetDialog(vm);
 
     /**
      * Show the $mdDialog.

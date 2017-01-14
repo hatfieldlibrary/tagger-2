@@ -22,8 +22,7 @@
 
   'use strict';
 
-  function TagController(ShowDialog,
-                         TagDialog,
+  function TagController(GetDialog,
                          UserAreaObserver,
                          TagList,
                          TagListObserver,
@@ -46,10 +45,10 @@
      * Compose the dialog object for this component.
      * @type {*}
      */
-    const dialog =  Object.assign({}, ShowDialog, TagDialog);
+    const dialog =  GetDialog(vm);
 
     function _initTagList() {
-      var tags = TagList.query();
+      let tags = TagList.query();
       tags.$promise.then(function (data) {
         if (data.length > 0) {
           TagListObserver.set(data);

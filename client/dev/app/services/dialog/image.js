@@ -6,7 +6,7 @@
 
   'use strict';
 
-  taggerServices.service('ImageDialog',
+  taggerServices.factory('ImageDialog',
 
     function ($mdDialog,
               Upload,
