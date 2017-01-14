@@ -109,7 +109,7 @@ const config = {
       dialect: 'mysql'
     },
     logLevel: 'debug',
-    dbLog: console.log,
+    dbLog: false,
     sync: {force: true},
     useAuth: false,
     convert: '/usr/local/bin/convert',

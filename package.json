@@ -10,7 +10,8 @@
     "build-dist": "gulp client.build:dist",
     "test-client": "gulp client.unit_test",
     "test-server": "NODE_ENV=test mocha './tests/server/**/*.js' --recursive --check-leaks --reporter min --compilers js:babel-register",
-    "coverage-server": "NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha -- 'tests/server/**/*.js' --compilers js:babel-register",
+    "bb": "NODE_ENV=test  istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "coverage-server": "NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha --verbose --report lcovonly -- 'tests/server/**/*.js' --compilers js:babel-register | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "coveralls-server": "NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha -- 'tests/server/**/*.js' --compilers js:babel-register --report lcovonly && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "dependencies": {
@@ -80,6 +81,7 @@
     "karma-phantomjs-launcher": "^1.0.1",
     "karma-safari-launcher": "^1.0.0",
     "mocha": "^3.2.0",
+    "mocha-lcov-reporter": "^1.2.0",
     "ng-annotate": "^1.2.1",
     "protractor": "^5.0.0",
     "require-dir": "^0.3.0",
