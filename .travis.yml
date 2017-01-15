@@ -25,6 +25,6 @@ before_script:
 
 
 script:
-  - npm run-script test-on-travis coveralls
+  - npm run-script test-on-travis
 
 services: mysql
