@@ -16,5 +16,16 @@
  */
 
 import gulp from 'gulp';
+import runSequence from 'run-sequence';
+import {tasks} from './const';
 
-
+gulp.task(tasks.SERVER_TRAVIS_CI, () => {
+  return new Promise((resolve, reject) => {
+    runSequence(
+      //  tasks.CLIENT_UNIT_TEST,
+      tasks.SERVER_INTEGRATION_TEST,
+      tasks.SERVER_COVERALLS,
+      resolve
+    );
+  });
+});

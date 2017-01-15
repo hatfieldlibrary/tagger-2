@@ -19,21 +19,21 @@ import gulp from 'gulp';
 import {tasks} from './const';
 import mocha from 'gulp-mocha';
 import util from 'gulp-util';
-import coveralls from 'gulp-coveralls';
-import istanbul from 'gulp-istanbul'
+const isparta = require('isparta');
+import istanbul from 'gulp-istanbul';
 
 // set the test environment variable.
 process.env.NODE_ENV = "test";
 
 gulp.task(tasks.SERVER_PRETEST, () => {
-  return gulp.src('test/**/*.js')
-    .pipe(istanbul())
+  return gulp.src('tests/server/**/*.js')
+    .pipe(istanbul({includeUntested: true, instrumenter: isparta.Instrumenter }))
     // This overwrites `require` so it returns covered files
     .pipe(istanbul.hookRequire());
 });
 
 gulp.task(tasks.SERVER_INTEGRATION_TEST,  [tasks.SERVER_PRETEST], function () {
-  return gulp.src(['tests/server/tagger/**/*.js'], { read: false })
+  return gulp.src(['tests/server/**/*.js'], { read: false })
     .pipe(mocha({ reporter: 'spec', timeout: 3000, globals: ['recursive','async-only'] }))
     .pipe(istanbul.writeReports())
     .on('error', util.log);
