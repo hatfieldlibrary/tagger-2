@@ -39,10 +39,4 @@ gulp.task(tasks.SERVER_INTEGRATION_TEST,  [tasks.SERVER_PRETEST], function () {
     .on('error', util.log);
 });
 
-gulp.task('coveralls', [tasks.SERVER_INTEGRATION_TEST], function() {
-  // lcov.info is the file which has the coverage information we wan't to upload
-  return gulp.src(__dirname + '/coverage/lcov.info')
-    .pipe(coveralls());
-});
-
 
