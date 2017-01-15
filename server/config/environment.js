@@ -17,7 +17,17 @@
 
 'use strict';
 
-const credentials = require('../credentials/credentials');
+let credentials;
+
+try {
+  credentials = require('../credentials/credentials');
+
+} catch (ex) {
+
+  console.log('Using travis credentials');
+  credentials = require('../credentials/travis-credentials')
+}
+
 const env = process.env.NODE_ENV || 'development';
 
 const config = {
@@ -99,7 +109,7 @@ const config = {
       dialect: 'mysql'
     },
     logLevel: 'debug',
-    dbLog: console.log,
+    dbLog: false,
     sync: {force: true},
     useAuth: false,
     convert: '/usr/local/bin/convert',

@@ -22,14 +22,15 @@
 
   'use strict';
 
-  function TypeController(ShowDialog,
-                          ContentTypeDialog,
+  function TypeController(GetDialog,
                           UserAreaObserver,
                           TagList,
                           TagListObserver,
                           TagObserver) {
 
     const vm = this;
+
+    console.log(vm.constructor.name)
 
     vm.currentType = {};
 
@@ -41,6 +42,12 @@
 
     /** @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteContentMessage.html';
+
+    /**
+     * Compose the dialog object for this component.
+     * @type {*}
+     */
+    const dialog =  GetDialog(vm);
 
     function _initTagList() {
       var tags = TagList.query();
@@ -66,7 +73,7 @@
      * @param message  html template to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new ShowDialog.showDialog($event, message,ContentTypeDialog);
+      dialog.showDialog($event, message);
     };
 
     vm.$onInit = function () {

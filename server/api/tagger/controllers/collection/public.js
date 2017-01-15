@@ -236,7 +236,7 @@ exports.browseList = function (req, res) {
 
   const request = http.request(options, handleResponse);
 
-  request.on('error', function (e) {
+  request.on('error', function (err) {
     logger.dao(err);
     request.end();
   });

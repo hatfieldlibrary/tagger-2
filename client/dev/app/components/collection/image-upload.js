@@ -22,20 +22,25 @@
   'use strict';
 
   function ImageController(ThumbImageObserver,
-                           ShowDialog,
-                           ImageDialog) {
+                           GetDialog) {
 
     const vm = this;
 
     /** @type {string} */
     vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
 
+    /**
+     * Get the dialog object for this controller.
+     * @type {*}
+     */
+    const dialog =  GetDialog(vm);
+
     ThumbImageObserver.subscribe(function onNext() {
       vm.thumbnailImage = ThumbImageObserver.get();
     });
 
     vm.showDialog = function ($event, message) {
-      new ShowDialog.showDialog($event, message, ImageDialog);
+      dialog.showDialog($event, message);
     };
 
     vm.$onInit = function () {

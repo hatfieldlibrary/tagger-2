@@ -6,9 +6,9 @@
 
   'use strict';
 
-  taggerServices.service('CollectionDialog',
+  taggerServices.factory('CollectionDialog',
 
-    function (ShowDialog,
+    function ($mdDialog,
               Constant,
               CollectionAdd,
               CollectionDelete,
@@ -18,7 +18,8 @@
               AreaObserver,
               TaggerToast) {
 
-    return function() {
+
+    const _controller = function() {
 
       const vm = this;
 
@@ -26,7 +27,7 @@
        * Closes the dialog
        */
       vm.closeDialog = function () {
-        ShowDialog.hideDialog();
+       $mdDialog.hide();
       };
 
       /**
@@ -110,6 +111,10 @@
 
       };
 
+    };
+
+    return {
+      controller: _controller
     }
 
   });

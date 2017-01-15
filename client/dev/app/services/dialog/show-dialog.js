@@ -2,6 +2,10 @@
  * Created by mspalti on 1/11/17.
  */
 
+/**
+ * The show dialog service.  This service needs to be combined via
+ * composition to obtain component-specific controllers.
+ */
 (function () {
 
   'use strict';
@@ -9,36 +13,30 @@
   taggerServices.factory('ShowDialog',
 
     function ($mdDialog) {
+
       /**
-       * Returns a dialog using predefined options and
-       * the provided message param. The event param is used by
+       * The show dialog function. The event param is used by
        *  $mdDialog to set the starting location of the animation.
        *
        * @param $event  the Angular event object
        * @param message  the template defining the dialog content
        */
-      const _showDialog = function ($event, message, controller) {
+      const _showDialog = function ($event, message) {
 
         let parentEl = angular.element(document.body);
 
-        // Show a dialog with the specified options.
         $mdDialog.show({
           parent: parentEl,
           targetEvent: $event,
           templateUrl: message,
-          controller: controller,
+          controller: this.controller,
           controllerAs: 'vm'
         });
 
       };
 
-      const _hideDialog = function () {
-        $mdDialog.hide();
-      };
-
       return {
-        showDialog: _showDialog,
-        hideDialog: _hideDialog,
+        showDialog: _showDialog
       }
 
     });

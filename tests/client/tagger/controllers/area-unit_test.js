@@ -2,6 +2,8 @@
  * Created by mspalti on 1/4/17.
  */
 
+'use strict';
+
 describe('area main component', function () {
 
   var $componentController;

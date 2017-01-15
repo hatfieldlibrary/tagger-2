@@ -53,6 +53,28 @@ var
 
 module.exports = function (app, config, passport) {
 
+  // AUTHENTICATION
+
+  // Use passport.authenticate() as middleware. The first step in Google authentication
+  // redirects the user to google.com.  After authorization, Google
+  // will redirect the user back to the callback URL /auth/google/callback
+  // jshint unused: false
+  app.get('/auth/google',
+    passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email'] }),
+
+    function(req, res){
+      // The request will be redirected to Google for authentication, so this
+      // function will not be called.
+    });
+
+  // If authentication failed, redirect the login page.  Otherwise, redirect
+  // to the admin page page.
+  app.get('/auth/google/callback',
+    passport.authenticate('google', { successRedirect: '/tagger/',
+      failureRedirect: '/tagger/login' }));
+
+
   // For development purposes, use express-session in lieu of Redisstore.
   if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
     app.use(session({
@@ -156,5 +178,7 @@ module.exports = function (app, config, passport) {
     }
     res.redirect('/tagger/login');
   };
+
+
 
 };

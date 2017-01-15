@@ -22,8 +22,7 @@
 
   'use strict';
 
-  function TagController(ShowDialog,
-                         TagDialog,
+  function TagController(GetDialog,
                          UserAreaObserver,
                          TagList,
                          TagListObserver,
@@ -42,8 +41,14 @@
     /** @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteTagMessage.html';
 
+    /**
+     * Get the dialog object for this component.
+     * @type {*}
+     */
+    const dialog =  GetDialog(vm);
+
     function _initTagList() {
-      var tags = TagList.query();
+      let tags = TagList.query();
       tags.$promise.then(function (data) {
         if (data.length > 0) {
           TagListObserver.set(data);
@@ -65,7 +70,7 @@
      * @param message  html template to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new ShowDialog.showDialog($event, message, TagDialog);
+      dialog.showDialog($event, message);
     };
 
     vm.$onInit = function () {

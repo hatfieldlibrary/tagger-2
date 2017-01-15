@@ -22,19 +22,11 @@
 (function () {
     'use strict';
 
-    function AuthController(UserAreaObserver,
+    function AuthController(SetGlobalValues,
+                            UserAreaObserver,
                             UserObserver,
                             IsAuthObserver,
-                            getUserInfo,
-                            CategoryList,
-                            GroupListObserver,
-                            GroupObserver,
-                            ContentTypeList,
-                            ContentTypeListObserver,
-                            ContentTypeObserver,
-                            TagList,
-                            TagListObserver,
-                            TagObserver) {
+                            getUserInfo) {
 
       const vm = this;
 
@@ -47,12 +39,8 @@
       function _getRole(areaId) {
 
         vm.role = _getUserRole(areaId);
-        // set area default for non-admin user
-        if (areaId > 0) {
-          //   AreaObserver.set(areaId);
-        }
-      }
 
+      }
 
       /**
        * Returns the user role based on the area id in their
@@ -70,48 +58,12 @@
 
       }
 
-      /**
-       * Initializes global values not specific to the area.
-       * @param id   the area id
-       */
-      function _initGlobals(id) {
-
-        if (typeof(id) === 'number') {
-
-          // Initialize global collection groups.
-          var categories = CategoryList.query();
-          categories.$promise.then(function (data) {
-            GroupListObserver.set(data);
-            GroupObserver.set(data[0].id);
-          });
-
-          // Initialize global tags.
-          var tags = TagList.query();
-          tags.$promise.then(function (data) {
-            if (data.length > 0) {
-              TagListObserver.set(data);
-              TagObserver.set(data[0].id);
-
-            }
-          });
-
-          // Initialize global content types
-          var types = ContentTypeList.query();
-          types.$promise.then(function (data) {
-            if (data.length > 0) {
-              ContentTypeListObserver.set(data);
-              ContentTypeObserver.set(data[0].id);
-            }
-
-          });
-
-        }
-      }
-
       vm.$onInit = () => {
 
         var userinfo = getUserInfo.query();
+
         userinfo.$promise.then(function (user) {
+
           IsAuthObserver.set(true);
           UserObserver.set(user.areaId);
           UserAreaObserver.set(user.areaId);
@@ -119,8 +71,7 @@
           vm.userPicture = user.picture;
           vm.userName = user.name;
           _getRole(user.areaId);
-
-          _initGlobals(user.areaId);
+          SetGlobalValues.initializeGlobalValues();
 
         }).catch(function (err) {
           vm.authorized = false;

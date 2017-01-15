@@ -19,7 +19,7 @@
  * Created by mspalti on 12/1/16.
  */
 
-// jshint strict:false
+'use strict';
 
 const taggerSchema = require('../models/index');
 const taggerDao = {};

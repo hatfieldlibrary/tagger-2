@@ -94,15 +94,17 @@
      * @private
      */
     function _getCollectionForNewArea(areaId) {
-      const first = FirstCollectionInArea.query({areaId: areaId});
-      first.$promise.then(function (data) {
-        vm.collection = data;
-        vm.collectionId = data.id;
-        vm.thumbnailImage = data.image;
-        ThumbImageObserver.set(data.image);
-        vm.menu({id: vm.collection.id, title: vm.collection.title});
-        _getCategoryForCollection(data.id);
-      });
+      if (areaId) {
+        const first = FirstCollectionInArea.query({areaId: areaId});
+        first.$promise.then(function (data) {
+          vm.collection = data;
+          vm.collectionId = data.id;
+          vm.thumbnailImage = data.image;
+          ThumbImageObserver.set(data.image);
+          vm.menu({id: vm.collection.id, title: vm.collection.title});
+          _getCategoryForCollection(data.id);
+        });
+      }
     }
 
     /**
@@ -297,7 +299,6 @@
     vm.$onInit = function () {
       areaId = AreaObserver.get();
       let collection = CollectionObserver.get();
-      console.log(collection)
       if (collection) {
         vm.collectionId = collection;
         _getCollectionById(collection);

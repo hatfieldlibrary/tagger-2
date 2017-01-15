@@ -22,8 +22,7 @@
 
   'use strict';
 
-  function AreasController(ShowDialog,
-                           AreaDialog,
+  function AreasController(GetDialog,
                            AreaListObserver,
                            UserAreaObserver) {
 
@@ -45,6 +44,13 @@
 
     /** @type {number */
     vm.currentAreaId = UserAreaObserver.get();
+
+    /**
+     * Get the dialog object for this controller.
+     * @type {*}
+     */
+    const dialog =  GetDialog(vm);
+
     /**
      * Watch for new areas in context.  Areas are added
      * and removed in a dialog controller.  They can also
@@ -72,7 +78,7 @@
      * @param message  html to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new ShowDialog.showDialog($event, message, AreaDialog);
+       dialog.showDialog($event, message);
     };
 
   }

@@ -22,8 +22,7 @@
 
   'use strict';
 
-  function GroupController(ShowDialog,
-                           CollectionGroupDialog,
+  function GroupController(GetDialog,
                            UserAreaObserver,
                            CategoryList,
                            GroupListObserver,
@@ -41,6 +40,12 @@
 
     /** @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteCategoryMessage.html';
+
+    /**
+     * Get the dialog object for this component.
+     * @type {*}
+     */
+    const dialog =  GetDialog(vm);
 
     function _initTagList() {
       var tags = CategoryList.query();
@@ -65,7 +70,7 @@
      * @param message  html template to display in dialog
      */
     vm.showDialog = function ($event, message) {
-      new ShowDialog.showDialog($event, message, CollectionGroupDialog);
+      dialog.showDialog($event, message);
     };
 
     vm.$onInit = function () {

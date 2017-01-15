@@ -15,6 +15,8 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 import {config} from './db-conf';
 import fs from 'fs';
 import path  from 'path';
@@ -28,7 +30,8 @@ const sequelize = new Sequelize(
   {
     host: config.test.mysql.host,
     port: config.test.mysql.port,
-    dialect: config.test.mysql.dialect
+    dialect: config.test.mysql.dialect,
+    logging: false
   }),
   database = {};
 
