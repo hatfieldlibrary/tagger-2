@@ -5,9 +5,11 @@
 'use strict';
 
 import coveralls from 'gulp-coveralls';
+import {path, tasks} from './const';
 import gulp from 'gulp';
 
-gulp.task('coveralls', function() {
-  return gulp.src(__dirname + '/coverage/lcov.info')
-    .pipe(coveralls());
+gulp.task(tasks.SERVER_COVERALLS, function() {
+  return gulp.src('./coverage/lcov.info')
+    .pipe(coveralls())
+    .on('error', function(err) {console.log(err)} );
 });
