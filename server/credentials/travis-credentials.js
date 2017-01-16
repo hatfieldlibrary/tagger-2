@@ -1,15 +1,10 @@
 /**
  * Created by mspalti on 1/13/17.
  */
-/**
- * Created by mspalti on 1/12/17.
- */
 'use strict';
 /**
- * Credential and path definitions.
- *
- * @type {{develuid: string, develgid: string, develdbuser: string, develdbpassword: string, googleClientId: string, googleClientSecret: string, googleCallback: string, uid: string, gid: string, user: string, password: string, productiondbhost: string, externalHostA: {host: string, port: string, path: string}}}
- */
+ * Credential and path definitions for travis test build.
+*/
 const credentials = {
   develgid: 'staff',
   develdbuser: 'test_user',

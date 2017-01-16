@@ -29,3 +29,15 @@ gulp.task(tasks.SERVER_TRAVIS_CI, () => {
     );
   });
 });
+
+gulp.task(tasks.SERVER_UNIT_TESTS, () => {
+    return new Promise((resolve, reject) => {
+      runSequence(
+        //  tasks.CLIENT_UNIT_TEST,
+        tasks.AREA_UNIT_TESTS,
+
+        resolve
+      );
+    });
+  }
+);
