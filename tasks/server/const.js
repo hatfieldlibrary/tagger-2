@@ -29,6 +29,8 @@ export const tasks = {
   SERVER_INTEGRATION_TEST: 'server.integration_test',
   SERVER_LINT_JS: 'server.lint',
   SERVER_TRAVIS_CI: 'server.test-on-travis',
-  SERVER_COVERALLS: 'server.coveralls'
+  SERVER_COVERALLS: 'server.coveralls',
+  SERVER_UNIT_TESTS: 'server.unit_test',
+  AREA_UNIT_TESTS: 'server.area_test'
 };
 

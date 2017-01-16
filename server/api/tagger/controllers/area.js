@@ -29,7 +29,8 @@ const logger = require('../utils/error-logger');
 exports.byId = function (req, res) {
   const areaId = req.params.id;
 
-  taggerDao.findAreaById(areaId).then(function (areas) {
+  taggerDao.findAreaById(areaId)
+    .then(function (areas) {
     utils.sendResponse(res, areas);
 
   }).catch(function (err) {

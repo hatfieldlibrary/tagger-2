@@ -26,14 +26,14 @@ import istanbul from 'gulp-istanbul';
 process.env.NODE_ENV = "test";
 
 gulp.task(tasks.SERVER_PRETEST, () => {
-  return gulp.src('tests/server/**/*.js')
+  return gulp.src('tests/server/integration/**/*.js')
     .pipe(istanbul({includeUntested: true, instrumenter: isparta.Instrumenter }))
     // This overwrites `require` so it returns covered files
     .pipe(istanbul.hookRequire());
 });
 
 gulp.task(tasks.SERVER_INTEGRATION_TEST,  [tasks.SERVER_PRETEST], function () {
-  return gulp.src(['tests/server/**/*.js'], { read: false })
+  return gulp.src(['tests/server/integration/**/*.js'], { read: false })
     .pipe(mocha({ reporter: 'spec', timeout: 3000, globals: ['recursive','async-only'] }))
     .pipe(istanbul.writeReports())
     .on('error', util.log);
