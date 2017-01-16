@@ -22,9 +22,9 @@
 'use strict';
 
 import db from '../_helpers/db';
-import  areaDao from '../../../server/api/tagger/dao/area-dao';
-import categoryDao from '../../../server/api/tagger/dao/category-dao';
-import collectionDao from '../../../server/api/tagger/dao/collection-dao';
+import  areaDao from '../../../../server/api/tagger/dao/area-dao';
+import categoryDao from '../../../../server/api/tagger/dao/category-dao';
+import collectionDao from '../../../../server/api/tagger/dao/collection-dao';
 import {expect} from 'chai';
 import async from 'async';
 

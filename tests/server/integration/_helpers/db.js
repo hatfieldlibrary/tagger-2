@@ -36,12 +36,12 @@ const sequelize = new Sequelize(
   database = {};
 
 fs
-  .readdirSync(__dirname + '/../../../server/api/tagger/models/')
+  .readdirSync(__dirname + '/../../../../server/api/tagger/models/')
   .filter(function (file) {
     return (file.indexOf('.') !== 0) && (file !== 'index.js');
   })
   .forEach(function (file) {
-    var model = sequelize.import(path.join(__dirname + '/../../../server/api/tagger/models/', file));
+    var model = sequelize.import(path.join(__dirname + '/../../../../server/api/tagger/models/', file));
     database[model.name] = model;
   });
 
