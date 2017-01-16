@@ -21,10 +21,10 @@
 'use strict';
 
 import db from '../_helpers/db';
-import areaDao from '../../../server/api/tagger/dao/area-dao';
-import tagDao from  '../../../server/api/tagger/dao/tags-dao';
-import collectionDao from  '../../../server/api/tagger/dao/collection-dao';
-import tagAreaDao from '../../../server/api/tagger/dao/tag-target-dao';
+import areaDao from '../../../../server/api/tagger/dao/area-dao';
+import tagDao from  '../../../../server/api/tagger/dao/tags-dao';
+import collectionDao from  '../../../../server/api/tagger/dao/collection-dao';
+import tagAreaDao from '../../../../server/api/tagger/dao/tag-target-dao';
 import {expect} from 'chai';
 import async from 'async';
 
