@@ -18,7 +18,7 @@ gulp.task(tasks.SERVER_INTEGRATION_TEST, function () {
 });
 
 gulp.task(tasks.SERVER_UNIT_TESTS, function() {
-  return gulpsrc(['tests/server/unit/**/*.js'], {read: false})
+  return gulp.src(['tests/server/unit/**/*.js'], {read: false})
     .pipe(mocha({ reporter: 'spec', timeout: 3000, globals: ['recursive','async-only'] }))
     .pipe(istanbul.writeReports())
     .on('error', util.log);
