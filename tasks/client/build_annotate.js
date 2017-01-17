@@ -21,6 +21,7 @@
  *
  * @author Michael Spalti
  */
+'use strict';
 
 import gulp from 'gulp';
 import ngAnnotate from 'gulp-ng-annotate';

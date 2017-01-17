@@ -15,16 +15,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Created by mspalti on 12/3/16.
- */
+'use strict';
 
 import db from '../_helpers/db';
 import  areaDao from '../../../../server/api/tagger/dao/area-dao';
 import {expect} from 'chai';
 import async from 'async';
 
-'use strict';
+
 
 /** Test area names. */
 const areas = [

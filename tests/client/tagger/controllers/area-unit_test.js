@@ -4,7 +4,7 @@
 
 'use strict';
 
-describe('area main component', function () {
+describe('Area component', function () {
 
   var $componentController;
 
@@ -22,9 +22,9 @@ describe('area main component', function () {
   beforeEach(module('taggerServices'));
   beforeEach(module('templates'));
 
-  beforeEach( () => {
+  beforeEach(() => {
 
-    module( ($provide) => {
+    module(($provide) => {
 
       $provide.value('AreaList', {
         query: function () {
@@ -43,79 +43,87 @@ describe('area main component', function () {
 
   });
 
-  beforeEach(inject( (_$componentController_) => {
+  beforeEach(inject((_$componentController_) => {
     $componentController = _$componentController_;
 
   }));
 
-  beforeEach(inject( (_AreaList_, _$q_) => {
+  beforeEach(inject((_AreaList_, _$q_) => {
     AreaList = _AreaList_;
     $q = _$q_;
 
   }));
 
 
-  it('should expose an `areas` object', () => {
+  describe('main area component', () => {
 
-    var bindings = {areas: areasInit};
-    var ctrl = $componentController('areasComponent', null, bindings);
 
-    expect(ctrl.areas).toBeDefined();
-    expect(ctrl.areas[0].name).toBe(areasInit[0].name);
+    it('should expose an `areas` object', () => {
 
-  });
+      var bindings = {areas: areasInit};
+      var ctrl = $componentController('areasComponent', null, bindings);
 
-  it('should call the `showDialog` method with add message', () => {
+      expect(ctrl.areas).toBeDefined();
+      expect(ctrl.areas[0].name).toBe(areasInit[0].name);
 
-    var bindings = {addMessage: addMessage};
-    var ctrl = $componentController('areasComponent', null, bindings);
-    spyOn(ctrl, 'showDialog');
-    ctrl.showDialog(stubEvent, ctrl.addMessage);
-
-    expect(ctrl.showDialog).toHaveBeenCalledWith(stubEvent, ctrl.addMessage);
-
-  });
-
-  it('should expose observed `areas` object', () => {
-
-    var bindings = {areas: areasInit};
-    var ctrl = $componentController('areasComponent', null, bindings);
-
-    var source = Rx.Observable.create(observer => {
-      observer.onNext(areasObserved);
-      observer.onCompleted();
     });
 
-    var subscription = source.subscribe(
+    it('should call the `showDialog` method with add message', () => {
 
-      x => {
-        ctrl.areas = x;
-        expect(ctrl.areas).toBeDefined();
-        expect(ctrl.areas[0].name).toBe('area observed');
-      },
-      e => console.log('onError: %s', e),
-      () => {}
+      var bindings = {addMessage: addMessage};
+      var ctrl = $componentController('areasComponent', null, bindings);
+      spyOn(ctrl, 'showDialog');
+      ctrl.showDialog(stubEvent, ctrl.addMessage);
 
-    );
+      expect(ctrl.showDialog).toHaveBeenCalledWith(stubEvent, ctrl.addMessage);
 
-    subscription.dispose();
+    });
 
+    it('should expose observed `areas` object', () => {
+
+      var bindings = {areas: areasInit};
+      var ctrl = $componentController('areasComponent', null, bindings);
+
+      var source = Rx.Observable.create(observer => {
+        observer.onNext(areasObserved);
+        observer.onCompleted();
+      });
+
+      var subscription = source.subscribe(
+        x => {
+          ctrl.areas = x;
+          expect(ctrl.areas).toBeDefined();
+          expect(ctrl.areas[0].name).toBe('area observed');
+        },
+        e => console.log('onError: %s', e),
+        () => {
+        }
+      );
+
+      subscription.dispose();
+
+    });
   });
 
-  it('should expose `areas ` object at onInit', () => {
+  describe('The areas list component', () => {
 
-    var bindings = {areas: areasInit};
-    var ctrl = $componentController('areasList', null, bindings);
+    it('should expose `areas ` object at onInit', () => {
 
-    spyOn(AreaList, "query").and.callThrough();
+      var bindings = {areas: areasInit};
+      var ctrl = $componentController('areasList', null, bindings);
 
-    ctrl.$onInit();
+      spyOn(AreaList, "query").and.callThrough();
 
-    expect(AreaList.query).toHaveBeenCalled();
-    expect(ctrl.areas[0].name).toBe(areasQueried[0].name);
+      ctrl.$onInit();
+
+      expect(AreaList.query).toHaveBeenCalled();
+      expect(ctrl.areas[0].name).toBe(areasQueried[0].name);
+
+    });
 
   });
 
 });
+
 
 

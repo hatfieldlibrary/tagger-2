@@ -3,6 +3,10 @@ language: node_js
 node_js:
   - "7"
 
+sudo: required
+
+dist: trusty
+
 env:
   - CXX=g++-4.8
 
@@ -14,15 +18,21 @@ addons:
       - g++-4.8
 
 before_install:
+  - export CHROME_BIN=/usr/bin/google-chrome
+  - sudo apt-get update
+  - sudo apt-get install -y libappindicator1 fonts-liberation
+  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome*.deb
+  - rm google-chrome*.deb
   - mysql -e 'CREATE DATABASE acomtags_test;'
   - mysql -uroot -e 'GRANT ALL PRIVILEGES ON acomtags_test.* TO "test_user"@"localhost" identified by "1234";'
 
 before_script:
+
   - npm install -g bower gulp-cli mocha
   - bower install
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-
 
 script:
   - npm run-script test-on-travis

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2016.
  *
@@ -16,6 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
 import gulp from 'gulp';
 import {tasks} from './client/const';
 
@@ -23,6 +23,5 @@ gulp.task('default', [tasks.CLIENT_WATCH]);
 
 require('require-dir')('client');
 
-
-require('require-dir')('server');
+require('require-dir')('ci');
 
