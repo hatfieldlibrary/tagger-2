@@ -104,6 +104,10 @@ describe('The main areas component', function () {
 
 describe('The areas list component', () => {
 
+// not great.
+  var areasInit = [{name: 'area init'}, {name: 'area two'}];
+  var areasQueried = [{name: 'areas queried'}, {name: 'area two'}];
+
   it('should expose `areas ` object at onInit', () => {
 
     var bindings = {areas: areasInit};
