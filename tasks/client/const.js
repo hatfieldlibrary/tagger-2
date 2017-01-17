@@ -15,6 +15,8 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 export const path = {
   ROOT: './',
   DEV: './client/dev/',
@@ -22,6 +24,7 @@ export const path = {
 };
 
 export const tasks = {
+
   CLIENT_VIEWS_PREPARE: 'client.prepare:dist',
   CLIENT_ANNOTATE_JS: 'client.annotate:dist',
   CLIENT_BABEL_JS: 'client.babel:dist',
@@ -30,9 +33,6 @@ export const tasks = {
   CLIENT_LINT_JS: 'client.lint',
 
   CLIENT_COPY: 'client.copy',
-
-  CLIENT_UNIT_TEST: 'client.unit_test',
-  CLIENT_COVERAGE: 'client.coverage',
 
   CLIENT_WATCH: 'client.watch',
 

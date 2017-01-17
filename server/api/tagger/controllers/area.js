@@ -28,11 +28,8 @@ const logger = require('../utils/error-logger');
  */
 exports.byId = function (req, res) {
   const areaId = req.params.id;
-
-  taggerDao.findAreaById(areaId)
-    .then(function (areas) {
+  taggerDao.findAreaById(areaId).then(function (areas) {
     utils.sendResponse(res, areas);
-
   }).catch(function (err) {
     logger.dao(err);
   });
@@ -90,7 +87,7 @@ exports.add = function (req, res) {
 exports.update = function (req, res) {
   const title = req.body.title;
   const url = req.body.url;
-  const searchUrl = req.body.searchUrl;
+ // const searchUrl = req.body.searchUrl;
   const description = req.body.description;
   const linkLabel = req.body.linkLabel;
   const id = req.body.id;
@@ -99,7 +96,7 @@ exports.update = function (req, res) {
     title: title,
     url: url,
     linkLabel: linkLabel,
-    searchUrl: searchUrl,
+   // searchUrl: searchUrl,
     description: description
   };
 

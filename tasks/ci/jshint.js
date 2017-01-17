@@ -1,14 +1,13 @@
 /**
- * Created by mspalti on 1/6/17.
+ * Created by mspalti on 1/16/17.
  */
-
+'use strict';
 import jshint from 'gulp-jshint';
 import gulp  from 'gulp';
 import {path, tasks} from './const';
 
 const JS = [
-  path.DEV + '**/*.js',
-  '!' + path.DEV + 'bower_components/**/*'
+  path.SERVER + '**/*.js'
 ];
 
 gulp.task(tasks.SERVER_LINT_JS, function() {

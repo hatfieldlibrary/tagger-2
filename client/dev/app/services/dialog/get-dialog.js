@@ -8,6 +8,8 @@
  */
 (function () {
 
+  'use strict';
+
   taggerServices.factory('GetDialog',
     (ShowDialog,
      AreaDialog,

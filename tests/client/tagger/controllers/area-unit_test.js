@@ -4,7 +4,7 @@
 
 'use strict';
 
-describe('area main component', function () {
+describe('The main areas component', function () {
 
   var $componentController;
 
@@ -22,9 +22,9 @@ describe('area main component', function () {
   beforeEach(module('taggerServices'));
   beforeEach(module('templates'));
 
-  beforeEach( () => {
+  beforeEach(() => {
 
-    module( ($provide) => {
+    module(($provide) => {
 
       $provide.value('AreaList', {
         query: function () {
@@ -43,12 +43,12 @@ describe('area main component', function () {
 
   });
 
-  beforeEach(inject( (_$componentController_) => {
+  beforeEach(inject((_$componentController_) => {
     $componentController = _$componentController_;
 
   }));
 
-  beforeEach(inject( (_AreaList_, _$q_) => {
+  beforeEach(inject((_AreaList_, _$q_) => {
     AreaList = _AreaList_;
     $q = _$q_;
 
@@ -87,20 +87,22 @@ describe('area main component', function () {
     });
 
     var subscription = source.subscribe(
-
       x => {
         ctrl.areas = x;
         expect(ctrl.areas).toBeDefined();
         expect(ctrl.areas[0].name).toBe('area observed');
       },
       e => console.log('onError: %s', e),
-      () => {}
-
+      () => {
+      }
     );
 
     subscription.dispose();
 
   });
+});
+
+describe('The areas list component', () => {
 
   it('should expose `areas ` object at onInit', () => {
 
