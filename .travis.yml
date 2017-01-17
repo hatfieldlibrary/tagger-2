@@ -18,6 +18,7 @@ before_install:
   - mysql -uroot -e 'GRANT ALL PRIVILEGES ON acomtags_test.* TO "test_user"@"localhost" identified by "1234";'
 
 before_script:
+  - export CHROME_BIN=chromium-browser
   - npm install -g bower gulp-cli mocha
   - bower install
   - "export DISPLAY=:99.0"
