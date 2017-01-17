@@ -4,7 +4,7 @@
 
 'use strict';
 
-describe('The main areas component', function () {
+describe('Area component', function () {
 
   var $componentController;
 
@@ -55,73 +55,75 @@ describe('The main areas component', function () {
   }));
 
 
-  it('should expose an `areas` object', () => {
+  describe('main area component', () => {
 
-    var bindings = {areas: areasInit};
-    var ctrl = $componentController('areasComponent', null, bindings);
 
-    expect(ctrl.areas).toBeDefined();
-    expect(ctrl.areas[0].name).toBe(areasInit[0].name);
+    it('should expose an `areas` object', () => {
 
-  });
+      var bindings = {areas: areasInit};
+      var ctrl = $componentController('areasComponent', null, bindings);
 
-  it('should call the `showDialog` method with add message', () => {
+      expect(ctrl.areas).toBeDefined();
+      expect(ctrl.areas[0].name).toBe(areasInit[0].name);
 
-    var bindings = {addMessage: addMessage};
-    var ctrl = $componentController('areasComponent', null, bindings);
-    spyOn(ctrl, 'showDialog');
-    ctrl.showDialog(stubEvent, ctrl.addMessage);
-
-    expect(ctrl.showDialog).toHaveBeenCalledWith(stubEvent, ctrl.addMessage);
-
-  });
-
-  it('should expose observed `areas` object', () => {
-
-    var bindings = {areas: areasInit};
-    var ctrl = $componentController('areasComponent', null, bindings);
-
-    var source = Rx.Observable.create(observer => {
-      observer.onNext(areasObserved);
-      observer.onCompleted();
     });
 
-    var subscription = source.subscribe(
-      x => {
-        ctrl.areas = x;
-        expect(ctrl.areas).toBeDefined();
-        expect(ctrl.areas[0].name).toBe('area observed');
-      },
-      e => console.log('onError: %s', e),
-      () => {
-      }
-    );
+    it('should call the `showDialog` method with add message', () => {
 
-    subscription.dispose();
+      var bindings = {addMessage: addMessage};
+      var ctrl = $componentController('areasComponent', null, bindings);
+      spyOn(ctrl, 'showDialog');
+      ctrl.showDialog(stubEvent, ctrl.addMessage);
+
+      expect(ctrl.showDialog).toHaveBeenCalledWith(stubEvent, ctrl.addMessage);
+
+    });
+
+    it('should expose observed `areas` object', () => {
+
+      var bindings = {areas: areasInit};
+      var ctrl = $componentController('areasComponent', null, bindings);
+
+      var source = Rx.Observable.create(observer => {
+        observer.onNext(areasObserved);
+        observer.onCompleted();
+      });
+
+      var subscription = source.subscribe(
+        x => {
+          ctrl.areas = x;
+          expect(ctrl.areas).toBeDefined();
+          expect(ctrl.areas[0].name).toBe('area observed');
+        },
+        e => console.log('onError: %s', e),
+        () => {
+        }
+      );
+
+      subscription.dispose();
+
+    });
+  });
+
+  describe('The areas list component', () => {
+
+    it('should expose `areas ` object at onInit', () => {
+
+      var bindings = {areas: areasInit};
+      var ctrl = $componentController('areasList', null, bindings);
+
+      spyOn(AreaList, "query").and.callThrough();
+
+      ctrl.$onInit();
+
+      expect(AreaList.query).toHaveBeenCalled();
+      expect(ctrl.areas[0].name).toBe(areasQueried[0].name);
+
+    });
 
   });
-});
-
-describe('The areas list component', () => {
-
-// not great.
-  var areasInit = [{name: 'area init'}, {name: 'area two'}];
-  var areasQueried = [{name: 'areas queried'}, {name: 'area two'}];
-
-  it('should expose `areas ` object at onInit', () => {
-
-    var bindings = {areas: areasInit};
-    var ctrl = $componentController('areasList', null, bindings);
-
-    spyOn(AreaList, "query").and.callThrough();
-
-    ctrl.$onInit();
-
-    expect(AreaList.query).toHaveBeenCalled();
-    expect(ctrl.areas[0].name).toBe(areasQueried[0].name);
-
-  });
 
 });
+
 
 
