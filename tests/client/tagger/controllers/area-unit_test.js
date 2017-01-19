@@ -14,6 +14,7 @@ describe('Area components', function () {
     AreaActionObserver,
     AreaById,
     AreaUpdate,
+    ReorderAreas,
     $q;
 
   let areas;
@@ -97,6 +98,7 @@ describe('Area components', function () {
                      _AreaObserver_,
                      _AreaListObserver_,
                      _AreaActionObserver_,
+                     _ReorderAreas_,
                      _$q_) => {
     // inject mocks
     AreaList = _AreaList_;
@@ -105,6 +107,7 @@ describe('Area components', function () {
     DialogStrategy = _DialogStrategy_;
     AreaListObserver = _AreaListObserver_;
     AreaActionObserver = _AreaActionObserver_;
+    ReorderAreas = _ReorderAreas_;
     $q = _$q_;
 
   }));
@@ -162,6 +165,16 @@ describe('Area components', function () {
     });
 
     spyOn(AreaUpdate, 'save').and.callFake(() => {
+      return {
+        $promise: {
+          then: (callback) => {
+            return callback(success);
+          }
+        }
+      }
+    });
+
+    spyOn(ReorderAreas, 'save').and.callFake(() => {
       return {
         $promise: {
           then: (callback) => {
@@ -233,6 +246,7 @@ describe('Area components', function () {
 
       expect(AreaList.query).toHaveBeenCalled();
       expect(ctrl.areas[0].name).toBe(areasQueried[0].name);
+      expect(AreaListObserver.subscribe).toHaveBeenCalled();
 
     });
 
@@ -255,6 +269,9 @@ describe('Area components', function () {
       ctrl.orderAreaList(0);
       expect(ctrl.areas.length).toBe(1);
       expect(ctrl.areas[0].name).toBe('area two');
+      expect(ReorderAreas.save).toHaveBeenCalled();
+      expect(AreaListObserver.set).toHaveBeenCalled();
+
     });
 
     it('should update the current area and notify the app.', () => {
@@ -285,6 +302,7 @@ describe('Area components', function () {
 
       expect(ctrl.area).toBeDefined();
       expect(ctrl.area.id).toEqual(actionArea.id);
+      expect(AreaActionObserver.subscribe).toHaveBeenCalled;
       expect(menuSpy).toHaveBeenCalledWith(actionArea);
 
     });
