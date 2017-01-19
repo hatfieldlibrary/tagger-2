@@ -8,7 +8,6 @@ import {path, tasks} from './const';
 
 const SERVER_JS = path.SERVER + "/api/**/*.js";
 const CLIENT_JS = [path.CLIENT + "/dev/app/**/*.js", '!' + path.CLIENT + '/dev/bower_components/**/*.js'];
-console.log(CLIENT_JS, SERVER_JS)
 
 gulp.task(tasks.ISTANBUL_PREFIGHT, () => {
   return gulp.src(CLIENT_JS, SERVER_JS)
