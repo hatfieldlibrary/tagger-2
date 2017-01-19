@@ -29,6 +29,7 @@ const logger = require('../utils/error-logger');
 exports.list = function (req, res) {
 
   taggerDao.findAllUsers().then(function (users) {
+    console.log(users)
     utils.sendResponse(res, users);
   }).catch(function (err) {
     logger.dao(err);

@@ -100,9 +100,9 @@
 
           } else {
             var result = AreaTargetRemove.query({collId: CollectionObserver.get(), areaId: areaId});
-            result.$promise.then(function (data) {
-              if (data.status === 'success') {
-                ctrl.areaTargets = result.areaTargets;
+            result.$promise.then(function (result) {
+              if (result.status === 'success') {
+                ctrl.areaTargets = result.data.areaList;
 
                 // Update the collections list (one collection has just been removed from the area).
                 CollectionAreasObserver.set();
@@ -116,9 +116,9 @@
         // not a target already, add a new area target.
         else {
           var add = AreaTargetAdd.query({collId: CollectionObserver.get(), areaId: areaId});
-          add.$promise.then(function (data) {
-            if (data.status === 'success') {
-              ctrl.areaTargets = add.areaTargets;
+          add.$promise.then(function (result) {
+            if (result.status === 'success') {
+              ctrl.areaTargets = result.data.areaList;
               new TaggerToast('Collection added to Area.');
             }
           });

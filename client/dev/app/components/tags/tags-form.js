@@ -94,23 +94,23 @@
       menu: '&'
     },
     template: '<md-content layout="row" layout-align="start start">' +
-    '<tag-list></tag-list>' +
-    '<md-card-content class="md-subhead grey-text" flex="80" layout="column">' +
-    '<md-button class="md-raised md-accent large-button" ng-show="vm.userAreaId==0" ng-click="vm.updateTag()">Update Tag </md-button>' +
-    '<md-input-container ng-show="vm.userAreaId==0">' +
-    '<label>Tag Name</label> ' +
-    '<input type="text" ng-model="vm.tag.name"/>' +
-    '</md-input-container>' +
-    '<div style="height: 507px; margin-bottom: 40px;overflow: auto;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc" flex="100" ng-show="vm.userAreaId &gt; 0">' +
-    '<md-content flex="flex"> ' +
-    '<md-list>' +
-    '<md-list-item ng-repeat="tag in vm.tags">' +
-    '<toggle-tag-area-button flex="100" tag-id="{{tag.id}}" tag-name="{{tag.name}}" area-id="vm.currentAreaIndex" ng-click="showDialog($event, vm.deleteMessage)"></toggle-tag-area-button>' +
-    '</md-list-item>' +
-    '</md-list>' +
-    '</md-content>' +
-    '</div>' +
-    '</md-card-content>' +
+    ' <tag-list></tag-list>' +
+    '   <md-card-content class="md-subhead grey-text" flex="80" layout="column">' +
+    '     <md-button class="md-raised md-accent large-button" ng-show="vm.userAreaId==0" ng-click="vm.updateTag()">Update Tag </md-button>' +
+    '      <md-input-container ng-show="vm.userAreaId==0">' +
+    '        <label>Tag Name</label> ' +
+    '       <input type="text" ng-model="vm.tag.name"/>' +
+    '      </md-input-container>' +
+    '     <div style="height: 507px; margin-bottom: 40px;overflow: auto;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc" flex="100" ng-show="vm.userAreaId &gt; 0">' +
+    '       <md-content flex="flex"> ' +
+    '      <md-list>' +
+    '         <md-list-item ng-repeat="tag in vm.tags">' +
+    '          <toggle-tag-area-button flex="100" tag-id="{{tag.id}}" tag-name="{{tag.name}}" area-id="vm.currentAreaIndex" ng-click="showDialog($event, vm.deleteMessage)"></toggle-tag-area-button>' +
+    '         </md-list-item>' +
+    '       </md-list>' +
+    '     </md-content>' +
+    '   </div>' +
+    '  </md-card-content>' +
     '</md-content>',
     controller: FormController,
     controllerAs: 'vm'

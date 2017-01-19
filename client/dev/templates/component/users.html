@@ -28,7 +28,12 @@
           <span flex="flex"></span>
         </div>
       </md-toolbar>
-      <md-card-content>
+      <md-card-content layout="row" style="margin-top: 40px;">
+        <div flex="5"></div>
+        <div flex="25" class="md-subhead" style="margin-left: -5px;">User Name</div>
+        <div flex="25" class="md-subhead" style="margin-left: 5px;">Email</div>
+        <div flex="25" class="md-subhead">Area or role</div>
+        <div flex></div>
       </md-card-content>
       <md-list flex="100">
         <md-list-item class="md-2-line" layout="row" flex="100" ng-repeat="user in vm.users">

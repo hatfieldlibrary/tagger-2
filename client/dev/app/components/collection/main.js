@@ -24,7 +24,7 @@
 
   'use strict';
 
-  function CollectionController(GetDialog,
+  function CollectionController(DialogStrategy,
                                 UserAreaObserver,
                                 PublicationStatusObserver) {
 
@@ -47,20 +47,11 @@
     vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
 
     /**
-     * Get the dialog object for this controller.
+     * Get the dialog object for this component.
+     * Call with showDialog($event,message).
      * @type {*}
      */
-    const dialog =  GetDialog(vm);
-
-    /**
-     * Show the $mdDialog.
-     * @param $event click event object (location of event used as
-     *                    animation starting point)
-     * @param message  html template to display in dialog
-     */
-    vm.showDialog = function ($event, message) {
-      dialog.showDialog($event, message);
-    };
+    vm.dialog =  DialogStrategy.makeDialog(vm);
 
     vm.menuUpdate = function(id, title) {
       vm.currentCollection.title = title;

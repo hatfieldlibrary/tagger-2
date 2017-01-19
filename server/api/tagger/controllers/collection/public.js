@@ -1,4 +1,5 @@
 /**
+ * Public API endpoints for collection information.
  * Created by mspalti on 1/9/17.
  */
 
@@ -9,8 +10,6 @@ const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/collection-dao');
 const config = require('../../../../config/environment');
 const logger = require('../../utils/error-logger');
-
-// The following are rest endpoints for external clients (e.g. Academic Commons).
 
 /**
  * Retrieves the tags associated with a single collection. Used by

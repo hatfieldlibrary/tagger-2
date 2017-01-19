@@ -22,7 +22,7 @@
 
   'use strict';
 
-  function TagController(GetDialog,
+  function TagController(DialogStrategy,
                          UserAreaObserver,
                          TagList,
                          TagListObserver,
@@ -43,9 +43,10 @@
 
     /**
      * Get the dialog object for this component.
+     * Call with showDialog($event,message).
      * @type {*}
      */
-    const dialog =  GetDialog(vm);
+    vm.dialog =  DialogStrategy.makeDialog(vm);
 
     function _initTagList() {
       let tags = TagList.query();
@@ -61,16 +62,6 @@
     vm.menuUpdate = function(id, title) {
       vm.currentTag.title = title;
       vm.currentTag.id = id;
-    };
-
-    /**
-     * Show the $mdDialog.
-     * @param $event click event object (location of event used as
-     *                    animation starting point)
-     * @param message  html template to display in dialog
-     */
-    vm.showDialog = function ($event, message) {
-      dialog.showDialog($event, message);
     };
 
     vm.$onInit = function () {
