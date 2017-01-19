@@ -3,8 +3,9 @@
  */
 
 /**
- * Implements strategy for composing the dialog object
- * for a controller.
+ * Implements strategy for composing the dialog object.  The
+ * ShowDialog directive is decorated with its controller based on
+ * the constructor name of the parent component.
  */
 (function () {
 
