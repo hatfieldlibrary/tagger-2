@@ -3,8 +3,8 @@
  */
 
 export const path = {
-  SERVER: 'server',
-  CLIENT: 'client'
+  SERVER: process.cwd() + 'server',
+  CLIENT: process.cwd() + 'client'
 };
 
 export const tasks = {
