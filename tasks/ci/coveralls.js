@@ -8,7 +8,7 @@ import {path, tasks} from './const';
 import gulp from 'gulp';
 
 gulp.task(tasks.COVERALLS, () => {
-  return gulp.src('unit_coverage/**/lcov.info')
+  return gulp.src('coverage/**/lcov.info')
     .pipe(coveralls())
     .on('error', function(err) {console.log(err)} );;
 });

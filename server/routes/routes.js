@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports = function(app,config,passport){
+module.exports = function(app,config){
 
   'use strict';
 
@@ -26,6 +26,10 @@ module.exports = function(app,config,passport){
   const area = require('../../server/api/tagger/controllers/area');
   const content = require('../../server/api/tagger/controllers/content');
   const collection = require('../api/tagger/controllers/collection/admin');
+  const collectionArea = require('../api/tagger/controllers/collection/areas');
+  const collectionTag = require('../api/tagger/controllers/collection/tags');
+  const collectionType = require('../api/tagger/controllers/collection/types');
+  const collectionImage = require('../api/tagger/controllers/collection/image');
   const apiCollection = require('../api/tagger/controllers/collection/public');
   const category = require('../../server/api/tagger/controllers/category');
   const users = require('../../server/api/tagger/controllers/users');
@@ -34,27 +38,6 @@ module.exports = function(app,config,passport){
    * @type {boolean}
    */
   const ensureAuthenticated = app.ensureAuthenticated;
-
-  // // AUTHENTICATION
-  //
-  // // Use passport.authenticate() as middleware. The first step in Google authentication
-  // // redirects the user to google.com.  After authorization, Google
-  // // will redirect the user back to the callback URL /auth/google/callback
-  // // jshint unused: false
-  // app.get('/auth/google',
-  //   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-  //     'https://www.googleapis.com/auth/userinfo.email'] }),
-  //
-  //   function(req, res){
-  //     // The request will be redirected to Google for authentication, so this
-  //     // function will not be called.
-  //   });
-  //
-  // // If authentication failed, redirect the login page.  Otherwise, redirect
-  // // to the admin page page.
-  // app.get('/auth/google/callback',
-  //   passport.authenticate('google', { successRedirect: '/tagger/',
-  //     failureRedirect: '/tagger/login' }));
 
   app.use('/rest/userinfo', ensureAuthenticated, (req, res) => {
     userInfo.returnUserInfo(req, res, config);
@@ -65,25 +48,25 @@ module.exports = function(app,config,passport){
   app.use('/rest/collection/show/list/:areaId', ensureAuthenticated, collection.list);
   app.use('/rest/collection/tags/:collId', apiCollection.tagsForCollection); // public
   app.use('/rest/collection/types/:collId', apiCollection.typesForCollection);  // public
-  app.use('/rest/collection/areas/:collId', ensureAuthenticated, collection.areas);
   app.post('/rest/collection/add', ensureAuthenticated, collection.add);
   app.post('/rest/collection/delete', ensureAuthenticated, collection.delete);
   app.post('/rest/collection/update', ensureAuthenticated, collection.update);
-  app.post('/tagger/collection/image', ensureAuthenticated, function (req, res) {
-    collection.updateImage(req, res, config);
-  });
-  app.get('/rest/collection/:collId/add/area/:areaId', ensureAuthenticated, collection.addAreaTarget);
-  app.get('/rest/collection/:collId/remove/area/:areaId', ensureAuthenticated, collection.removeAreaTarget);
-  app.get('/rest/collection/:collId/add/tag/:tagId', ensureAuthenticated, collection.addTagTarget);
-  app.get('/rest/collection/:collId/remove/tag/:tagId', ensureAuthenticated, collection.removeTagTarget);
-  app.get('/rest/collection/:collId/add/type/:typeId', ensureAuthenticated, collection.addTypeTarget);
-  app.get('/rest/collection/:collId/remove/type/:typeId', ensureAuthenticated, collection.removeTypeTarget);
   app.get('/rest/collection/repoTypeByArea/:areaId', ensureAuthenticated, collection.repoTypesByArea);
   app.get('/rest/collection/count/types/byArea/:areaId', ensureAuthenticated, collection.countCTypesByArea);
   app.get('/rest/collection/count/linkTypes/byArea/:areaId', ensureAuthenticated, collection.browseTypesByArea);
   app.get('/rest/collection/first/inArea/:areaId', ensureAuthenticated, collection.getFirstCollectionInArea);
   app.get('/rest/collection/:collId/pubstatus/:status', ensureAuthenticated, collection.setPublicationStatus);
   app.get('/rest/collection/:collId/pubstatus', ensureAuthenticated, collection.getPublicationStatus);
+  app.post('/tagger/collection/image', ensureAuthenticated, function (req, res) {
+    collectionImage.updateImage(req, res, config);
+  });
+  app.use('/rest/collection/areas/:collId', ensureAuthenticated, collectionArea.areas);
+  app.get('/rest/collection/:collId/add/area/:areaId', ensureAuthenticated, collectionArea.addAreaTarget);
+  app.get('/rest/collection/:collId/remove/area/:areaId', ensureAuthenticated, collectionArea.removeAreaTarget);
+  app.get('/rest/collection/:collId/add/tag/:tagId', ensureAuthenticated, collectionTag.addTagTarget);
+  app.get('/rest/collection/:collId/remove/tag/:tagId', ensureAuthenticated, collectionTag.removeTagTarget);
+  app.get('/rest/collection/:collId/add/type/:typeId', ensureAuthenticated, collectionType.addTypeTarget);
+  app.get('/rest/collection/:collId/remove/type/:typeId', ensureAuthenticated, collectionType.removeTypeTarget);
 
   // AREAS
   app.use('/rest/area/byId/:id', area.byId);  // used by public and admin views, no authentication

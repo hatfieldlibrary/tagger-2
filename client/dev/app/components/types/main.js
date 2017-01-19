@@ -22,7 +22,7 @@
 
   'use strict';
 
-  function TypeController(GetDialog,
+  function TypeController(DialogStrategy,
                           UserAreaObserver,
                           TagList,
                           TagListObserver,
@@ -44,10 +44,11 @@
     vm.deleteMessage = 'templates/dialog/deleteContentMessage.html';
 
     /**
-     * Compose the dialog object for this component.
+     * Get the dialog object for this component.
+     * Call with showDialog($event,message).
      * @type {*}
      */
-    const dialog =  GetDialog(vm);
+    vm.dialog =  DialogStrategy.makeDialog(vm);
 
     function _initTagList() {
       var tags = TagList.query();
@@ -64,16 +65,6 @@
     vm.menuUpdate = function(id, title) {
       vm.currentType.title = title;
       vm.currentType.id = id;
-    };
-
-    /**
-     * Show the $mdDialog.
-     * @param $event click event object (location of event used as
-     *                    animation starting point)
-     * @param message  html template to display in dialog
-     */
-    vm.showDialog = function ($event, message) {
-      dialog.showDialog($event, message);
     };
 
     vm.$onInit = function () {

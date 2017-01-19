@@ -28,6 +28,10 @@
   taggerServices.factory('AreaActionObserver', ['rx', function(rx){
 
     const Subject = new rx.Subject();
+    /**
+     * The area id.
+     * @type {null}
+     */
     let area = null;
 
     return {

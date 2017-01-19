@@ -4,115 +4,232 @@
 
 'use strict';
 
-describe('Area component', function () {
+describe('Area components', function () {
 
-  var $componentController;
+  let $componentController;
 
-  var AreaList;
-  var $q;
+  let AreaList,
+    DialogStrategy,
+    AreaListObserver,
+    AreaActionObserver,
+    AreaById,
+    AreaUpdate,
+    $q;
 
-  var areas;
-  var areasInit = [{name: 'area init'}, {name: 'area two'}];
-  var areasObserved = [{name: 'area observed'}, {name: 'area two'}];
-  var areasQueried = [{name: 'areas queried'}, {name: 'area two'}];
-  var addMessage = 'add message';
-  var stubEvent = 'stub event';
+
+  let areas;
+  let areasUpdated = [{name: 'updated area', id: 1}, {name: 'area two', id: 2}];
+  let areasObserved = [{name: 'the observed area one', id: 1}, {name: 'area two', id: 2}, {name: 'area three', id: 3}];
+  let areasQueried = [{name: 'areas queried', id: 1}, {name: 'area two', id: 2}];
+  let actionAreaId = 2;
+  let actionArea = {id: 2, title: 'action title'};
+  let success = {data: {status: 'success'}};
+  let savedArea = {
+    id: 2,
+    title: 'saved area'
+  };
 
   beforeEach(module('tagger'));
   beforeEach(module('taggerServices'));
   beforeEach(module('templates'));
 
+
   beforeEach(() => {
 
     module(($provide) => {
-
       $provide.value('AreaList', {
-        query: function () {
-          return {
-            $promise: {
-              then: (callback) => {
-                return callback(areasQueried);
-              }
-            }
-          };
+        query: () => {
         }
       });
-      return null;
+    });
 
+    module(($provide) => {
+      $provide.value('AreaById', {
+        query: () => {
+        }
+      });
+    });
+
+    module(($provide) => {
+      $provide.value('AreaUpdate', {
+        save: () => {
+        }
+      });
+    });
+
+    module(($provide) => {
+      $provide.value('AreaListObserver', {
+        set: (x) => {
+        },
+        get: () => {
+        },
+        subscribe: (o) => {
+        }
+      });
+    });
+
+    module(($provide) => {
+      $provide.value('AreaActionObserver', {
+        set: (x) => {
+        },
+        get: () => {
+        },
+        subscribe: (o) => {
+        }
+      });
+    });
+
+    module(($provide) => {
+      $provide.value('DialogStrategy', {
+        makeDialog: (vm) => {
+        },
+        showDialog: (event, message) => {
+        }
+      });
     });
 
   });
 
   beforeEach(inject((_$componentController_) => {
+    // used to create instances of component controllers
     $componentController = _$componentController_;
+
 
   }));
 
-  beforeEach(inject((_AreaList_, _$q_) => {
+
+  beforeEach(inject((_AreaList_,
+                     _AreaById_,
+                     _AreaUpdate_,
+                     _DialogStrategy_,
+                     _AreaObserver_,
+                     _AreaListObserver_,
+                     _AreaActionObserver_,
+                     _$q_) => {
+    // inject mocks
     AreaList = _AreaList_;
+    AreaById = _AreaById_;
+    AreaUpdate = _AreaUpdate_;
+    DialogStrategy = _DialogStrategy_;
+    AreaListObserver = _AreaListObserver_;
+    AreaActionObserver = _AreaActionObserver_;
     $q = _$q_;
 
   }));
 
+  beforeEach(() => {
 
-  describe('main area component', () => {
+    let fakeAreaListSubject,
+      fakeActionSubject,
+      fakeAreaObserver;
+
+    spyOn(AreaListObserver, 'set').and.callFake((value) => {
+      fakeAreaListSubject(value);
+    });
+    spyOn(AreaListObserver, 'get').and.callFake(() => {
+      return areasObserved;
+    });
+    spyOn(AreaListObserver, 'subscribe').and.callFake((o) => {
+      fakeAreaListSubject = o;
+    });
+
+    spyOn(AreaActionObserver, 'set').and.callFake((value) => {
+
+    });
+    spyOn(AreaActionObserver, 'get').and.callFake(() => {
+      return actionAreaId;
+    });
+    spyOn(AreaActionObserver, 'subscribe').and.callFake((o) => {
+      fakeActionSubject = o;
+    });
+
+    spyOn(AreaList, 'query').and.callFake(() => {
+      return {
+        $promise: {
+          then: (callback) => {
+            return callback(areasQueried);
+          }
+        }
+      }
+    });
+
+    spyOn(AreaById, 'query').and.callFake(() => {
+      return {
+        $promise: {
+          then: (callback) => {
+            return callback(actionArea);
+          }
+        }
+      }
+    });
+
+    spyOn(AreaUpdate, 'save').and.callFake(() => {
+      return {
+        $promise: {
+          then: (callback) => {
+            return callback(success);
+          }
+        }
+      }
+    });
+
+    spyOn(DialogStrategy, 'makeDialog').and.callThrough();
+
+  });
 
 
-    it('should expose an `areas` object', () => {
+  describe('The main area component', () => {
 
-      var bindings = {areas: areasInit};
-      var ctrl = $componentController('areasComponent', null, bindings);
+    it('should try to get areas from observer $onInit', () => {
+
+      let ctrl = $componentController('areasComponent', null);
+      ctrl.$onInit();
 
       expect(ctrl.areas).toBeDefined();
-      expect(ctrl.areas[0].name).toBe(areasInit[0].name);
+      expect(AreaListObserver.get).toHaveBeenCalled();
+      expect(ctrl.areas[0].name).toBe('the observed area one');
 
     });
 
-    it('should call the `showDialog` method with add message', () => {
+    it('should get the component dialog $onInit', () => {
 
-      var bindings = {addMessage: addMessage};
-      var ctrl = $componentController('areasComponent', null, bindings);
-      spyOn(ctrl, 'showDialog');
-      ctrl.showDialog(stubEvent, ctrl.addMessage);
+      let ctrl = $componentController('areasComponent', null);
+      ctrl.$onInit();
 
-      expect(ctrl.showDialog).toHaveBeenCalledWith(stubEvent, ctrl.addMessage);
+      expect(DialogStrategy.makeDialog).toHaveBeenCalled();
 
     });
 
-    it('should expose observed `areas` object', () => {
+    it('should update the area list after observable push', () => {
 
-      var bindings = {areas: areasInit};
-      var ctrl = $componentController('areasComponent', null, bindings);
+      let ctrl = $componentController('areasComponent', null);
+      ctrl.$onInit();
 
-      var source = Rx.Observable.create(observer => {
-        observer.onNext(areasObserved);
-        observer.onCompleted();
-      });
+      AreaListObserver.set(areasUpdated);
 
-      var subscription = source.subscribe(
-        x => {
-          ctrl.areas = x;
-          expect(ctrl.areas).toBeDefined();
-          expect(ctrl.areas[0].name).toBe('area observed');
-        },
-        e => console.log('onError: %s', e),
-        () => {
-        }
-      );
+      expect(ctrl.areas).toBeDefined();
+      expect(ctrl.areas[0].name).toBe('updated area');
 
-      subscription.dispose();
+    });
+
+    it('should update the view model\'s title and id headers', () => {
+
+      let ctrl = $componentController('areasComponent', null);
+
+      ctrl.menuUpdate(3, 'good area');
+
+      expect(ctrl.currentArea.title).toEqual('good area');
+      expect(ctrl.currentArea.id).toEqual(3);
 
     });
   });
 
-  describe('The areas list component', () => {
 
-    it('should expose `areas ` object at onInit', () => {
+  describe('The area list component', () => {
 
-      var bindings = {areas: areasInit};
-      var ctrl = $componentController('areasList', null, bindings);
+    it('should retrieve areas via the AreaList service $onInit ', () => {
 
-      spyOn(AreaList, "query").and.callThrough();
+      let ctrl = $componentController('areasListComponent', null);
 
       ctrl.$onInit();
 
@@ -121,7 +238,79 @@ describe('Area component', function () {
 
     });
 
+    it('should notify the AreaActionObserver $onInit', () => {
+
+      let ctrl = $componentController('areasListComponent', null);
+
+      ctrl.$onInit();
+
+      expect(AreaActionObserver.set).toHaveBeenCalledWith(1);
+
+    });
+
+
+    it('should prepare the area list to be reordered.', () => {
+      // test for reordered areas using integration or e2e
+      let bindings = {areas: areasQueried};
+      let ctrl = $componentController('areasListComponent', null, bindings);
+
+      ctrl.orderAreaList(0);
+      expect(ctrl.areas.length).toBe(1);
+      expect(ctrl.areas[0].name).toBe('area two');
+    });
+
+    it('should update the current area and notify the app.', () => {
+
+      let ctrl = $componentController('areasListComponent', null);
+      ctrl.resetArea(2);
+      expect(ctrl.currentAreaId).toEqual(2);
+      expect(AreaActionObserver.set).toHaveBeenCalledWith(2);
+
+    });
+
   });
+
+
+  describe('The area form component', () => {
+
+    it('should initialize the form $onInit', () => {
+
+      var menuSpy = jasmine.createSpy('menuSpy');
+
+      let bindings = {
+        menu: menuSpy
+      };
+      let ctrl = $componentController('areaForm', null, bindings);
+
+      ctrl.$onInit();
+
+      expect(ctrl.area).toBeDefined();
+      expect(ctrl.area.id).toEqual(actionArea.id);
+      expect(menuSpy).toHaveBeenCalledWith(actionArea);
+
+    });
+
+    it('should update the area and set new area list', () => {
+
+      let bindings = {
+        area: {
+          id: 2,
+          title: 'updated area',
+          description: '',
+          searchUrl: '',
+          linkLabel: '',
+          url: ''
+        }
+      };
+      let ctrl = $componentController('areaForm', null, bindings);
+      ctrl.updateArea();
+      expect(AreaUpdate.save).toHaveBeenCalled();
+
+    });
+
+
+  });
+
 
 });
 

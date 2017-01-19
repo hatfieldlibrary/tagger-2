@@ -10,8 +10,7 @@
                             TagObserver,
                             AreaObserver,
                             TagListObserver,
-                            ShowDialog,
-                            TagDialog) {
+                            DialogStrategy) {
 
     const vm = this;
 
@@ -23,6 +22,14 @@
     TagListObserver.subscribe(function onNext() {
       _getTagList();
     });
+
+
+    /**
+     * Get the dialog object for this component.
+     * Call with showDialog($event,message).
+     * @type {*}
+     */
+    const dialog = DialogStrategy.makeDialog(vm);
 
     /**
      * Show the $mdDialog.
@@ -42,7 +49,7 @@
         message = addMessage;
       }
 
-      new ShowDialog.showDialog($event, message, TagDialog);
+      dialog.showDialog($event, message);
 
     };
 

@@ -23,13 +23,12 @@
 
   'use strict';
 
-  function TagAreaCtrl($scope,
-                       ShowDialog,
-                       TagDialog,
+  function TagAreaController($scope,
                        TagTargets,
                        TagObserver,
                        TagAreaObserver,
-                       AreaListObserver) {
+                       AreaListObserver,
+                       DialogStrategy) {
 
     const vm = this;
 
@@ -81,6 +80,13 @@
     };
 
     /**
+     * Get the dialog object for this component.
+     * Call with showDialog($event,message).
+     * @type {*}
+     */
+    const dialog = DialogStrategy.makeDialog(vm);
+
+    /**
      * Show the $mdDialog.
      * @param $event click event object (location of event used as
      *                    animation starting point)
@@ -97,7 +103,7 @@
         message = addMessage;
       }
 
-      new ShowDialog.showDialog($event, message,TagDialog);
+     dialog.showDialog($event, message);
 
     };
 
@@ -155,7 +161,7 @@
     '      </div>' +
     '   </md-content>' +
     '</md-card>',
-    controller: TagAreaCtrl,
+    controller: TagAreaController,
     controllerAs: 'vm'
 
   });

@@ -32,23 +32,12 @@
     const vm = this;
 
     /**
-     * Watch for changes in the shared area index
-     * and reset the area in the view model.
-     */
-    AreaActionObserver.subscribe(function onNext() {
-      var ar = AreaById.query({id: AreaActionObserver.get()});
-      ar.$promise.then(function (data) {
-        vm.area = data;
-        vm.menu({id: vm.area.id, title: vm.area.title});
-      });
-    });
-
-    /**
      *  Updates the area information.  Updates area list
      *  upon success.
      */
     vm.updateArea = function () {
-      var success = AreaUpdate.save({
+
+      let success = AreaUpdate.save({
         id: vm.area.id,
         title: vm.area.title,
         description: vm.area.description,
@@ -58,28 +47,57 @@
 
       });
       success.$promise.then(function (data) {
+
         if (data.status === 'success') {
-          var areas = AreaList.query();
-          areas.$promise.then(function (data) {
-            // observer
-            AreaListObserver.set(data);
-          });
           // Toast upon success
           new TaggerToast('Area Updated"');
+          _getAreaList();
+
         }
       });
 
     };
 
+    /**
+     * Get new area list after successful update.
+     * @private
+     */
+    function _getAreaList() {
+      let areas = AreaList.query();
+      areas.$promise.then(function (data) {
+        AreaListObserver.set(data);
+      });
+    }
+
+    /**
+     * Gets field data for the current area.
+     * @param areaId
+     * @private
+     */
+    function _initializeForm(areaId) {
+      let ar = AreaById.query({id: areaId});
+      ar.$promise.then(function (data) {
+        vm.area = data;
+        vm.menu({id: vm.area.id, title: vm.area.title});
+      });
+    }
+
     vm.$onInit = function() {
+
+      /**
+       * Watch for changes in the area index
+       * and reset the area form view model.
+       */
+      AreaActionObserver.subscribe((areaId) => {
+       _initializeForm(areaId);
+      });
+
+      // Check for area id in current state.
       let areaId = AreaActionObserver.get();
       if (areaId) {
-        var ar = AreaById.query({id: AreaActionObserver.get()});
-        ar.$promise.then(function (data) {
-          vm.area = data;
-          vm.menu({id: vm.area.id, title: vm.area.title});
-        });
+        _initializeForm(areaId);
       }
+
     };
   }
 

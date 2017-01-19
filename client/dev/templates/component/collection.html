@@ -29,7 +29,7 @@
             <h3 class="md-display-1">{{vm.currentCollection.title}} (ID: {{vm.currentCollection.id}})</h3>
           </span>
           <span flex="flex"></span>
-          <md-button class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection" ng-click="vm.showDialog($event, vm.deleteMessage)">
+          <md-button class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection" ng-click="vm.dialog.showDialog($event, vm.deleteMessage)">
             <i class="material-icons">delete</i>
           </md-button>
         </div>
@@ -37,7 +37,7 @@
       <md-content style="background: transparent">
         <div layout="row" layout-align="start start">
           <md-card-content flex="20">
-            <md-button class="md-raised md-accent responsive-button" ng-click="vm.showDialog($event, vm.addMessage)">Add Collection</md-button>
+            <md-button class="md-raised md-accent responsive-button" ng-click="vm.dialog.showDialog($event, vm.addMessage)">Add Collection</md-button>
           </md-card-content>
           <md-card-content layout="column" layout-padding="layout-padding" flex="80" flex-gt-md="80" style="padding-left: 20px">
             <div class="md-subhead grey-text" flex="80">
@@ -45,11 +45,10 @@
             </div>
           </md-card-content>
         </div>
-        <md-card-content layout="row" layout-align="start start">
+        <md-card-content flex layout="row" layout-align="start start">
 
           <collection-list flex="20"></collection-list>
-          <collection-form menu="vm.menuUpdate(id, title)" flex="80" style="padding:25px;border: 1px solid #ccc;background: #fff"></collection-form>
-
+          <collection-form menu="vm.menuUpdate(id, title)" flex="80" style="border:1px solid #ccc;"></collection-form>
           <md-content class="transparent" ng-if="vm.collectionId == -1" layout-padding="layout-padding" flex="80" style="padding: 55px;padding-top: 30px;border: 1px solid #ccc;background: #fff">
             <div class="md-subhead grey-text" flex="85">
               <span>Add collection to area.</span>
@@ -60,7 +59,7 @@
     </md-card>
   </md-content>
   <md-content class="transparent transparent" layout="column" flex="100" flex-gt-md="25">
-     <pub-status-switch collection-id="{{vm.collectionId}}"></pub-status-switch>
+    <pub-status-switch collection-id="{{vm.collectionId}}"></pub-status-switch>
     <image-selector></image-selector>
     <subject-selector class="flex"></subject-selector>
     <content-type-selector class="flex"></content-type-selector>

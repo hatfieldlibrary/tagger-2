@@ -40,7 +40,7 @@ require('./auth/authenticate')(app, config, passport);
 require('./routes/routes.conf')(app, config);
 
 // configure angular and api routes
-require('./routes/routes')(app, config, passport);
+require('./routes/routes')(app, config);
 
 function startServer() {
 

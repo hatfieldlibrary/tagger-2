@@ -59,6 +59,7 @@
     function _setUsers() {
       var users = UserList.query();
       users.$promise.then(function (list) {
+        console.log(list)
         var arr = [];
         if (list.length > 0) {
           for (var i = 0; i < list.length; i++) {

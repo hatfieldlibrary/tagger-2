@@ -10,7 +10,7 @@
 
   'use strict';
 
-  taggerServices.factory('GetDialog',
+  taggerServices.factory('DialogStrategy',
     (ShowDialog,
      AreaDialog,
      CollectionDialog,
@@ -37,7 +37,7 @@
        * by refactored controller names.  The console warning will hopefully
        * help with debugging.
        */
-      return (controller) => {
+      function _makeDialog (controller) {
 
         const constructor = _getConstructorName(controller.constructor);
 
@@ -60,10 +60,20 @@
           case 'ImageController':
             return Object.assign({}, ShowDialog, ImageDialog);
             break;
+          case 'ToggleController':
+            return Object.assign({}, ShowDialog, ImageDialog);
+            break;
+          case 'TagAreaController':
+            return Object.assign({}, ShowDialog, ImageDialog);
+            break;
           default:
             console.log('WARNING: controller not found ' + constructor);
 
         }
+      }
+
+      return {
+        makeDialog: _makeDialog
       }
     }
   );

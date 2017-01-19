@@ -22,17 +22,11 @@
 
   'use strict';
 
-  function AreasController(GetDialog,
+  function AreasController(DialogStrategy,
                            AreaListObserver,
                            UserAreaObserver) {
 
     var vm = this;
-
-    /** @type {Array.<Object>} */
-    vm.areas = AreaListObserver.get();
-
-    /** @type {Object} */
-    vm.area = vm.areas[0];
 
     vm.currentArea = {};
 
@@ -46,40 +40,36 @@
     vm.currentAreaId = UserAreaObserver.get();
 
     /**
-     * Get the dialog object for this controller.
-     * @type {*}
-     */
-    const dialog =  GetDialog(vm);
-
-    /**
-     * Watch for new areas in context.  Areas are added
-     * and removed in a dialog controller.  They can also
-     * be reordered by the view model (see above).
-     */
-    AreaListObserver.subscribe(function onNext() {
-      vm.areas = AreaListObserver.get();
-
-    });
-
-    /**
      * Updates the title and id in view.
      * @param id  area id
      * @param title   area title
      */
-    vm.menuUpdate = function (id, title) {
+    vm.menuUpdate = (id, title) => {
       vm.currentArea.title = title;
       vm.currentArea.id = id;
     };
 
-    /**
-     * Show the $mdDialog.
-     * @param $event click event object (location of event used as
-     *                    animation starting point)
-     * @param message  html to display in dialog
-     */
-    vm.showDialog = function ($event, message) {
-       dialog.showDialog($event, message);
-    };
+    vm.$onInit = () => {
+
+      /**
+       * Watch for new areas in context.  Areas are added
+       * and removed in a dialog controller.  They can also
+       * be reordered by the view model (see above).
+       */
+      AreaListObserver.subscribe((areas) => {
+        vm.areas = areas;
+
+      });
+      /** @type {Array.<Object>} */
+      vm.areas = AreaListObserver.get();
+
+      /**
+       * Get the dialog object for this controller.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+      vm.dialog =  DialogStrategy.makeDialog(vm);
+    }
 
   }
 
