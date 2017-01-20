@@ -36,12 +36,19 @@
      */
     vm.dialog =  DialogStrategy.makeDialog(vm);
 
-    ThumbImageObserver.subscribe(function onNext() {
-      vm.thumbnailImage = ThumbImageObserver.get();
-    });
+    /**
+     * Set the component subscriptions.
+     * @private
+     */
+    function _setSubscriptions() {
+
+      ThumbImageObserver.subscribe(function onNext() {
+        vm.thumbnailImage = ThumbImageObserver.get();
+      });
+    }
 
     vm.$onInit = function () {
-
+      _setSubscriptions();
     };
   }
 

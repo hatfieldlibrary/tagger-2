@@ -58,6 +58,34 @@
 
     vm.noCollectionMessage = 'No collections for this area.';
 
+    /**
+     * Set the component subscriptions.
+     * @private
+     */
+    function _setSubscriptions() {
+
+      ThumbImageObserver.subscribe(function onNext() {
+        vm.thumbnailImage = ThumbImageObserver.get();
+      });
+
+      AreaObserver.subscribe(function onNext() {
+
+        areaId = AreaObserver.get();
+        _getCollectionForNewArea(areaId);
+
+      });
+
+      CollectionObserver.subscribe(function onNext() {
+
+        const id = CollectionObserver.get();
+        vm.collectionId = id;
+        _getCollectionById(id);
+        _getCategoryForCollection(id);
+
+      });
+
+    }
+
     /** @type {[string]} */
     const placeholder = ['Add the collection URL, e.g.: http://host.domain.edu/wombats?type=hungry', 'Add the collection name for select option, e.g. wallulah'];
 
@@ -67,26 +95,6 @@
      */
     let areaId = 0;
 
-    ThumbImageObserver.subscribe(function onNext() {
-      vm.thumbnailImage = ThumbImageObserver.get();
-    });
-
-    AreaObserver.subscribe(function onNext() {
-
-      areaId = AreaObserver.get();
-      _getCollectionForNewArea(areaId);
-
-    });
-
-
-    CollectionObserver.subscribe(function onNext() {
-
-      const id = CollectionObserver.get();
-      vm.collectionId = id;
-      _getCollectionById(id);
-      _getCategoryForCollection(id);
-
-    });
 
     /**
      * Gets the first collection for the current area.
@@ -297,6 +305,9 @@
     };
 
     vm.$onInit = function () {
+
+      _setSubscriptions();
+
       areaId = AreaObserver.get();
       let collection = CollectionObserver.get();
       if (collection) {
@@ -307,6 +318,7 @@
       }
       _getCategoryForCollection(collection);
     };
+
   }
 
 

@@ -58,6 +58,28 @@
 
     };
 
+
+    /**
+     * Set the component subscriptions.
+     * @private
+     */
+    function _setSubscriptions() {
+      /**
+       * Subscribe to be notified of changes in the area list
+       * while this component is active.
+       */
+      AreaListObserver.subscribe((areas) => {
+        vm.areas = areas;
+        /**
+         *  With any changes while this component is active,
+         *  set the current area to the first in the list and
+         *  notify subscribers.
+         */
+        AreaObserver.set(vm.areas[0].id);
+      });
+    }
+
+
     /**
      * Updates the area position attribute for
      * all areas after they have been reordered
@@ -85,6 +107,8 @@
 
     vm.$onInit = () => {
 
+      _setSubscriptions();
+
       /**
        * Get the areas list and set the application
        * area observer to the first in the list.
@@ -95,19 +119,7 @@
         vm.currentAreaId = data[0].id;
         AreaActionObserver.set(vm.currentAreaId);
       });
-      /**
-       * Subscribe to be notified of changes in the area list
-       * while this component is active.
-       */
-      AreaListObserver.subscribe((areas) => {
-        vm.areas = areas;
-        /**
-         *  With any changes while this component is active,
-         *  set the current area to the first in the list and
-         *  notify subscribers.
-         */
-        AreaObserver.set(vm.areas[0].id);
-      });
+
 
     };
   }

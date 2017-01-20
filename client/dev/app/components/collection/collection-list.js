@@ -31,33 +31,50 @@
 
     const vm = this;
 
-    AreaObserver.subscribe(function onNext() {
-      _getCollections(AreaObserver.get());
 
-    });
-
-    CollectionObserver.subscribe(function onNext() {
-      vm.collectionId = CollectionObserver.get();
-    });
-
-    CollectionListObserver.subscribe(function onNext() {
-      vm.collectionList = CollectionListObserver.get();
-    });
-
-    CollectionAreasObserver.subscribe(function onNext() {
-         _getCollections(AreaObserver.get());
-    });
-
-    vm.getCollectionById = function (id) {
+    vm.setCollectionById = (id) => {
       CollectionObserver.set(id);
     };
 
     /**
-     * Get collection list after an area change.
+     * Set the component subscriptions.
+     * @private
+     */
+    function _setSubscriptions() {
+
+      AreaObserver.subscribe((area) => {
+        _getCollections(area);
+
+      });
+
+      CollectionObserver.subscribe((collectionId) => {
+        vm.collectionId = collectionId;
+      });
+
+      CollectionListObserver.subscribe(
+        (collections) => {
+          vm.collectionList = collections;
+        });
+
+      /**
+       * Called by the area selector component. If collection
+       * was removed from area, this assures that the list is
+       * updated.
+       */
+      CollectionAreasObserver.subscribe(() => {
+        let areaId = AreaObserver.get();
+        _getCollections(areaId);
+      });
+
+    }
+
+    /**
+     * Update the collection list after an area change.
      * @param areaId
      * @private
      */
     function _getCollections(areaId) {
+      console.log('in private method ' + areaId)
 
       if (areaId) {
         const collectionList = CollectionsByArea.query(
@@ -70,11 +87,11 @@
             vm.collectionId = data[0].Collection.id;
             CollectionListObserver.set(data);
             CollectionObserver.set(vm.collectionId);
-          }  else {
-            CollectionListObserver.set([]);
-            CollectionObserver.set(-1);
           }
         });
+      }
+      else {
+        throw new Error('Area is unavailable after collection area update.');
       }
     }
 
@@ -86,28 +103,34 @@
     function _initCollections(areaId) {
 
       if (areaId) {
+
         const list = CollectionsByArea.query(
           {
             areaId: areaId
           });
-        list.$promise.then(function (data) {
-          if (data[0]) {
-            CollectionObserver.set(data[0].Collection.id);
-            CollectionListObserver.set(data);
-            // Verify that the selected collection id is
-            // set.
-            vm.collectionId = CollectionObserver.get();
-          } else {
-            CollectionListObserver.set([]);
-            CollectionObserver.set(-1);
-          }
-        });
+        list.$promise
+          .then((data) => {
+            if (data[0]) {
+              CollectionObserver.set(data[0].Collection.id);
+              CollectionListObserver.set(data);
+              // Verify that the selected collection id is
+              // set.
+              vm.collectionId = CollectionObserver.get();
+            }
+          });
+
+      }
+      else {
+        throw new Error('Area is unavailable.');
+
       }
     }
 
     vm.$onInit = function () {
 
-      _initCollections(AreaObserver.get());
+      _setSubscriptions();
+      let areaId = AreaObserver.get();
+      _initCollections(areaId);
 
     };
 
@@ -121,7 +144,7 @@
     '     <md-list>' +
     '       <div ng-repeat="col in vm.collectionList">' +
     '         <md-list-item>' +
-    '           <md-button class="md-no-style md-button  md-default-theme nav-item-dimens" ng-class="{\'md-primary\': col.Collection.id==vm.collectionId}" ng-click="vm.getCollectionById(col.Collection.id);">' +
+    '           <md-button class="md-no-style md-button  md-default-theme nav-item-dimens" ng-class="{\'md-primary\': col.Collection.id==vm.collectionId}" ng-click="vm.setCollectionById(col.Collection.id);">' +
     '             <div class="list-group-item-text md-subhead layout-fill">{{col.Collection.title}}' +
     '               <div class="md-ripple-container"></div>' +
     '             </div>' +
