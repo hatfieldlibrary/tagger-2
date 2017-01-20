@@ -14,8 +14,8 @@ describe('Area components', function () {
     AreaActionObserver,
     AreaById,
     AreaUpdate,
+    ReorderAreas,
     $q;
-
 
   let areas;
   let areasUpdated = [{name: 'updated area', id: 1}, {name: 'area two', id: 2}];
@@ -23,16 +23,9 @@ describe('Area components', function () {
   let areasQueried = [{name: 'areas queried', id: 1}, {name: 'area two', id: 2}];
   let actionAreaId = 2;
   let actionArea = {id: 2, title: 'action title'};
-  let success = {data: {status: 'success'}};
-  let savedArea = {
-    id: 2,
-    title: 'saved area'
-  };
+  let success = {status: 'success'};
 
   beforeEach(module('tagger'));
-  beforeEach(module('taggerServices'));
-  beforeEach(module('templates'));
-
 
   beforeEach(() => {
 
@@ -105,6 +98,7 @@ describe('Area components', function () {
                      _AreaObserver_,
                      _AreaListObserver_,
                      _AreaActionObserver_,
+                     _ReorderAreas_,
                      _$q_) => {
     // inject mocks
     AreaList = _AreaList_;
@@ -113,15 +107,22 @@ describe('Area components', function () {
     DialogStrategy = _DialogStrategy_;
     AreaListObserver = _AreaListObserver_;
     AreaActionObserver = _AreaActionObserver_;
+    ReorderAreas = _ReorderAreas_;
     $q = _$q_;
 
   }));
 
   beforeEach(() => {
 
-    let fakeAreaListSubject,
-      fakeActionSubject,
-      fakeAreaObserver;
+
+    /**
+     * Define default values so the set() method
+     * can be called without subscribing. Components
+     * often call the set() function without first subscribing
+     * to the observable Subject.
+     */
+    let fakeAreaListSubject = () => {};
+    let  fakeActionSubject = () => {};
 
     spyOn(AreaListObserver, 'set').and.callFake((value) => {
       fakeAreaListSubject(value);
@@ -164,6 +165,16 @@ describe('Area components', function () {
     });
 
     spyOn(AreaUpdate, 'save').and.callFake(() => {
+      return {
+        $promise: {
+          then: (callback) => {
+            return callback(success);
+          }
+        }
+      }
+    });
+
+    spyOn(ReorderAreas, 'save').and.callFake(() => {
       return {
         $promise: {
           then: (callback) => {
@@ -235,6 +246,7 @@ describe('Area components', function () {
 
       expect(AreaList.query).toHaveBeenCalled();
       expect(ctrl.areas[0].name).toBe(areasQueried[0].name);
+      expect(AreaListObserver.subscribe).toHaveBeenCalled();
 
     });
 
@@ -257,11 +269,15 @@ describe('Area components', function () {
       ctrl.orderAreaList(0);
       expect(ctrl.areas.length).toBe(1);
       expect(ctrl.areas[0].name).toBe('area two');
+      expect(ReorderAreas.save).toHaveBeenCalled();
+      expect(AreaListObserver.set).toHaveBeenCalled();
+
     });
 
     it('should update the current area and notify the app.', () => {
 
       let ctrl = $componentController('areasListComponent', null);
+
       ctrl.resetArea(2);
       expect(ctrl.currentAreaId).toEqual(2);
       expect(AreaActionObserver.set).toHaveBeenCalledWith(2);
@@ -286,11 +302,12 @@ describe('Area components', function () {
 
       expect(ctrl.area).toBeDefined();
       expect(ctrl.area.id).toEqual(actionArea.id);
+      expect(AreaActionObserver.subscribe).toHaveBeenCalled;
       expect(menuSpy).toHaveBeenCalledWith(actionArea);
 
     });
 
-    it('should update the area and set new area list', () => {
+    it('should update the area and get new area list', () => {
 
       let bindings = {
         area: {
@@ -300,17 +317,20 @@ describe('Area components', function () {
           searchUrl: '',
           linkLabel: '',
           url: ''
-        }
+        },
+        menu: () => {}
       };
       let ctrl = $componentController('areaForm', null, bindings);
+      ctrl.$onInit();
       ctrl.updateArea();
+      // update area
       expect(AreaUpdate.save).toHaveBeenCalled();
+      // got new area list
+      expect(AreaList.query).toHaveBeenCalled();
 
     });
 
-
   });
-
 
 });
 

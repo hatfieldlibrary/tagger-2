@@ -98,7 +98,7 @@ describe('Category creation', () => {
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
-              callback(null,);
+              callback(null);
             }).catch((err) => {
             callback(err);
           });
@@ -180,7 +180,7 @@ describe('Category operations', () => {
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
-              callback(null,);
+              callback(null);
             }).catch(function (err) {
             callback(err);
           });

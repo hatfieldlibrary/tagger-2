@@ -32,13 +32,21 @@
 
     const ctrl = this;
 
-    CollectionObserver.subscribe(function onNext() {
-      _getCurrentAreaTargets(CollectionObserver.get());
-    });
+    /**
+     * Set the component subscriptions.
+     * @private
+     */
+    function _setSubscriptions() {
 
-    AreaListObserver.subscribe(function onNext() {
-      ctrl.areas = AreaListObserver.get();
-    });
+      CollectionObserver.subscribe(function onNext() {
+        _getCurrentAreaTargets(CollectionObserver.get());
+      });
+
+      AreaListObserver.subscribe(function onNext() {
+        ctrl.areas = AreaListObserver.get();
+      });
+
+    }
 
     /**
      * Gets the list of areas associated with the current
@@ -47,8 +55,8 @@
      */
     function _getCurrentAreaTargets(id) {
       const areas = AreasForCollection.query({collId: id});
-      areas.$promise.then(function(data) {
-           ctrl.areaTargets = data;
+      areas.$promise.then(function (data) {
+        ctrl.areaTargets = data;
       });
     }
 
@@ -59,7 +67,7 @@
      * @param target  {Array.<Object>} the areas associated with the collection.
      * @returns {boolean}
      */
-    var _findArea = function (areaId, targets) {
+    function _findArea(areaId, targets) {
 
       for (var i = 0; i < targets.length; i++) {
         if (targets[i].AreaId === areaId) {
@@ -76,9 +84,9 @@
      * @returns {boolean}
      */
     ctrl.isChosen = function (areaId) {
-       if (ctrl.areaTargets) {
-         return _findArea(areaId, ctrl.areaTargets);
-       }
+      if (ctrl.areaTargets) {
+        return _findArea(areaId, ctrl.areaTargets);
+      }
 
     };
 
@@ -127,10 +135,13 @@
 
     };
 
-   ctrl.$onInit = function () {
-       ctrl.areas = AreaListObserver.get();
-       ctrl.areaTargets =  _getCurrentAreaTargets(CollectionObserver.get());
-   };
+    ctrl.$onInit = function () {
+
+      _setSubscriptions();
+
+      ctrl.areas = AreaListObserver.get();
+      ctrl.areaTargets = _getCurrentAreaTargets(CollectionObserver.get());
+    };
 
   }
 

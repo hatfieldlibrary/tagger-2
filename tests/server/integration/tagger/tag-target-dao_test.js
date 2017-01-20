@@ -55,7 +55,7 @@ describe('Tag area target operations', () => {
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
-              callback(null,);
+              callback(null);
             }).catch(function (err) {
             callback(err);
           });

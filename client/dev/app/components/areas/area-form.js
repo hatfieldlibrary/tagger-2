@@ -47,7 +47,6 @@
 
       });
       success.$promise.then(function (data) {
-
         if (data.status === 'success') {
           // Toast upon success
           new TaggerToast('Area Updated"');
@@ -57,17 +56,6 @@
       });
 
     };
-
-    /**
-     * Get new area list after successful update.
-     * @private
-     */
-    function _getAreaList() {
-      let areas = AreaList.query();
-      areas.$promise.then(function (data) {
-        AreaListObserver.set(data);
-      });
-    }
 
     /**
      * Gets field data for the current area.
@@ -82,15 +70,35 @@
       });
     }
 
-    vm.$onInit = function() {
-
+    /**
+     * Set the component subscriptions.
+     * @private
+     */
+    function _setSubscriptions() {
       /**
        * Watch for changes in the area index
        * and reset the area form view model.
        */
       AreaActionObserver.subscribe((areaId) => {
-       _initializeForm(areaId);
+        _initializeForm(areaId);
       });
+
+    }
+
+    /**
+     * Get new area list after successful update.
+     * @private
+     */
+    function _getAreaList() {
+      let areas = AreaList.query();
+      areas.$promise.then(function (data) {
+        AreaListObserver.set(data);
+      });
+    }
+
+    vm.$onInit = function() {
+
+      _setSubscriptions();
 
       // Check for area id in current state.
       let areaId = AreaActionObserver.get();

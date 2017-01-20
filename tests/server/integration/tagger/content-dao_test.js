@@ -63,7 +63,7 @@ describe('Content type creation', () => {
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
-              callback(null,);
+              callback(null);
             }).catch((err) => {
             callback(err);
           });
@@ -144,7 +144,7 @@ describe('Content type operations', () => {
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
-              callback(null,);
+              callback(null);
             }).catch(function (err) {
             callback(err);
           });

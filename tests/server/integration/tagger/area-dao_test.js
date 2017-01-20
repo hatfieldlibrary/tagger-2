@@ -79,7 +79,7 @@ describe('Area creation', () => {
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
-              callback(null,);
+              callback(null);
             }).catch((err) => {
             callback(err);
           });
@@ -159,7 +159,7 @@ describe('Area operations', () => {
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
-              callback(null,);
+              callback(null);
             }).catch((err) => {
             callback(err);
           });

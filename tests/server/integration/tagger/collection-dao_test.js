@@ -97,7 +97,7 @@ describe('Collection init', () => {
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
             .then(() => {
-              callback(null,);
+              callback(null);
             }).catch(function (err) {
             callback(err);
           });
