@@ -17,18 +17,22 @@
 
 'use strict';
 
+const env = process.env.NODE_ENV || 'development';
+
 let credentials;
 
+let credentialsPath = require('./require-paths');
+
 try {
-  credentials = require('../credentials/credentials');
+  // The path to credentials.
+  credentials = require(credentialsPath.path(env) + 'credentials');
 
 } catch (ex) {
-
+  // No credentials ... try travis-ci credentials.
   console.log('Using travis credentials');
   credentials = require('../credentials/travis-credentials')
-}
 
-const env = process.env.NODE_ENV || 'development';
+}
 
 const config = {
 
@@ -66,6 +70,7 @@ const config = {
     app: {
       name: 'acomtags'
     },
+    credentialsPath: '',
     uid: credentials.develuid,
     gid: credentials.develgid,
     port: 3000,
@@ -97,6 +102,7 @@ const config = {
     app: {
       name: 'tagger'
     },
+    credentialsPath: '',
     uid: credentials.develuid,
     gid: credentials.develgid,
     port: 3000,
@@ -128,6 +134,7 @@ const config = {
     app: {
       name: 'tagger'
     },
+    credentialsPath: '',
     logLevel: 'info',
     dbLog: false,
     sync: {force: false},
