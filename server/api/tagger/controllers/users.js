@@ -43,6 +43,7 @@ exports.list = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
+  console.log(req.body)
   const name = req.body.name;
   const email = req.body.email;
   const area = req.body.area;

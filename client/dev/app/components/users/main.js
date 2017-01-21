@@ -16,9 +16,6 @@
  */
 
 /**
- * Created by mspalti on 12/16/16.
- */
-/**
  * Created by mspalti on 12/15/16.
  */
 (function () {
@@ -39,9 +36,10 @@
      */
     vm.newRow = function () {
       vm.users[vm.users.length] = {
-        id: null, name: '',
+        id: null,
+        name: '',
         email: '',
-        area: ''
+        area: -1
       };
     };
 
@@ -59,7 +57,6 @@
     function _setUsers() {
       var users = UserList.query();
       users.$promise.then(function (list) {
-        console.log(list)
         var arr = [];
         if (list.length > 0) {
           for (var i = 0; i < list.length; i++) {
@@ -85,7 +82,7 @@
      */
     vm.updateUser = function (id, name, email, area) {
       if (id === null) {
-        var update = UserAdd.save(
+        let update = UserAdd.save(
           {
             name: name,
             email: email,
@@ -98,7 +95,7 @@
           }
         });
       } else {
-        var save = UserUpdate.save(
+        let save = UserUpdate.save(
           {
             id: id,
             name: name,
