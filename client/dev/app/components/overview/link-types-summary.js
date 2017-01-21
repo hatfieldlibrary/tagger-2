@@ -23,7 +23,7 @@
   'use strict';
 
   function CollectionCtrl(CollectionLinkCount,
-                          AreaObserver) {
+                          AreaObservable) {
 
     let ctrl = this;
 
@@ -31,13 +31,13 @@
 
     ctrl.selectCount = 0;
 
-    AreaObserver.subscribe(function onNext() {
-      _init(AreaObserver.get());
+    AreaObservable.subscribe(function onNext() {
+      _init(AreaObservable.get());
 
     });
 
     ctrl.$onInit = function () {
-      _init(AreaObserver.get());
+      _init(AreaObservable.get());
 
     };
 

@@ -24,7 +24,7 @@
   /**
    * Observable for the areas list.
    */
-  taggerServices.factory('AreaListObserver', ['rx', function(rx){
+  taggerServices.factory('AreaListObservable', ['rx', function(rx){
 
     const Subject = new rx.Subject();
     let areas = [];

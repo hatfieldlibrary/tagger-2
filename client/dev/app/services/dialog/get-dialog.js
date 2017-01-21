@@ -62,10 +62,10 @@
             return Object.assign({}, ShowDialog, ImageDialog);
             break;
           case 'ToggleController':
-            return Object.assign({}, ShowDialog, ImageDialog);
+            return Object.assign({}, ShowDialog, TagDialog);
             break;
           case 'TagAreaController':
-            return Object.assign({}, ShowDialog, ImageDialog);
+            return Object.assign({}, ShowDialog, TagDialog);
             break;
           default:
             console.log('WARNING: controller not found ' + constructor);

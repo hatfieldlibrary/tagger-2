@@ -23,7 +23,7 @@
   'use strict';
 
   function GroupController(DialogStrategy,
-                           UserAreaObserver,
+                           UserAreaObservable,
                            CategoryList,
                            GroupListObserver,
                            GroupObserver) {
@@ -33,7 +33,7 @@
     vm.currentCategory = {};
 
     /** @type {number} */
-    vm.userAreaId = UserAreaObserver.get();
+    vm.userAreaId = UserAreaObservable.get();
 
     /** @type {string} */
     vm.addMessage = 'templates/dialog/addCategoryMessage.html';

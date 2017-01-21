@@ -26,8 +26,8 @@
   function TagAreaController($scope,
                        TagTargets,
                        TagObserver,
-                       TagAreaObserver,
-                       AreaListObserver,
+                       TagAreaObservable,
+                       AreaListObservable,
                        DialogStrategy) {
 
     const vm = this;
@@ -35,7 +35,7 @@
     let removeMessage = 'templates/dialog/removeAreaFromTagMessage.html';
     let addMessage = 'templates/dialog/addAreaToTagMessage.html';
 
-    vm.areas = AreaListObserver.get();
+    vm.areas = AreaListObservable.get();
 
     /**
      * Watch updates the current list of area targets
@@ -48,13 +48,13 @@
      * Watches the global list of areas and updates local
      * area list on change.
      */
-    AreaListObserver.subscribe(function onNext() {
-      vm.areas = AreaListObserver.get();
+    AreaListObservable.subscribe(function onNext() {
+      vm.areas = AreaListObservable.get();
     });
 
 
     /** @type {Array.<Object>} */
-    vm.areas = AreaListObserver.get();
+    vm.areas = AreaListObservable.get();
 
     /** @type {Array.<Object>} */
     vm.areaTargets = [];
@@ -80,13 +80,6 @@
     };
 
     /**
-     * Get the dialog object for this component.
-     * Call with showDialog($event,message).
-     * @type {*}
-     */
-    const dialog = DialogStrategy.makeDialog(vm);
-
-    /**
      * Show the $mdDialog.
      * @param $event click event object (location of event used as
      *                    animation starting point)
@@ -95,7 +88,7 @@
     vm.showDialog = function ($event, areaId) {
 
       let message = '';
-      TagAreaObserver.set(areaId);
+      TagAreaObservable.set(areaId);
       if (_findArea(areaId, vm.areaTargets)) {
         message = removeMessage;
       }
@@ -103,7 +96,7 @@
         message = addMessage;
       }
 
-     dialog.showDialog($event, message);
+     vm.dialog.showDialog($event, message);
 
     };
 
@@ -137,6 +130,15 @@
     }
 
     vm.$onInit = function() {
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+       vm.dialog = DialogStrategy.makeDialog(vm);
+
+
       let id = TagObserver.get();
       _getCurrentAreaTargets(id);
     };

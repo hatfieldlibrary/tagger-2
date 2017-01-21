@@ -14,11 +14,11 @@
     function ($mdDialog,
               AreaDelete,
               AreaAdd,
-              AreaActionObserver,
+              AreaActionObservable,
               AreaList,
-              AreaObserver,
-              AreaListObserver,
-              CollectionObserver,
+              AreaObservable,
+              AreaListObservable,
+              CollectionObservable,
               TaggerToast) {
 
 
@@ -37,13 +37,13 @@
 
           areas.$promise.then(function (data) {
 
-            AreaListObserver.set(data);
+            AreaListObservable.set(data);
             if (data.length > 0) {
               if (id === null) {
-                AreaActionObserver.set(data[0].id);
-                AreaObserver.set(data[0].id);
+                AreaActionObservable.set(data[0].id);
+                AreaObservable.set(data[0].id);
               } else {
-                AreaObserver.set(id);
+                AreaObservable.set(id);
               }
 
               vm.closeDialog();
@@ -85,7 +85,7 @@
          * @param id
          */
         vm.deleteArea = function () {
-          const result = AreaDelete.save({id: AreaActionObserver.get()});
+          const result = AreaDelete.save({id: AreaActionObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -93,7 +93,7 @@
               // after retrieving new area list, we need
               // to update the areas currently in view.
               vm.getAreaList(null);
-              CollectionObserver.set(-1);
+              CollectionObservable.set(-1);
               vm.closeDialog();
 
             }

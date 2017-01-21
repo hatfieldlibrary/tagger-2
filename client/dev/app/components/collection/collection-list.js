@@ -23,17 +23,17 @@
 
   'use strict';
 
-  function ListController(CollectionObserver,
-                          CollectionListObserver,
+  function ListController(CollectionObservable,
+                          CollectionListObservable,
                           CollectionsByArea,
-                          CollectionAreasObserver,
-                          AreaObserver) {
+                          CollectionAreasObservable,
+                          AreaObservable) {
 
     const vm = this;
 
 
     vm.setCollectionById = (id) => {
-      CollectionObserver.set(id);
+      CollectionObservable.set(id);
     };
 
     /**
@@ -42,16 +42,16 @@
      */
     function _setSubscriptions() {
 
-      AreaObserver.subscribe((area) => {
+      AreaObservable.subscribe((area) => {
         _getCollections(area);
 
       });
 
-      CollectionObserver.subscribe((collectionId) => {
+      CollectionObservable.subscribe((collectionId) => {
         vm.collectionId = collectionId;
       });
 
-      CollectionListObserver.subscribe(
+      CollectionListObservable.subscribe(
         (collections) => {
           vm.collectionList = collections;
         });
@@ -61,20 +61,19 @@
        * was removed from area, this assures that the list is
        * updated.
        */
-      CollectionAreasObserver.subscribe(() => {
-        let areaId = AreaObserver.get();
+      CollectionAreasObservable.subscribe(() => {
+        let areaId = AreaObservable.get();
         _getCollections(areaId);
       });
 
     }
 
     /**
-     * Update the collection list after an area change.
+     * Update the collection list and collection id.
      * @param areaId
      * @private
      */
     function _getCollections(areaId) {
-      console.log('in private method ' + areaId)
 
       if (areaId) {
         const collectionList = CollectionsByArea.query(
@@ -85,52 +84,25 @@
           if (data[0]) {
             vm.collectionList = data;
             vm.collectionId = data[0].Collection.id;
-            CollectionListObserver.set(data);
-            CollectionObserver.set(vm.collectionId);
+            /* Set collection list and collection id observers.
+             * This updates observers only when values have changed.
+             * Should have effect only when called via the
+             * CollectionAreaObservableable. */
+            CollectionListObservable.set(data);
+            CollectionObservable.set(vm.collectionId);
           }
         });
       }
       else {
-        throw new Error('Area is unavailable after collection area update.');
-      }
-    }
-
-    /**
-     * Get collection list on page initialization.
-     * @param areaId
-     * @private
-     */
-    function _initCollections(areaId) {
-
-      if (areaId) {
-
-        const list = CollectionsByArea.query(
-          {
-            areaId: areaId
-          });
-        list.$promise
-          .then((data) => {
-            if (data[0]) {
-              CollectionObserver.set(data[0].Collection.id);
-              CollectionListObserver.set(data);
-              // Verify that the selected collection id is
-              // set.
-              vm.collectionId = CollectionObserver.get();
-            }
-          });
-
-      }
-      else {
-        throw new Error('Area is unavailable.');
-
+        throw new Error('Area id is undefined.');
       }
     }
 
     vm.$onInit = function () {
 
       _setSubscriptions();
-      let areaId = AreaObserver.get();
-      _initCollections(areaId);
+      let areaId = AreaObservable.get();
+      _getCollections(areaId);
 
     };
 

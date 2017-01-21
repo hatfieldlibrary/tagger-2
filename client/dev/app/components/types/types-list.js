@@ -24,7 +24,7 @@
 
   function ListController(ContentTypeListObserver,
                           ContentTypeObserver,
-                          UserAreaObserver) {
+                          UserAreaObservable) {
 
     var vm = this;
 
@@ -40,7 +40,7 @@
 
     vm.$onInit = function () {
 
-      vm.userAreaId = UserAreaObserver.get();
+      vm.userAreaId = UserAreaObservable.get();
       // If current type exists, use it.
       const currentType = ContentTypeObserver.get();
       if (currentType) {

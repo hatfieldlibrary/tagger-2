@@ -12,10 +12,10 @@
               Constant,
               CollectionAdd,
               CollectionDelete,
-              CollectionListObserver,
-              CollectionObserver,
+              CollectionListObservable,
+              CollectionObservable,
               CollectionsByArea,
-              AreaObserver,
+              AreaObservable,
               TaggerToast) {
 
 
@@ -39,7 +39,7 @@
         const result = CollectionAdd.save(
           {
             title: title,
-            areaId: AreaObserver.get(),
+            areaId: AreaObservable.get(),
             browseType: Constant.defaultBrowseType,
             repoType: Constant.defaultRepoType,
             ctype: Constant.defaultCollectionType,
@@ -65,7 +65,7 @@
        */
       vm.deleteCollection = function () {
 
-        const result = CollectionDelete.save({id: CollectionObserver.get()});
+        const result = CollectionDelete.save({id: CollectionObservable.get()});
         result.$promise.then(function (data) {
           if (data.status === 'success') {
 
@@ -91,19 +91,19 @@
        */
       vm.getCollectionList = function (id) {
 
-        const result = CollectionsByArea.query({areaId: AreaObserver.get()});
+        const result = CollectionsByArea.query({areaId: AreaObservable.get()});
         result.$promise.then(function (data) {
-          CollectionListObserver.set(data);
+          CollectionListObservable.set(data);
           // Deleting a category doesn't generate
           // a new id. In that case, expect the
           // id to be null. Update the view using the
           // id of the first item in the updated category
           // list.
           if (id === null) {
-            CollectionObserver.set(data[0].Collection.id);
+            CollectionObservable.set(data[0].Collection.id);
 
           } else {
-            CollectionObserver.set(id);
+            CollectionObservable.set(id);
 
           }
 

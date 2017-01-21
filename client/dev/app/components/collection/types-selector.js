@@ -22,7 +22,7 @@
   'use strict';
 
   function TypeController(ContentTypeList,
-                          CollectionObserver,
+                          CollectionObservable,
                           CollectionTypeTargetRemove,
                           CollectionTypeTargetAdd,
                           TypesForCollection,
@@ -52,8 +52,8 @@
      * Watch for new collection id.
      * Update the tags when collection changes.
      */
-    CollectionObserver.subscribe(function onNext() {
-      let collid = CollectionObserver.get();
+    CollectionObservable.subscribe(function onNext() {
+      let collid = CollectionObservable.get();
       _getTypesForCollection(collid);
 
     });
@@ -100,7 +100,7 @@
 
       var result = CollectionTypeTargetAdd.query(
         {
-          collId: CollectionObserver.get(),
+          collId: CollectionObservable.get(),
           typeId: chip.id
         }
       );
@@ -127,7 +127,7 @@
     ctrl.removeType = function (chip) {
       var result = CollectionTypeTargetRemove.query(
         {
-          collId: CollectionObserver.get(),
+          collId: CollectionObservable.get(),
           typeId: chip.id
         }
       );
@@ -159,7 +159,7 @@
 
     ctrl.$onInit = function () {
       // Need to set at init to cover all cases.
-      let id = CollectionObserver.get();
+      let id = CollectionObservable.get();
       _getTypesForCollection(id);
     };
   }

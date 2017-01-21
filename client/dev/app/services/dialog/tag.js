@@ -17,8 +17,8 @@
               TagList,
               TagListObserver,
               TagObserver,
-              TagAreaObserver,
-              AreaObserver,
+              TagAreaObservable,
+              AreaObservable,
               TaggerToast) {
 
     const _controller = function() {
@@ -59,17 +59,18 @@
         const result = TagTargetAdd.query(
           {
             tagId: TagObserver.get(),
-            areaId: TagAreaObserver.get()
+            areaId: TagAreaObservable.get()
           }
         );
-        result.$promise.then(function (data) {
-          if (data.status === 'success') {
+        result.$promise.then(function (result) {
+
+          if (result.status === 'success') {
             new TaggerToast('Tag Added area.');
             // Broadcast successful deletion with the updated area list.
             // Not using the shared context and a  watch for this update.
             // Using event emitter communicates the update information without
             // adding this essentially local and temporary to shared context.
-            $rootScope.$broadcast('addedAreaToTag', {areaTargets: result.areaTargets});
+            $rootScope.$broadcast('addedAreaToTag', {areaTargets: result.data.areaList});
             vm.closeDialog();
           }
         });
@@ -82,11 +83,12 @@
         const result = TagTargetRemove.query(
           {
             tagId: TagObserver.get(),
-            areaId: TagAreaObserver.get()
+            areaId: TagAreaObservable.get()
           }
         );
-        result.$promise.then(function (data) {
-          if (data.status === 'success') {
+        result.$promise.then(function (result) {
+          console.log(result)
+          if (result.status === 'success') {
             new TaggerToast('Tag removed from Area.');
             // Broadcast successful deletion with the updated area list.
             // Not using the shared context and a  watch for this update.
@@ -107,7 +109,7 @@
         const result = TagTargetAdd.query(
           {
             tagId: TagObserver.get(),
-            areaId: AreaObserver.get()
+            areaId: AreaObservable.get()
           }
         );
         result.$promise.then(function (data) {
@@ -126,7 +128,7 @@
         const result = TagTargetRemove.query(
           {
             tagId: TagObserver.get(),
-            areaId: AreaObserver.get()
+            areaId: AreaObservable.get()
           }
         );
         result.$promise.then(function (data) {

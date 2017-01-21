@@ -257,7 +257,7 @@ describe('Collection operations', () => {
         (callback) => {
           collectionDao
             .addNewCollection(initCollections[0])
-            .then( () => {
+            .then(() => {
               collectionDao.setPublicationStatus(true, 1)
                 .then(callback(null))
                 .catch((err) => callback(err));
@@ -268,7 +268,7 @@ describe('Collection operations', () => {
         (callback) => {
           collectionDao
             .addNewCollection(initCollections[1])
-            .then( () => {
+            .then(() => {
               collectionDao.setPublicationStatus(true, 2)
                 .then(callback(null))
                 .catch((err) => callback(err));
@@ -769,5 +769,6 @@ describe('Collection operations', () => {
       .then(_onSuccess)
       .catch(_onError);
   });
+
 
 });

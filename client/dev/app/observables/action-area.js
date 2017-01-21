@@ -25,7 +25,7 @@
   /**
    * Observable used by areas component for operations on the current area.
    */
-  taggerServices.factory('AreaActionObserver', ['rx', function(rx){
+  taggerServices.factory('AreaActionObservable', ['rx', function(rx){
 
     const Subject = new rx.Subject();
     /**

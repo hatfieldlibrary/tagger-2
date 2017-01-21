@@ -25,7 +25,7 @@
 
   function PieController($element,
                          $attrs,
-                         AreaObserver) {
+                         AreaObservable) {
 
     const ctrl = this;
 
@@ -212,7 +212,7 @@
       }
     }
 
-    AreaObserver.subscribe(function onNext() {
+    AreaObservable.subscribe(function onNext() {
       $element.ready(function () {
         _initChart();
       });

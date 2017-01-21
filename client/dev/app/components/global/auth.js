@@ -23,7 +23,7 @@
     'use strict';
 
     function AuthController(SetGlobalValues,
-                            UserAreaObserver,
+                            UserAreaObservable,
                             UserObserver,
                             IsAuthObserver,
                             getUserInfo) {
@@ -66,7 +66,7 @@
 
           IsAuthObserver.set(true);
           UserObserver.set(user.areaId);
-          UserAreaObserver.set(user.areaId);
+          UserAreaObservable.set(user.areaId);
           vm.authorized = true;
           vm.userPicture = user.picture;
           vm.userName = user.name;

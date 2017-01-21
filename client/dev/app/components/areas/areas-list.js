@@ -23,10 +23,10 @@
   'use strict';
 
   function ListController(TaggerToast,
-                          AreaObserver,
+                          AreaObservable,
                           AreaList,
-                          AreaListObserver,
-                          AreaActionObserver,
+                          AreaListObservable,
+                          AreaActionObservable,
                           ReorderAreas) {
 
     var vm = this;
@@ -38,7 +38,7 @@
     vm.resetArea = (id) => {
       if (id !== null) {
         vm.currentAreaId = id;
-        AreaActionObserver.set(id);
+        AreaActionObservable.set(id);
       }
 
     };
@@ -68,14 +68,14 @@
        * Subscribe to be notified of changes in the area list
        * while this component is active.
        */
-      AreaListObserver.subscribe((areas) => {
+      AreaListObservable.subscribe((areas) => {
         vm.areas = areas;
         /**
          *  With any changes while this component is active,
          *  set the current area to the first in the list and
          *  notify subscribers.
          */
-        AreaObserver.set(vm.areas[0].id);
+        AreaObservable.set(vm.areas[0].id);
       });
     }
 
@@ -96,8 +96,8 @@
         if (data.status === 'success') {
           var areas = AreaList.query();
           areas.$promise.then(function (data) {
-            AreaListObserver.set(data);
-            AreaObserver.set(data[0].id);
+            AreaListObservable.set(data);
+            AreaObservable.set(data[0].id);
           });
           new TaggerToast('Area order updated.');
         }
@@ -117,7 +117,7 @@
       areas.$promise.then(function (data) {
         vm.areas = data;
         vm.currentAreaId = data[0].id;
-        AreaActionObserver.set(vm.currentAreaId);
+        AreaActionObservable.set(vm.currentAreaId);
       });
 
 

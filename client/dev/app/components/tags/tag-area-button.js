@@ -8,14 +8,14 @@
 
   function ToggleController(TagTargets,
                             TagObserver,
-                            AreaObserver,
+                            AreaObservable,
                             TagListObserver,
                             DialogStrategy) {
 
     const vm = this;
 
     let targetList = [];
-    let currentArea = AreaObserver.get();
+    let currentArea = AreaObservable.get();
     const removeMessage = 'templates/dialog/removeTagFromAreaMessage.html';
     const addMessage = 'templates/dialog/addTagToAreaMessage.html';
 

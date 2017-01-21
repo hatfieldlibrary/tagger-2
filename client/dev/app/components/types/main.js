@@ -23,7 +23,7 @@
   'use strict';
 
   function TypeController(DialogStrategy,
-                          UserAreaObserver,
+                          UserAreaObservable,
                           TagList,
                           TagListObserver,
                           TagObserver) {
@@ -35,7 +35,7 @@
     vm.currentType = {};
 
     /** @type {number} */
-    vm.userAreaId = UserAreaObserver.get();
+    vm.userAreaId = UserAreaObservable.get();
 
     /** @type {string} */
     vm.addMessage = 'templates/dialog/addContentMessage.html';

@@ -23,8 +23,8 @@
   'use strict';
 
   function AreasController(DialogStrategy,
-                           AreaListObserver,
-                           UserAreaObserver) {
+                           AreaListObservable,
+                           UserAreaObservable) {
 
     var vm = this;
 
@@ -37,7 +37,7 @@
     vm.deleteMessage = 'templates/dialog/deleteAreaMessage.html';
 
     /** @type {number */
-    vm.currentAreaId = UserAreaObserver.get();
+    vm.currentAreaId = UserAreaObservable.get();
 
     /**
      * Updates the title and id in view.
@@ -56,12 +56,12 @@
        * and removed in a dialog controller.  They can also
        * be reordered by the view model (see above).
        */
-      AreaListObserver.subscribe((areas) => {
+      AreaListObservable.subscribe((areas) => {
         vm.areas = areas;
 
       });
       /** @type {Array.<Object>} */
-      vm.areas = AreaListObserver.get();
+      vm.areas = AreaListObservable.get();
 
       /**
        * Get the dialog object for this controller.

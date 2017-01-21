@@ -19,7 +19,7 @@
  * Created by mspalti on 12/1/16.
  */
 
-// jshint strict:false
+'use strict';
 
 const taggerSchema = require('../models/index');
 const taggerDao = {};
@@ -306,6 +306,16 @@ taggerDao.updateCollectionCategory = (id, category) => {
       }
     });
 
+};
+
+taggerDao.deleteCategoryFromCollection = (id, category) => {
+
+ return taggerSchema.CategoryTarget.destroy({
+   where: {
+     CategoryId: category,
+     CollectionId: id
+   }
+ });
 };
 
 taggerDao.deleteCollection = (collId) => {

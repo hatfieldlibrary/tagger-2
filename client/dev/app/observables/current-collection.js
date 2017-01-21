@@ -22,13 +22,14 @@
 
   'use strict';
 
-  taggerServices.factory('CollectionObserver', ['rx', function (rx) {
+  taggerServices.factory('CollectionObservable', ['rx', function (rx) {
 
     const Subject = new rx.Subject();
     let collection = 0;
 
     return {
       set: function set(update) {
+        console.log('in obs with set of ' + update)
         if (update !== collection) {
           collection = update;
           Subject.onNext(collection);
