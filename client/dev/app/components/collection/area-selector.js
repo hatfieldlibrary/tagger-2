@@ -26,9 +26,9 @@
                           AreaTargetAdd,
                           AreaTargetRemove,
                           AreasForCollection,
-                          CollectionObserver,
-                          CollectionAreasObserver,
-                          AreaListObserver) {
+                          CollectionObservable,
+                          CollectionAreasObservable,
+                          AreaListObservable) {
 
     const ctrl = this;
 
@@ -38,12 +38,12 @@
      */
     function _setSubscriptions() {
 
-      CollectionObserver.subscribe(function onNext() {
-        _getCurrentAreaTargets(CollectionObserver.get());
+      CollectionObservable.subscribe(function onNext() {
+        _getCurrentAreaTargets(CollectionObservable.get());
       });
 
-      AreaListObserver.subscribe(function onNext() {
-        ctrl.areas = AreaListObserver.get();
+      AreaListObservable.subscribe(function onNext() {
+        ctrl.areas = AreaListObservable.get();
       });
 
     }
@@ -99,6 +99,7 @@
      */
     ctrl.update = function (areaId) {
 
+
       if (ctrl.areaTargets !== undefined) {
         // If the area id of the selected checkbox is a
         // already a target, then delete the area target.
@@ -107,13 +108,13 @@
             new TaggerToast('Cannot remove area.  Collections must belong to at least one area.');
 
           } else {
-            var result = AreaTargetRemove.query({collId: CollectionObserver.get(), areaId: areaId});
+            var result = AreaTargetRemove.query({collId: CollectionObservable.get(), areaId: areaId});
             result.$promise.then(function (result) {
               if (result.status === 'success') {
                 ctrl.areaTargets = result.data.areaList;
 
                 // Update the collections list (one collection has just been removed from the area).
-                CollectionAreasObserver.set();
+                CollectionAreasObservable.set();
 
                 new TaggerToast('Collection removed from area.');
               }
@@ -123,7 +124,7 @@
         // If the area id of the selected item is
         // not a target already, add a new area target.
         else {
-          var add = AreaTargetAdd.query({collId: CollectionObserver.get(), areaId: areaId});
+          var add = AreaTargetAdd.query({collId: CollectionObservable.get(), areaId: areaId});
           add.$promise.then(function (result) {
             if (result.status === 'success') {
               ctrl.areaTargets = result.data.areaList;
@@ -139,8 +140,8 @@
 
       _setSubscriptions();
 
-      ctrl.areas = AreaListObserver.get();
-      ctrl.areaTargets = _getCurrentAreaTargets(CollectionObserver.get());
+      ctrl.areas = AreaListObservable.get();
+      ctrl.areaTargets = _getCurrentAreaTargets(CollectionObservable.get());
     };
 
   }
@@ -165,4 +166,5 @@
     controller: AreaController
 
   });
+
 })();

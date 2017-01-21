@@ -23,7 +23,7 @@
 
   'use strict';
 
-  function FormController(UserAreaObserver,
+  function FormController(UserAreaObservable,
                           TagListObserver,
                           TagObserver,
                           TagById,
@@ -38,8 +38,8 @@
       _getTagInfo(tagId);
     });
 
-    UserAreaObserver.subscribe(function onNext() {
-      vm.userAreaId = UserAreaObserver.get();
+    UserAreaObservable.subscribe(function onNext() {
+      vm.userAreaId = UserAreaObservable.get();
     });
 
     // TagListObserver.subscribe(function onNext() {
@@ -77,7 +77,7 @@
     };
 
     vm.$onInit = function () {
-      vm.userAreaId = UserAreaObserver.get();
+      vm.userAreaId = UserAreaObservable.get();
       let tagId = TagObserver.get();
       vm.tags = TagListObserver.get();
 

@@ -27,9 +27,9 @@
                     CollectionTagTargetRemove,
                     TagsForArea,
                     TagsForCollection,
-                    AreaObserver,
+                    AreaObservable,
                     TaggerToast,
-                    CollectionObserver) {
+                    CollectionObservable) {
 
     const ctrl = this;
 
@@ -37,8 +37,8 @@
      * Watch for new collection id.
      * Update the tags when collection changes.
      */
-    CollectionObserver.subscribe(function onNext() {
-      ctrl.collectionId = CollectionObserver.get();
+    CollectionObservable.subscribe(function onNext() {
+      ctrl.collectionId = CollectionObservable.get();
       _getTagsForCollection(ctrl.collectionId);
 
     });
@@ -47,8 +47,8 @@
      * Watch for new area id.
      * Update the area tag list when area changes.
      */
-    AreaObserver.subscribe(function onNext() {
-      let id = AreaObserver.get();
+    AreaObservable.subscribe(function onNext() {
+      let id = AreaObservable.get();
      _getTagsForArea(id);
     });
 
@@ -135,7 +135,7 @@
     ctrl.removeTag = function (chip) {
       const result = CollectionTagTargetRemove.query(
         {
-          collId: CollectionObserver.get(),
+          collId: CollectionObservable.get(),
           tagId: chip.id
         }
       );
@@ -164,9 +164,9 @@
     }
 
     ctrl.$onInit = function () {
-      ctrl.collectionId = CollectionObserver.get();
+      ctrl.collectionId = CollectionObservable.get();
       _getTagsForCollection(ctrl.collectionId);
-      _getTagsForArea(AreaObserver.get());
+      _getTagsForArea(AreaObservable.get());
     };
 
   }

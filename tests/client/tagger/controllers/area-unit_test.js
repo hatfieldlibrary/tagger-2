@@ -10,8 +10,8 @@ describe('Area components', function () {
 
   let AreaList,
     DialogStrategy,
-    AreaListObserver,
-    AreaActionObserver,
+    AreaListObservable,
+    AreaActionObservable,
     AreaById,
     AreaUpdate,
     ReorderAreas,
@@ -51,7 +51,7 @@ describe('Area components', function () {
     });
 
     module(($provide) => {
-      $provide.value('AreaListObserver', {
+      $provide.value('AreaListObservable', {
         set: (x) => {
         },
         get: () => {
@@ -62,7 +62,7 @@ describe('Area components', function () {
     });
 
     module(($provide) => {
-      $provide.value('AreaActionObserver', {
+      $provide.value('AreaActionObservable', {
         set: (x) => {
         },
         get: () => {
@@ -84,7 +84,6 @@ describe('Area components', function () {
   });
 
   beforeEach(inject((_$componentController_) => {
-    // used to create instances of component controllers
     $componentController = _$componentController_;
 
 
@@ -95,9 +94,9 @@ describe('Area components', function () {
                      _AreaById_,
                      _AreaUpdate_,
                      _DialogStrategy_,
-                     _AreaObserver_,
-                     _AreaListObserver_,
-                     _AreaActionObserver_,
+                     _AreaObservable_,
+                     _AreaListObservable_,
+                     _AreaActionObservable_,
                      _ReorderAreas_,
                      _$q_) => {
     // inject mocks
@@ -105,8 +104,8 @@ describe('Area components', function () {
     AreaById = _AreaById_;
     AreaUpdate = _AreaUpdate_;
     DialogStrategy = _DialogStrategy_;
-    AreaListObserver = _AreaListObserver_;
-    AreaActionObserver = _AreaActionObserver_;
+    AreaListObservable = _AreaListObservable_;
+    AreaActionObservable = _AreaActionObservable_;
     ReorderAreas = _ReorderAreas_;
     $q = _$q_;
 
@@ -124,23 +123,23 @@ describe('Area components', function () {
     let fakeAreaListSubject = () => {};
     let  fakeActionSubject = () => {};
 
-    spyOn(AreaListObserver, 'set').and.callFake((value) => {
+    spyOn(AreaListObservable, 'set').and.callFake((value) => {
       fakeAreaListSubject(value);
     });
-    spyOn(AreaListObserver, 'get').and.callFake(() => {
+    spyOn(AreaListObservable, 'get').and.callFake(() => {
       return areasObserved;
     });
-    spyOn(AreaListObserver, 'subscribe').and.callFake((o) => {
+    spyOn(AreaListObservable, 'subscribe').and.callFake((o) => {
       fakeAreaListSubject = o;
     });
 
-    spyOn(AreaActionObserver, 'set').and.callFake((value) => {
+    spyOn(AreaActionObservable, 'set').and.callFake((value) => {
 
     });
-    spyOn(AreaActionObserver, 'get').and.callFake(() => {
+    spyOn(AreaActionObservable, 'get').and.callFake(() => {
       return actionAreaId;
     });
-    spyOn(AreaActionObserver, 'subscribe').and.callFake((o) => {
+    spyOn(AreaActionObservable, 'subscribe').and.callFake((o) => {
       fakeActionSubject = o;
     });
 
@@ -197,7 +196,7 @@ describe('Area components', function () {
       ctrl.$onInit();
 
       expect(ctrl.areas).toBeDefined();
-      expect(AreaListObserver.get).toHaveBeenCalled();
+      expect(AreaListObservable.get).toHaveBeenCalled();
       expect(ctrl.areas[0].name).toBe('the observed area one');
 
     });
@@ -216,7 +215,7 @@ describe('Area components', function () {
       let ctrl = $componentController('areasComponent', null);
       ctrl.$onInit();
 
-      AreaListObserver.set(areasUpdated);
+      AreaListObservable.set(areasUpdated);
 
       expect(ctrl.areas).toBeDefined();
       expect(ctrl.areas[0].name).toBe('updated area');
@@ -246,17 +245,17 @@ describe('Area components', function () {
 
       expect(AreaList.query).toHaveBeenCalled();
       expect(ctrl.areas[0].name).toBe(areasQueried[0].name);
-      expect(AreaListObserver.subscribe).toHaveBeenCalled();
+      expect(AreaListObservable.subscribe).toHaveBeenCalled();
 
     });
 
-    it('should notify the AreaActionObserver $onInit', () => {
+    it('should notify the AreaActionObservable $onInit', () => {
 
       let ctrl = $componentController('areasListComponent', null);
 
       ctrl.$onInit();
 
-      expect(AreaActionObserver.set).toHaveBeenCalledWith(1);
+      expect(AreaActionObservable.set).toHaveBeenCalledWith(1);
 
     });
 
@@ -270,7 +269,7 @@ describe('Area components', function () {
       expect(ctrl.areas.length).toBe(1);
       expect(ctrl.areas[0].name).toBe('area two');
       expect(ReorderAreas.save).toHaveBeenCalled();
-      expect(AreaListObserver.set).toHaveBeenCalled();
+      expect(AreaListObservable.set).toHaveBeenCalled();
 
     });
 
@@ -280,7 +279,7 @@ describe('Area components', function () {
 
       ctrl.resetArea(2);
       expect(ctrl.currentAreaId).toEqual(2);
-      expect(AreaActionObserver.set).toHaveBeenCalledWith(2);
+      expect(AreaActionObservable.set).toHaveBeenCalledWith(2);
 
     });
 
@@ -302,7 +301,7 @@ describe('Area components', function () {
 
       expect(ctrl.area).toBeDefined();
       expect(ctrl.area.id).toEqual(actionArea.id);
-      expect(AreaActionObserver.subscribe).toHaveBeenCalled;
+      expect(AreaActionObservable.subscribe).toHaveBeenCalled;
       expect(menuSpy).toHaveBeenCalledWith(actionArea);
 
     });

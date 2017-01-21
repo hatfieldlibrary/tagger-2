@@ -23,7 +23,7 @@
   'use strict';
 
   function TagController(DialogStrategy,
-                         UserAreaObserver,
+                         UserAreaObservable,
                          TagList,
                          TagListObserver,
                          TagObserver) {
@@ -33,7 +33,7 @@
     vm.currentTag = {};
 
     /** @type {number} */
-    vm.userAreaId = UserAreaObserver.get();
+    vm.userAreaId = UserAreaObservable.get();
 
     /** @type {string} */
     vm.addMessage = 'templates/dialog/addTagMessage.html';

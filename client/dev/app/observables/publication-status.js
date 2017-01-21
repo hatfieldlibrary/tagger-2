@@ -22,7 +22,7 @@
 
   'use strict';
 
-  taggerServices.factory('PublicationStatusObserver', ['rx', function(rx){
+  taggerServices.factory('PublicationStatusObservable', ['rx', function(rx){
 
     const Subject = new rx.Subject();
     let tag = 0;

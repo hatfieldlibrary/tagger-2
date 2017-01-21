@@ -24,8 +24,8 @@
 
   function PublicationController(UpdatePublicationStatus,
                                  GetPublicationStatus,
-                                 CollectionObserver,
-                                 PublicationStatusObserver,
+                                 CollectionObservable,
+                                 PublicationStatusObservable,
                                  TaggerToast) {
 
     const ctrl = this;
@@ -34,12 +34,12 @@
      * Watch for new collection id.
      * Update the tags when collection changes.
      */
-    CollectionObserver.subscribe(function onNext() {
-      const status = GetPublicationStatus.query({collId: CollectionObserver.get()});
+    CollectionObservable.subscribe(function onNext() {
+      const status = GetPublicationStatus.query({collId: CollectionObservable.get()});
       status.$promise.then(function (pub) {
         ctrl.pubstatus = pub.published;
         _setPubMessage(pub.published);
-        PublicationStatusObserver.set(pub.published);
+        PublicationStatusObservable.set(pub.published);
       });
 
     });
@@ -51,11 +51,11 @@
       else {
         ctrl.message = 'Unpublished';
       }
-      const update = UpdatePublicationStatus.query({collId: CollectionObserver.get(), status: state});
+      const update = UpdatePublicationStatus.query({collId: CollectionObservable.get(), status: state});
       update.$promise.then(function (data) {
         if (data.status === 'success') {
           new TaggerToast('Publication Status Changed.');
-          PublicationStatusObserver.set(state);
+          PublicationStatusObservable.set(state);
         } else {
           new TaggerToast('WARNING: Unable to update publication status!');
           return {};
@@ -72,11 +72,11 @@
     }
 
     ctrl.$onInit = function () {
-      const status = GetPublicationStatus.query({collId: CollectionObserver.get()});
+      const status = GetPublicationStatus.query({collId: CollectionObservable.get()});
       status.$promise.then(function (pub) {
         ctrl.pubstatus = pub.published;
         _setPubMessage(pub.published);
-        PublicationStatusObserver.set(pub.published);
+        PublicationStatusObservable.set(pub.published);
       });
     };
 

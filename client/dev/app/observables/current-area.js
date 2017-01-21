@@ -22,7 +22,7 @@
 
   'use strict';
 
-  taggerServices.factory('AreaObserver', ['rx', function(rx){
+  taggerServices.factory('AreaObservable', ['rx', function(rx){
 
     const Subject = new rx.Subject();
     let area = null;

@@ -23,17 +23,17 @@
   'use strict';
 
   function CollectionCtrl(SearchOptionType,
-                          AreaObserver) {
+                          AreaObservable) {
 
     let ctrl = this;
 
-    AreaObserver.subscribe(function onNext() {
-      _init(AreaObserver.get());
+    AreaObservable.subscribe(function onNext() {
+      _init(AreaObservable.get());
 
     });
 
     ctrl.$onInit = function () {
-      _init(AreaObserver.get());
+      _init(AreaObservable.get());
 
     };
 

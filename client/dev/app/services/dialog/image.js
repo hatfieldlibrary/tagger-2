@@ -10,7 +10,7 @@
 
     function ($mdDialog,
               Upload,
-              CollectionObserver,
+              CollectionObservable,
               ThumbImageObserver) {
 
       const _controller = function () {
@@ -35,7 +35,7 @@
             Upload.upload({
               url: '/tagger/collection/image',
               file: file,
-              fields: {id: CollectionObserver.get()}
+              fields: {id: CollectionObservable.get()}
             }).progress(function (evt) {
               let progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
               //console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);

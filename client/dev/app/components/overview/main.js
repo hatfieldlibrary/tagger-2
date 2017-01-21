@@ -21,7 +21,7 @@
 (function () {
   'use strict';
 
-  function OverviewController(AreaObserver,
+  function OverviewController(AreaObservable,
                               AreaById,
                               CollectionsByArea,
                               CategoryCountByArea,
@@ -30,8 +30,8 @@
 
     const ctrl = this;
 
-    AreaObserver.subscribe(() => {
-      let areaId = AreaObserver.get();
+    AreaObservable.subscribe(() => {
+      let areaId = AreaObservable.get();
       _setCollections(areaId);
       _getCategories(areaId);
       _getTypes(areaId);
@@ -113,7 +113,7 @@
 
     ctrl.$postLink = function () {
       ctrl.collectionCount = 0;
-      let areaId = AreaObserver.get();
+      let areaId = AreaObservable.get();
       _setCollections(areaId);
       _getCategories(areaId);
       _getTypes(areaId);

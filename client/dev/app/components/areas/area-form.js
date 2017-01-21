@@ -24,8 +24,8 @@
 
   function FormController(AreaUpdate,
                           AreaById,
-                          AreaActionObserver,
-                          AreaListObserver,
+                          AreaActionObservable,
+                          AreaListObservable,
                           AreaList,
                           TaggerToast) {
 
@@ -79,7 +79,7 @@
        * Watch for changes in the area index
        * and reset the area form view model.
        */
-      AreaActionObserver.subscribe((areaId) => {
+      AreaActionObservable.subscribe((areaId) => {
         _initializeForm(areaId);
       });
 
@@ -92,7 +92,7 @@
     function _getAreaList() {
       let areas = AreaList.query();
       areas.$promise.then(function (data) {
-        AreaListObserver.set(data);
+        AreaListObservable.set(data);
       });
     }
 
@@ -101,7 +101,7 @@
       _setSubscriptions();
 
       // Check for area id in current state.
-      let areaId = AreaActionObserver.get();
+      let areaId = AreaActionObservable.get();
       if (areaId) {
         _initializeForm(areaId);
       }

@@ -25,7 +25,7 @@
 
   function ListController(TagListObserver,
                           TagObserver,
-                          UserAreaObserver) {
+                          UserAreaObservable) {
 
     var vm = this;
 
@@ -41,7 +41,7 @@
 
     vm.$onInit = function () {
 
-      vm.userAreaId = UserAreaObserver.get();
+      vm.userAreaId = UserAreaObservable.get();
       // If current tag exists, use it.
       const currentTag = TagObserver.get();
       if (currentTag) {

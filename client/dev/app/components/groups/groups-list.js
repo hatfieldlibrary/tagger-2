@@ -24,7 +24,7 @@
 
   function ListController(GroupListObserver,
                           GroupObserver,
-                          UserAreaObserver) {
+                          UserAreaObservable) {
 
     const vm = this;
 
@@ -44,7 +44,7 @@
 
     vm.$onInit = function () {
 
-      vm.userAreaId = UserAreaObserver.get();
+      vm.userAreaId = UserAreaObservable.get();
       // If current group exists, use it.
       const currentCat = GroupObserver.get();
       if (currentCat) {

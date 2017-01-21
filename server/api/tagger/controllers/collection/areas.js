@@ -31,7 +31,7 @@ exports.areas = function (req, res) {
  * @param callback
  * @private
  */
-function _areaIdsForCollection (collId, callback) {
+function _areaIdsForCollection(collId, callback) {
 
   taggerDao.getAreaIdsForCollection(collId).then(function (result) {
     callback(null, result);
@@ -118,7 +118,8 @@ exports.addAreaTarget = function (req, res) {
 
 /**
  * Removes the association between a collection and a collection
- * area.  Returns new area list after completion.
+ * area.  Also removes the category (collection group) from the collection,
+ * Returns new area list after completion.
  * @param req
  * @param res
  */
@@ -127,20 +128,34 @@ exports.removeAreaTarget = function (req, res) {
   const collId = req.params.collId;
   const areaId = req.params.areaId;
 
-  async.series(
-    {
-      create: function (callback) {
+  async.waterfall([
+      (callback) => {
+        taggerDao.getCategoryForCollection(collId).then((result) => {
+            callback(null, result)
+          }
+        ).catch(function (err) {
+          logger.dao(err);
+        })
+      },
+      (catId, callback) => {
         taggerDao.removeCollectionFromArea(areaId, collId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
           logger.dao(err);
         });
       },
-      areaList: function (callback) {
-        _areaIdsForCollection(collId, callback);
-      }
-    },
+      (catId, callback) => {
+        taggerDao.deleteCategoryFromCollection(collId, catId).then((result) => {
+          callback(null, result);
+        }).catch(function (err) {
+          logger.dao(err);
+        });
+      },
+      (result, callback) => {
 
+          _areaIdsForCollection(collId, callback);
+      }
+    ],
     function (err, result) {
       if (err) {
         utils.sendErrorJson(res, err);
@@ -148,4 +163,5 @@ exports.removeAreaTarget = function (req, res) {
       utils.sendSuccessAndDataJson(res, result);
 
     });
+
 };

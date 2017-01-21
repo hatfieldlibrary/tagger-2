@@ -22,7 +22,7 @@
 
   'use strict';
 
-  function FormController(UserAreaObserver,
+  function FormController(UserAreaObservable,
                           ContentTypeListObserver,
                           ContentTypeObserver,
                           ContentType,
@@ -68,7 +68,7 @@
     };
 
     vm.$onInit = function () {
-      vm.userAreaId = UserAreaObserver.get();
+      vm.userAreaId = UserAreaObservable.get();
       let typeId = ContentTypeObserver.get();
       if (typeId) {
         _getTypeInfo(typeId);

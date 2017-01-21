@@ -22,7 +22,7 @@
 
   'use strict';
 
-  function FormController(UserAreaObserver,
+  function FormController(UserAreaObservable,
                           GroupListObserver,
                           GroupObserver,
                           Category,
@@ -84,7 +84,7 @@
     };
 
     vm.$onInit = function () {
-      vm.userAreaId = UserAreaObserver.get();
+      vm.userAreaId = UserAreaObservable.get();
       vm.categories = GroupListObserver.get();
       _getAreas();
       let groupId = GroupObserver.get();

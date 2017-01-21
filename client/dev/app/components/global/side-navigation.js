@@ -22,7 +22,7 @@
 
   'use strict';
 
-  function NavigationController(UserAreaObserver) {
+  function NavigationController(UserAreaObservable) {
 
     const vm = this;
 
@@ -32,9 +32,9 @@
      * Watches for update to the user's area. The value is obtained in the Passport
      * OAUTH login procedure and is used here to initialize state.
      */
-    UserAreaObserver.subscribe(function onNext() {
+    UserAreaObservable.subscribe(function onNext() {
 
-      vm.userAreaId = UserAreaObserver.get();
+      vm.userAreaId = UserAreaObservable.get();
 
     });
 
@@ -43,7 +43,7 @@
     };
 
     vm.$onInit = () => {
-      vm.userAreaId = UserAreaObserver.get();
+      vm.userAreaId = UserAreaObservable.get();
     };
 
   }

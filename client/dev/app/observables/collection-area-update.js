@@ -26,7 +26,7 @@
    * Observable used by the area-selector and collection-list components.
    * Use it to notify subscribers that the area list has changed.
    */
-  taggerServices.factory('CollectionAreasObserver', ['rx', function(rx){
+  taggerServices.factory('CollectionAreasObservable', ['rx', function(rx){
 
     const Subject = new rx.Subject();
 

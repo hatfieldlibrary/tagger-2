@@ -25,33 +25,33 @@
   'use strict';
 
   function CollectionController(DialogStrategy,
-                                UserAreaObserver,
-                                PublicationStatusObserver) {
+                                UserAreaObservable,
+                                PublicationStatusObservable) {
 
     const vm = this;
 
+    /**
+     * The current collection object.
+     * @type {{}}
+     */
     vm.currentCollection = {};
 
-    PublicationStatusObserver.subscribe(function onNext() {
-      vm.isPublished = PublicationStatusObserver.get();
-    });
-
-
-    /** @type {string} */
+    /**
+     * The message used in the add collection dialog.
+     * @type {string} */
     vm.addMessage = 'templates/dialog/addCollectionMessage.html';
 
-    /** @type {string} */
+    /**
+     * The message used in the delete collection dialog.
+     * @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteCollectionMessage.html';
 
-    /** @type {string} */
-    vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
+    // /**
+    //  * The message used in the update image dialog.
+    //  * @type {string} */
+    // vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
 
-    /**
-     * Get the dialog object for this component.
-     * Call with showDialog($event,message).
-     * @type {*}
-     */
-    vm.dialog =  DialogStrategy.makeDialog(vm);
+
 
     vm.menuUpdate = function(id, title) {
       vm.currentCollection.title = title;
@@ -59,8 +59,20 @@
     };
 
     vm.$onInit = function () {
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+      vm.dialog =  DialogStrategy.makeDialog(vm);
+
+      PublicationStatusObservable.subscribe(() => {
+        vm.isPublished = PublicationStatusObservable.get();
+      });
+
       /** @type {number} */
-      vm.userAreaId = UserAreaObserver.get();
+      vm.userAreaId = UserAreaObservable.get();
 
     };
 

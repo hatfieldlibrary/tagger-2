@@ -24,7 +24,7 @@
 
   function BarController($element,
                          $attrs,
-                         AreaObserver) {
+                         AreaObservable) {
 
     const ctrl = this;
 
@@ -136,7 +136,7 @@
       drawBarChart(ctrl.data);
     };
 
-    AreaObserver.subscribe(function onNext() {
+    AreaObservable.subscribe(function onNext() {
       _initChart();
     });
 
