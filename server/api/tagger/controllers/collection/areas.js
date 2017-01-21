@@ -34,6 +34,7 @@ exports.areas = function (req, res) {
 function _areaIdsForCollection(collId, callback) {
 
   taggerDao.getAreaIdsForCollection(collId).then(function (result) {
+    console.log(result)
     callback(null, result);
   }).catch(function (err) {
     logger.dao(err);
@@ -103,7 +104,6 @@ exports.addAreaTarget = function (req, res) {
       // if new
       if (result.check === null) {
         _addArea(collId, areaId, res);
-
       }
       // if not new, just return the current list.
       else {
@@ -131,36 +131,47 @@ exports.removeAreaTarget = function (req, res) {
   async.waterfall([
       (callback) => {
         taggerDao.getCategoryForCollection(collId).then((result) => {
-            callback(null, result)
+            callback(null, result.Category)
           }
         ).catch(function (err) {
           logger.dao(err);
         })
       },
-      (catId, callback) => {
+      (category, callback) => {
+      /*
+       * Remove category from collection if the category belongs to the area
+       * that is being removed. This allows a new category for to the collection.
+       */
+        if (category.areaId === areaId) {
+          taggerDao.deleteCategoryFromCollection(collId, category.id).then((result) => {
+            callback(null, result);
+          }).catch(function (err) {
+            logger.dao(err);
+          });
+        } else {
+          callback(null, category);
+        }
+      },
+      (result, callback) => {
         taggerDao.removeCollectionFromArea(areaId, collId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
           logger.dao(err);
         });
       },
-      (catId, callback) => {
-        taggerDao.deleteCategoryFromCollection(collId, catId).then((result) => {
+      (result, callback) => {
+        taggerDao.getAreaIdsForCollection(collId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
           logger.dao(err);
         });
-      },
-      (result, callback) => {
-
-          _areaIdsForCollection(collId, callback);
       }
     ],
     function (err, result) {
       if (err) {
         utils.sendErrorJson(res, err);
       }
-      utils.sendSuccessAndDataJson(res, result);
+      utils.sendSuccessAndDataJson(res, {areaList: result});
 
     });
 

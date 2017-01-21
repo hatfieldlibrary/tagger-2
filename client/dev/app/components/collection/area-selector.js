@@ -38,11 +38,11 @@
      */
     function _setSubscriptions() {
 
-      CollectionObservable.subscribe(function onNext() {
+      CollectionObservable.subscribe(() => {
         _getCurrentAreaTargets(CollectionObservable.get());
       });
 
-      AreaListObservable.subscribe(function onNext() {
+      AreaListObservable.subscribe(() => {
         ctrl.areas = AreaListObservable.get();
       });
 
@@ -84,6 +84,7 @@
      * @returns {boolean}
      */
     ctrl.isChosen = function (areaId) {
+
       if (ctrl.areaTargets) {
         return _findArea(areaId, ctrl.areaTargets);
       }
@@ -112,10 +113,8 @@
             result.$promise.then(function (result) {
               if (result.status === 'success') {
                 ctrl.areaTargets = result.data.areaList;
-
                 // Update the collections list (one collection has just been removed from the area).
                 CollectionAreasObservable.set();
-
                 new TaggerToast('Collection removed from area.');
               }
             });

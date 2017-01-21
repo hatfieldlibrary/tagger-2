@@ -29,7 +29,7 @@
 
     return {
       set: function set(update) {
-        console.log('in obs with set of ' + update)
+
         if (update !== collection) {
           collection = update;
           Subject.onNext(collection);

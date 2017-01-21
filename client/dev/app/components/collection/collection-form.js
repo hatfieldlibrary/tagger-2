@@ -24,6 +24,7 @@
   'use strict';
 
   function FormController($scope,
+                          AreaById,
                           CollectionsByArea,
                           CollectionById,
                           CollectionUpdate,
@@ -32,13 +33,11 @@
                           AreaObservable,
                           UserAreaObservable,
                           CollectionObservable,
-                          FirstCollectionInArea,
+                          CollectionAreasObservable,
                           ThumbImageObserver,
                           TaggerToast) {
 
     const vm = this;
-
-    let areaId = 0;
 
     /** @type {Object} */
     vm.collection = {};
@@ -79,20 +78,14 @@
 
       });
 
-      AreaObservable.subscribe((area) => {
-
-        /*
-         * This always results in a second request for collection data
-         * when the administrator selects a new area while viewing a
-         * collection. It's here to assure that the first collection will
-         * ALWAYS be updated on an area change.  In rare situations, the
-         * first collection may exist in two areas.  Toggling areas will not
-         * result in an update since the collection id has not changed. So
-         * we need to update the first collection.
-         */
-      // _getCollectionForNewArea(areaId);
+      AreaObservable.subscribe((areaId) => {
         _getCategoryForCollection(CollectionObservable.get());
+        _getAreaInfo(areaId);
 
+      });
+
+      CollectionAreasObservable.subscribe(() => {
+        _getCollectionById(CollectionObservable.get());
       });
 
     }
@@ -101,9 +94,17 @@
     const placeholder = ['Add the collection URL, e.g.: http://host.domain.edu/wombats?type=hungry', 'Add the collection name for select option, e.g. wallulah'];
 
     /**
-     * Initialize area id to 0
-     * @type {number}
+     * Gets area info to provide additional user context.
+     * @param areaId
+     * @private
      */
+    function _getAreaInfo(areaId) {
+      const area = AreaById.query({id: areaId});
+      area.$promise.then((result) => {
+        vm.areaTitle = result.title;
+        vm.areaId = result.id;
+      });
+    }
 
     /**
      * Retrieves collection information, tags and
@@ -124,24 +125,6 @@
         _getCategoryForCollection(id);
       });
 
-    }
-    /**
-     * Gets the first collection for the current area.
-     * @param areaId
-     * @private
-     */
-    function _getCollectionForNewArea(areaId) {
-      if (areaId) {
-        const first = FirstCollectionInArea.query({areaId: areaId});
-        first.$promise.then(function (data) {
-          vm.collection = data;
-          vm.collectionId = data.id;
-          vm.thumbnailImage = data.image;
-          ThumbImageObserver.set(data.image);
-          vm.menu({id: vm.collection.id, title: vm.collection.title});
-          _getCategoryForCollection(data.id);
-        });
-      }
     }
 
     /**
@@ -171,8 +154,6 @@
       );
       cats.$promise.then(function (data) {
         vm.categoryList = data;
-        console.log(data)
-      //  _evaluateCategoryArea(data)
       });
     }
 
@@ -184,12 +165,8 @@
      * @private
      */
     function _evaluateCategoryArea(categories) {
-console.log(categories)
-      console.log(AreaObservable.get())
       //  Using unary operator to force integer comparison.
       if (+categories[0].Category.areaId === AreaObservable.get()) {
-  console.log()
-
         /* Category belongs to this area.  Provide user with the
          option to change category. */
         _getCategories();
@@ -215,7 +192,6 @@ console.log(categories)
         vm.category = categories[0].Category.id;
         // Check to see if the category belongs to a different area.
         _evaluateCategoryArea(categories);
-
       }
       // No category assigned yet. Provide input options now.
       else {
@@ -234,13 +210,10 @@ console.log(categories)
      */
     function _getCategoryForCollection(id) {
 
-      console.log(id);
-
       if (id > 0) {
 
         const categories = CategoryForCollection.query({collId: id});
         categories.$promise.then(function (cats) {
-          console.log(cats)
           // Returns an array length zero or one
           if (cats.length === 1) {
             // Pass to check function with list.
@@ -330,12 +303,11 @@ console.log(categories)
         _getCategoryForCollection(collection);
       }
 
-
+      _getAreaInfo(AreaObservable.get());
 
     };
 
   }
-
 
   taggerComponents.component('collectionForm', {
     bindings: {
