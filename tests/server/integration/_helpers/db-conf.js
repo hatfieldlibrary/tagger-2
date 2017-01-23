@@ -18,17 +18,21 @@
 /**
  * Created by mspalti on 12/3/16.
  */
-
 'use strict';
 (function () {
 
+  const env = 'test';
+
   let credentials;
 
+  let credentialsPath = require('../../../../server/config/require-paths');
+  console.log(credentialsPath.path(env))
+
   try {
-    credentials = require('../../../../server/credentials/credentials');
+    credentials = require(credentialsPath.path(env) + 'credentials');
   } catch (ex) {
 
-    console.log('Using travis credentials');
+    console.log('Using travis credentials for integration test');
     credentials = require('../../../../server/credentials/travis-credentials')
   }
 
@@ -46,7 +50,5 @@
     }
 
   };
-
-
 
 })();

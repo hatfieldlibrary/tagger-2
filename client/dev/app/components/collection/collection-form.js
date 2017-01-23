@@ -24,6 +24,7 @@
   'use strict';
 
   function FormController($scope,
+                          AreaById,
                           CollectionsByArea,
                           CollectionById,
                           CollectionUpdate,
@@ -32,13 +33,11 @@
                           AreaObservable,
                           UserAreaObservable,
                           CollectionObservable,
-                          FirstCollectionInArea,
-                          ThumbImageObserver,
+                          CollectionAreasObservable,
+                          ThumbImageObservable,
                           TaggerToast) {
 
     const vm = this;
-
-    let areaId = 0;
 
     /** @type {Object} */
     vm.collection = {};
@@ -48,9 +47,6 @@
 
     /** @type {Array.<Object>} */
     vm.categoryList = [];
-
-    /** @type {number} */
-    vm.collectionId = -1;
 
     /** @type {string} */
     vm.thumbnailImage = '';
@@ -66,8 +62,8 @@
      */
     function _setSubscriptions() {
 
-      ThumbImageObserver.subscribe(() => {
-        vm.thumbnailImage = ThumbImageObserver.get();
+      ThumbImageObservable.subscribe((image) => {
+        vm.thumbnailImage = image;
       });
 
       CollectionObservable.subscribe((id) => {
@@ -76,23 +72,16 @@
         _getCollectionById(id);
         _getCategoryForCollection(id);
 
+      });
+
+      AreaObservable.subscribe((areaId) => {
+        _getCategoryForCollection(CollectionObservable.get());
+        _getAreaInfo(areaId);
 
       });
 
-      AreaObservable.subscribe((area) => {
-
-        /*
-         * This always results in a second request for collection data
-         * when the administrator selects a new area while viewing a
-         * collection. It's here to assure that the first collection will
-         * ALWAYS be updated on an area change.  In rare situations, the
-         * first collection may exist in two areas.  Toggling areas will not
-         * result in an update since the collection id has not changed. So
-         * we need to update the first collection.
-         */
-      // _getCollectionForNewArea(areaId);
-        _getCategoryForCollection(CollectionObservable.get());
-
+      CollectionAreasObservable.subscribe(() => {
+        _getCollectionById(CollectionObservable.get());
       });
 
     }
@@ -101,9 +90,17 @@
     const placeholder = ['Add the collection URL, e.g.: http://host.domain.edu/wombats?type=hungry', 'Add the collection name for select option, e.g. wallulah'];
 
     /**
-     * Initialize area id to 0
-     * @type {number}
+     * Gets area info to provide additional user context.
+     * @param areaId
+     * @private
      */
+    function _getAreaInfo(areaId) {
+      const area = AreaById.query({id: areaId});
+      area.$promise.then((result) => {
+        vm.areaTitle = result.title;
+        vm.areaId = result.id;
+      });
+    }
 
     /**
      * Retrieves collection information, tags and
@@ -111,37 +108,19 @@
      * @param id  {number} the collection id
      */
     function _getCollectionById(id) {
-
       const col = CollectionById.query({id: id});
       col.$promise.then(function (data) {
+
         vm.collection = data;
         vm.collectionId = data.id;
         vm.category = data.category;
         vm.thumbnailImage = data.image;
-        ThumbImageObserver.set(data.image);
+        ThumbImageObservable.set(data.image);
         vm.menu({id: vm.collection.id, title: vm.collection.title});
         _setBrowseTypeLabel(data.browseType);
         _getCategoryForCollection(id);
       });
 
-    }
-    /**
-     * Gets the first collection for the current area.
-     * @param areaId
-     * @private
-     */
-    function _getCollectionForNewArea(areaId) {
-      if (areaId) {
-        const first = FirstCollectionInArea.query({areaId: areaId});
-        first.$promise.then(function (data) {
-          vm.collection = data;
-          vm.collectionId = data.id;
-          vm.thumbnailImage = data.image;
-          ThumbImageObserver.set(data.image);
-          vm.menu({id: vm.collection.id, title: vm.collection.title});
-          _getCategoryForCollection(data.id);
-        });
-      }
     }
 
     /**
@@ -171,8 +150,6 @@
       );
       cats.$promise.then(function (data) {
         vm.categoryList = data;
-        console.log(data)
-      //  _evaluateCategoryArea(data)
       });
     }
 
@@ -184,11 +161,9 @@
      * @private
      */
     function _evaluateCategoryArea(categories) {
-console.log(categories)
-      console.log(AreaObservable.get())
+
       //  Using unary operator to force integer comparison.
       if (+categories[0].Category.areaId === AreaObservable.get()) {
-  console.log()
 
         /* Category belongs to this area.  Provide user with the
          option to change category. */
@@ -212,10 +187,9 @@ console.log(categories)
       if (categories !== null && categories[0].Category !== null) {
 
         // Set category id on the view model.
-        vm.category = categories[0].Category.id;
+        // vm.category = categories[0].Category.id;
         // Check to see if the category belongs to a different area.
         _evaluateCategoryArea(categories);
-
       }
       // No category assigned yet. Provide input options now.
       else {
@@ -233,8 +207,6 @@ console.log(categories)
      * @private
      */
     function _getCategoryForCollection(id) {
-
-      console.log(id);
 
       if (id > 0) {
 
@@ -279,37 +251,15 @@ console.log(categories)
         ctype: vm.collection.ctype
 
       });
-      update.$promise.then(function (data) {
-        if (data.status === 'success') {
-          vm.collectionList = CollectionsByArea.query(
-            {
-              areaId: AreaObservable.get()
-            }
-          );
-          // Toast upon success
-          new TaggerToast('Collection Updated');
-        }
-      });
+      update.$promise
+        .then(function (data) {
+          if (data.status === 'success') {
+            // Toast upon success
+            new TaggerToast('Collection Updated');
+          }
+        })
 
     };
-    /**
-     * Listens for event emitted after the collection has
-     * been removed from and area.  This updates the collection
-     * list in the current view in the event that the collection
-     * was removed from the area currently in view.
-     *
-     * Updates the collection list on event.
-     *
-     * This could be observable on collection list.
-     */
-    $scope.$on('removedFromArea', function () {
-      vm.collectionList = CollectionsByArea.query(
-        {
-          areaId: AreaObservable.get()
-        }
-      );
-
-    });
 
     /**
      * Sets vm.browseType string for choosing the URL label.
@@ -323,19 +273,18 @@ console.log(categories)
 
       _setSubscriptions();
 
-      let collection = CollectionObservable.get();
+      vm.collectionId = CollectionObservable.get();
 
-      if (collection && collection !== 0) {
-        _getCollectionById(collection);
-        _getCategoryForCollection(collection);
+      if (vm.collectionId > 0) {
+        _getCollectionById(vm.collectionId);
+        //  _getCategoryForCollection(collection);
       }
 
-
+      _getAreaInfo(AreaObservable.get());
 
     };
 
   }
-
 
   taggerComponents.component('collectionForm', {
     bindings: {
