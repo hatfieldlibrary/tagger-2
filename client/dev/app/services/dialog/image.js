@@ -11,7 +11,7 @@
     function ($mdDialog,
               Upload,
               CollectionObservable,
-              ThumbImageObserver) {
+              ThumbImageObservable) {
 
       const _controller = function () {
 

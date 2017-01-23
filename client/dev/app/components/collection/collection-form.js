@@ -34,7 +34,7 @@
                           UserAreaObservable,
                           CollectionObservable,
                           CollectionAreasObservable,
-                          ThumbImageObserver,
+                          ThumbImageObservable,
                           TaggerToast) {
 
     const vm = this;
@@ -47,9 +47,6 @@
 
     /** @type {Array.<Object>} */
     vm.categoryList = [];
-
-    /** @type {number} */
-    vm.collectionId = -1;
 
     /** @type {string} */
     vm.thumbnailImage = '';
@@ -65,8 +62,8 @@
      */
     function _setSubscriptions() {
 
-      ThumbImageObserver.subscribe(() => {
-        vm.thumbnailImage = ThumbImageObserver.get();
+      ThumbImageObservable.subscribe((image) => {
+        vm.thumbnailImage = image;
       });
 
       CollectionObservable.subscribe((id) => {
@@ -74,7 +71,6 @@
         vm.collectionId = id;
         _getCollectionById(id);
         _getCategoryForCollection(id);
-
 
       });
 
@@ -112,14 +108,14 @@
      * @param id  {number} the collection id
      */
     function _getCollectionById(id) {
-
       const col = CollectionById.query({id: id});
       col.$promise.then(function (data) {
+
         vm.collection = data;
         vm.collectionId = data.id;
         vm.category = data.category;
         vm.thumbnailImage = data.image;
-        ThumbImageObserver.set(data.image);
+        ThumbImageObservable.set(data.image);
         vm.menu({id: vm.collection.id, title: vm.collection.title});
         _setBrowseTypeLabel(data.browseType);
         _getCategoryForCollection(id);
@@ -165,8 +161,10 @@
      * @private
      */
     function _evaluateCategoryArea(categories) {
+
       //  Using unary operator to force integer comparison.
       if (+categories[0].Category.areaId === AreaObservable.get()) {
+
         /* Category belongs to this area.  Provide user with the
          option to change category. */
         _getCategories();
@@ -189,7 +187,7 @@
       if (categories !== null && categories[0].Category !== null) {
 
         // Set category id on the view model.
-        vm.category = categories[0].Category.id;
+        // vm.category = categories[0].Category.id;
         // Check to see if the category belongs to a different area.
         _evaluateCategoryArea(categories);
       }
@@ -214,6 +212,7 @@
 
         const categories = CategoryForCollection.query({collId: id});
         categories.$promise.then(function (cats) {
+          console.log(cats)
           // Returns an array length zero or one
           if (cats.length === 1) {
             // Pass to check function with list.
@@ -252,37 +251,15 @@
         ctype: vm.collection.ctype
 
       });
-      update.$promise.then(function (data) {
-        if (data.status === 'success') {
-          vm.collectionList = CollectionsByArea.query(
-            {
-              areaId: AreaObservable.get()
-            }
-          );
-          // Toast upon success
-          new TaggerToast('Collection Updated');
-        }
-      });
+      update.$promise
+        .then(function (data) {
+          if (data.status === 'success') {
+            // Toast upon success
+            new TaggerToast('Collection Updated');
+          }
+        })
 
     };
-    /**
-     * Listens for event emitted after the collection has
-     * been removed from and area.  This updates the collection
-     * list in the current view in the event that the collection
-     * was removed from the area currently in view.
-     *
-     * Updates the collection list on event.
-     *
-     * This could be observable on collection list.
-     */
-    $scope.$on('removedFromArea', function () {
-      vm.collectionList = CollectionsByArea.query(
-        {
-          areaId: AreaObservable.get()
-        }
-      );
-
-    });
 
     /**
      * Sets vm.browseType string for choosing the URL label.
@@ -296,11 +273,11 @@
 
       _setSubscriptions();
 
-      let collection = CollectionObservable.get();
+      vm.collectionId = CollectionObservable.get();
 
-      if (collection && collection !== 0) {
-        _getCollectionById(collection);
-        _getCategoryForCollection(collection);
+      if (vm.collectionId > 0) {
+        _getCollectionById(vm.collectionId);
+        //  _getCategoryForCollection(collection);
       }
 
       _getAreaInfo(AreaObservable.get());

@@ -21,7 +21,7 @@
 (function () {
   'use strict';
 
-  function ImageController(ThumbImageObserver,
+  function ImageController(ThumbImageObservable,
                            DialogStrategy) {
 
     const vm = this;
@@ -42,8 +42,8 @@
      */
     function _setSubscriptions() {
 
-      ThumbImageObserver.subscribe(function onNext() {
-        vm.thumbnailImage = ThumbImageObserver.get();
+      ThumbImageObservable.subscribe(function onNext() {
+        vm.thumbnailImage = ThumbImageObservable.get();
       });
     }
 

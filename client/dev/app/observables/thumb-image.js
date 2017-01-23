@@ -25,7 +25,7 @@
 
   'use strict';
 
-  taggerServices.factory('ThumbImageObserver', ['rx', function(rx){
+  taggerServices.factory('ThumbImageObservable', ['rx', function(rx){
 
     const Subject = new rx.Subject();
     let thumb = '';
