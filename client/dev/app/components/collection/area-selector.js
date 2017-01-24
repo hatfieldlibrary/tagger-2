@@ -38,12 +38,12 @@
      */
     function _setSubscriptions() {
 
-      CollectionObservable.subscribe(() => {
-        _getCurrentAreaTargets(CollectionObservable.get());
+      CollectionObservable.subscribe((value) => {
+        _getCurrentAreaTargets(value);
       });
 
-      AreaListObservable.subscribe(() => {
-        ctrl.areas = AreaListObservable.get();
+      AreaListObservable.subscribe((value) => {
+        ctrl.areas = value;
       });
 
     }
@@ -69,7 +69,7 @@
      */
     function _findArea(areaId, targets) {
 
-      for (var i = 0; i < targets.length; i++) {
+      for (let i = 0; i < targets.length; i++) {
         if (targets[i].AreaId === areaId) {
           return true;
         }
@@ -104,12 +104,13 @@
       if (ctrl.areaTargets !== undefined) {
         // If the area id of the selected checkbox is a
         // already a target, then delete the area target.
+
         if (_findArea(areaId, ctrl.areaTargets)) {
           if (ctrl.areaTargets.length === 1) {
             new TaggerToast('Cannot remove area.  Collections must belong to at least one area.');
 
           } else {
-            var result = AreaTargetRemove.query({collId: CollectionObservable.get(), areaId: areaId});
+            let result = AreaTargetRemove.query({collId: CollectionObservable.get(), areaId: areaId});
             result.$promise.then(function (result) {
               if (result.status === 'success') {
                 ctrl.areaTargets = result.data.areaList;
@@ -123,7 +124,7 @@
         // If the area id of the selected item is
         // not a target already, add a new area target.
         else {
-          var add = AreaTargetAdd.query({collId: CollectionObservable.get(), areaId: areaId});
+          let add = AreaTargetAdd.query({collId: CollectionObservable.get(), areaId: areaId});
           add.$promise.then(function (result) {
             if (result.status === 'success') {
               ctrl.areaTargets = result.data.areaList;
@@ -140,7 +141,8 @@
       _setSubscriptions();
 
       ctrl.areas = AreaListObservable.get();
-      ctrl.areaTargets = _getCurrentAreaTargets(CollectionObservable.get());
+      _getCurrentAreaTargets(CollectionObservable.get());
+
     };
 
   }
