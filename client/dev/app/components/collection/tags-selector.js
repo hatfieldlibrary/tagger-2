@@ -37,8 +37,8 @@
      * Watch for new collection id.
      * Update the tags when collection changes.
      */
-    CollectionObservable.subscribe(function onNext() {
-      ctrl.collectionId = CollectionObservable.get();
+    CollectionObservable.subscribe((id) => {
+      ctrl.collectionId = id;
       _getTagsForCollection(ctrl.collectionId);
 
     });
@@ -47,8 +47,7 @@
      * Watch for new area id.
      * Update the area tag list when area changes.
      */
-    AreaObservable.subscribe(function onNext() {
-      let id = AreaObservable.get();
+    AreaObservable.subscribe((id) => {
      _getTagsForArea(id);
     });
 
@@ -133,6 +132,7 @@
      * @param chip  {Object} $chip
      */
     ctrl.removeTag = function (chip) {
+
       const result = CollectionTagTargetRemove.query(
         {
           collId: CollectionObservable.get(),

@@ -17,13 +17,13 @@ describe('The collection form component', () => {
     CategoryByArea,
     CollectionUpdate,
     AreaById,
-    TaggerToast,
     testAreaId,
     testCollectionId,
     testImage,
-    testArea,
+    testAreas,
     updatedImage,
     testCollections,
+    testCollection,
     testCategoryList;
 
   beforeEach(module('tagger'));
@@ -133,18 +133,26 @@ describe('The collection form component', () => {
 
 
   beforeEach(() => {
+
     testAreaId = 1;
     testCollectionId = 1;
     testImage = 'image';
     updatedImage = 'no-image.png';
-    testArea = {
+    testAreas = [{
       id: 1,
       title: 'test area',
       linkLabel: 'test label',
       position: 1,
       searchUrl: '',
       description: ''
-    };
+    }, {
+      id: 2,
+      title: 'test area tow',
+      linkLabel: 'test label two',
+      position: 1,
+      searchUrl: '',
+      description: ''
+    }];
     /* */
     testCategoryList = [{
       Category: {
@@ -189,27 +197,25 @@ describe('The collection form component', () => {
       }
 
     };
+    testCollection = testCollections.init;
 
   });
 
   // configure spies
   beforeEach(() => {
 
-    let fakeAreaCallback = (value) => {
-      testAreaId = value;
+    let fakeAreaCallback = () => {
     };
-    let fakeCollectionCallback = (value) => {
-      testCollectionId = value;
+    let fakeCollectionCallback = () => {
     };
     let fakeImageCallback = (value) => {
       testImage = value;
     };
     let fakeCollectionAreasCallback = (value) => {
-
     };
-
-    spyOn(AreaObservable, 'set').and.callFake((value) => {
-      fakeAreaCallback(value);
+    // area id observable.
+    spyOn(AreaObservable, 'set').and.callFake(() => {
+      fakeAreaCallback(testAreaId);
     });
     spyOn(AreaObservable, 'get').and.callFake(() => {
       return testAreaId;
@@ -217,15 +223,15 @@ describe('The collection form component', () => {
     spyOn(AreaObservable, 'subscribe').and.callFake((o) => {
       fakeAreaCallback = o;
     });
-
-    spyOn(CollectionObservable, 'set').and.callFake((value) => {
-      fakeCollectionCallback(value);
+    // collection id observable.
+    spyOn(CollectionObservable, 'set').and.callFake(() => {
+      fakeCollectionCallback(testCollectionId);
     });
     spyOn(CollectionObservable, 'get').and.callFake(() => {
-      return testCollections.init.id;
+      return testCollectionId;
     });
     spyOn(CollectionObservable, 'subscribe').and.callFake((o) => {
-      //fakeCollectionCallback = o;
+      fakeCollectionCallback = o;
     });
 
     spyOn(ThumbImageObservable, 'set').and.callFake((value) => {
@@ -238,8 +244,8 @@ describe('The collection form component', () => {
       fakeImageCallback = o;
     });
 
-    spyOn(CollectionAreasObservable, 'set').and.callFake((value) => {
-      fakeCollectionAreasCallback(value);
+    spyOn(CollectionAreasObservable, 'set').and.callFake(() => {
+      fakeCollectionAreasCallback();
     });
     spyOn(CollectionAreasObservable, 'get').and.callFake(() => {
       return '';
@@ -286,7 +292,13 @@ describe('The collection form component', () => {
       return {
         $promise: {
           then: (callback) => {
-            return callback(testArea);
+            if (testAreaId === 1) {
+              return callback(testAreas[0]);
+            } else if (testAreaId == 2) {
+              return callback(testAreas[1]);
+            } else {
+
+            }
           }
         }
       }
@@ -311,6 +323,8 @@ describe('The collection form component', () => {
     let bindings = {menu: menuSpy};
     let ctrl = $componentController('collectionForm', null, bindings);
 
+    CollectionObservable.set(1);
+
     ctrl.$onInit();
 
     expect(CollectionObservable.get).toHaveBeenCalled();
@@ -327,6 +341,8 @@ describe('The collection form component', () => {
     let menuSpy = jasmine.createSpy('menuSpy');
     let bindings = {menu: menuSpy};
     let ctrl = $componentController('collectionForm', null, bindings);
+
+    CollectionObservable.set(1);
 
     ctrl.$onInit();
 
@@ -371,7 +387,7 @@ describe('The collection form component', () => {
 
   });
 
-  it('should fetch new collection on observer update', (done) => {
+  it('should fetch new collection on observer update', () => {
 
     let menuSpy = jasmine.createSpy('menuSpy');
     let bindings = {menu: menuSpy};
@@ -380,18 +396,15 @@ describe('The collection form component', () => {
 
     ctrl.$onInit();
 
-    CollectionObservable.set.and.stub();
-    CollectionObservable.set.and.callThrough();
+    testCollectionId = 2;
+
     CollectionObservable.set(2);
 
-    done(() => {
-      expect(ctrl.collectionId).toEqual(2);
-      expect(ctrl.collection).toEqual(testCollections.update);
-      expect(ctrl.collectionId).toEqual(2);
-      expect(ctrl.category).toEqual(4);
-      expect(ctrl.thumbnailImage).toEqual(updatedImage);
-    });
-
+    expect(ctrl.collectionId).toEqual(2);
+    expect(ctrl.collection).toEqual(testCollections.update);
+    expect(ctrl.collectionId).toEqual(2);
+    expect(ctrl.category).toEqual(4);
+    expect(ctrl.thumbnailImage).toEqual(updatedImage);
 
   });
 
@@ -418,8 +431,8 @@ describe('The collection form component', () => {
 
     ctrl.$onInit();
 
-    ctrl.areaTitle = testArea.title;
-    ctrl.areaId = testArea.id
+    ctrl.areaTitle = testAreas[0].title;
+    ctrl.areaId = testAreas[0].id;
 
   });
 
@@ -442,7 +455,22 @@ describe('The collection form component', () => {
 
   });
 
-  it('should set the placehoder message', () => {
+  it('should update area info and category on area change.', () => {
+
+    let menuSpy = jasmine.createSpy('menuSpy');
+    let bindings = {menu: menuSpy};
+    let ctrl = $componentController('collectionForm', null, bindings);
+
+    ctrl.$onInit();
+
+    testAreaId = 2;
+    AreaObservable.set(2);
+
+    expect(ctrl.areaTitle).toEqual(testAreas[1].title);
+
+  });
+
+  it('should set the placeholder message', () => {
 
     let ctrl = $componentController('collectionForm', null);
 
@@ -450,6 +478,44 @@ describe('The collection form component', () => {
     expect(ctrl.browsePlaceholder).toEqual('Add the collection URL, e.g.: http://host.domain.edu/wombats?type=hungry');
     ctrl.setBrowseType(1);
     expect(ctrl.browsePlaceholder).toEqual('Add the collection name for select option, e.g. wallulah');
+
+  });
+
+  it('should update collection on area membership update', () => {
+
+    let menuSpy = jasmine.createSpy('menuSpy');
+    let bindings = {menu: menuSpy};
+    let ctrl = $componentController('collectionForm', null, bindings);
+
+    ctrl.$onInit();
+    CollectionAreasObservable.set();
+
+    expect(CollectionById.query).toHaveBeenCalled();
+
+  });
+
+  it('should retrieve categories on offer options if the collection has no category assigned.', () => {
+
+    let menuSpy = jasmine.createSpy('menuSpy');
+    let bindings = {menu: menuSpy};
+    let ctrl = $componentController('collectionForm', null, bindings);
+
+    CategoryForCollection.query.and.stub();
+    CategoryForCollection.query.and.callFake(() => {
+      return {
+        $promise: {
+          then: (callback) => {
+            return callback([]);
+          }
+        }
+      }
+    });
+
+    ctrl.$onInit();
+
+
+    expect(ctrl.showCollectionCategories).toBe(true);
+    expect(CategoryByArea.query).toHaveBeenCalled();
 
   });
 

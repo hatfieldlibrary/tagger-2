@@ -23,9 +23,7 @@
 
   'use strict';
 
-  function FormController($scope,
-                          AreaById,
-                          CollectionsByArea,
+  function FormController(AreaById,
                           CollectionById,
                           CollectionUpdate,
                           CategoryByArea,
@@ -66,20 +64,22 @@
         vm.thumbnailImage = image;
       });
 
+      // Load collection into form.
       CollectionObservable.subscribe((id) => {
-
         vm.collectionId = id;
         _getCollectionById(id);
         _getCategoryForCollection(id);
 
       });
-
+      /* Update area info and assure that the category
+         is updated.  */
       AreaObservable.subscribe((areaId) => {
         _getCategoryForCollection(CollectionObservable.get());
         _getAreaInfo(areaId);
 
-      });
 
+      });
+      // Reset collection when areas change.
       CollectionAreasObservable.subscribe(() => {
         _getCollectionById(CollectionObservable.get());
       });
@@ -212,7 +212,6 @@
 
         const categories = CategoryForCollection.query({collId: id});
         categories.$promise.then(function (cats) {
-          console.log(cats)
           // Returns an array length zero or one
           if (cats.length === 1) {
             // Pass to check function with list.
@@ -277,7 +276,6 @@
 
       if (vm.collectionId > 0) {
         _getCollectionById(vm.collectionId);
-        //  _getCategoryForCollection(collection);
       }
 
       _getAreaInfo(AreaObservable.get());
