@@ -16,6 +16,8 @@
  */
 
 /**
+ * Edit areas for collection.
+ *
  * Created by mspalti on 12/13/16.
  */
 (function () {

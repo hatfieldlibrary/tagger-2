@@ -4,7 +4,7 @@
 
 'use strict';
 
-describe('Tag selector component', () => {
+describe('The tag selector component', () => {
 
   let $componentController;
 
@@ -260,7 +260,7 @@ describe('Tag selector component', () => {
 
   });
 
-  it('should initialize the component', () => {
+  it('should initialize the component.', () => {
 
     let ctrl = $componentController('subjectSelector', null);
     ctrl.$onInit();
@@ -272,7 +272,7 @@ describe('Tag selector component', () => {
 
   });
 
-  it('should add new tag', () => {
+  it('should add new tag.', () => {
 
     // initialize tags to short list
     tagsForCollection = tagsForAreaRemove;
@@ -287,7 +287,7 @@ describe('Tag selector component', () => {
 
   });
 
-  it('should remove new tag', () => {
+  it('should remove new tag.', () => {
 
     // initialize tags to long list
     tagsForCollection = tagsForAreaAdd;
@@ -302,7 +302,7 @@ describe('Tag selector component', () => {
 
   });
 
-  it('should fetch new tags on collection change', () => {
+  it('should fetch new tags on collection change.', () => {
 
     let ctrl = $componentController('subjectSelector', null);
     ctrl.$onInit();
@@ -317,7 +317,7 @@ describe('Tag selector component', () => {
 
   });
 
-  it('should fetch new tags on area change', () => {
+  it('should fetch new tags on area change.', () => {
 
     let ctrl = $componentController('subjectSelector', null);
     ctrl.$onInit();
@@ -342,7 +342,7 @@ describe('Tag selector component', () => {
 
   });
 
-  it('should return no tags for the collection', () => {
+  it('should return no tags for the collection.', () => {
 
     tagsForCollection = emptySet;
 

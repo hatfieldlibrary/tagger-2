@@ -16,6 +16,8 @@
  */
 
 /**
+ * Set pub status for a collection.
+ *
  * Created by mspalti on 12/22/16.
  */
 (function () {
@@ -30,19 +32,22 @@
 
     const ctrl = this;
 
-    /**
-     * Watch for new collection id.
-     * Update the tags when collection changes.
-     */
-    CollectionObservable.subscribe(function onNext() {
-      const status = GetPublicationStatus.query({collId: CollectionObservable.get()});
-      status.$promise.then(function (pub) {
-        ctrl.pubstatus = pub.published;
-        _setPubMessage(pub.published);
-        PublicationStatusObservable.set(pub.published);
-      });
+    function _setSubscriptions() {
+      /**
+       * Watch for new collection id.
+       * Update the pub status when collection changes.
+       */
+      CollectionObservable.subscribe((id) => {
 
-    });
+        const status = GetPublicationStatus.query({collId: id});
+        status.$promise.then(function (pub) {
+          ctrl.pubstatus = pub.published;
+          _setPubMessage(pub.published);
+          PublicationStatusObservable.set(pub.published);
+        });
+
+      });
+    }
 
     ctrl.onChange = function (state) {
       if (state) {
@@ -54,6 +59,7 @@
       const update = UpdatePublicationStatus.query({collId: CollectionObservable.get(), status: state});
       update.$promise.then(function (data) {
         if (data.status === 'success') {
+
           new TaggerToast('Publication Status Changed.');
           PublicationStatusObservable.set(state);
         } else {
@@ -72,6 +78,10 @@
     }
 
     ctrl.$onInit = function () {
+
+      _setSubscriptions();
+
+      // initial pub status.
       const status = GetPublicationStatus.query({collId: CollectionObservable.get()});
       status.$promise.then(function (pub) {
         ctrl.pubstatus = pub.published;

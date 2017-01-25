@@ -16,6 +16,8 @@
  */
 
 /**
+ * Edit item types for collection.
+ *
  * Created by mspalti on 12/13/16.
  */
 (function () {
@@ -43,18 +45,14 @@
     ctrl.selectedTags = [];
 
     /** @type {Array.<Object>} */
-    ctrl.globalTypes = ContentTypeList.query();
-
-    /** @type {Array.<Object>} */
     ctrl.typesForCollection = [];
 
     /**
      * Watch for new collection id.
      * Update the tags when collection changes.
      */
-    CollectionObservable.subscribe(function onNext() {
-      let collid = CollectionObservable.get();
-      _getTypesForCollection(collid);
+    CollectionObservable.subscribe((id) => {
+      _getTypesForCollection(id);
 
     });
 
@@ -125,7 +123,7 @@
      * @param chip {Object} $chip
      */
     ctrl.removeType = function (chip) {
-      var result = CollectionTypeTargetRemove.query(
+      const result = CollectionTypeTargetRemove.query(
         {
           collId: CollectionObservable.get(),
           typeId: chip.id
@@ -158,9 +156,16 @@
     }
 
     ctrl.$onInit = function () {
+
+      const typeList = ContentTypeList.query();
+      typeList.$promise.then((data) => {
+        /** @type {Array.<Object>} */
+        ctrl.globalTypes = data;
+      });
       // Need to set at init to cover all cases.
       let id = CollectionObservable.get();
       _getTypesForCollection(id);
+
     };
   }
 
