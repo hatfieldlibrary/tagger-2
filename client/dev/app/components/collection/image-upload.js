@@ -16,6 +16,8 @@
  */
 
 /**
+ * Image upload component.
+ *
  * Created by mspalti on 12/13/16.
  */
 (function () {
@@ -30,25 +32,28 @@
     vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
 
     /**
-     * Get the dialog object for this component.
-     * Call with showDialog($event,message).
-     * @type {*}
-     */
-    vm.dialog =  DialogStrategy.makeDialog(vm);
-
-    /**
      * Set the component subscriptions.
      * @private
      */
     function _setSubscriptions() {
 
-      ThumbImageObservable.subscribe(function onNext() {
-        vm.thumbnailImage = ThumbImageObservable.get();
+      ThumbImageObservable.subscribe((img) => {
+        vm.thumbnailImage = img;
       });
     }
 
     vm.$onInit = function () {
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+      vm.dialog =  DialogStrategy.makeDialog(vm);
+
+
       _setSubscriptions();
+
     };
   }
 

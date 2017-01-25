@@ -20,50 +20,49 @@
  */
 
 (function () {
-    'use strict';
+  'use strict';
 
-    function AuthController(SetGlobalValues,
-                            UserAreaObservable,
-                            UserObserver,
-                            IsAuthObserver,
-                            getUserInfo) {
+  function AuthController(SetGlobalValues,
+                          UserAreaObservable,
+                          UserObserver,
+                          IsAuthObserver,
+                          getUserInfo) {
 
-      const vm = this;
+    const vm = this;
 
-      /**
-       * Sets the role of the user based on the
-       * area to which they belong. Called on the
-       * initial page load after successful authentication.
-       * @param areaId the current area id
-       */
-      function _getRole(areaId) {
+    /**
+     * Sets the role of the user based on the
+     * area to which they belong. Called on the
+     * initial page load after successful authentication.
+     * @param areaId the current area id
+     */
+    function _getRole(areaId) {
 
-        vm.role = _getUserRole(areaId);
+      vm.role = _getUserRole(areaId);
 
+    }
+
+    /**
+     * Returns the user role based on the area id in their
+     * user profile.
+     * @param areaId
+     * @returns string for role
+     */
+    function _getUserRole(areaId) {
+
+      if (areaId === 0) {
+        return 'Administrator';
+      } else {
+        return 'Area Maintainer';
       }
 
-      /**
-       * Returns the user role based on the area id in their
-       * user profile.
-       * @param areaId
-       * @returns string for role
-       */
-      function _getUserRole(areaId) {
+    }
 
-        if (areaId === 0) {
-          return 'Administrator';
-        } else {
-          return 'Area Maintainer';
-        }
+    vm.$onInit = () => {
 
-      }
-
-      vm.$onInit = () => {
-
-        var userinfo = getUserInfo.query();
-
-        userinfo.$promise.then(function (user) {
-
+      let userInfo = getUserInfo.query();
+      userInfo.$promise
+        .then(function (user) {
           IsAuthObserver.set(true);
           UserObserver.set(user.areaId);
           UserAreaObservable.set(user.areaId);
@@ -74,40 +73,40 @@
           SetGlobalValues.initializeGlobalValues();
 
         }).catch(function (err) {
-          vm.authorized = false;
-          console.log(err);
-        });
-      };
+        vm.authorized = false;
+        console.log(err);
+      });
+    };
 
-    }
+  }
 
-    taggerComponents.component('authenticationComponent', {
+  taggerComponents.component('authorizationComponent', {
 
-      template: '<md-toolbar class="md-default-theme"> ' +
-      ' <md-card class="local-hue-1 margin-override"> ' +
-      '   <md-card-content style="padding-left: 12px"> ' +
-      '     <md-list> ' +
-      '       <md-list-item class="contact-item">   ' +
-      '       <!-- Passport login provides picture from Google profile-->   ' +
-      '         <img ng-if="vm.authorized" class="md-avatar" ng-src="{{vm.userPicture}}"> ' +
-      '       </md-list-item> ' +
-      '     <md-list-item>  ' +
-      '       {{vm.userName}} ' +
-      '     </md-list-item> ' +
-      '     <md-list-item> ' +
-      '       <!-- The user and areaId are also from passport login.--> ' +
-      '       <!-- Passing the areaId to the controller will initialize--> ' +
-      '       <!-- the application context.--> ' +
-      '       <div class="md-subhead"> ' +
-      '         <div class="md-caption">{{vm.role}}</div> ' +
-      '       </div> ' +
-      '     </md-list-item> ' +
-      '   </md-list> ' +
-      ' </md-card-content> ' +
-      ' </md-card> ' +
-      '</md-toolbar>',
-      controller: AuthController,
-      controllerAs: 'vm'
-    });
+    template: '<md-toolbar class="md-default-theme"> ' +
+    ' <md-card class="local-hue-1 margin-override"> ' +
+    '   <md-card-content style="padding-left: 12px"> ' +
+    '     <md-list> ' +
+    '       <md-list-item class="contact-item">   ' +
+    '       <!-- Passport login provides picture from Google profile-->   ' +
+    '         <img ng-if="vm.authorized" class="md-avatar" ng-src="{{vm.userPicture}}"> ' +
+    '       </md-list-item> ' +
+    '     <md-list-item>  ' +
+    '       {{vm.userName}} ' +
+    '     </md-list-item> ' +
+    '     <md-list-item> ' +
+    '       <!-- The user and areaId are also from passport login.--> ' +
+    '       <!-- Passing the areaId to the controller will initialize--> ' +
+    '       <!-- the application context.--> ' +
+    '       <div class="md-subhead"> ' +
+    '         <div class="md-caption">{{vm.role}}</div> ' +
+    '       </div> ' +
+    '     </md-list-item> ' +
+    '   </md-list> ' +
+    ' </md-card-content> ' +
+    ' </md-card> ' +
+    '</md-toolbar>',
+    controller: AuthController,
+    controllerAs: 'vm'
+  });
 
-  })();
+})();

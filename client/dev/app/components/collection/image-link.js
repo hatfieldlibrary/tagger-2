@@ -16,6 +16,8 @@
  */
 
 /**
+ * Image link component.
+ *
  * Created by mspalti on 12/13/16.
  */
 

@@ -16,7 +16,7 @@
  */
 
 /**
- * Directive used to associate a TAG with a COLLECTION.
+ * Edit tags for collection.
  */
 
 (function () {

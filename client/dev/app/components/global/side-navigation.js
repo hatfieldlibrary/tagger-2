@@ -28,22 +28,24 @@
 
     vm.currentIndex = 0;
 
-    /**
-     * Watches for update to the user's area. The value is obtained in the Passport
-     * OAUTH login procedure and is used here to initialize state.
-     */
-    UserAreaObservable.subscribe(function onNext() {
-
-      vm.userAreaId = UserAreaObservable.get();
-
-    });
-
     vm.setCurrentIndex = (index) => {
       vm.currentIndex = index;
     };
 
     vm.$onInit = () => {
+
+      // get area id if it's already available.
       vm.userAreaId = UserAreaObservable.get();
+
+      /**
+       * Watches for update to the user's area. The value is obtained in the Passport
+       * OAUTH login procedure and is used here to initialize state.
+       */
+      UserAreaObservable.subscribe((id) => {
+        vm.userAreaId = id;
+
+      });
+
     };
 
   }
@@ -53,6 +55,7 @@
     templateUrl: 'templates/component/side-nav.html',
     controller: NavigationController,
     controllerAs: 'vm'
+
   });
 
 })();

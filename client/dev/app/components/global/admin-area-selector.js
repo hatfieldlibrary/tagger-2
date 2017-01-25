@@ -52,9 +52,9 @@
        * Watches for update to the user's area. The value is obtained in the Passport
        * OAUTH login procedure and is used here to initialize state.
        */
-      UserAreaObservable.subscribe(function onNext() {
+      UserAreaObservable.subscribe((id) => {
 
-        vm.userAreaId = UserAreaObservable.get();
+        vm.userAreaId = id;
 
         if (vm.userAreaId === 0) {
           var areas = AreaList.query();
@@ -69,8 +69,8 @@
         }
       });
 
-      AreaListObservable.subscribe(function onNext() {
-        const areas = AreaListObservable.get();
+      AreaListObservable.subscribe((list) => {
+        const areas = list;
         if (areas.length > 0) {
           vm.areas = areas;
           if (UserAreaObservable.get() === 0) {
