@@ -17,7 +17,9 @@
 
 /**
  * Created by mspalti on 12/6/16.
+ *
  */
+'use strict';
 import areaDao from '../../../../server/api/tagger/dao/area-dao';
 import tagDao from  '../../../../server/api/tagger/dao/tags-dao';
 import targetDao from '../../../../server/api/tagger/dao/tag-target-dao';
@@ -26,7 +28,7 @@ import db from '../_helpers/db';
 import {expect} from 'chai';
 import async from 'async';
 
-'use strict';
+
 
 const initAreas = [
   'Init Area One',
