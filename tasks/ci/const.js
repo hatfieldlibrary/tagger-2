@@ -1,7 +1,7 @@
 /**
  * Created by mspalti on 1/16/17.
  */
-
+'use strict';
 export const path = {
   SERVER: process.cwd() + '/server',
   CLIENT: process.cwd() + '/client'

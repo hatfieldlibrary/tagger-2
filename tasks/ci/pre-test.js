@@ -1,6 +1,8 @@
 /**
  * Created by mspalti on 1/16/17.
  */
+'use strict';
+
 import gulp from 'gulp';
 const isparta = require('isparta');
 import istanbul from 'gulp-istanbul';
