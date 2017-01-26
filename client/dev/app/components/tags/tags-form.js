@@ -24,8 +24,8 @@
   'use strict';
 
   function FormController(UserAreaObservable,
-                          TagListObserver,
-                          TagObserver,
+                          TagListObservable,
+                          TagObservable,
                           TagById,
                           TagUpdate,
                           TagList,
@@ -33,8 +33,8 @@
 
     const vm = this;
 
-    TagObserver.subscribe(function onNext() {
-      const tagId = TagObserver.get();
+    TagObservable.subscribe(function onNext() {
+      const tagId = TagObservable.get();
       _getTagInfo(tagId);
     });
 
@@ -42,8 +42,8 @@
       vm.userAreaId = UserAreaObservable.get();
     });
 
-    // TagListObserver.subscribe(function onNext() {
-    //   vm.tags = TagListObserver.get();
+    // TagListObservable.subscribe(function onNext() {
+    //   vm.tags = TagListObservable.get();
     //   console.log(vm.tags)
     // });
 
@@ -67,7 +67,7 @@
           let tags = TagList.query();
           tags.$promise.then(function (list) {
             vm.tags = list;
-            TagListObserver.set(list);
+            TagListObservable.set(list);
             // Toast upon success
             new TaggerToast('Tag Updated');
           });
@@ -78,8 +78,8 @@
 
     vm.$onInit = function () {
       vm.userAreaId = UserAreaObservable.get();
-      let tagId = TagObserver.get();
-      vm.tags = TagListObserver.get();
+      let tagId = TagObservable.get();
+      vm.tags = TagListObservable.get();
 
       if (tagId) {
         _getTagInfo(tagId);

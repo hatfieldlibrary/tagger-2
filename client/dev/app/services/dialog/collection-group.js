@@ -12,8 +12,8 @@
               CategoryDelete,
               CategoryAdd,
               CategoryList,
-              GroupListObserver,
-              GroupObserver,
+              CollectionObservable,
+              GroupObservable,
               TaggerToast) {
 
       const _controller = function () {
@@ -32,7 +32,7 @@
          */
         vm.deleteCategory = function () {
 
-          const result = CategoryDelete.save({id: GroupObserver.get()});
+          const result = CategoryDelete.save({id: GroupObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -81,12 +81,12 @@
 
           const categories = CategoryList.query();
           categories.$promise.then(function (data) {
-            GroupListObserver.set(data);
+            CollectionObservable.set(data);
             if (id === null) {
-              GroupObserver.set(data[0].id);
+              GroupObservable.set(data[0].id);
 
             } else {
-              GroupObserver.set(id);
+              GroupObservable.set(id);
 
             }
           });

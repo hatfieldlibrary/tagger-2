@@ -25,8 +25,8 @@
   function TagController(DialogStrategy,
                          UserAreaObservable,
                          TagList,
-                         TagListObserver,
-                         TagObserver) {
+                         TagListObservable,
+                         TagObservable) {
 
     const vm = this;
 
@@ -41,19 +41,12 @@
     /** @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteTagMessage.html';
 
-    /**
-     * Get the dialog object for this component.
-     * Call with showDialog($event,message).
-     * @type {*}
-     */
-    vm.dialog =  DialogStrategy.makeDialog(vm);
-
     function _initTagList() {
       let tags = TagList.query();
       tags.$promise.then(function (data) {
         if (data.length > 0) {
-          TagListObserver.set(data);
-          TagObserver.set(data[0].id);
+          TagListObservable.set(data);
+          TagObservable.set(data[0].id);
 
         }
       });
@@ -65,7 +58,16 @@
     };
 
     vm.$onInit = function () {
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+      vm.dialog =  DialogStrategy.makeDialog(vm);
+
       _initTagList();
+
     };
   }
 

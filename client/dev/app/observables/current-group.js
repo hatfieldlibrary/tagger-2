@@ -22,7 +22,7 @@
 
   'use strict';
 
-  taggerServices.factory('GroupObserver', ['rx', function(rx){
+  taggerServices.factory('GroupObservable', ['rx', function(rx){
 
     const Subject = new rx.Subject();
     let category = 0;
