@@ -1,7 +1,7 @@
 #  Tagger
  
 [![Build Status](https://travis-ci.org/hatfieldlibrary/tagger-2.svg?branch=master)](https://travis-ci.org/hatfieldlibrary/tagger-2)
-[![Coverage Status](https://coveralls.io/repos/github/hatfieldlibrary/tagger-2/badge.svg)](https://coveralls.io/github/hatfieldlibrary/tagger-2)
+[![[![Coverage Status](https://coveralls.io/repos/github/hatfieldlibrary/tagger-2/badge.svg?branch=master)](https://coveralls.io/github/hatfieldlibrary/tagger-2?branch=master)
 [![bitHound Dependencies](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/dependencies.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2/master/dependencies/npm)
 [![bitHound Code](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/code.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
 [![bitHound Overall Score](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/score.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
