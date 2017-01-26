@@ -25,8 +25,8 @@
   function TypeController(DialogStrategy,
                           UserAreaObservable,
                           TagList,
-                          TagListObserver,
-                          TagObserver) {
+                          TagListObservable,
+                          TagObservable) {
 
     const vm = this;
 
@@ -54,8 +54,8 @@
       var tags = TagList.query();
       tags.$promise.then(function (data) {
         if (data.length > 0) {
-          TagListObserver.set(data);
-          TagObserver.set(data[0].id);
+          TagListObservable.set(data);
+          TagObservable.set(data[0].id);
 
         }
       });

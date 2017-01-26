@@ -15,8 +15,8 @@
               TagTargetRemove,
               TagAdd,
               TagList,
-              TagListObserver,
-              TagObserver,
+              TagListObservable,
+              TagObservable,
               TagAreaObservable,
               AreaObservable,
               TaggerToast) {
@@ -37,7 +37,7 @@
        */
       vm.deleteTag = function () {
 
-        const result = TagDelete.save({id: TagObserver.get()});
+        const result = TagDelete.save({id: TagObservable.get()});
         result.$promise.then(function (data) {
           if (data.status === 'success') {
 
@@ -58,7 +58,7 @@
       vm.addAreaToTag = function () {
         const result = TagTargetAdd.query(
           {
-            tagId: TagObserver.get(),
+            tagId: TagObservable.get(),
             areaId: TagAreaObservable.get()
           }
         );
@@ -82,7 +82,7 @@
       vm.removeAreaFromTag = function () {
         const result = TagTargetRemove.query(
           {
-            tagId: TagObserver.get(),
+            tagId: TagObservable.get(),
             areaId: TagAreaObservable.get()
           }
         );
@@ -108,7 +108,7 @@
       vm.addTagToArea = function () {
         const result = TagTargetAdd.query(
           {
-            tagId: TagObserver.get(),
+            tagId: TagObservable.get(),
             areaId: AreaObservable.get()
           }
         );
@@ -127,7 +127,7 @@
       vm.removeTagFromArea = function () {
         const result = TagTargetRemove.query(
           {
-            tagId: TagObserver.get(),
+            tagId: TagObservable.get(),
             areaId: AreaObservable.get()
           }
         );
@@ -172,11 +172,11 @@
         const tags = TagList.query();
         tags.$promise.then(function (tags) {
           if (id === null) {
-            TagObserver.set(tags[0].id);
+            TagObservable.set(tags[0].id);
           } else {
-            TagObserver.set(id);
+            TagObservable.set(id);
           }
-          TagListObserver.set(tags);
+          TagListObservable.set(tags);
 
           vm.closeDialog();
         });

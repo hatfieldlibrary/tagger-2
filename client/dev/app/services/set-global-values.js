@@ -7,11 +7,11 @@
 
   taggerServices.factory('SetGlobalValues',
     (CategoryList,
-     GroupListObserver,
-     GroupObserver,
+     CollectionObservable,
+     GroupObservable,
      TagList,
-     TagListObserver,
-     TagObserver,
+     TagListObservable,
+     TagObservable,
      ContentTypeList,
      ContentTypeListObserver,
      ContentTypeObserver) => {
@@ -24,16 +24,16 @@
           // Initialize global collection groups.
           const categories = CategoryList.query();
           categories.$promise.then(function (data) {
-            GroupListObserver.set(data);
-            GroupObserver.set(data[0].id);
+            CollectionObservable.set(data);
+            GroupObservable.set(data[0].id);
           });
 
           // Initialize global tags.
           const tags = TagList.query();
           tags.$promise.then(function (data) {
             if (data.length > 0) {
-              TagListObserver.set(data);
-              TagObserver.set(data[0].id);
+              TagListObservable.set(data);
+              TagObservable.set(data[0].id);
 
             }
           });

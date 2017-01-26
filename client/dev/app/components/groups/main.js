@@ -25,15 +25,12 @@
   function GroupController(DialogStrategy,
                            UserAreaObservable,
                            CategoryList,
-                           GroupListObserver,
-                           GroupObserver) {
+                           GroupListObservable,
+                           GroupObservable) {
 
     const vm = this;
 
     vm.currentCategory = {};
-
-    /** @type {number} */
-    vm.userAreaId = UserAreaObservable.get();
 
     /** @type {string} */
     vm.addMessage = 'templates/dialog/addCategoryMessage.html';
@@ -41,20 +38,12 @@
     /** @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteCategoryMessage.html';
 
-    /**
-     * Get the dialog object for this component.
-     * Call with showDialog($event,message).
-     * @type {*}
-     */
-    vm.dialog =  DialogStrategy.makeDialog(vm);
-
     function _initTagList() {
       var tags = CategoryList.query();
       tags.$promise.then(function (data) {
         if (data.length > 0) {
-          GroupListObserver.set(data);
-          GroupObserver.set(data[0].id);
-
+          GroupListObservable.set(data);
+          GroupObservable.set(data[0].id);
         }
       });
     }
@@ -65,6 +54,17 @@
     };
 
     vm.$onInit = function () {
+
+      /** @type {number} */
+      vm.userAreaId = UserAreaObservable.get();
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+      vm.dialog =  DialogStrategy.makeDialog(vm);
+
       _initTagList();
     };
   }

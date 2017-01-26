@@ -25,7 +25,7 @@
 
   function TagAreaController($scope,
                        TagTargets,
-                       TagObserver,
+                       TagObservable,
                        TagAreaObservable,
                        AreaListObservable,
                        DialogStrategy) {
@@ -37,21 +37,22 @@
 
     vm.areas = AreaListObservable.get();
 
-    /**
-     * Watch updates the current list of area targets
-     * when the current tag id changes.
-     */
-    TagObserver.subscribe(function onNext() {
-      _getCurrentAreaTargets(TagObserver.get());
-    });
-    /**
-     * Watches the global list of areas and updates local
-     * area list on change.
-     */
-    AreaListObservable.subscribe(function onNext() {
-      vm.areas = AreaListObservable.get();
-    });
-
+    function _setSubscriptions() {
+      /**
+       * Watch updates the current list of area targets
+       * when the current tag id changes.
+       */
+      TagObservable.subscribe((tag) => {
+        _getCurrentAreaTargets(tag);
+      });
+      /**
+       * Watches the global list of areas and updates local
+       * area list on change.
+       */
+      AreaListObservable.subscribe((list) => {
+        vm.areas = list;
+      });
+    }
 
     /** @type {Array.<Object>} */
     vm.areas = AreaListObservable.get();
@@ -64,8 +65,10 @@
      * @param id the id of the tag
      */
     function _getCurrentAreaTargets(id) {
-      vm.areaTargets = TagTargets.query({tagId: id});
-
+      const tagTargets = TagTargets.query({tagId: id});
+      tagTargets.$promise.then((targets) => {
+        vm.areaTargets = targets;
+      });
     }
 
     /**
@@ -131,6 +134,8 @@
 
     vm.$onInit = function() {
 
+      _setSubscriptions();
+
       /**
        * Get the dialog object for this component.
        * Call with showDialog($event,message).
@@ -138,9 +143,10 @@
        */
        vm.dialog = DialogStrategy.makeDialog(vm);
 
+      let id = TagObservable.get();
 
-      let id = TagObserver.get();
       _getCurrentAreaTargets(id);
+
     };
 
 

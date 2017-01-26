@@ -29,7 +29,7 @@
        */
       function _getConstructorName(constructor) {
         let result = /^function\s+([\w\$]+)\s*\(/.exec(constructor);
-        return result ? result[1] : ''
+        return result ? result[1] : '';
 
       }
 
@@ -45,28 +45,28 @@
         switch (constructor) {
           case 'AreasController':
             return Object.assign({}, ShowDialog, AreaDialog);
-            break;
+
           case 'CollectionController':
             return Object.assign({}, ShowDialog, CollectionDialog);
-            break;
+
           case 'TagController':
             return Object.assign({}, ShowDialog, TagDialog);
-            break;
+
           case 'TypeController':
             return Object.assign({}, ShowDialog, ContentTypeDialog);
-            break;
+
           case 'GroupController':
             return Object.assign({}, ShowDialog, CollectionGroupDialog);
-            break;
+
           case 'ImageController':
             return Object.assign({}, ShowDialog, ImageDialog);
-            break;
+
           case 'ToggleController':
             return Object.assign({}, ShowDialog, TagDialog);
-            break;
+
           case 'TagAreaController':
             return Object.assign({}, ShowDialog, TagDialog);
-            break;
+
           default:
             console.log('WARNING: controller not found ' + constructor);
 
@@ -75,7 +75,7 @@
 
       return {
         makeDialog: _makeDialog
-      }
+      };
     }
   );
 

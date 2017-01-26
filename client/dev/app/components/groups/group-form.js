@@ -23,8 +23,8 @@
   'use strict';
 
   function FormController(UserAreaObservable,
-                          GroupListObserver,
-                          GroupObserver,
+                          GroupListObservable,
+                          GroupObservable,
                           Category,
                           CategoryUpdate,
                           CategoryList,
@@ -33,14 +33,11 @@
 
     const vm = this;
 
-    GroupObserver.subscribe(function onNext() {
-      const groupId = GroupObserver.get();
-      _getGroupInfo(groupId);
-    });
 
     function _getGroupInfo(grpId) {
       let grp = Category.query({id: grpId});
       grp.$promise.then(function (data) {
+        console.log(data)
         vm.category = data;
         // parent menu callback
         vm.menu({id: vm.category.id, title: vm.category.title});
@@ -59,7 +56,7 @@
 
     vm.updateGroup = function () {
 
-      var success = CategoryUpdate.save({
+      let success = CategoryUpdate.save({
 
         title: vm.category.title,
         url: vm.category.url,
@@ -70,11 +67,13 @@
 
       });
       success.$promise.then(function (data) {
+
         if (data.status === 'success') {
+          console.log(data)
           let groups = CategoryList.query();
           groups.$promise.then(function (list) {
             vm.categories = list;
-            GroupListObserver.set(list);
+            GroupListObservable.set(list);
             // Toast upon success
             new TaggerToast('Category Updated');
           });
@@ -84,10 +83,17 @@
     };
 
     vm.$onInit = function () {
+
+      GroupObservable.subscribe((id) => {
+        _getGroupInfo(id);
+      });
+
       vm.userAreaId = UserAreaObservable.get();
-      vm.categories = GroupListObserver.get();
+      vm.categories = GroupListObservable.get();
+
       _getAreas();
-      let groupId = GroupObserver.get();
+
+      let groupId = GroupObservable.get();
       if (groupId) {
         _getGroupInfo(groupId);
       }
