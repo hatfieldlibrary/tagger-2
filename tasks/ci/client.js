@@ -1,6 +1,7 @@
 /**
  * Created by mspalti on 1/16/17.
  */
+'use strict';
 import gulp from 'gulp';
 import {tasks} from './const';
 import {Server as Karma} from 'karma';

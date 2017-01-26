@@ -1,12 +1,12 @@
 /**
  * Created by mspalti on 1/21/17.
  */
-
+'use strict';
 (function () {
 
   // User's home directory. Should be OS agnostic.
   function getUserHome() {
-    return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+    return process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
   }
   // Home of the development/test credentials file.
   const devDirectory = getUserHome() + '/etc/tagger/';
