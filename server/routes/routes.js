@@ -14,10 +14,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+'use strict';
 module.exports = function(app,config){
 
-  'use strict';
+
 
   const userInfo = require('../../server/api/tagger/controllers/user-info');
   const tag = require('../../server/api/tagger/controllers/tags/admin');
