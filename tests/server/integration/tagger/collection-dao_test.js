@@ -115,7 +115,7 @@ describe('Collection init', () => {
 
     let _onSuccess = (collection) => {
 
-      expect(collection).to.be.defined();
+      expect(collection).to.be.defined;
       expect(collection.dataValues.title).to.have.string(initCollections[0]);
       done();
     };
@@ -132,7 +132,7 @@ describe('Collection init', () => {
 
   it('should update the publication status of the collection', (done) => {
     let _onSuccess = (collection) => {
-      expect(collection).to.be.defined();
+      expect(collection).to.be.defined;
       expect(collection[0]).to.equal(1);
       done();
     };
@@ -149,7 +149,7 @@ describe('Collection init', () => {
 
   it('should get the new publication status for the collection', (done) => {
     let _onSuccess = (collection) => {
-      expect(collection).to.be.defined();
+      expect(collection).to.be.defined;
       expect(collection.dataValues.published).to.be.true;
       done();
     };
@@ -289,7 +289,7 @@ describe('Collection operations', () => {
   it('should find collection with id 1.', (done) => {
 
     let _onSuccess = (collections) => {
-      expect(collections).to.be.defined();
+      expect(collections).to.be.defined;
       expect(collections.dataValues.title).to.have.string(initCollections[0]);
       done();
     };
@@ -308,7 +308,7 @@ describe('Collection operations', () => {
   it('should add collection to area one', (done) => {
 
     let _onSuccess = (collection) => {
-      expect(collection).to.be.defined();
+      expect(collection).to.be.defined;
       expect(collection.dataValues.CollectionId).to.equal(2);
       expect(collection.dataValues.AreaId).to.equal(1);
       done();
@@ -327,7 +327,7 @@ describe('Collection operations', () => {
 
   it('should add collection to category one', (done) => {
     let _onSuccess = (collection) => {
-      expect(collection).to.be.defined();
+      expect(collection).to.be.defined;
       expect(collection.dataValues.CollectionId).to.equal(1);
       expect(collection.dataValues.CategoryId).to.equal(1);
       done();
@@ -345,7 +345,7 @@ describe('Collection operations', () => {
 
   it('should add content type to collection', (done) => {
     let _onSuccess = (collection) => {
-      expect(collection).to.be.defined();
+      expect(collection).to.be.defined;
       expect(collection.dataValues.CollectionId).to.equal(1);
       expect(collection.dataValues.ItemContentId).to.equal(1);
       done();
@@ -364,7 +364,7 @@ describe('Collection operations', () => {
 
   it('should add subject tag to collection', (done) => {
     let _onSuccess = (collection) => {
-      expect(collection).to.be.defined();
+      expect(collection).to.be.defined;
       expect(collection.dataValues.CollectionId).to.equal(1);
       expect(collection.dataValues.TagId).to.equal(1);
       done();
@@ -383,7 +383,7 @@ describe('Collection operations', () => {
 
   it('should retrieve all collections', (done) => {
     let _onSuccess = (collections) => {
-      expect(collections).to.be.defined();
+      expect(collections).to.be.defined;
       expect(collections[1].dataValues.title).to.have.string('Init Collection Two');
       done();
     };
@@ -400,7 +400,7 @@ describe('Collection operations', () => {
 
   it('should update collection with id 2', (done) => {
     let _onSuccess = (collection) => {
-      expect(collection).to.be.defined();
+      expect(collection).to.be.defined;
       expect(collection[0]).to.equal(1);
       done();
     };
@@ -418,7 +418,7 @@ describe('Collection operations', () => {
 
   it('should return collections for area.', (done) => {
     let _onSuccess = (collections) => {
-      expect(collections).to.be.defined();
+      expect(collections).to.be.defined;
       expect(collections.length).to.equal(1);
       done();
     };
@@ -434,7 +434,7 @@ describe('Collection operations', () => {
 
   it('should get the publication status of the collection', (done) => {
     let _onSuccess = (collection) => {
-      expect(collection).to.be.defined();
+      expect(collection).to.be.defined;
       expect(collection.dataValues.published).to.be.true;
       done();
     };
@@ -451,7 +451,7 @@ describe('Collection operations', () => {
 
   it('should find collection types for area one', (done) => {
     let _onSuccess = (count) => {
-      expect(count).to.be.defined();
+      expect(count).to.be.defined;
       expect(count[0].ctype).to.have.string('col');
       expect(count[0].count).to.equal(1);
       done();
@@ -469,7 +469,7 @@ describe('Collection operations', () => {
 
   it('should find browse types for area 1', (done) => {
     let _onSuccess = (count) => {
-      expect(count).to.be.defined();
+      expect(count).to.be.defined;
       expect(count[0].browseType).to.have.string('test');
       expect(count[0].count).to.equal(1);
       done();
@@ -488,7 +488,7 @@ describe('Collection operations', () => {
 
   it('should find repo types for area 1', (done) => {
     let _onSuccess = (count) => {
-      expect(count).to.be.defined();
+      expect(count).to.be.defined;
       expect(count[0].repoType).to.have.string('search');
       expect(count[0].count).to.equal(1);
       done();
@@ -506,7 +506,7 @@ describe('Collection operations', () => {
 
   it('should find collections in area 1', (done) => {
     let _onSuccess = (collections) => {
-      expect(collections).to.be.defined();
+      expect(collections).to.be.defined;
       expect(collections[0].dataValues.CollectionId).to.equal(2);
       done();
     };
@@ -523,7 +523,7 @@ describe('Collection operations', () => {
 
   it('should find areas for collection 2', (done) => {
     let _onSuccess = (areas) => {
-      expect(areas).to.be.defined();
+      expect(areas).to.be.defined;
       expect(areas[0].dataValues.AreaId).to.equal(1);
       done();
     };
@@ -540,7 +540,7 @@ describe('Collection operations', () => {
 
   it('should check for existing association between collection and content type', (done) => {
     let _onSuccess = (type) => {
-      expect(type).to.be.defined();
+      expect(type).to.be.defined;
       expect(type.dataValues.ItemContentId).to.equal(1);
       done();
     };
@@ -557,7 +557,7 @@ describe('Collection operations', () => {
 
   it('should find content types for collection.', (done) => {
     let _onSuccess = (type) => {
-      expect(type).to.be.defined();
+      expect(type).to.be.defined;
       expect(type[0].dataValues.ItemContentId).to.equal(1);
       done();
     };
@@ -574,7 +574,7 @@ describe('Collection operations', () => {
 
   it('should check for existing association between tag and collection.', (done) => {
     let _onSuccess = (tag) => {
-      expect(tag).to.be.defined();
+      expect(tag).to.be.defined;
       expect(tag.dataValues.TagId).to.equal(1);
       done();
     };
@@ -591,7 +591,7 @@ describe('Collection operations', () => {
 
   it('should find areas for collection.', (done) => {
     let _onSuccess = (areas) => {
-      expect(areas).to.be.defined();
+      expect(areas).to.be.defined;
       expect(areas[0].dataValues.AreaId).to.equal(1);
       done();
     };
@@ -607,7 +607,7 @@ describe('Collection operations', () => {
 
   it('should check for association between area and collection.', (done) => {
     let _onSuccess = (areas) => {
-      expect(areas).to.be.defined();
+      expect(areas).to.be.defined;
       expect(areas.dataValues.AreaId).to.equal(1);
       done();
     };
@@ -623,7 +623,7 @@ describe('Collection operations', () => {
 
   it('should find collection by collection id', (done) => {
     let _onSuccess = (collection) => {
-      expect(collection).to.be.defined();
+      expect(collection).to.be.defined;
       expect(collection.dataValues.title).to.have.string('Updated Collection');
       done();
     };
@@ -639,7 +639,7 @@ describe('Collection operations', () => {
 
   it('should find category for collection.', (done) => {
     let _onSuccess = (category) => {
-      expect(category).to.be.defined();
+      expect(category).to.be.defined;
       expect(category.dataValues.CategoryId).to.equal(1);
       done();
     };
@@ -656,7 +656,7 @@ describe('Collection operations', () => {
 
   it('should update the collection category.', (done) => {
     let _onSuccess = (category) => {
-      expect(category).to.be.defined();
+      expect(category).to.be.defined;
       expect(category[0]).to.equal(1);
       done();
     };
@@ -672,7 +672,7 @@ describe('Collection operations', () => {
 
   it('should update the collection image name.', (done) => {
     let _onSuccess = (image) => {
-      expect(image).to.be.defined();
+      expect(image).to.be.defined;
       expect(image[0]).to.equal(1);
       done();
     };
@@ -688,7 +688,7 @@ describe('Collection operations', () => {
 
   it('should find subject tags for collection.', (done) => {
     let _onSuccess = (tags) => {
-      expect(tags).to.be.defined();
+      expect(tags).to.be.defined;
       expect(tags[0].dataValues.id).to.equal(1);
       expect(tags[0].dataValues.Tag).to.be.an('object');
       done();
@@ -705,7 +705,7 @@ describe('Collection operations', () => {
 
   it('should return collections for area.', (done) => {
     let _onSuccess = (collections) => {
-      expect(collections).to.be.defined();
+      expect(collections).to.be.defined;
       expect(collections[0].title).to.have.string('Updated Collection');
       done();
     };
@@ -721,7 +721,7 @@ describe('Collection operations', () => {
 
   it('should return collection in subject and area.', (done) => {
     let _onSuccess = (collections) => {
-      expect(collections).to.be.defined();
+      expect(collections).to.be.defined;
       // should be no match
       expect(collections.length).to.equal(0);
       done();
@@ -738,7 +738,7 @@ describe('Collection operations', () => {
 
   it('should get collections by subject tag.', (done) => {
     let _onSuccess = (collections) => {
-      expect(collections).to.be.defined();
+      expect(collections).to.be.defined;
       expect(collections[0].CollectionId).to.equal(1);
       expect(collections[0].title).to.have.string('Init Collection One');
       done();
@@ -755,7 +755,7 @@ describe('Collection operations', () => {
 
   it('should get collections by category.', (done) => {
     let _onSuccess = (collections) => {
-      expect(collections).to.be.defined();
+      expect(collections).to.be.defined;
       expect(collections[0].CollectionId).to.equal(1);
       expect(collections[0].title).to.have.string('Init Collection One');
       done();
