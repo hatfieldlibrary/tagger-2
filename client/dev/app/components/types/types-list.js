@@ -22,32 +22,34 @@
 
   'use strict';
 
-  function ListController(ContentTypeListObserver,
-                          ContentTypeObserver,
+  function ListController(ContentTypeListObservable,
+                          ContentTypeObservable,
                           UserAreaObservable) {
 
-    var vm = this;
-
-    ContentTypeListObserver.subscribe(function onNext() {
-      vm.types = ContentTypeListObserver.get();
-      vm.currentType = vm.types[0].id;
-    });
+    let vm = this;
 
     vm.resetType = function (typeId) {
-      ContentTypeObserver.set(typeId);
+      ContentTypeObservable.set(typeId);
       vm.currentType = typeId;
     };
 
     vm.$onInit = function () {
 
+      ContentTypeListObservable.subscribe((list) => {
+        vm.types = list;
+        vm.currentType = vm.types[0].id;
+      });
+
       vm.userAreaId = UserAreaObservable.get();
+
       // If current type exists, use it.
-      const currentType = ContentTypeObserver.get();
+      const currentType = ContentTypeObservable.get();
       if (currentType) {
         vm.currentType = currentType;
       }
+
       // If current type list exists, use it.
-      const typeList = ContentTypeListObserver.get();
+      const typeList = ContentTypeListObservable.get();
       if (typeList) {
         vm.types = typeList;
       }

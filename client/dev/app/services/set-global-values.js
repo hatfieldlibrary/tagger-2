@@ -13,8 +13,8 @@
      TagListObservable,
      TagObservable,
      ContentTypeList,
-     ContentTypeListObserver,
-     ContentTypeObserver) => {
+     ContentTypeListObservable,
+     ContentTypeObservable) => {
 
       /**
        * Initializes global values not specific to the area.
@@ -42,8 +42,8 @@
           const types = ContentTypeList.query();
           types.$promise.then(function (data) {
             if (data.length > 0) {
-              ContentTypeListObserver.set(data);
-              ContentTypeObserver.set(data[0].id);
+              ContentTypeListObservable.set(data);
+              ContentTypeObservable.set(data[0].id);
             }
 
           });

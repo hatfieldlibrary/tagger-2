@@ -35,8 +35,6 @@
     let removeMessage = 'templates/dialog/removeAreaFromTagMessage.html';
     let addMessage = 'templates/dialog/addAreaToTagMessage.html';
 
-    vm.areas = AreaListObservable.get();
-
     function _setSubscriptions() {
       /**
        * Watch updates the current list of area targets
@@ -133,6 +131,8 @@
     }
 
     vm.$onInit = function() {
+
+      vm.areas = AreaListObservable.get();
 
       _setSubscriptions();
 

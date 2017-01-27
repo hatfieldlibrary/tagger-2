@@ -24,50 +24,63 @@
 
   function TypeController(DialogStrategy,
                           UserAreaObservable,
-                          TagList,
-                          TagListObservable,
-                          TagObservable) {
+                          ContentTypeList,
+                          ContentTypeListObservable,
+                          ContentTypeObservable) {
 
     const vm = this;
 
-    console.log(vm.constructor.name)
-
+    /**
+     * The object contains values for currently selected type.
+     * @type {{}}
+     */
     vm.currentType = {};
 
-    /** @type {number} */
-    vm.userAreaId = UserAreaObservable.get();
-
-    /** @type {string} */
+    /**
+     * Content of the add dialog.
+     * @type {string} */
     vm.addMessage = 'templates/dialog/addContentMessage.html';
 
-    /** @type {string} */
+    /**
+     * Content of the remove dialog.
+     * @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteContentMessage.html';
 
-    /**
-     * Get the dialog object for this component.
-     * Call with showDialog($event,message).
-     * @type {*}
-     */
-    vm.dialog =  DialogStrategy.makeDialog(vm);
-
     function _initTagList() {
-      var tags = TagList.query();
+      let tags = ContentTypeList.query();
       tags.$promise.then(function (data) {
         if (data.length > 0) {
-          TagListObservable.set(data);
-          TagObservable.set(data[0].id);
+          ContentTypeListObservable.set(data);
+          ContentTypeObservable.set(data[0].id);
 
         }
       });
     }
 
-
+    /**
+     * Updates the title and id on the view model.
+     * This is a callback method used by children.
+     * @param id
+     * @param title
+     */
     vm.menuUpdate = function(id, title) {
       vm.currentType.title = title;
       vm.currentType.id = id;
     };
 
     vm.$onInit = function () {
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+      vm.dialog =  DialogStrategy.makeDialog(vm);
+
+
+      /** @type {number} */
+      vm.userAreaId = UserAreaObservable.get();
+
       _initTagList();
     };
   }

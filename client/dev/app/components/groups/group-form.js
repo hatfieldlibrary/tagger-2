@@ -37,7 +37,6 @@
     function _getGroupInfo(grpId) {
       let grp = Category.query({id: grpId});
       grp.$promise.then(function (data) {
-        console.log(data)
         vm.category = data;
         // parent menu callback
         vm.menu({id: vm.category.id, title: vm.category.title});
@@ -69,7 +68,6 @@
       success.$promise.then(function (data) {
 
         if (data.status === 'success') {
-          console.log(data)
           let groups = CategoryList.query();
           groups.$promise.then(function (list) {
             vm.categories = list;
