@@ -30,10 +30,11 @@
 
     const vm = this;
 
+    /**
+     * The object contains values for currently selected tag.
+     * @type {{}}
+     */
     vm.currentTag = {};
-
-    /** @type {number} */
-    vm.userAreaId = UserAreaObservable.get();
 
     /** @type {string} */
     vm.addMessage = 'templates/dialog/addTagMessage.html';
@@ -52,12 +53,21 @@
       });
     }
 
+    /**
+     * Updates the title and id on the view model.
+     * This is a callback method used by children.
+     * @param id
+     * @param title
+     */
     vm.menuUpdate = function(id, title) {
       vm.currentTag.title = title;
       vm.currentTag.id = id;
     };
 
     vm.$onInit = function () {
+
+      /** @type {number} */
+      vm.userAreaId = UserAreaObservable.get();
 
       /**
        * Get the dialog object for this component.

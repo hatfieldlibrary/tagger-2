@@ -29,10 +29,13 @@
 
     var vm = this;
 
-    TagListObservable.subscribe(function onNext() {
-      vm.tags = TagListObservable.get();
-      vm.currentTag = vm.tags[0].id;
-    });
+
+    function _setSubscriptions() {
+      TagListObservable.subscribe((list) => {
+        vm.tags = list;
+        vm.currentTag = vm.tags[0].id;
+      });
+    }
 
     vm.resetTag = function (tagId) {
       TagObservable.set(tagId);
@@ -40,6 +43,8 @@
     };
 
     vm.$onInit = function () {
+
+      _setSubscriptions();
 
       vm.userAreaId = UserAreaObservable.get();
       // If current tag exists, use it.

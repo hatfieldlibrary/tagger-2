@@ -22,7 +22,7 @@
 
   'use strict';
 
-  taggerServices.factory('ContentTypeObserver', ['rx', function(rx){
+  taggerServices.factory('ContentTypeObservable', ['rx', function(rx){
 
     const Subject = new rx.Subject();
     let contentType = 0;

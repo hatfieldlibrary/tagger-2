@@ -17,7 +17,8 @@ describe('The tags area selector component', () => {
     deferred,
     tagId,
     tagTargetList,
-    areaId;
+    areaId,
+    areaList;
 
   beforeEach(module('tagger'));
 
@@ -109,10 +110,22 @@ describe('The tags area selector component', () => {
         AreaId: 1
       },
       {
-        AreaId: 2
+        AreaId: 3
+      }
+    ];
+
+    areaList = [
+      {
+        name: 'the observed area one',
+        id: 1
       },
       {
-        AreaId: 3
+        name: 'area two',
+        id: 2
+      },
+      {
+        name: 'area three',
+        id: 3
       }
     ];
 
@@ -143,7 +156,7 @@ describe('The tags area selector component', () => {
     spyOn(TagAreaObservable, 'set').and.callFake((x) => {
       fakeTagListCallback(x)
     });
-    spyOn(TagAreaObservable, 'get').and.callFake((x) => {
+    spyOn(TagAreaObservable, 'get').and.callFake(() => {
       return tagTargetList;
     });
 
@@ -154,7 +167,7 @@ describe('The tags area selector component', () => {
     spyOn(TagObservable, 'set').and.callFake((x) => {
       fakeTagCallback(x)
     });
-    spyOn(TagObservable, 'get').and.callFake((x) => {
+    spyOn(TagObservable, 'get').and.callFake(() => {
       return tagId;
     });
     spyOn(TagObservable, 'subscribe').and.callFake((o) => {
@@ -164,8 +177,8 @@ describe('The tags area selector component', () => {
     spyOn(AreaListObservable, 'set').and.callFake((x) => {
       fakeAreaCallback(x)
     });
-    spyOn(AreaListObservable, 'get').and.callFake((x) => {
-      return areaId;
+    spyOn(AreaListObservable, 'get').and.callFake(() => {
+      return areaList;
     });
     spyOn(AreaListObservable, 'subscribe').and.callFake((o) => {
       fakeAreaCallback = o
@@ -225,7 +238,46 @@ describe('The tags area selector component', () => {
 
   });
 
+  it('should update the area list by subscription', () => {
 
+    let ctrl = $componentController('tagAreaSelector', null);
+
+    ctrl.$onInit();
+
+    AreaListObservable.set(areaList);
+    expect(ctrl.areas).toEqual(areaList);
+
+  });
+
+  it('should identify the area as chosen', () => {
+
+    let ctrl = $componentController('tagAreaSelector', null);
+
+    ctrl.$onInit();
+
+    deferred.resolve(tagTargetList);
+    $rootScope.$apply();
+
+    AreaListObservable.set(areaList);
+    let status = ctrl.isChosen(3);
+    expect(status).toBe(true);
+
+  });
+
+  it('should identify the area as not chosen', () => {
+
+    let ctrl = $componentController('tagAreaSelector', null);
+
+    ctrl.$onInit();
+
+    deferred.resolve(tagTargetList);
+    $rootScope.$apply();
+
+    AreaListObservable.set(areaList);
+    let status = ctrl.isChosen(2);
+    expect(status).toBe(false);
+
+  });
 
 
 });

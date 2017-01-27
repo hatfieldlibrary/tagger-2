@@ -27,12 +27,13 @@
 
     let ctrl = this;
 
-    AreaObservable.subscribe(function onNext() {
-      _init(AreaObservable.get());
-
-    });
-
     ctrl.$onInit = function () {
+
+      AreaObservable.subscribe((id) => {
+        _init(id);
+
+      });
+
       _init(AreaObservable.get());
 
     };

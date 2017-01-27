@@ -33,19 +33,17 @@
 
     const vm = this;
 
-    TagObservable.subscribe(function onNext() {
-      const tagId = TagObservable.get();
-      _getTagInfo(tagId);
-    });
+    function _setSubscriptions() {
 
-    UserAreaObservable.subscribe(function onNext() {
-      vm.userAreaId = UserAreaObservable.get();
-    });
+      TagObservable.subscribe((id) => {
+        _getTagInfo(id);
+      });
 
-    // TagListObservable.subscribe(function onNext() {
-    //   vm.tags = TagListObservable.get();
-    //   console.log(vm.tags)
-    // });
+      UserAreaObservable.subscribe((areaId) => {
+        vm.userAreaId = areaId;
+      });
+
+    }
 
     function _getTagInfo(tagId) {
       const tag = TagById.query({id: tagId});
@@ -77,10 +75,12 @@
     };
 
     vm.$onInit = function () {
+
+      _setSubscriptions();
+
       vm.userAreaId = UserAreaObservable.get();
       let tagId = TagObservable.get();
       vm.tags = TagListObservable.get();
-
       if (tagId) {
         _getTagInfo(tagId);
       }

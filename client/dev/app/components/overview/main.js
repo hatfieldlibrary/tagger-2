@@ -30,15 +30,6 @@
 
     const ctrl = this;
 
-    AreaObservable.subscribe(() => {
-      let areaId = AreaObservable.get();
-      _setCollections(areaId);
-      _getCategories(areaId);
-      _getTypes(areaId);
-      _getTagCounts(areaId);
-      _getAreaInfo(areaId);
-    });
-
     function _setCollections(areaId) {
       let collections = CollectionsByArea.query({areaId: areaId});
       collections.$promise.then((data) => {
@@ -63,7 +54,6 @@
           data: data
         };
         ctrl.categoriesReady = true;
-
       });
 
     }
@@ -112,6 +102,7 @@
     }
 
     ctrl.$postLink = function () {
+
       ctrl.collectionCount = 0;
       let areaId = AreaObservable.get();
       _setCollections(areaId);
@@ -120,6 +111,18 @@
       _getTagCounts(areaId);
       _getAreaInfo(areaId);
     };
+
+    ctrl.$onInit = () => {
+
+      AreaObservable.subscribe((areaId) => {
+        _setCollections(areaId);
+        _getCategories(areaId);
+        _getTypes(areaId);
+        _getTagCounts(areaId);
+        _getAreaInfo(areaId);
+      });
+
+    }
 
   }
 

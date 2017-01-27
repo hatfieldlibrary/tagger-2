@@ -12,8 +12,8 @@
               ContentTypeDelete,
               ContentTypeList,
               ContentTypeAdd,
-              ContentTypeObserver,
-              ContentTypeListObserver,
+              ContentTypeObservable,
+              ContentTypeListObservable,
               TaggerToast) {
 
       const _controller = function() {
@@ -30,7 +30,7 @@
          */
         vm.deleteContentType = function () {
 
-          const result = ContentTypeDelete.save({id: ContentTypeObserver.get()});
+          const result = ContentTypeDelete.save({id: ContentTypeObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -59,12 +59,12 @@
           const contentTypes = ContentTypeList.query();
           // Wait for callback.
           contentTypes.$promise.then(function (data) {
-            ContentTypeListObserver.set(data);
+            ContentTypeListObservable.set(data);
             if (id === null) {
-              ContentTypeObserver.set(data[0].id);
+              ContentTypeObservable.set(data[0].id);
 
             } else {
-              ContentTypeObserver.set(id);
+              ContentTypeObservable.set(id);
             }
 
           });

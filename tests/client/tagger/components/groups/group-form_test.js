@@ -276,7 +276,6 @@ describe('The collection group/category form component', () => {
 
     ctrl.$onInit();
 
-    groupId = 2;
     GroupObservable.set(2);
     expect(Category.query).toHaveBeenCalledWith({id: 2});
 

@@ -31,17 +31,13 @@
     ctrl.itmCount = 0;
     ctrl.eadCount = 0;
 
-    AreaObservable.subscribe(function onNext() {
-      _init(AreaObservable.get());
 
-    });
 
     function _init(areaId) {
 
       if (areaId) {
         const types = CollectionTypeCount.query({areaId: areaId});
         types.$promise.then(function (data) {
-
           for (var i = 0; i < data.length; i++) {
             if (data[i].ctype === 'dig') {
               ctrl.digCount = data[i].count;
@@ -59,6 +55,11 @@
 
     ctrl.$onInit = function () {
       _init(AreaObservable.get());
+
+      AreaObservable.subscribe((areaId) => {
+        _init(areaId);
+
+      });
 
     };
 
