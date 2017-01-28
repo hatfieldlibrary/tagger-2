@@ -18,7 +18,7 @@
               AreaList,
               AreaObservable,
               AreaListObservable,
-              CollectionObservable,
+              GroupListObservable,
               TaggerToast) {
 
 
@@ -70,7 +70,7 @@
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              new TaggerToast('Area Added');
+              TaggerToast.toast('Area Added');
               // After area update succeeds, update the view.
               vm.getAreaList(data.id);
               vm.closeDialog();
@@ -89,11 +89,11 @@
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              new TaggerToast('Area Deleted');
+              TaggerToast.toast('Area Deleted');
               // after retrieving new area list, we need
               // to update the areas currently in view.
               vm.getAreaList(null);
-              CollectionObservable.set(-1);
+              AreaObservable.set(-1);
               vm.closeDialog();
 
             }

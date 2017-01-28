@@ -13,7 +13,7 @@
               CollectionAdd,
               CollectionDelete,
               CollectionListObservable,
-              CollectionObservable,
+              GroupListObservable,
               CollectionsByArea,
               AreaObservable,
               TaggerToast) {
@@ -48,7 +48,7 @@
         );
         result.$promise.then(function (data) {
           if (data.status === 'success') {
-            new TaggerToast('Collection Added');
+            TaggerToast.toast('Collection Added');
             // Update the collection list. The
             // id parameter will be used to select
             // the newly added category for editing.
@@ -69,7 +69,7 @@
         result.$promise.then(function (data) {
           if (data.status === 'success') {
 
-            new TaggerToast('Collection Deleted');
+            TaggerToast.toast('Collection Deleted');
             // After retrieving new collection list, we need
             // to update the category currently in view.
             // Given a null id parameter, the getCollectionList

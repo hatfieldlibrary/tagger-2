@@ -60,10 +60,10 @@
       update.$promise.then(function (data) {
         if (data.status === 'success') {
 
-          new TaggerToast('Publication Status Changed.');
+          TaggerToast.toast('Publication Status Changed.');
           PublicationStatusObservable.set(state);
         } else {
-          new TaggerToast('WARNING: Unable to update publication status!');
+          TaggerToast.toast('WARNING: Unable to update publication status!');
           return {};
         }
       });

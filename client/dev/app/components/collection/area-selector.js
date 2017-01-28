@@ -109,7 +109,7 @@
 
         if (_findArea(areaId, ctrl.areaTargets)) {
           if (ctrl.areaTargets.length === 1) {
-            new TaggerToast('Cannot remove area.  Collections must belong to at least one area.');
+            TaggerToast.toast('Cannot remove area.  Collections must belong to at least one area.');
 
           } else {
             let result = AreaTargetRemove.query({collId: CollectionObservable.get(), areaId: areaId});
@@ -118,7 +118,7 @@
                 ctrl.areaTargets = result.data.areaList;
                 // Update the collections list (one collection has just been removed from the area).
                 CollectionAreasObservable.set();
-                new TaggerToast('Collection removed from area.');
+                TaggerToast.toast('Collection removed from area.');
               }
             });
           }
@@ -130,7 +130,7 @@
           add.$promise.then(function (result) {
             if (result.status === 'success') {
               ctrl.areaTargets = result.data.areaList;
-              new TaggerToast('Collection added to Area.');
+              TaggerToast.toast('Collection added to Area.');
             }
           });
         }

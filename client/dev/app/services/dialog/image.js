@@ -10,7 +10,7 @@
 
     function ($mdDialog,
               Upload,
-              CollectionObservable,
+              GroupListObservable,
               ThumbImageObservable) {
 
       const _controller = function () {

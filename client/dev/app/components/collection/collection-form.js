@@ -254,7 +254,7 @@
         .then(function (data) {
           if (data.status === 'success') {
             // Toast upon success
-            new TaggerToast('Collection Updated');
+            TaggerToast.toast('Collection Updated');
           }
         })
 

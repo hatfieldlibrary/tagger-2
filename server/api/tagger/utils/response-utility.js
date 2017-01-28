@@ -55,7 +55,6 @@ utils.sendSuccessJson = function (res) {
  * @param data
  */
 utils.sendSuccessAndDataJson = function (res, data) {
-  console.log(data)
   utils.sendResponse(res, {status: 'success', data: data});
 };
 

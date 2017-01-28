@@ -41,7 +41,7 @@
         result.$promise.then(function (data) {
           if (data.status === 'success') {
 
-            new TaggerToast('Tag Deleted');
+            TaggerToast.toast('Tag Deleted');
             // after retrieving new area list, we need
             // to update the areas currently in view.
             vm.getTagList(null);
@@ -65,7 +65,7 @@
         result.$promise.then(function (result) {
 
           if (result.status === 'success') {
-            new TaggerToast('Tag Added area.');
+            TaggerToast.toast('Tag Added area.');
             // Broadcast successful deletion with the updated area list.
             // Not using the shared context and a  watch for this update.
             // Using event emitter communicates the update information without
@@ -89,7 +89,7 @@
         result.$promise.then(function (result) {
           console.log(result)
           if (result.status === 'success') {
-            new TaggerToast('Tag removed from Area.');
+            TaggerToast.toast('Tag removed from Area.');
             // Broadcast successful deletion with the updated area list.
             // Not using the shared context and a  watch for this update.
             // Using event emitter communicates the update information without
@@ -114,7 +114,7 @@
         );
         result.$promise.then(function (data) {
           if (data.status === 'success') {
-            new TaggerToast('Tag Added area.');
+            TaggerToast.toast('Tag Added area.');
             vm.getTagList(data.id);
             vm.closeDialog();
           }
@@ -133,7 +133,7 @@
         );
         result.$promise.then(function (data) {
           if (data.status === 'success') {
-            new TaggerToast('Tag removed from Area.');
+            TaggerToast.toast('Tag removed from Area.');
             vm.getTagList(data.id);
             // broadcast successful deletion.
             $rootScope.$broadcast('removedFromArea');
@@ -152,7 +152,7 @@
         const result = TagAdd.save({name: name});
         result.$promise.then(function (data) {
           if (data.status === 'success') {
-            new TaggerToast('Tag Added');
+            TaggerToast.toast('Tag Added');
             // After area update succeeds, update the view.
             vm.getTagList(data.id);
             vm.closeDialog();

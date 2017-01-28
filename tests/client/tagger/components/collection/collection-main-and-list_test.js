@@ -46,7 +46,7 @@ describe('The primary collection component and collection list component', () =>
     });
 
     module(($provide) => {
-      $provide.value('CollectionObservable', {
+      $provide.value('GroupListObservable', {
         set: (x) => {
         },
         get: () => {

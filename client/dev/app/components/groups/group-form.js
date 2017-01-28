@@ -73,7 +73,7 @@
             vm.categories = list;
             GroupListObservable.set(list);
             // Toast upon success
-            new TaggerToast('Category Updated');
+            TaggerToast.toast('Category Updated');
           });
 
         }

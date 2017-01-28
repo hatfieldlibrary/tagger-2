@@ -113,10 +113,10 @@
       );
       result.$promise.then(function (data) {
         if (data.status === 'success') {
-          new TaggerToast('Subject Tag Added');
+          TaggerToast.toast('Subject Tag Added');
 
         } else {
-          new TaggerToast('WARNING: Unable to add subject tag! ' + data.status);
+          TaggerToast.toast('WARNING: Unable to add subject tag! ' + data.status);
           return {};
         }
       });
@@ -141,9 +141,9 @@
       );
       result.$promise.then(function (data) {
         if (data.status === 'success') {
-          new TaggerToast('Subject Tag Removed');
+          TaggerToast.toast('Subject Tag Removed');
         } else {
-          new TaggerToast('WARNING: Unable to remove subject tag!');
+          TaggerToast.toast('WARNING: Unable to remove subject tag!');
         }
       });
     };

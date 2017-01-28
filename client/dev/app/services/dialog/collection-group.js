@@ -12,7 +12,7 @@
               CategoryDelete,
               CategoryAdd,
               CategoryList,
-              CollectionObservable,
+              GroupListObservable,
               GroupObservable,
               TaggerToast) {
 
@@ -36,7 +36,7 @@
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              new TaggerToast('Category Deleted');
+              TaggerToast.toast('Category Deleted');
               // After retrieving new category list, we need
               // to update the category currently in view.
               // When the parameter is null, the method will
@@ -59,7 +59,7 @@
           const result = CategoryAdd.save({title: title});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
-              new TaggerToast('Category Added');
+              TaggerToast.toast('Category Added');
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.

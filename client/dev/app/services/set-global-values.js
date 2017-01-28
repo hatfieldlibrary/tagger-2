@@ -7,7 +7,7 @@
 
   taggerServices.factory('SetGlobalValues',
     (CategoryList,
-     CollectionObservable,
+     GroupListObservable,
      GroupObservable,
      TagList,
      TagListObservable,
@@ -21,32 +21,32 @@
        */
       function _initGlobals() {
 
-          // Initialize global collection groups.
-          const categories = CategoryList.query();
-          categories.$promise.then(function (data) {
-            CollectionObservable.set(data);
-            GroupObservable.set(data[0].id);
-          });
+        // Initialize global collection groups.
+        const categories = CategoryList.query();
+        categories.$promise.then(function (data) {
+          GroupListObservable.set(data);
+          GroupObservable.set(data[0].id);
+        });
 
-          // Initialize global tags.
-          const tags = TagList.query();
-          tags.$promise.then(function (data) {
-            if (data.length > 0) {
-              TagListObservable.set(data);
-              TagObservable.set(data[0].id);
+        // Initialize global tags.
+        const tags = TagList.query();
+        tags.$promise.then(function (data) {
+          if (data.length > 0) {
+            TagListObservable.set(data);
+            TagObservable.set(data[0].id);
 
-            }
-          });
+          }
+        });
 
-          // Initialize global content types
-          const types = ContentTypeList.query();
-          types.$promise.then(function (data) {
-            if (data.length > 0) {
-              ContentTypeListObservable.set(data);
-              ContentTypeObservable.set(data[0].id);
-            }
+        // Initialize global content types
+        const types = ContentTypeList.query();
+        types.$promise.then(function (data) {
+          if (data.length > 0) {
+            ContentTypeListObservable.set(data);
+            ContentTypeObservable.set(data[0].id);
+          }
 
-          });
+        });
       }
 
       return {
