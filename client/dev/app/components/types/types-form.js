@@ -56,7 +56,7 @@
             vm.types = list;
             ContentTypeListObservable.set(list);
             // Toast upon success
-            new TaggerToast('Tag Updated');
+            TaggerToast.toast('Tag Updated');
           });
 
         }

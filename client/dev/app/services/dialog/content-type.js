@@ -34,7 +34,7 @@
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              new TaggerToast('Content Type Deleted');
+              TaggerToast.toast('Content Type Deleted');
               // After retrieving new content type list, we need
               // to update the content types currently in view.
               // This method is designed to take an id
@@ -81,7 +81,7 @@
           result.$promise.then(function (data) {
 
             if (data.status === 'success') {
-              new TaggerToast('Content Type Added');
+              TaggerToast.toast('Content Type Added');
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.

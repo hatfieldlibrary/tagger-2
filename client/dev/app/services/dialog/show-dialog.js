@@ -3,8 +3,8 @@
  */
 
 /**
- * The show dialog service.  This service needs to be combined via
- * composition to obtain component-specific controllers.
+ * The show dialog service.  This service is augmented via
+ * composition to obtain the component-specific controller.
  */
 (function () {
 

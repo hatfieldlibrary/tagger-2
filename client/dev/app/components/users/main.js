@@ -57,18 +57,7 @@
     function _setUsers() {
       var users = UserList.query();
       users.$promise.then(function (list) {
-        var arr = [];
-        if (list.length > 0) {
-          for (var i = 0; i < list.length; i++) {
-            arr[i] = {
-              id: list[i].id,
-              name: list[i].name,
-              email: list[i].email,
-              area: list[i].area
-            };
-          }
-        }
-        vm.users = arr;
+        vm.users = list;
       });
     }
 
@@ -88,9 +77,9 @@
             email: email,
             area: area
           });
-        update.$promise.then(function () {
-          if (update.status === 'success') {
-            new TaggerToast('User Added');
+        update.$promise.then( (data) => {
+          if (data.status === 'success') {
+            TaggerToast.toast('User Added');
             _setUsers();
           }
         });
@@ -102,9 +91,9 @@
             email: email,
             area: area
           });
-        save.$promise.then(function () {
-          if (save.status === 'success') {
-            new TaggerToast('User Updated');
+        save.$promise.then( (data)=>  {
+          if (data.status === 'success') {
+            TaggerToast.toast('User Updated');
             _setUsers();
           }
         });
@@ -116,10 +105,10 @@
      * @param id  the user's id
      */
     vm.deleteUser = function (id) {
-      var result = UserDelete.save({id: id});
-      result.$promise.then(function () {
-        if (result.status === 'success') {
-          new TaggerToast('User Deleted');
+      let result = UserDelete.save({id: id});
+      result.$promise.then( (data) => {
+        if (data.status === 'success') {
+          TaggerToast.toast('User Deleted');
           _setUsers();
         }
       });

@@ -104,10 +104,10 @@
       );
       result.$promise.then(function (data) {
         if (data.status === 'success') {
-          new TaggerToast('Content Type Added');
+          TaggerToast.toast('Content Type Added');
 
         } else {
-          new TaggerToast('WARNING: Unable to add content type!');
+          TaggerToast.toast('WARNING: Unable to add content type!');
 
         }
       });
@@ -132,9 +132,9 @@
 
       result.$promise.then(function (data) {
         if (data.status === 'success') {
-          new TaggerToast('Content Type Removed');
+          TaggerToast.toast('Content Type Removed');
         } else {
-          new TaggerToast('WARNING: Unable to remove content type!');
+          TaggerToast.toast('WARNING: Unable to remove content type!');
         }
       });
     };

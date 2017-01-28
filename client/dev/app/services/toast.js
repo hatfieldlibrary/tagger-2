@@ -46,7 +46,9 @@
 
       }
 
-      return _toast;
+      return {
+        toast: _toast
+      };
 
     }]);
 

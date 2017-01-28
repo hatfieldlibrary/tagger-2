@@ -99,7 +99,7 @@
             AreaListObservable.set(data);
             AreaObservable.set(data[0].id);
           });
-          new TaggerToast('Area order updated.');
+          TaggerToast.toast('Area order updated.');
         }
       });
     }
