@@ -18,7 +18,6 @@
               AreaList,
               AreaObservable,
               AreaListObservable,
-              GroupListObservable,
               TaggerToast) {
 
 
@@ -27,8 +26,7 @@
         const vm = this;
 
         /**
-         * Get list of all areas.  Optionally takes an area
-         * id parameter.
+         * Get list of all areas.  Updates area observers.
          * @param id  the id of the current area or null.
          */
         vm.getAreaList = function (id) {
@@ -36,17 +34,10 @@
           let areas = AreaList.query();
 
           areas.$promise.then(function (data) {
-
             AreaListObservable.set(data);
             if (data.length > 0) {
-              if (id === null) {
                 AreaActionObservable.set(data[0].id);
                 AreaObservable.set(data[0].id);
-              } else {
-                AreaObservable.set(id);
-              }
-
-              vm.closeDialog();
             }
           });
 
@@ -72,7 +63,7 @@
 
               TaggerToast.toast('Area Added');
               // After area update succeeds, update the view.
-              vm.getAreaList(data.id);
+              vm.getAreaList();
               vm.closeDialog();
 
             }
@@ -92,8 +83,8 @@
               TaggerToast.toast('Area Deleted');
               // after retrieving new area list, we need
               // to update the areas currently in view.
-              vm.getAreaList(null);
-              AreaObservable.set(-1);
+              //AreaObservable.set(-1);
+              vm.getAreaList();
               vm.closeDialog();
 
             }
