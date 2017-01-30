@@ -79,7 +79,6 @@
 
           const result = ContentTypeAdd.save({title: title});
           result.$promise.then(function (data) {
-
             if (data.status === 'success') {
               TaggerToast.toast('Content Type Added');
               // Update the category list. The

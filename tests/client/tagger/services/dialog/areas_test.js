@@ -7,7 +7,8 @@ describe('The areas dialog controller', () => {
 
   let $controller;
 
-  let AreaDialog,
+  let $mdDialog,
+    AreaDialog,
     AreaDelete,
     AreaAdd,
     AreaActionObservable,
@@ -26,6 +27,12 @@ describe('The areas dialog controller', () => {
 
 
   beforeEach(module(($provide) => {
+
+    $provide.value('$mdDialog', {
+      hide: () => {
+
+      }
+    });
 
     $provide.value('AreaList', {
       query: () => {
@@ -50,6 +57,9 @@ describe('The areas dialog controller', () => {
 
     $provide.value('AreaActionObservable', {
       set: () => {
+      },
+      get: () => {
+
       }
     });
 
@@ -69,7 +79,8 @@ describe('The areas dialog controller', () => {
     $controller = _$controller_;
   }));
 
-  beforeEach(inject((_AreaDialog_,
+  beforeEach(inject((_$mdDialog_,
+                     _AreaDialog_,
                      _AreaList_,
                      _AreaAdd_,
                      _AreaDelete_,
@@ -80,6 +91,7 @@ describe('The areas dialog controller', () => {
                      _$rootScope_,
                      _$q_) => {
 
+    $mdDialog = _$mdDialog_;
     AreaDialog = _AreaDialog_;
     dialogController = AreaDialog.controller;
     AreaList = _AreaList_;
@@ -122,19 +134,21 @@ describe('The areas dialog controller', () => {
 
     spyOn(AreaListObservable, 'set');
     spyOn(AreaActionObservable, 'set');
+    spyOn(AreaActionObservable, 'get').and.callFake(() => {
+      return 1;
+    });
     spyOn(AreaObservable, 'set');
     spyOn(TaggerToast, 'toast');
+    spyOn($mdDialog, 'hide');
 
   });
 
 
-
   it('should add a new area', () => {
 
-    let locals = {$scope: $rootScope.$new()};
-    let ctrlConstructor = $controller(dialogController, locals);
+    let ctrl = $controller(dialogController, {});
 
-    ctrlConstructor.addArea('new area');
+    ctrl.addArea('new area');
 
     deferredList.resolve(areas);
     deferred.resolve(success);
@@ -145,6 +159,27 @@ describe('The areas dialog controller', () => {
     expect(AreaActionObservable.set).toHaveBeenCalledWith(areas[0].id);
     expect(AreaObservable.set).toHaveBeenCalledWith(areas[0].id);
     expect(TaggerToast.toast).toHaveBeenCalledWith('Area Added');
+    expect($mdDialog.hide).toHaveBeenCalled();
+
+  });
+
+  it('should delete an area', () => {
+
+    let ctrl = $controller(dialogController, {});
+
+    ctrl.deleteArea();
+    deferredList.resolve(areas);
+    deferred.resolve(success);
+    $rootScope.$apply();
+
+    expect(AreaDelete.save).toHaveBeenCalled();
+    expect(AreaActionObservable.get).toHaveBeenCalled();
+    expect(AreaListObservable.set).toHaveBeenCalledWith(areas);
+    expect(AreaActionObservable.set).toHaveBeenCalledWith(areas[0].id);
+    expect(AreaObservable.set).toHaveBeenCalledWith(areas[0].id);
+    expect(TaggerToast.toast).toHaveBeenCalledWith('Area Deleted');
+    expect($mdDialog.hide).toHaveBeenCalled();
+
 
   });
 
