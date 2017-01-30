@@ -36,7 +36,7 @@
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              TaggerToast.toast('Category Deleted');
+              TaggerToast.toast('Collection Group Deleted');
               // After retrieving new category list, we need
               // to update the category currently in view.
               // When the parameter is null, the method will
@@ -59,7 +59,7 @@
           const result = CategoryAdd.save({title: title});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
-              TaggerToast.toast('Category Added');
+              TaggerToast.toast('Collection Group Added');
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
@@ -78,19 +78,15 @@
          * @param id  id of the current collection group or null.
          */
         vm.getCategoryList = function (id) {
-
           const categories = CategoryList.query();
           categories.$promise.then(function (data) {
-            CollectionObservable.set(data);
+            GroupListObservable.set(data);
             if (id === null) {
               GroupObservable.set(data[0].id);
-
             } else {
               GroupObservable.set(id);
-
             }
           });
-
         };
 
       } ;

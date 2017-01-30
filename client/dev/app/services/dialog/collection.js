@@ -13,8 +13,8 @@
               CollectionAdd,
               CollectionDelete,
               CollectionListObservable,
-              GroupListObservable,
               CollectionsByArea,
+              CollectionObservable,
               AreaObservable,
               TaggerToast) {
 
@@ -104,7 +104,6 @@
 
           } else {
             CollectionObservable.set(id);
-
           }
 
         });
