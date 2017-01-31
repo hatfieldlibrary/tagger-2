@@ -41,7 +41,7 @@ module.exports = (config) => {
       'client/dev/bower_components/angular-aria/angular-aria.min.js',
       'client/dev/bower_components/angular-material/angular-material.min.js',
       'client/dev/bower_components/ng-file-upload/ng-file-upload.min.js',
-      'client/dev/bower_components/ng-file-upload-shim/ng-file-upload-shim.min.js',
+      'client/dev/bower_components/ng-file-upload/ng-file-upload-shim.min.js',
       'client/dev/bower_components/d3/d3.min.js',
       'client/dev/bower_components/angular-messages/angular-messages.min.js',
 
