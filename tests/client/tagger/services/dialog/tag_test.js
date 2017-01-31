@@ -3,7 +3,7 @@
  */
 'use strict';
 
-describe('The collection group dialog controller', () => {
+describe('The tag dialog controller', () => {
 
   let $controller;
 
@@ -277,6 +277,8 @@ describe('The collection group dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
+    spyOn($rootScope, '$broadcast');
+
     let target = {
       tagId: 1, // the tag id returned by TagObservable spy
       areaId: 2 // the tag id returned by AreaObservable spy
@@ -288,7 +290,31 @@ describe('The collection group dialog controller', () => {
     $rootScope.$apply();
 
     expect(TagTargetAdd.query).toHaveBeenCalledWith(target);
+    expect($rootScope.$broadcast).toHaveBeenCalled();
     expect(TaggerToast.toast).toHaveBeenCalledWith('Tag Added area.');
+    expect($mdDialog.hide).toHaveBeenCalled();
+
+  });
+
+  it('should delete tag from an area.', () => {
+
+    let ctrl = $controller(dialogController, {});
+
+    spyOn($rootScope, '$broadcast');
+
+    let target = {
+      tagId: 1, // the tag id returned by TagObservable spy
+      areaId: 2 // the tag id returned by AreaObservable spy
+    };
+
+    ctrl.removeAreaFromTag();
+
+    deferredTarget.resolve(tagTargetsSuccess);
+    $rootScope.$apply();
+
+    expect(TagTargetRemove.query).toHaveBeenCalledWith(target);
+    expect($rootScope.$broadcast).toHaveBeenCalled();
+    expect(TaggerToast.toast).toHaveBeenCalledWith('Tag removed from Area.');
     expect($mdDialog.hide).toHaveBeenCalled();
 
   });
