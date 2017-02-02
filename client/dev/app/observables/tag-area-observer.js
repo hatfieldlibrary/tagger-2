@@ -29,7 +29,6 @@
 
     return {
       set: function set(update){
-        console.log(update)
         if (update !== area) {
           area = update;
           Subject.onNext(area);

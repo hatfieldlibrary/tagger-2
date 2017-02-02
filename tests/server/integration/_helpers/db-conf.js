@@ -26,7 +26,6 @@
   let credentials;
 
   let credentialsPath = require('../../../../server/config/require-paths');
-  console.log(credentialsPath.path(env))
 
   try {
     credentials = require(credentialsPath.path(env) + 'credentials');

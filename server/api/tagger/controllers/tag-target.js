@@ -54,7 +54,6 @@ function _addArea(tagId, areaId, res) {
       if (err) {
         utils.sendErrorJson(res, err);
       }
-      console.log(result);
       utils.sendSuccessAndDataJson(res, result);
 
     }

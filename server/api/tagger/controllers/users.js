@@ -29,7 +29,6 @@ const logger = require('../utils/error-logger');
 exports.list = function (req, res) {
 
   taggerDao.findAllUsers().then(function (users) {
-    console.log(users)
     utils.sendResponse(res, users);
   }).catch(function (err) {
     logger.dao(err);
@@ -43,7 +42,6 @@ exports.list = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
-  console.log(req.body)
   const name = req.body.name;
   const email = req.body.email;
   const area = req.body.area;
