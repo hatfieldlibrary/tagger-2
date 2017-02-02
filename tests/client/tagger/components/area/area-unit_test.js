@@ -12,6 +12,7 @@ describe('Area components', function () {
     DialogStrategy,
     AreaListObservable,
     AreaActionObservable,
+    AreaObservable,
     AreaById,
     AreaUpdate,
     ReorderAreas,
@@ -104,6 +105,7 @@ describe('Area components', function () {
     AreaById = _AreaById_;
     AreaUpdate = _AreaUpdate_;
     DialogStrategy = _DialogStrategy_;
+    AreaObservable = _AreaObservable_;
     AreaListObservable = _AreaListObservable_;
     AreaActionObservable = _AreaActionObservable_;
     ReorderAreas = _ReorderAreas_;
@@ -142,6 +144,9 @@ describe('Area components', function () {
     spyOn(AreaActionObservable, 'subscribe').and.callFake((o) => {
       fakeActionSubject = o;
     });
+
+    spyOn(AreaObservable, 'set');
+
 
     spyOn(AreaList, 'query').and.callFake(() => {
       return {
@@ -256,6 +261,19 @@ describe('Area components', function () {
       ctrl.$onInit();
 
       expect(AreaActionObservable.set).toHaveBeenCalledWith(1);
+
+    });
+
+    it('should update areas via AreaListObservable callback.', () => {
+
+      let testAreas = [{title: 'test area', id: 1}];
+
+      let ctrl = $componentController('areasListComponent', null);
+
+      ctrl.$onInit();
+      AreaListObservable.set(testAreas);
+      expect(ctrl.areas[0].title).toEqual('test area');
+      expect(AreaObservable.set).toHaveBeenCalled();
 
     });
 
