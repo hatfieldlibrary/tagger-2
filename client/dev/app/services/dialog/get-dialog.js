@@ -69,6 +69,7 @@
 
           default:
             console.log('WARNING: controller not found ' + constructor);
+            return null;
 
         }
       }

@@ -22,14 +22,17 @@
 
   'use strict';
 
-  taggerServices.factory('ContentTypeListObservable', ['rx', function(rx){
+  taggerServices.factory('ContentTypeListObservable', [
+    'rxSubject',
+    'observerUtils',
+    function(rxSubject,observerUtils){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
     let types = [];
 
     return {
       set: function set(update){
-        if (update !== types) {
+        if (!observerUtils.identicalArray(update, types)) {
           types = update;
           Subject.onNext(types);
         }

@@ -22,15 +22,18 @@
 
   'use strict';
 
-  taggerServices.factory('CollectionListObservable', ['rx', function(rx){
+  taggerServices.factory('CollectionListObservable', [
+    'rxSubject',
+    'observerUtils',
+    function(rxSubject, observerUtils){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
     let collections = [];
 
     return {
       set: function set(update){
         // notify observers only when changed.
-        if (update !== collections) {
+        if (!observerUtils.identicalArray(update,collections)) {
           collections = update;
           Subject.onNext(collections);
         }

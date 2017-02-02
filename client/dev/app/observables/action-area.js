@@ -25,9 +25,9 @@
   /**
    * Observable used by areas component for operations on the current area.
    */
-  taggerServices.factory('AreaActionObservable', ['rx', function(rx){
+  taggerServices.factory('AreaActionObservable', ['rxSubject', function(rxSubject){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
     /**
      * The area id.
      * @type {null}

@@ -36,8 +36,6 @@
     /** @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteAreaMessage.html';
 
-    /** @type {number */
-    vm.currentAreaId = UserAreaObservable.get();
 
     /**
      * Updates the title and id in view.
@@ -60,6 +58,10 @@
         vm.areas = areas;
 
       });
+
+      /** @type {number */
+      vm.currentAreaId = UserAreaObservable.get();
+
       /** @type {Array.<Object>} */
       vm.areas = AreaListObservable.get();
 

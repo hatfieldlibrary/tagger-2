@@ -18,7 +18,6 @@
     let currentArea = AreaObservable.get();
     const removeMessage = 'templates/dialog/removeTagFromAreaMessage.html';
     const addMessage = 'templates/dialog/addTagToAreaMessage.html';
-    let dialog;
 
     /**
      * Show the $mdDialog.
@@ -37,7 +36,7 @@
       else {
         message = addMessage;
       }
-      dialog.showDialog($event, message);
+      vm.dialog.showDialog($event, message);
 
     };
 
@@ -47,7 +46,7 @@
      */
     function _getTagList() {
 
-      var targets = TagTargets.query({tagId: vm.tagId});
+      let targets = TagTargets.query({tagId: vm.tagId});
       targets.$promise.then(function (data) {
         targetList = data;
         _checkArea();
@@ -91,7 +90,8 @@
        * Call with showDialog($event,message).
        * @type {*}
        */
-      dialog = DialogStrategy.makeDialog(vm);
+      vm.dialog = DialogStrategy.makeDialog(vm);
+
 
 
       TagListObservable.subscribe(() => {

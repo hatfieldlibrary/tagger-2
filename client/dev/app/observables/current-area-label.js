@@ -22,9 +22,9 @@
 
   'use strict';
 
-  taggerServices.factory('AreaLabelObserver', ['rx', function(rx){
+  taggerServices.factory('AreaLabelObserver', ['rxSubject', function(rxSubject){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
     let label = '';
 
     return {

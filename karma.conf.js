@@ -100,6 +100,8 @@ module.exports = (config) => {
       'client/dev/app/components/global/admin-area-selector.js',
       'client/dev/app/components/global/auth.js',
       'client/dev/app/components/global/side-navigation.js',
+      'client/dev/app/observables/utils.js',
+      'client/dev/app/observables/subject.js',
       'client/dev/app/observables/current-area.js',
       'client/dev/app/observables/areas.js',
       'client/dev/app/observables/action-area.js',

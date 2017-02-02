@@ -22,14 +22,17 @@
 
   'use strict';
 
-  taggerServices.factory('GroupListObservable', ['rx', function(rx){
+  taggerServices.factory('GroupListObservable', [
+    'rxSubject',
+    'observerUtils',
+    function(rxSubject, observerUtils){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
     let categories = [];
 
     return {
       set: function set(update){
-        if (update !== categories) {
+        if (!observerUtils.identicalArray(update,categories)) {
           categories = update;
           Subject.onNext(categories);
         }
