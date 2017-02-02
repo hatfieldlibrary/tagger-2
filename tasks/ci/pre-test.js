@@ -10,10 +10,7 @@ import {path, tasks} from './const';
 
 const SERVER_JS = path.SERVER + '/api/**/*.js';
 const CLIENT_JS =
-  path.CLIENT + '/dev/app/components/**/*.js, ' +
-  path.CLIENT + '/dev/app/common/**/*.js, ' +
-  path.CLIENT + '/dev/app/services/**/*.js, ' +
-  path.CLIENT + '/dev/app/config/**/*.js';
+  path.CLIENT + '/dev/app/**/*.js';
 
 
 gulp.task(tasks.ISTANBUL_PREFIGHT, () => {

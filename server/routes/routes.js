@@ -84,7 +84,7 @@ module.exports = function(app,config){
   app.post('/rest/category/add', ensureAuthenticated, category.add);
   app.post('/rest/category/update', ensureAuthenticated, category.update);
   app.post('/rest/category/delete', ensureAuthenticated, category.delete);
-  app.get('/rest/category/getCollections/:collId', ensureAuthenticated, category.collectionsByCategory);
+  app.get('/rest/category/getCollections/:collId', ensureAuthenticated, category.categoryByCollection);
 
   // CONTENT TYPES
   app.use('/rest/content/byId/:id', ensureAuthenticated, content.byId);
