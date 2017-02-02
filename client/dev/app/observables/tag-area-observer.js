@@ -22,18 +22,21 @@
 
   'use strict';
 
-  taggerServices.factory('TagAreaObservable', ['rx', function(rx){
+  taggerServices.factory('TagAreaObservable', ['rxSubject', function(rxSubject){
 
-    const Subject = new rx.Subject();
-    let tag = 0;
+    const Subject = rxSubject.getSubject();
+    let area = 0;
 
     return {
       set: function set(update){
-        tag = update;
-        Subject.onNext(tag);
+        console.log(update)
+        if (update !== area) {
+          area = update;
+          Subject.onNext(area);
+        }
       },
       get: function get() {
-        return tag;
+        return area;
       },
       subscribe: function (o) {
         return Subject.subscribe(o);

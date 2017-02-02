@@ -22,15 +22,18 @@
 
   'use strict';
 
-  taggerServices.factory('UserObserver', function(rx){
+  taggerServices.factory('UserObserver', function(rxSubject){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
     let user = {};
 
     return {
       set: function set(update){
-        user = update;
-        Subject.onNext(user);
+        // using angular.equals for the object comparison.
+        if (!angular.equals(update, user)) {
+          user = update;
+          Subject.onNext(user);
+        }
       },
       get: function get() {
         return user;

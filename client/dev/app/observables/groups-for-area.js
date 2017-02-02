@@ -22,9 +22,9 @@
 
   'use strict';
 
-  taggerServices.factory('GroupsForAreaObservable', ['rx', function(rx){
+  taggerServices.factory('GroupsForAreaObservable', ['rxSubject', function(rxSubject){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
     let catgories = [];
 
     return {

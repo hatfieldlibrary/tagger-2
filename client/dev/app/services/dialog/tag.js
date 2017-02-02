@@ -113,7 +113,6 @@
               vm.closeDialog();
             } else {
               TaggerToast.toast('WARNING: Unable to add tag.');
-              console.log(data);
               vm.closeDialog();
             }
           });

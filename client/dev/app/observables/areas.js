@@ -24,15 +24,19 @@
   /**
    * Observable for the areas list.
    */
-  taggerServices.factory('AreaListObservable', ['rx', function(rx){
+  taggerServices.factory('AreaListObservable', [
+    'rxSubject',
+    'observerUtils',
+    function(rxSubject, observerUtils){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
+
     let areas = [];
 
     return {
 
       set: function set(update){
-        if (update !== areas) {
+        if (!observerUtils.identicalArray(update, areas)) {
           areas = update;
           Subject.onNext(areas);
         }
@@ -43,7 +47,7 @@
       },
 
       subscribe: function (o) {
-        return Subject.subscribe(o);
+        Subject.subscribe(o);
       }
     };
   }]);

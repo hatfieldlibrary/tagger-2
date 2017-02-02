@@ -57,7 +57,7 @@
         vm.userAreaId = id;
 
         if (vm.userAreaId === 0) {
-          var areas = AreaList.query();
+          let areas = AreaList.query();
           areas.$promise.then(function (data) {
             if (data.length > 0) {
               AreaListObservable.set(data);
