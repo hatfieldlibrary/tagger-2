@@ -136,7 +136,7 @@ describe('Area components', function () {
     });
 
     spyOn(AreaActionObservable, 'set').and.callFake((value) => {
-
+      fakeActionSubject(value);
     });
     spyOn(AreaActionObservable, 'get').and.callFake(() => {
       return actionAreaId;
@@ -346,6 +346,24 @@ describe('Area components', function () {
       expect(AreaList.query).toHaveBeenCalled();
 
     });
+
+  });
+
+
+  it('should update areas via AreaActionObservable callback.', () => {
+
+    let testCall = {id: 1};
+    var menuSpy = jasmine.createSpy('menuSpy');
+
+    let bindings = {
+      menu: menuSpy
+    };
+    let ctrl = $componentController('areaForm', null, bindings);
+
+    ctrl.$onInit();
+    AreaActionObservable.set(1);
+    expect(AreaById.query).toHaveBeenCalledWith(testCall);
+    expect(menuSpy).toHaveBeenCalled();
 
   });
 

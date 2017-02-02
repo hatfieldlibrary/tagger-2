@@ -104,7 +104,7 @@ describe('The authorization component', () => {
       name: 'test user',
       areaId: 0,
       picture: 'mugshot.jpg'
-    }
+    };
     areaMaintainer = {
       name: 'test maintainer',
       areaId: 1,
@@ -195,6 +195,18 @@ describe('The authorization component', () => {
     expect(UserAreaObservable.set).toHaveBeenCalledWith(1);
     expect(ctrl.role).toEqual('Area Maintainer');
     expect(SetGlobalValues.initializeGlobalValues).toHaveBeenCalled();
+
+  });
+
+  it('should fail initialization', () => {
+
+    let ctrl = $componentController('authorizationComponent', null);
+
+    ctrl.$onInit();
+
+    deferred.reject({message: 'Test error.'});
+    $rootScope.$apply();
+    expect(ctrl.authorized).toBe(false);
 
   });
 

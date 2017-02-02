@@ -34,7 +34,6 @@ exports.areas = function (req, res) {
 function _areaIdsForCollection(collId, callback) {
 
   taggerDao.getAreaIdsForCollection(collId).then(function (result) {
-    console.log(result)
     callback(null, result);
   }).catch(function (err) {
     logger.dao(err);
