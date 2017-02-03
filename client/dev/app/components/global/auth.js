@@ -26,7 +26,8 @@
                           UserAreaObservable,
                           UserObserver,
                           IsAuthObserver,
-                          getUserInfo) {
+                          getUserInfo,
+                          $log) {
 
     const vm = this;
 
@@ -74,7 +75,7 @@
 
         }).catch(function (err) {
         vm.authorized = false;
-        console.log(err);
+        $log.error(err);
       });
     };
 

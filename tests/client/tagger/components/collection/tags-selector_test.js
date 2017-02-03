@@ -14,6 +14,9 @@ describe('The tag selector component', () => {
     TagsForCollection,
     AreaObservable,
     CollectionObservable,
+    TaggerToast,
+    deferred,
+    $rootScope,
     testAreaId,
     testCollectionId,
     tagsForArea,
@@ -93,7 +96,10 @@ describe('The tag selector component', () => {
                      _TagsForArea_,
                      _TagsForCollection_,
                      _AreaObservable_,
-                     _CollectionObservable_) => {
+                     _CollectionObservable_,
+                     _TaggerToast_,
+                     _$q_,
+                     _$rootScope_) => {
 
     CollectionTagTargetAdd = _CollectionTagTargetAdd_;
     CollectionTagTargetRemove = _CollectionTagTargetRemove_;
@@ -101,6 +107,9 @@ describe('The tag selector component', () => {
     TagsForCollection = _TagsForCollection_;
     AreaObservable = _AreaObservable_;
     CollectionObservable = _CollectionObservable_;
+    TaggerToast = _TaggerToast_;
+    deferred = _$q_.defer();
+    $rootScope = _$rootScope_;
 
   }));
 
@@ -220,21 +229,13 @@ describe('The tag selector component', () => {
 
     spyOn(CollectionTagTargetAdd, 'query').and.callFake(() => {
       return {
-        $promise: {
-          then: (callback) => {
-            return callback(tagsForAreaAdd);
-          }
-        }
+        $promise: deferred.promise
       }
     });
 
     spyOn(CollectionTagTargetRemove, 'query').and.callFake(() => {
       return {
-        $promise: {
-          then: (callback) => {
-            return callback(tagsForAreaRemove);
-          }
-        }
+        $promise: deferred.promise
       }
     });
 
@@ -257,6 +258,8 @@ describe('The tag selector component', () => {
         }
       }
     });
+
+    spyOn(TaggerToast, 'toast');
 
   });
 
@@ -283,6 +286,9 @@ describe('The tag selector component', () => {
     // add tag
     ctrl.addTag(addChip);
 
+    deferred.resolve({status: 'success'});
+    $rootScope.$apply();
+
     expect(CollectionTagTargetAdd.query).toHaveBeenCalledWith({collId: 1, tagId: 1});
 
   });
@@ -298,8 +304,37 @@ describe('The tag selector component', () => {
     // remove tag
     ctrl.removeTag(removeChip);
 
+    deferred.resolve({status: 'success'});
+    $rootScope.$apply();
+
     expect(CollectionTagTargetRemove.query).toHaveBeenCalledWith({collId: 1, tagId: 1});
 
+  });
+
+  it('should toast when unable to add tag.', () => {
+    let ctrl = $componentController('subjectSelector', null);
+    ctrl.$onInit();
+
+    // add tag
+    ctrl.addTag(addChip);
+
+    deferred.resolve({status: 'failure'});
+    $rootScope.$apply();
+
+    expect(TaggerToast.toast).toHaveBeenCalledWith('WARNING: Unable to add subject tag! failure');
+  });
+
+  it('should toast when unable to remove tag.', () => {
+    let ctrl = $componentController('subjectSelector', null);
+    ctrl.$onInit();
+
+    // remove tag
+    ctrl.removeTag(removeChip);
+
+    deferred.resolve({status: 'failure'});
+    $rootScope.$apply();
+
+    expect(TaggerToast.toast).toHaveBeenCalledWith('WARNING: Unable to remove subject tag!');
   });
 
   it('should fetch new tags on collection change.', () => {

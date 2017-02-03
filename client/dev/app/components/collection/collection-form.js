@@ -33,7 +33,8 @@
                           CollectionObservable,
                           CollectionAreasObservable,
                           ThumbImageObservable,
-                          TaggerToast) {
+                          TaggerToast,
+                          $log) {
 
     const vm = this;
 
@@ -72,7 +73,7 @@
 
       });
       /* Update area info and assure that the category
-         is updated.  */
+       is updated.  */
       AreaObservable.subscribe((areaId) => {
         _getCategoryForCollection(CollectionObservable.get());
         _getAreaInfo(areaId);
@@ -111,7 +112,7 @@
       const col = CollectionById.query({id: id});
       col.$promise.then(function (data) {
 
-        if (data) {
+        try {
           vm.collection = data;
           vm.collectionId = data.id;
           vm.category = data.category;
@@ -120,7 +121,8 @@
           vm.menu({id: vm.collection.id, title: vm.collection.title});
           _setBrowseTypeLabel(data.browseType);
           _getCategoryForCollection(id);
-        } else {
+        } catch (e) {
+          $log.warn('Unable to retrieve collection using the provided id: ' + id);
           vm.collection = {};
         }
       });
@@ -239,7 +241,7 @@
      * Updates the collection and reloads the collection
      * list for the current area upon success.
      */
-    vm.updateCollection = function () {
+    vm.updateCollection = () => {
 
       const update = CollectionUpdate.save({
         id: vm.collection.id,
@@ -256,12 +258,15 @@
 
       });
       update.$promise
-        .then(function (data) {
+        .then((data) => {
           if (data.status === 'success') {
             // Toast upon success
             TaggerToast.toast('Collection Updated');
           }
-        })
+        }).catch((err) => {
+        $log.error(err);
+        TaggerToast.toast('ERROR: Unable to update collection.');
+      });
 
     };
 
@@ -278,9 +283,15 @@
       _setSubscriptions();
 
       vm.collectionId = CollectionObservable.get();
-
-      if (vm.collectionId > 0) {
-        _getCollectionById(vm.collectionId);
+      if (typeof vm.collectionId !== 'undefined') {
+        if (vm.collectionId > 0) {
+          // get the collection information.
+          _getCollectionById(vm.collectionId);
+        } else {
+          // did not get valid collection id so set
+          // empty collection.
+          vm.collection = {};
+        }
       }
 
       _getAreaInfo(AreaObservable.get());
