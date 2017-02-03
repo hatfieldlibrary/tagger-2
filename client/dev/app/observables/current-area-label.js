@@ -25,6 +25,10 @@
   taggerServices.factory('AreaLabelObserver', ['rxSubject', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {string}
+     */
     let label = '';
 
     return {

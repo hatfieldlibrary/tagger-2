@@ -29,7 +29,7 @@
 
     const Subject = rxSubject.getSubject();
     /**
-     * The area id.
+     * Default value.
      * @type {null}
      */
     let area = null;

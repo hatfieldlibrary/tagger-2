@@ -25,6 +25,10 @@
   taggerServices.factory('TotalCollectionsObservable', ['rxSubject', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {number}
+     */
     let total = 0;
 
     return {

@@ -25,6 +25,10 @@
   taggerServices.factory('UserObserver', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {{}}
+     */
     let user = {};
 
     return {

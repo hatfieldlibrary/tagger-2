@@ -25,6 +25,10 @@
   taggerServices.factory('PublicationStatusObservable', ['rxSubject', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {boolean}
+     */
     let status = false;
 
     return {

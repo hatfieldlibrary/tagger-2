@@ -18,33 +18,37 @@
 /**
  * Created by mspalti on 12/12/16.
  */
-(function()  {
+(function () {
 
   'use strict';
 
   taggerServices.factory('ContentTypeListObservable', [
     'rxSubject',
     'observerUtils',
-    function(rxSubject,observerUtils){
+    function (rxSubject, observerUtils) {
 
-    const Subject = rxSubject.getSubject();
-    let types = [];
+      const Subject = rxSubject.getSubject();
+      /**
+       * Default value.
+       * @type {Array}
+       */
+      let types = [];
 
-    return {
-      set: function set(update){
-        if (!observerUtils.identicalArray(update, types)) {
-          types = update;
-          Subject.onNext(types);
+      return {
+        set: function set(update) {
+          if (!observerUtils.identicalArray(update, types)) {
+            types = update;
+            Subject.onNext(types);
+          }
+        },
+        get: function get() {
+          return types;
+        },
+        subscribe: function (o) {
+          return Subject.subscribe(o);
         }
-      },
-      get: function get() {
-        return types;
-      },
-      subscribe: function (o) {
-        return Subject.subscribe(o);
-      }
-    };
-  }]);
+      };
+    }]);
 
 
 })();

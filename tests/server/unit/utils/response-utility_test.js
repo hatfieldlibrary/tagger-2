@@ -3,7 +3,7 @@
  */
 'use strict';
 
-import utils from '../../../server/api/tagger/utils/response-utility';
+import utils from '../../../../server/api/tagger/utils/response-utility';
 import chai from 'chai';
 import sinon from 'sinon';
 const assert = chai.assert;

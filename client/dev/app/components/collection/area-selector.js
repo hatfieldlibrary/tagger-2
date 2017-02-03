@@ -119,7 +119,15 @@
                 // Update the collections list (one collection has just been removed from the area).
                 CollectionAreasObservable.set();
                 TaggerToast.toast('Collection removed from area.');
+              } else {
+                TaggerToast.toast(
+                  result.status +
+                  ': ' +
+                  result.reason +
+                  '. Tip: collections can only be removed after a collection group has been assigned.');
               }
+            }).catch((err) => {
+              console.log(err);
             });
           }
         }

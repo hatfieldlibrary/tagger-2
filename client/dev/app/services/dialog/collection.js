@@ -93,17 +93,21 @@
 
         const result = CollectionsByArea.query({areaId: AreaObservable.get()});
         result.$promise.then(function (data) {
-          CollectionListObservable.set(data);
-          // Deleting a category doesn't generate
-          // a new id. In that case, expect the
-          // id to be null. Update the view using the
-          // id of the first item in the updated category
-          // list.
-          if (id === null) {
-            CollectionObservable.set(data[0].Collection.id);
+          if (data) {
+            CollectionListObservable.set(data);
+            // Deleting a category doesn't generate
+            // a new id. In that case, expect the
+            // id to be null. Update the view using the
+            // id of the first item in the updated category
+            // list.
+            if (id === null) {
+              CollectionObservable.set(data[0].Collection.id);
 
+            } else {
+              CollectionObservable.set(id);
+            }
           } else {
-            CollectionObservable.set(id);
+            CollectionObservable.set(0)
           }
 
         });

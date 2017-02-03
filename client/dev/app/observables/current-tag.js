@@ -25,6 +25,10 @@
   taggerServices.factory('TagObservable', ['rxSubject', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {number}
+     */
     let tag = 0;
 
     return {

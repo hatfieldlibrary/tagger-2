@@ -443,6 +443,8 @@ describe('The collection form component', () => {
     ctrl.overrideCategory();
 
     expect(ctrl.showCollectionCategories).toBe(true);
+    expect(AreaObservable.get).toHaveBeenCalled();
+    expect(CategoryByArea.query).toHaveBeenCalled();
 
   });
 

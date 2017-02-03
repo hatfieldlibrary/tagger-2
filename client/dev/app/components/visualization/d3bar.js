@@ -136,7 +136,7 @@
       drawBarChart(ctrl.data);
     };
 
-    AreaObservable.subscribe(function onNext() {
+    AreaObservable.subscribe(() => {
       _initChart();
     });
 

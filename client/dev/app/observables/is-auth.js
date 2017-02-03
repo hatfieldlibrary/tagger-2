@@ -25,6 +25,10 @@
   taggerServices.factory('IsAuthObserver', ['rxSubject', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {boolean}
+     */
     let auth = false;
 
     return {
