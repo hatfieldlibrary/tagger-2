@@ -25,6 +25,10 @@
   taggerServices.factory('GroupObservable', ['rxSubject', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {number}
+     */
     let category = 0;
 
     return {

@@ -18,34 +18,38 @@
 /**
  * Created by mspalti on 12/12/16.
  */
-(function()  {
+(function () {
 
   'use strict';
 
   taggerServices.factory('CollectionListObservable', [
     'rxSubject',
     'observerUtils',
-    function(rxSubject, observerUtils){
+    function (rxSubject, observerUtils) {
 
-    const Subject = rxSubject.getSubject();
-    let collections = [];
+      const Subject = rxSubject.getSubject();
+      /**
+       * Default value.
+       * @type {Array}
+       */
+      let collections = [];
 
-    return {
-      set: function set(update){
-        // notify observers only when changed.
-        if (!observerUtils.identicalArray(update,collections)) {
-          collections = update;
-          Subject.onNext(collections);
+      return {
+        set: function set(update) {
+          // notify observers only when changed.
+          if (!observerUtils.identicalArray(update, collections)) {
+            collections = update;
+            Subject.onNext(collections);
+          }
+        },
+        get: function get() {
+          return collections;
+        },
+        subscribe: function (o) {
+          return Subject.subscribe(o);
         }
-      },
-      get: function get() {
-        return collections;
-      },
-      subscribe: function (o) {
-        return Subject.subscribe(o);
-      }
-    };
-  }]);
+      };
+    }]);
 
 
 })();

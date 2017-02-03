@@ -28,6 +28,10 @@
   taggerServices.factory('ThumbImageObservable', ['rxSubject', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {string}
+     */
     let thumb = '';
 
     return {

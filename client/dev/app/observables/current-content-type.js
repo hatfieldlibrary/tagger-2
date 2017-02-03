@@ -25,6 +25,10 @@
   taggerServices.factory('ContentTypeObservable', ['rxSubject', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {number}
+     */
     let contentType = 0;
 
     return {

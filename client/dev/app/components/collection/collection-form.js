@@ -111,14 +111,18 @@
       const col = CollectionById.query({id: id});
       col.$promise.then(function (data) {
 
-        vm.collection = data;
-        vm.collectionId = data.id;
-        vm.category = data.category;
-        vm.thumbnailImage = data.image;
-        ThumbImageObservable.set(data.image);
-        vm.menu({id: vm.collection.id, title: vm.collection.title});
-        _setBrowseTypeLabel(data.browseType);
-        _getCategoryForCollection(id);
+        if (data) {
+          vm.collection = data;
+          vm.collectionId = data.id;
+          vm.category = data.category;
+          vm.thumbnailImage = data.image;
+          ThumbImageObservable.set(data.image);
+          vm.menu({id: vm.collection.id, title: vm.collection.title});
+          _setBrowseTypeLabel(data.browseType);
+          _getCategoryForCollection(id);
+        } else {
+          vm.collection = {};
+        }
       });
 
     }
@@ -227,6 +231,7 @@
     }
 
     vm.overrideCategory = function () {
+      _getCategories();
       vm.showCollectionCategories = true;
     };
 

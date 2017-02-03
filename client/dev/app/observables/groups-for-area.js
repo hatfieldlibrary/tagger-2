@@ -25,15 +25,19 @@
   taggerServices.factory('GroupsForAreaObservable', ['rxSubject', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
-    let catgories = [];
+    /**
+     * Default value.
+     * @type {Array}
+     */
+    let categories = [];
 
     return {
       set: function set(update){
-        catgories = update;
-        Subject.onNext(catgories);
+        categories = update;
+        Subject.onNext(categories);
       },
       get: function get() {
-        return catgories;
+        return categories;
       },
       subscribe: function (o) {
         return Subject.subscribe(o);

@@ -13,6 +13,7 @@ describe('The collection area selector component', () => {
     AreasForCollection,
     AreaTargetAdd,
     AreaTargetRemove,
+    TaggerToast,
     testCollectionId,
     testAreaId,
     testTwoAreaResponse,
@@ -20,7 +21,10 @@ describe('The collection area selector component', () => {
     testAreasForCollectionAdd,
     testAreasForCollectionRemove,
     testAreasForCollectionResponse,
-    testAreaResponse;
+    testAreaResponse,
+    failedQuery,
+    deferred,
+    $rootScope;
 
   beforeEach(module('tagger'));
 
@@ -92,7 +96,10 @@ describe('The collection area selector component', () => {
                      _CollectionAreasObservable_,
                      _AreasForCollection_,
                      _AreaTargetAdd_,
-                     _AreaTargetRemove_) => {
+                     _AreaTargetRemove_,
+                     _TaggerToast_,
+                     _$rootScope_,
+                     _$q_) => {
 
     AreaListObservable = _AreaListObservable_;
     CollectionAreasObservable = _CollectionAreasObservable_;
@@ -100,6 +107,9 @@ describe('The collection area selector component', () => {
     AreasForCollection = _AreasForCollection_;
     AreaTargetAdd = _AreaTargetAdd_;
     AreaTargetRemove = _AreaTargetRemove_;
+    TaggerToast = _TaggerToast_;
+    deferred = _$q_.defer();
+    $rootScope = _$rootScope_;
 
   }));
 
@@ -108,7 +118,7 @@ describe('The collection area selector component', () => {
     testCollectionId = 1;
     testAreaId = 1;
     testTwoAreaResponse = {
-      status: "success",
+      status: 'success',
       data: {
         areaList: [
           {
@@ -125,7 +135,7 @@ describe('The collection area selector component', () => {
     };
 
     testSingleAreaResponse = {
-      status: "success",
+      status: 'success',
       data: {
         areaList: [
           {
@@ -134,6 +144,11 @@ describe('The collection area selector component', () => {
           }
         ]
       }
+    };
+
+    failedQuery = {
+      status: 'failure',
+      reason: 'unknown'
     };
 
     testAreaResponse = testTwoAreaResponse;
@@ -185,6 +200,8 @@ describe('The collection area selector component', () => {
     spyOn(CollectionAreasObservable, 'get');
     spyOn(CollectionAreasObservable, 'subscribe');
 
+    spyOn(TaggerToast, 'toast');
+
     // area list observable.
     spyOn(AreaListObservable, 'set').and.callFake(() => {
       fakeAreaListCallback(testAreaResponse);
@@ -218,11 +235,7 @@ describe('The collection area selector component', () => {
 
     spyOn(AreaTargetRemove, 'query').and.callFake(() => {
       return {
-        $promise: {
-          then: (callback) => {
-            return callback(testAreaResponse);
-          }
-        }
+        $promise: deferred.promise
       }
     });
 
@@ -268,16 +281,37 @@ describe('The collection area selector component', () => {
 
   });
 
-  it('should remove the first area from the collection', () => {
+  it('should remove collection from area.', () => {
 
     let ctrl = $componentController('areaSelector', null);
     ctrl.$onInit();
     expect(ctrl.areas).toEqual(testTwoAreaResponse);
 
     ctrl.update(1);
+    deferred.resolve(testAreaResponse);
+    $rootScope.$apply();
 
-    expect(AreaTargetRemove.query).toHaveBeenCalled();
+    expect(AreaTargetRemove.query).toHaveBeenCalledWith({collId: testCollectionId, areaId: 1});
     expect(CollectionAreasObservable.set).toHaveBeenCalled();
+
+
+  });
+
+  it('should toast after failing to remove collection from area.', () => {
+
+    let ctrl = $componentController('areaSelector', null);
+    ctrl.$onInit();
+    expect(ctrl.areas).toEqual(testTwoAreaResponse);
+
+    ctrl.update(1);
+    deferred.resolve(failedQuery);
+    $rootScope.$apply();
+
+    expect(TaggerToast.toast).toHaveBeenCalledWith(
+      failedQuery.status +
+      ': ' +
+      failedQuery.reason +
+      '. Tip: collections can only be removed after a collection group has been assigned.');
 
 
   });

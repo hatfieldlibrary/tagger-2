@@ -18,33 +18,37 @@
 /**
  * Created by mspalti on 12/12/16.
  */
-(function()  {
+(function () {
 
   'use strict';
 
   taggerServices.factory('CollectionTagsObserver', [
     'rxSubject',
     'observerUtils',
-    function(rxSubject, observerUtils){
+    function (rxSubject, observerUtils) {
 
-    const Subject = rxSubject.getSubject();
-    let tags = [];
+      const Subject = rxSubject.getSubject();
+      /**
+       * Default value.
+       * @type {Array}
+       */
+      let tags = [];
 
-    return {
-      set: function set(update){
-        if (!observerUtils.identicalArray(update, tags)) {
-          tags = update;
-          Subject.onNext(tags);
+      return {
+        set: function set(update) {
+          if (!observerUtils.identicalArray(update, tags)) {
+            tags = update;
+            Subject.onNext(tags);
+          }
+        },
+        get: function get() {
+          return tags;
+        },
+        subscribe: function (o) {
+          return Subject.subscribe(o);
         }
-      },
-      get: function get() {
-        return tags;
-      },
-      subscribe: function (o) {
-        return Subject.subscribe(o);
-      }
-    };
-  }]);
+      };
+    }]);
 
 
 })();

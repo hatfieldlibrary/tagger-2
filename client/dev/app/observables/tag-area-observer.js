@@ -25,6 +25,10 @@
   taggerServices.factory('TagAreaObservable', ['rxSubject', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {number}
+     */
     let area = 0;
 
     return {

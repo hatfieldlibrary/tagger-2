@@ -18,7 +18,7 @@
 /**
  * Created by mspalti on 12/11/16.
  */
-(function()  {
+(function () {
 
   'use strict';
   /**
@@ -27,30 +27,33 @@
   taggerServices.factory('AreaListObservable', [
     'rxSubject',
     'observerUtils',
-    function(rxSubject, observerUtils){
+    function (rxSubject, observerUtils) {
 
-    const Subject = rxSubject.getSubject();
+      const Subject = rxSubject.getSubject();
+      /**
+       * Default value.
+       * @type {Array}
+       */
+      let areas = [];
 
-    let areas = [];
+      return {
 
-    return {
+        set: function set(update) {
+          if (!observerUtils.identicalArray(update, areas)) {
+            areas = update;
+            Subject.onNext(areas);
+          }
+        },
 
-      set: function set(update){
-        if (!observerUtils.identicalArray(update, areas)) {
-          areas = update;
-          Subject.onNext(areas);
+        get: function get() {
+          return areas;
+        },
+
+        subscribe: function (o) {
+          Subject.subscribe(o);
         }
-      },
-
-      get: function get() {
-        return areas;
-      },
-
-      subscribe: function (o) {
-        Subject.subscribe(o);
-      }
-    };
-  }]);
+      };
+    }]);
 
 
 })();

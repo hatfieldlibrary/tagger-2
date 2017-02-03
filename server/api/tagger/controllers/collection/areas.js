@@ -25,20 +25,21 @@ exports.areas = function (req, res) {
 
 };
 
-/**
- * Returns area ids associated with the collection.
- * @param collId
- * @param callback
- * @private
- */
-function _areaIdsForCollection(collId, callback) {
-
-  taggerDao.getAreaIdsForCollection(collId).then(function (result) {
-    callback(null, result);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
-}
+// /**
+//  * Returns area ids associated with the collection.
+//  * @param collId
+//  * @param callback
+//  * @private
+//  */
+// function _areaIdsForCollection(collId, callback) {
+//
+//   taggerDao.getAreaIdsForCollection(collId).then(function (result) {
+//     callback(null, result);
+//   }).catch(function (err) {
+//     callback(err, null);
+//     logger.dao(err);
+//   });
+// }
 
 /**
  * Adds a collection to a collection area.
@@ -54,12 +55,21 @@ function _addArea(collId, areaId, res) {
         taggerDao.addCollectionToArea(collId, areaId)
           .then(function (result) {
             callback(null, result);
+            // see https://github.com/sequelize/sequelize/issues/4883
+            return null;
           }).catch(function (err) {
           logger.dao(err);
+          callback(err, null);
         });
       },
       areaList: function (callback) {
-        _areaIdsForCollection(collId, callback);
+        taggerDao.getAreaIdsForCollection(collId)
+          .then(function (result) {
+            callback(null, result);
+          }).catch(function (err) {
+          callback(err, null);
+          logger.dao(err);
+        });
       }
     },
 
@@ -92,7 +102,7 @@ exports.addAreaTarget = function (req, res) {
         taggerDao.checkAreaAssociation(collId, areaId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
-          logger.dao(err);
+          callback(err, null);
         });
       }
     },
@@ -115,6 +125,7 @@ exports.addAreaTarget = function (req, res) {
 
 };
 
+
 /**
  * Removes the association between a collection and a collection
  * area.  Also removes the category (collection group) from the collection,
@@ -130,17 +141,18 @@ exports.removeAreaTarget = function (req, res) {
   async.waterfall([
       (callback) => {
         taggerDao.getCategoryForCollection(collId).then((result) => {
-            callback(null, result.Category)
+            callback(null, result.Category);
+            return null;
           }
         ).catch(function (err) {
-          logger.dao(err);
+          callback(err, null);
         })
       },
       (category, callback) => {
-      /*
-       * Remove category from collection if the category belongs to the area
-       * that is being removed. This allows a new category for to the collection.
-       */
+        /*
+         * Remove category from collection if the category belongs to the area
+         * that is being removed. This allows a new category for to the collection.
+         */
         if (category.areaId === areaId) {
           taggerDao.deleteCategoryFromCollection(collId, category.id).then((result) => {
             callback(null, result);
@@ -150,27 +162,31 @@ exports.removeAreaTarget = function (req, res) {
         } else {
           callback(null, category);
         }
+
       },
       (result, callback) => {
         taggerDao.removeCollectionFromArea(areaId, collId).then(function (result) {
           callback(null, result);
+          return null;
         }).catch(function (err) {
-          logger.dao(err);
+          callback(err, null);
         });
       },
       (result, callback) => {
         taggerDao.getAreaIdsForCollection(collId).then(function (result) {
           callback(null, result);
         }).catch(function (err) {
-          logger.dao(err);
+          callback(err, null);
         });
       }
     ],
     function (err, result) {
       if (err) {
+        logger.dao(err);
         utils.sendErrorJson(res, err);
+      } else {
+        utils.sendSuccessAndDataJson(res, {areaList: result});
       }
-      utils.sendSuccessAndDataJson(res, {areaList: result});
 
     });
 

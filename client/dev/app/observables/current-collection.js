@@ -25,6 +25,10 @@
   taggerServices.factory('CollectionObservable', ['rxSubject', function (rxSubject) {
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {number}
+     */
     let collection = 0;
 
     return {

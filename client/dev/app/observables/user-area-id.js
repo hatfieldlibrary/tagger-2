@@ -25,8 +25,10 @@
   taggerServices.factory('UserAreaObservable', ['rxSubject', function(rxSubject){
 
     const Subject = rxSubject.getSubject();
-
-    // Initialize to fake area id. Updated by the auth component.
+    /**
+     * Default value.
+     * @type {number}
+     */
     let areaId = -1;
 
     return {

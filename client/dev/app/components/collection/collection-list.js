@@ -87,9 +87,13 @@
             /* Set collection list and collection id observers.
              * This updates observers only when values have changed.
              * Should have effect only when called via the
-             * CollectionAreaObservableable. */
+             * CollectionAreaObservable. */
             CollectionListObservable.set(data);
             CollectionObservable.set(vm.collectionId);
+          } else {
+            vm.collectionList = [];
+            vm.collectionId = 0;
+            CollectionObservable.set(0);
           }
         });
       }

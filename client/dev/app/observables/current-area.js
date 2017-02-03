@@ -18,17 +18,21 @@
 /**
  * Created by mspalti on 12/11/16.
  */
-(function()  {
+(function () {
 
   'use strict';
 
-  taggerServices.factory('AreaObservable', ['rxSubject', function(rxSubject){
+  taggerServices.factory('AreaObservable', ['rxSubject', function (rxSubject) {
 
     const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {null}
+     */
     let area = null;
 
     return {
-      set: function set(update){
+      set: function set(update) {
         if (update !== area) {
           area = update;
           Subject.onNext(area);
