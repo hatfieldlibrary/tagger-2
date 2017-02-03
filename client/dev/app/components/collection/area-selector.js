@@ -123,8 +123,7 @@
                 TaggerToast.toast(
                   result.status +
                   ': ' +
-                  result.reason +
-                  '. Tip: collections can only be removed after a collection group has been assigned.');
+                  result.reason);
               }
             }).catch((err) => {
               console.log(err);
