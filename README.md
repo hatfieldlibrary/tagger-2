@@ -7,15 +7,15 @@
 [![bitHound Overall Score](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/score.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
 
  
-Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization. Artifacts are 
-assigned to Areas that can be topical or administrative (e.g. student research or University Archives). These Areas are further refined with 
-one or more Collection Groups (e.g. Northwest Art Collection).  
+Tagger implements a specific approach to publishing information about digital artifacts produced by a community or organization. In this approach, artifacts are 
+assigned to general Areas that can be topical or administrative (e.g. student research or University Archives). Areas are in turn given 
+one or more Collection Groups (e.g. Northwest Art Collection) that are the specific home of digital artifacts or sub-collections.  
 
-All of the collections and items in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to 
+All of the digital collections and items in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to 
 discover more about the people and departments who produce and own the content.  Subject tags and content types can also be assigned to support browsing and discovery.
 
-Every entity in Tagger (Area, Collection Group, Collection, Subject Tag, Content Type) includes descriptive fields that are populated via
-Tagger's administrative user interface. Beyond titles and descriptions, fields include URLs, link types, link labels, and restrictions.
+Every entity in Tagger (Area, Collection Group, Collection, Subject Tag, Content Type) has descriptive fields that are populated via
+Tagger's administrative user interface. Beyond titles and descriptions, these fields include URLs, link types, link labels, and restrictions.
 
 Access to the administrative interface is limited to Administrators and Collection Maintainers.
 
