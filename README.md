@@ -8,13 +8,15 @@
 
  
 Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization. Artifacts are 
-assigned to Areas that can be topical or administrative (e.g. student research or archives). These Areas are further refined with 
-one or more Collection Groups (e.g. Northwest Art Collection).  All of the artifacts in Tagger are associated with Areas and (optionally) 
- with Collection Groups to provide structure, context and the ability to discover more about the people and departments who produce and own the content.  Subject tags and media 
-types can also be assigned to support browsing and discovery.
+assigned to Areas that can be topical or administrative (e.g. student research or University Archives). These Areas are further refined with 
+one or more Collection Groups (e.g. Northwest Art Collection).  
 
-Every entity in Tagger (Area, Collection Group, Collection, Subject Tag, Media Type) includes descriptive fields that are populated via
-Tagger's administrative user interface. Access to this interface is restricted to Administrators and Collection Maintainers.
+All of the artifacts in Tagger are associated with Areas and (optionally) with Collection Groups to provide structure, context and the ability to 
+discover more about the people and departments who produce and own the content.  Subject tags and content types can also be assigned to support browsing and discovery.
+
+Every entity in Tagger (Area, Collection Group, Collection, Subject Tag, Content Type) includes descriptive fields that are populated via
+Tagger's administrative user interface. Beyond titles and descriptions, fields include urls, link types, link labels, and restrictions.
+Access to the administrative interface is limited to Administrators and Collection Maintainers.
 
 Tagger itself is not a fullstack, out-of-the-box publishing solution.  It is a microservice that shares information with external clients or other services
 over the network. External clients can access information such as:
@@ -22,7 +24,7 @@ over the network. External clients can access information such as:
  * All collections
  * The Collections in an Area
  * The Collections in a Collection Group
- * The Collections in an Area by Subject Tag
+ * The Collections by Subject Tag
 
 Tagger persists information in a Mysql/MariaDb database.  
  
