@@ -1,4 +1,3 @@
-.idea
 client/dist
 server/credentials/credentials.js
 coverage
