@@ -20,7 +20,9 @@ describe('The primary collection component and collection list component', () =>
     testAreaCollections,
     testEmptyCollectionList,
     collectionIdInView,
-    setAreasObserver;
+    setAreasObserver,
+    $rootScope,
+    deferredCollectionsList;
 
 
   beforeEach(module('tagger'));
@@ -124,7 +126,9 @@ describe('The primary collection component and collection list component', () =>
                      _PublicationStatusObservable_,
                      _DialogStrategy_,
                      _UserAreaObservable_,
-                     _CollectionsByArea_) => {
+                     _CollectionsByArea_,
+                     _$q_,
+                     _$rootScope_) => {
 
     AreaObservable = _AreaObservable_;
     CollectionObservable = _CollectionObservable_;
@@ -134,6 +138,8 @@ describe('The primary collection component and collection list component', () =>
     CollectionsByArea = _CollectionsByArea_;
     PublicationStatusObservable = _PublicationStatusObservable_;
     UserAreaObservable = _UserAreaObservable_;
+    $rootScope = _$rootScope_;
+    deferredCollectionsList = _$q_.defer();
 
   }));
 
@@ -223,11 +229,7 @@ describe('The primary collection component and collection list component', () =>
 
     spyOn(CollectionsByArea, 'query').and.callFake(() => {
       return {
-        $promise: {
-          then: (callback) => {
-            return callback(testAreaCollections);
-          }
-        }
+        $promise: deferredCollectionsList.promise
       }
     });
 
@@ -277,7 +279,7 @@ describe('The primary collection component and collection list component', () =>
 
   describe('The list component', () => {
 
-    it('should initialize the collection id and observers $onInit', () => {
+    it('should initialize the collection list, current collection id and subscriptions $onInit', () => {
 
       let ctrl = $componentController('collectionList', null);
 
@@ -286,12 +288,14 @@ describe('The primary collection component and collection list component', () =>
 
       ctrl.$onInit();
 
+      deferredCollectionsList.resolve(testAreaCollections);
+      $rootScope.$apply();
+
       expect(CollectionObservable.subscribe).toHaveBeenCalled();
       expect(CollectionListObservable.subscribe).toHaveBeenCalled();
       expect(CollectionAreasObservable.subscribe).toHaveBeenCalled();
       expect(AreaObservable.subscribe).toHaveBeenCalled();
       expect(AreaObservable.get).toHaveBeenCalled();
-
       expect(CollectionsByArea.query).toHaveBeenCalledWith({areaId: testAreaId});
       expect(CollectionObservable.set).toHaveBeenCalledWith(testAreaCollections[0].Collection.id);
       expect(CollectionListObservable.set).toHaveBeenCalledWith(testAreaCollections);
@@ -299,6 +303,18 @@ describe('The primary collection component and collection list component', () =>
       expect(ctrl.collectionList).toEqual(testAreaCollections);
 
     });
+
+    it('should set empty collection list on init if area contains no collections.', () => {
+
+      let ctrl = $componentController('collectionList', null);
+      ctrl.$onInit();
+      deferredCollectionsList.resolve([]);
+      $rootScope.$apply();
+      expect(ctrl.collectionId).toEqual(0);
+      expect(ctrl.collectionList.length).toEqual(0);
+    });
+
+
 
     it('should throw error for undefined area.', () => {
 

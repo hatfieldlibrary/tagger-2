@@ -25,22 +25,6 @@ exports.areas = function (req, res) {
 
 };
 
-// /**
-//  * Returns area ids associated with the collection.
-//  * @param collId
-//  * @param callback
-//  * @private
-//  */
-// function _areaIdsForCollection(collId, callback) {
-//
-//   taggerDao.getAreaIdsForCollection(collId).then(function (result) {
-//     callback(null, result);
-//   }).catch(function (err) {
-//     callback(err, null);
-//     logger.dao(err);
-//   });
-// }
-
 /**
  * Adds a collection to a collection area.
  * @param collId    the collection id
@@ -101,6 +85,7 @@ exports.addAreaTarget = function (req, res) {
 
         taggerDao.checkAreaAssociation(collId, areaId).then(function (result) {
           callback(null, result);
+          return null;
         }).catch(function (err) {
           callback(err, null);
         });
@@ -124,6 +109,51 @@ exports.addAreaTarget = function (req, res) {
     });
 
 };
+
+/**
+ * Removes collection from the area.  This can be called if the
+ * attempt to remove the collection via the default API method
+ * failed due to a missing Collection/Category relation.
+ * @param collId the collection id
+ * @param areaId the area id
+ * @param res the response object
+ * @private
+ */
+function _removeCollectionFromArea(collId, areaId, res) {
+
+  async.series(
+    {
+      remove: (callback) => {
+        taggerDao.removeCollectionFromArea(areaId, collId)
+          .then(function (result) {
+            callback(null, result);
+            return null;
+          }).catch(function (err) {
+          callback(err, null);
+        });
+      }
+      ,
+      getAreas: (callback) => {
+        taggerDao.getAreaIdsForCollection(collId)
+          .then(function (result) {
+            callback(null, result);
+            return null;
+          }).catch(function (err) {
+          callback(err, null);
+        });
+      }
+    }
+    ,
+    function (err, result) {
+      if (err) {
+        logger.dao(err);
+        utils.sendErrorJson(res, err);
+      } else {
+        utils.sendSuccessAndDataJson(res, {areaList: result});
+      }
+    });
+
+}
 
 
 /**
@@ -182,10 +212,25 @@ exports.removeAreaTarget = function (req, res) {
     ],
     function (err, result) {
       if (err) {
-        logger.dao(err);
-        utils.sendErrorJson(res, err);
+
+        let message = err.message;
+        if (message.match('Cannot read property \'Category\' of null') !== null) {
+          logger.dao(err);
+          /**
+           * If the Category property is missing, the collection that is being
+           * removed from the area did not have a Category assigned. Attempt to
+           * remove the collection without checking for Category.
+           */
+          _removeCollectionFromArea(collId, areaId, res);
+
+        } else {
+          logger.dao(err);
+          utils.sendErrorJson(res, err);
+
+        }
       } else {
         utils.sendSuccessAndDataJson(res, {areaList: result});
+
       }
 
     });

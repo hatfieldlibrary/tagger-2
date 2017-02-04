@@ -310,8 +310,7 @@ describe('The collection area selector component', () => {
     expect(TaggerToast.toast).toHaveBeenCalledWith(
       failedQuery.status +
       ': ' +
-      failedQuery.reason +
-      '. Tip: collections can only be removed after a collection group has been assigned.');
+      failedQuery.reason);
 
 
   });

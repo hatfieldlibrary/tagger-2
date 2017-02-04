@@ -13,6 +13,9 @@ describe('The type selector component', () => {
     CollectionTypeTargetRemove,
     CollectionTypeTargetAdd,
     TypesForCollection,
+    $rootScope,
+    deferred,
+    TaggerToast,
     contentTypeList,
     typesForCollectionAdd,
     typesForCollectionRemove,
@@ -79,13 +82,19 @@ describe('The type selector component', () => {
                       _CollectionObservable_,
                       _CollectionTypeTargetRemove_,
                       _CollectionTypeTargetAdd_,
-                      _TypesForCollection_) => {
+                      _TypesForCollection_,
+                      _$rootScope_,
+                      _$q_,
+                      _TaggerToast_) => {
 
     ContentTypeList = _ContentTypeList_;
     CollectionObservable = _CollectionObservable_;
     CollectionTypeTargetRemove = _CollectionTypeTargetRemove_;
     CollectionTypeTargetAdd = _CollectionTypeTargetAdd_;
     TypesForCollection = _TypesForCollection_;
+    deferred = _$q_.defer();
+    TaggerToast = _TaggerToast_;
+    $rootScope = _$rootScope_;
 
   })));
 
@@ -155,8 +164,8 @@ describe('The type selector component', () => {
     success = 'success';
 
     addChip = {
-        id: 2,
-        name: 'tag two name'
+      id: 2,
+      name: 'tag two name'
     };
 
     removeChip = {
@@ -194,21 +203,13 @@ describe('The type selector component', () => {
 
     spyOn(CollectionTypeTargetAdd, 'query').and.callFake(() => {
       return {
-        $promise: {
-          then: (callback) => {
-            callback(success);
-          }
-        }
+        $promise: deferred.promise
       }
     });
 
     spyOn(CollectionTypeTargetRemove, 'query').and.callFake(() => {
       return {
-        $promise: {
-          then: (callback) => {
-            callback(success);
-          }
-        }
+        $promise: deferred.promise
       }
     });
 
@@ -223,6 +224,8 @@ describe('The type selector component', () => {
     spyOn(CollectionObservable, 'subscribe').and.callFake((callback) => {
       fakeCollectionObservableCallback = callback;
     });
+
+    spyOn(TaggerToast, 'toast');
 
   });
 
@@ -246,6 +249,8 @@ describe('The type selector component', () => {
     ctrl.$onInit();
 
     ctrl.addType(addChip);
+    deferred.resolve({status: 'success'});
+    $rootScope.$apply();
 
     expect(CollectionTypeTargetAdd.query).toHaveBeenCalledWith({collId: 1, typeId: 2})
 
@@ -258,8 +263,40 @@ describe('The type selector component', () => {
     ctrl.$onInit();
 
     ctrl.removeType(removeChip);
+    deferred.resolve({status: 'success'});
+    $rootScope.$apply();
 
     expect(CollectionTypeTargetRemove.query).toHaveBeenCalledWith({collId: 1, typeId: 1})
+
+  });
+
+  it('should toast on failing to add type.', () => {
+
+
+    let ctrl = $componentController('contentTypeSelector', null);
+
+    ctrl.$onInit();
+
+    ctrl.addType(addChip);
+    deferred.resolve({status: 'failure'});
+    $rootScope.$apply();
+
+    expect(TaggerToast.toast).toHaveBeenCalledWith('WARNING: Unable to add content type!');
+
+  });
+
+  it('should toast on failing to remove type.', () => {
+
+
+    let ctrl = $componentController('contentTypeSelector', null);
+
+    ctrl.$onInit();
+
+    ctrl.removeType(removeChip);
+    deferred.resolve({status: 'failure'});
+    $rootScope.$apply();
+
+    expect(TaggerToast.toast).toHaveBeenCalledWith('WARNING: Unable to remove content type!');
 
   });
 

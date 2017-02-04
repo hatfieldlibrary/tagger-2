@@ -11,11 +11,14 @@ describe('The collection publication status', () => {
     GetPublicationStatus,
     CollectionObservable,
     PublicationStatusObservable,
+    TaggerToast,
     status,
     testCollectionId,
     publishQueryResponse,
     unPublishQueryResponse,
-    pubStatus;
+    pubStatus,
+    deferredStatus,
+    $rootScope;
 
   beforeEach(module('tagger'));
 
@@ -68,11 +71,18 @@ describe('The collection publication status', () => {
   beforeEach(inject((_UpdatePublicationStatus_,
                      _GetPublicationStatus_,
                      _CollectionObservable_,
-                     _PublicationStatusObservable_) => {
+                     _PublicationStatusObservable_,
+                     _TaggerToast_,
+                     _$q_,
+                     _$rootScope_) => {
+
     UpdatePublicationStatus = _UpdatePublicationStatus_;
     GetPublicationStatus = _GetPublicationStatus_;
     CollectionObservable = _CollectionObservable_;
     PublicationStatusObservable = _PublicationStatusObservable_;
+    TaggerToast = _TaggerToast_;
+    deferredStatus = _$q_.defer();
+    $rootScope = _$rootScope_;
 
   }));
 
@@ -105,11 +115,7 @@ describe('The collection publication status', () => {
 
     spyOn(UpdatePublicationStatus, 'query').and.callFake(() => {
       return {
-        $promise: {
-          then: (callback) => {
-            callback(status)
-          }
-        }
+        $promise: deferredStatus.promise
       }
 
     });
@@ -123,6 +129,8 @@ describe('The collection publication status', () => {
         }
       }
     });
+
+    spyOn(TaggerToast, 'toast');
 
     spyOn(PublicationStatusObservable, 'set');
     spyOn(CollectionObservable, 'set').and.callFake(() => {
@@ -141,11 +149,27 @@ describe('The collection publication status', () => {
 
     ctrl.$onInit();
 
+
+
     expect(CollectionObservable.subscribe).toHaveBeenCalled();
     expect(GetPublicationStatus.query).toHaveBeenCalledWith({collId: 1});
     expect(ctrl.pubstatus).toBe(true);
     expect(ctrl.message).toEqual('Published');
     expect(PublicationStatusObservable.set).toHaveBeenCalledWith(true);
+
+  });
+
+  it('should toast if publication status updated failed.', () => {
+
+    let ctrl = $componentController('pubStatusSwitch', null);
+
+    ctrl.$onInit();
+
+    ctrl.onChange();
+    deferredStatus.resolve({status: 'failure'});
+    $rootScope.$apply();
+    expect(TaggerToast.toast).toHaveBeenCalledWith('WARNING: Unable to update publication status!');
+
 
   });
 
@@ -185,6 +209,9 @@ describe('The collection publication status', () => {
 
     ctrl.onChange(false);
 
+    deferredStatus.resolve({status: 'success'});
+    $rootScope.$apply();
+
     expect(ctrl.message).toEqual('Unpublished');
     expect(UpdatePublicationStatus.query).toHaveBeenCalledWith({collId: 1, status: false});
     expect(PublicationStatusObservable.set).toHaveBeenCalledWith(false);
@@ -192,6 +219,9 @@ describe('The collection publication status', () => {
     PublicationStatusObservable.set.calls.reset();
 
     ctrl.onChange(true);
+
+    deferredStatus.resolve({status: 'success'});
+    $rootScope.$apply();
 
     expect(ctrl.message).toEqual('Published');
     expect(UpdatePublicationStatus.query).toHaveBeenCalledWith({collId: 1, status: true});

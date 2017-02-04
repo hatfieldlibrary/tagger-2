@@ -27,7 +27,8 @@
                           CollectionListObservable,
                           CollectionsByArea,
                           CollectionAreasObservable,
-                          AreaObservable) {
+                          AreaObservable,
+                          $log) {
 
     const vm = this;
 
@@ -81,7 +82,7 @@
             areaId: areaId
           });
         collectionList.$promise.then(function (data) {
-          if (data[0]) {
+          try {
             vm.collectionList = data;
             vm.collectionId = data[0].Collection.id;
             /* Set collection list and collection id observers.
@@ -90,10 +91,12 @@
              * CollectionAreaObservable. */
             CollectionListObservable.set(data);
             CollectionObservable.set(vm.collectionId);
-          } else {
+          } catch (err) {
+            $log.info('Unable to find collections for this area. Initializing list with no collections.');
             vm.collectionList = [];
             vm.collectionId = 0;
             CollectionObservable.set(0);
+
           }
         });
       }

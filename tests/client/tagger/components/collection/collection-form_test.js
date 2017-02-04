@@ -17,6 +17,7 @@ describe('The collection form component', () => {
     CategoryByArea,
     CollectionUpdate,
     AreaById,
+    TaggerToast,
     testAreaId,
     testCollectionId,
     testImage,
@@ -24,7 +25,13 @@ describe('The collection form component', () => {
     updatedImage,
     testCollections,
     testCollection,
-    testCategoryList;
+    testCategoryList,
+    testCategoryAreaMismatch,
+    deferredCollectionQuery,
+    deferredCategory,
+    deferredStatus,
+    placeholder,
+    $rootScope;
 
   beforeEach(module('tagger'));
 
@@ -117,7 +124,10 @@ describe('The collection form component', () => {
                      _CategoryForCollection_,
                      _CategoryByArea_,
                      _AreaById_,
-                     _CollectionUpdate_) => {
+                     _TaggerToast_,
+                     _CollectionUpdate_,
+                     _$q_,
+                     _$rootScope_) => {
 
     AreaObservable = _AreaObservable_;
     CollectionObservable = _CollectionObservable_;
@@ -128,6 +138,11 @@ describe('The collection form component', () => {
     CategoryByArea = _CategoryByArea_;
     AreaById = _AreaById_;
     CollectionUpdate = _CollectionUpdate_;
+    TaggerToast = _TaggerToast_;
+    deferredCollectionQuery = _$q_.defer();
+    deferredCategory = _$q_.defer();
+    deferredStatus = _$q_.defer();
+    $rootScope = _$rootScope_;
 
   }));
 
@@ -153,7 +168,7 @@ describe('The collection form component', () => {
       searchUrl: '',
       description: ''
     }];
-    /* */
+
     testCategoryList = [{
       Category: {
         areaId: '1', // this is a string in data model - blah
@@ -168,6 +183,23 @@ describe('The collection form component', () => {
       CollectionId: 1,
       id: 1
     }];
+
+    testCategoryAreaMismatch = [
+      { // use this for testing area/category mismatch
+        Category: {
+          areaId: '10', // this is a string in data model - blah
+          id: 2,
+          description: 'description',
+          linkLabel: 'label',
+          secondaryUrl: 'secondary',
+          title: 'category title',
+          url: 'http://somewhere'
+        },
+        CategoryId: 2,
+        CollectionId: 1,
+        id: 1
+      }];
+
     testCollections = {
       init: {
         id: 1,
@@ -186,7 +218,7 @@ describe('The collection form component', () => {
         id: 2,
         category: 4,
         image: updatedImage,
-        browseType: 'link',
+        browseType: 'opt',
         ctype: 'dig',
         dates: '2001',
         items: [],
@@ -198,6 +230,9 @@ describe('The collection form component', () => {
 
     };
     testCollection = testCollections.init;
+
+    placeholder = ['Add the collection URL, e.g.: http://host.domain.edu/wombats?type=hungry', 'Add the collection name for select option, e.g. wallulah'];
+
 
   });
 
@@ -266,25 +301,13 @@ describe('The collection form component', () => {
 
     spyOn(CategoryForCollection, 'query').and.callFake(() => {
       return {
-        $promise: {
-          then: (callback) => {
-            return callback(testCategoryList);
-          }
-        }
+        $promise: deferredCategory.promise
       }
     });
 
     spyOn(CollectionById, 'query').and.callFake(() => {
       return {
-        $promise: {
-          then: (callback) => {
-            if (testCollectionId === 1) {
-              return callback(testCollections.init);
-            } else if (testCollectionId == 2) {
-              return callback(testCollections.update);
-            }
-          }
-        }
+        $promise: deferredCollectionQuery.promise
       }
     });
 
@@ -307,17 +330,15 @@ describe('The collection form component', () => {
 
     spyOn(CollectionUpdate, 'save').and.callFake(() => {
       return {
-        $promise: {
-          then: (callback) => {
-            return callback({status: 'success'});
-          }
-        }
+        $promise: deferredStatus.promise
       }
     });
 
+    spyOn(TaggerToast,'toast');
+
   });
 
-  it('should initialize the form on load', () => {
+  it('should initialize the form on init', () => {
 
     let menuSpy = jasmine.createSpy('menuSpy');
     let bindings = {menu: menuSpy};
@@ -327,12 +348,37 @@ describe('The collection form component', () => {
 
     ctrl.$onInit();
 
+    deferredCollectionQuery.resolve(testCollections.init);
+    $rootScope.$apply();
+
     expect(CollectionObservable.get).toHaveBeenCalled();
     expect(ThumbImageObservable.subscribe).toHaveBeenCalled();
     expect(CollectionAreasObservable.subscribe).toHaveBeenCalled();
     expect(AreaObservable.subscribe).toHaveBeenCalled();
     expect(ctrl.collectionId).toEqual(testCollections.init.id);
     expect(menuSpy).toHaveBeenCalledWith({id: ctrl.collection.id, title: ctrl.collection.title});
+
+  });
+
+  it('should initialize empty collection on init if collection id is not valid.', () => {
+
+    let ctrl = $componentController('collectionForm', null);
+    CollectionObservable.set(0);
+    testCollectionId = 0;
+    ctrl.$onInit();
+    expect(ctrl.collection).toEqual({});
+
+  });
+
+  it('should initialize empty collection if collection query does not return data', () => {
+
+    let ctrl = $componentController('collectionForm', null);
+
+    ctrl.$onInit();
+
+    deferredCollectionQuery.resolve();
+    $rootScope.$apply();
+    expect(ctrl.collection).toEqual({});
 
   });
 
@@ -345,6 +391,9 @@ describe('The collection form component', () => {
     CollectionObservable.set(1);
 
     ctrl.$onInit();
+
+    deferredCollectionQuery.resolve(testCollections.init);
+    $rootScope.$apply();
 
     expect(ctrl.collection).toEqual(testCollections.init);
     expect(ctrl.collectionId).toEqual(1);
@@ -396,6 +445,9 @@ describe('The collection form component', () => {
 
     ctrl.$onInit();
 
+    deferredCollectionQuery.resolve(testCollections.update);
+    $rootScope.$apply();
+
     testCollectionId = 2;
 
     CollectionObservable.set(2);
@@ -405,6 +457,7 @@ describe('The collection form component', () => {
     expect(ctrl.collectionId).toEqual(2);
     expect(ctrl.category).toEqual(4);
     expect(ctrl.thumbnailImage).toEqual(updatedImage);
+    expect(ctrl.browsePlaceholder).toEqual(placeholder[1])
 
   });
 
@@ -417,9 +470,28 @@ describe('The collection form component', () => {
 
     ctrl.$onInit();
 
+    deferredCollectionQuery.resolve(testCollections.init);
+    deferredCategory.resolve(testCategoryList);
+    $rootScope.$apply();
+
     expect(CategoryForCollection.query).toHaveBeenCalled();
     expect(CategoryByArea.query).toHaveBeenCalled();
     expect(ctrl.categoryList).toEqual(testCategoryList)
+
+  });
+
+  it('should set the category option to false', () => {
+    let menuSpy = jasmine.createSpy('menuSpy');
+    let bindings = {menu: menuSpy};
+    let ctrl = $componentController('collectionForm', null, bindings);
+
+    ctrl.$onInit();
+
+    deferredCollectionQuery.resolve(testCollections.init);
+    deferredCategory.resolve(testCategoryAreaMismatch);
+    $rootScope.$apply();
+
+    expect(ctrl.showCollectionCategories).toBe(false);
 
   });
 
@@ -454,8 +526,25 @@ describe('The collection form component', () => {
 
     ctrl.updateCollection();
     expect(CollectionUpdate.save).toHaveBeenCalled();
+    deferredStatus.resolve({status: 'success'});
+    $rootScope.$apply();
+    expect(TaggerToast.toast).toHaveBeenCalledWith('Collection Updated')
 
   });
+
+  it('should fail to update the collection and warn via toast.', () => {
+
+    let ctrl = $componentController('collectionForm', null);
+
+    ctrl.updateCollection();
+    expect(CollectionUpdate.save).toHaveBeenCalled();
+    deferredStatus.reject();
+    $rootScope.$apply();
+    expect(TaggerToast.toast).toHaveBeenCalledWith('ERROR: Unable to update collection.')
+
+  });
+
+
 
   it('should update area info and category on area change.', () => {
 
@@ -477,9 +566,9 @@ describe('The collection form component', () => {
     let ctrl = $componentController('collectionForm', null);
 
     ctrl.setBrowseType(0);
-    expect(ctrl.browsePlaceholder).toEqual('Add the collection URL, e.g.: http://host.domain.edu/wombats?type=hungry');
+    expect(ctrl.browsePlaceholder).toEqual(placeholder[0]);
     ctrl.setBrowseType(1);
-    expect(ctrl.browsePlaceholder).toEqual('Add the collection name for select option, e.g. wallulah');
+    expect(ctrl.browsePlaceholder).toEqual(placeholder[1]);
 
   });
 
@@ -502,19 +591,11 @@ describe('The collection form component', () => {
     let bindings = {menu: menuSpy};
     let ctrl = $componentController('collectionForm', null, bindings);
 
-    CategoryForCollection.query.and.stub();
-    CategoryForCollection.query.and.callFake(() => {
-      return {
-        $promise: {
-          then: (callback) => {
-            return callback([]);
-          }
-        }
-      }
-    });
-
     ctrl.$onInit();
 
+    deferredCollectionQuery.resolve(testCollections.init);
+    deferredCategory.resolve([]);
+    $rootScope.$apply();
 
     expect(ctrl.showCollectionCategories).toBe(true);
     expect(CategoryByArea.query).toHaveBeenCalled();
