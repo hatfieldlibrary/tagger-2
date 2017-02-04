@@ -7,7 +7,7 @@
 [![bitHound Overall Score](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/score.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
 
  
-Tagger implements a specific approach to publishing information about digital artifacts produced by a community or organization. 
+Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization. 
 
 In this approach, artifacts are 
 assigned to general Areas that can be topical or administrative (e.g. student research or University Archives). Areas are in turn given 
