@@ -11,11 +11,12 @@ Tagger implements a specific approach to publishing information about the digita
 assigned to Areas that can be topical or administrative (e.g. student research or University Archives). These Areas are further refined with 
 one or more Collection Groups (e.g. Northwest Art Collection).  
 
-All of the collections and items in Tagger are associated with Areas and (optionally) with Collection Groups to provide structure, context and the ability to 
+All of the collections and items in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to 
 discover more about the people and departments who produce and own the content.  Subject tags and content types can also be assigned to support browsing and discovery.
 
 Every entity in Tagger (Area, Collection Group, Collection, Subject Tag, Content Type) includes descriptive fields that are populated via
-Tagger's administrative user interface. Beyond titles and descriptions, fields include urls, link types, link labels, and restrictions.
+Tagger's administrative user interface. Beyond titles and descriptions, fields include URLs, link types, link labels, and restrictions.
+
 Access to the administrative interface is limited to Administrators and Collection Maintainers.
 
 ## Microservice
@@ -80,6 +81,8 @@ Configurations for development, production, and test environments are defined in
 on `credentials.js` for sensitive information such as OAUTH2 keys. You will need to create your own `credentials.js` file. A sample file is provided
 in the `server/config`.  Be sure to place this file outside of the project itself.  The path to the `credentials.js` file is defined in
 `server/config/environment.js`.
+
+See the documentation for [more about configuration](https://github.com/hatfieldlibrary/tagger-2/wiki/Configuration).  
   
   
 ## User Authentication
@@ -99,7 +102,7 @@ To start the development server, type:
 The first time you start the application in development mode, Sequelize will create tables in the `acomtags_development` database.
  
 The Express server will run on the development port configured in `config/environment.js` (e.g. 3333). This project uses [browser-sync](https://www.browsersync.io/) for synchronized browser testing, including automatic page 
-refresh on code changes.
+refresh on code changes. You can bypass browser-sync and run the server directly if you prefer.
  
 ## Unit Tests
  
