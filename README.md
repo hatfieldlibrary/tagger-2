@@ -11,23 +11,27 @@ Tagger implements a specific approach to publishing information about the digita
 assigned to Areas that can be topical or administrative (e.g. student research or University Archives). These Areas are further refined with 
 one or more Collection Groups (e.g. Northwest Art Collection).  
 
-All of the artifacts in Tagger are associated with Areas and (optionally) with Collection Groups to provide structure, context and the ability to 
+All of the collections and items in Tagger are associated with Areas and (optionally) with Collection Groups to provide structure, context and the ability to 
 discover more about the people and departments who produce and own the content.  Subject tags and content types can also be assigned to support browsing and discovery.
 
 Every entity in Tagger (Area, Collection Group, Collection, Subject Tag, Content Type) includes descriptive fields that are populated via
 Tagger's administrative user interface. Beyond titles and descriptions, fields include urls, link types, link labels, and restrictions.
 Access to the administrative interface is limited to Administrators and Collection Maintainers.
 
-Tagger itself is not a fullstack, out-of-the-box publishing solution.  It is a microservice that shares information with external clients or other services
+## Microservice
+
+Tagger itself is not a fullstack, out-of-the-box publishing solution.  It is a modest microservice that shares information with external clients or other services
 over the network. External clients can access information such as:
 
  * All Collections 
  * The Collections in an Area
  * The Collections in a Collection Group
- * The Collections by Subject Tag
+ * Collections by Subject Tag
+ 
+See documentation for the [Public API](https://github.com/hatfieldlibrary/tagger-2/wiki/Public-API).
 
 Tagger persists information in a Mysql/MariaDb database. Tagger is written using [NodeJs](https://nodejs.org/en/), [Express](http://expressjs.com), [Sequelize](http://docs.sequelizejs.com/en/v3/), [AngularJs (1.6+)](https://angularjs.org/) and [Angular Material]( https://material.angularjs.org/latest/).
- The AngularJs administrative client is component-based.
+ The AngularJs administrative client is [Component-based](https://docs.angularjs.org/guide/component).
  
  
 ## Area Overview
