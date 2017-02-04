@@ -189,6 +189,7 @@ describe('The tag selector component', () => {
       name: 'tag one name'
     };
 
+
     tagSuccess = {status: 'success'};
 
     testAreaId = 1;
@@ -311,7 +312,7 @@ describe('The tag selector component', () => {
 
   });
 
-  it('should toast when unable to add tag.', () => {
+  it('should toast when API response indicated tag addition did not succeed.', () => {
     let ctrl = $componentController('subjectSelector', null);
     ctrl.$onInit();
 
@@ -324,7 +325,7 @@ describe('The tag selector component', () => {
     expect(TaggerToast.toast).toHaveBeenCalledWith('WARNING: Unable to add subject tag! failure');
   });
 
-  it('should toast when unable to remove tag.', () => {
+  it('should toast when API response indicated tag removal did not succeed.', () => {
     let ctrl = $componentController('subjectSelector', null);
     ctrl.$onInit();
 
@@ -335,6 +336,16 @@ describe('The tag selector component', () => {
     $rootScope.$apply();
 
     expect(TaggerToast.toast).toHaveBeenCalledWith('WARNING: Unable to remove subject tag!');
+  });
+
+  it('should fail to remove tag because the tag id is not in the current area.', () => {
+    let ctrl = $componentController('subjectSelector', null);
+    ctrl.$onInit();
+
+    removeChip.id = 10;
+    ctrl.removeTag(removeChip);
+
+    expect(TaggerToast.toast).toHaveBeenCalledWith('Cannot remove tag.');
   });
 
   it('should fetch new tags on collection change.', () => {
@@ -349,6 +360,26 @@ describe('The tag selector component', () => {
 
     expect(ctrl.collectionId).toEqual(2);
     expect(TagsForCollection.query).toHaveBeenCalled();
+
+  });
+
+  it('should indicate that the tag is removable.', () => {
+
+    let ctrl = $componentController('subjectSelector', null);
+    ctrl.$onInit();
+
+    let removable = ctrl.isRemovable(1);
+    expect(removable).toBe(true);
+
+  });
+
+  it('should indicate that the tag is not removable.', () => {
+
+    let ctrl = $componentController('subjectSelector', null);
+    ctrl.$onInit();
+
+    let removable = ctrl.isRemovable(200);
+    expect(removable).toBe(false);
 
   });
 
