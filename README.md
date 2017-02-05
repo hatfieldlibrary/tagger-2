@@ -6,13 +6,12 @@
 [![bitHound Code](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/code.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
 [![bitHound Overall Score](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/score.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
 
- 
-Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization. 
 
-In this approach, artifacts are 
-assigned to general Areas. These Areas can be topical or administrative (e.g. student research or University Archives). Areas are in turn given one or more Collection Groups (e.g. Northwest Art Collection) that are the specific home of digital artifacts and sub-collections.  
+Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization.
 
-All of the digital collections and items in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content.  Subject tags and content types can also be assigned to support browsing and discovery.
+In this approach, artifacts are assigned to general Areas. These Areas can be topical or administrative (e.g. student research or University Archives). Areas are in turn given one or more Collection Groups (e.g. Northwest Art Collection) that are the specific home of digital artifacts and sub-collections.
+
+All of the digital collections and items in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content. Subject tags and content types can also be assigned to support browsing and discovery.
 
 Every entity in Tagger has descriptive fields that are populated via Tagger's administrative user interface. Beyond titles and descriptions, these fields include URLs, link types, link labels, and restrictions.
 
