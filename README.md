@@ -6,7 +6,7 @@
 [![bitHound Code](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/code.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
 [![bitHound Overall Score](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/score.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
 
- 
+
 Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization.
 
 In this approach, artifacts are assigned to general Areas. These Areas can be topical or administrative (e.g. student research or University Archives). Areas are in turn given one or more Collection Groups (e.g. Northwest Art Collection) that are the specific home of digital artifacts and sub-collections.
@@ -19,8 +19,7 @@ Access to Tagger's administrative interface is limited to Administrators and Are
 
 ## Microservice
 
-Tagger itself is not a fullstack, out-of-the-box publishing solution.  It is a modest microservice that shares information with external clients or other services
-over the network. External clients can access information such as:
+Tagger itself is not a fullstack, out-of-the-box publishing solution.  It is a modest microservice that shares information with external clients or other services over the network. External clients can access information such as:
 
  * All Collections 
  * The Collections in an Area
