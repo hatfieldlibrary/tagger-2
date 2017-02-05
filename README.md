@@ -15,7 +15,7 @@ All of the digital collections and items in Tagger are associated with one or mo
 
 Every entity in Tagger has descriptive fields that are populated via Tagger's administrative user interface. Beyond titles and descriptions, these fields include URLs, link types, link labels, and restrictions.
 
-Access to the administrative interface is limited to Administrators and Collection Maintainers.
+Access to the administrative interface is limited to Administrators and Area Maintainers.
 
 ## Microservice
 
