@@ -10,21 +10,17 @@
 Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization. 
 
 In this approach, artifacts are 
-assigned to general Areas that can be topical or administrative (e.g. student research or University Archives). Areas are in turn given 
-one or more Collection Groups (e.g. Northwest Art Collection) that are the specific home of digital artifacts or sub-collections.  
+assigned to general Areas. These Areas can be topical or administrative (e.g. student research or University Archives). Areas are in turn given one or more Collection Groups (e.g. Northwest Art Collection) that are the specific home of digital artifacts and sub-collections.  
 
-All of the digital collections and items in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to 
-discover more about the people and departments who produce and own the content.  Subject tags and content types can also be assigned to support browsing and discovery.
+All of the digital collections and items in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content.  Subject tags and content types can also be assigned to support browsing and discovery.
 
-Every entity in Tagger has descriptive fields that are populated via
-Tagger's administrative user interface. Beyond titles and descriptions, these fields include URLs, link types, link labels, and restrictions.
+Every entity in Tagger has descriptive fields that are populated via Tagger's administrative user interface. Beyond titles and descriptions, these fields include URLs, link types, link labels, and restrictions.
 
-Access to the Tagger administrative interface is limited to Administrators and Area Maintainers.
+Access to Tagger's administrative interface is limited to Administrators and Area Maintainers.
 
 ## Microservice
 
-Tagger itself is not a fullstack, out-of-the-box publishing solution.  It is a modest microservice that shares information with external clients or other services
-over the network. External clients can access information such as:
+Tagger itself is not a fullstack, out-of-the-box publishing solution.  It is a modest microservice that shares information with external clients or other services over the network. External clients can access information such as:
 
  * All Collections 
  * The Collections in an Area
