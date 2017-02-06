@@ -9,9 +9,9 @@
 
 Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization.
 
-In this approach, artifacts are assigned to general Areas. These Areas can be topical or administrative (e.g. student research or University Archives). Areas in turn have one or more Collection Groups that are the specific home of digital artifacts and sub-collections.
+In this approach, artifacts are assigned to general Areas. These Areas can be topical or administrative (e.g. student research or University Archives). Areas in turn have one or more Collection Groups that are the more specific home of digital artifacts and sub-collections.
 
-All of the digital collections and items in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content. Subject tags and content types can also be assigned to support browsing and discovery.
+All digital items and collections in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content. Subject tags and content types can also be assigned to support browsing and discovery.
 
 Every entity in Tagger has descriptive fields that are populated using the Tagger administrative interface. Beyond titles and descriptions, these fields include URLs, link types, link labels, and restrictions.
 
@@ -72,10 +72,9 @@ Database tables for the Tagger database schema are generated when the applicatio
 ## Configuration
  
 Configurations for development, production, and test environments are defined in `server/config/environment.js`.  This configuration file relies in turn
-on `credentials.js` for sensitive information such as OAUTH2 keys. You will need to create your own `credentials.js` file. A sample file is provided
-in the `server/config`.  
+on `credentials.js` for sensitive information such as OAUTH2 keys. You will need to create your own `credentials.js` file. A sample file is provided in `server/credentials`.  
 
-Be sure to place this file outside of the project itself.  The path to the `credentials.js` file on your local system is defined in `server/config/environment.js`.
+Be sure to place the credential file outside of the project itself.  The path to the `credentials.js` file on your local development system is defined in `server/config/require-paths.js` and assumes your home directory: `~/etc/tagger/configuration.js`.
 
 See the documentation for [more about Tagger configuration](https://github.com/hatfieldlibrary/tagger-2/wiki/Configuration).  
   
