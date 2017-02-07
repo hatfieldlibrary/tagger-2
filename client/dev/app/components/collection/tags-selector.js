@@ -218,7 +218,7 @@
     '         </div>' +
     '       </md-input-container>' +
     '     </div>' +
-     ' <div class="md-caption">You can only remove tags that belong to this area. </div> ' +
+     ' <div class="md-caption">You can only add and remove tags that belong to this area. </div> ' +
     ' </md-card-content>' +
     '</md-card>',
     controller: TagsCtrl

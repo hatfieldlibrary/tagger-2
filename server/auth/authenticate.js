@@ -64,13 +64,19 @@ module.exports = function (app, config) {
   }
   else if (app.get('env') === 'production') {
 
-    sessionMiddleware = session(
-      {
-        secret: 'insideoutorup',
-        store: new RedisStore({host: '127.0.0.1', port: config.redisPort}),
-        saveUninitialized: false, // don't create session until something stored,
-        resave: false // don't save session if unmodified
-      });
+    // temporary hack.
+    sessionMiddleware = session({
+      secret: 'keyboard cat',
+      saveUninitialized: true,
+      resave: true
+    });
+    // sessionMiddleware = session(
+    //   {
+    //     secret: 'insideoutorup',
+    //     store: new RedisStore({host: '127.0.0.1', port: config.redisPort}),
+    //     saveUninitialized: false, // don't create session until something stored,
+    //     resave: false // don't save session if unmodified
+    //   });
 
   }
 

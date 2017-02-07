@@ -12,13 +12,13 @@
   'use strict';
 
   taggerServices.factory('DialogStrategy',
-    (ShowDialog,
+    function (ShowDialog,
      AreaDialog,
      CollectionDialog,
      ContentTypeDialog,
      CollectionGroupDialog,
      TagDialog,
-     ImageDialog) => {
+     ImageDialog) {
 
       /**
        * The constructor.name property is not consistently supported in
