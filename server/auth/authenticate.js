@@ -19,97 +19,81 @@
  * Authentication module.
  * Created by mspalti on 12/4/14.
  * Modified by mspalti on 11/10/2015
+ * Modified by mspalti on 2/9/2017
  */
 
 'use strict';
 
-var
+let
   /**
    * Express session store
    * @type {session|exports|module.exports}
    */
   session = require('express-session'),
-  /**
-   * cookie header parser used with sessions
-   * @type {*|exports|module.exports}
-   */
+
+  passport = require('passport'),
+
   cookieParser = require('cookie-parser'),
-  /**
-   * Google passport OAUTH2 authentication
-   */
-  GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-  /**
-   * Redis client
-   * @type {exports|module.exports}
-   */
-  redis = require('redis'),
+
+  bodyParser = require('body-parser'),
+
   /**
    * Redis session store
    */
   RedisStore = require('connect-redis')(session);
 
-  const db = require('../api/tagger/models');
+
+const db = require('../api/tagger/models');
 
 
-module.exports = function (app, config, passport) {
+module.exports = function (app, config) {
 
-  // AUTHENTICATION
 
-  // Use passport.authenticate() as middleware. The first step in Google authentication
-  // redirects the user to google.com.  After authorization, Google
-  // will redirect the user back to the callback URL /auth/google/callback
-  // jshint unused: false
-  app.get('/auth/google',
-    passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email'] }),
-
-    function(req, res){
-      // The request will be redirected to Google for authentication, so this
-      // function will not be called.
-    });
-
-  // If authentication failed, redirect the login page.  Otherwise, redirect
-  // to the admin page page.
-  app.get('/auth/google/callback',
-    passport.authenticate('google', { successRedirect: '/tagger/',
-      failureRedirect: '/tagger/login' }));
-
+  let sessionMiddleware;
 
   // For development purposes, use express-session in lieu of Redisstore.
   if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
-    app.use(session({
-        secret: 'keyboard cat',
-        saveUninitialized: true,
-        resave: true
-      })
-    );
+    sessionMiddleware = session({
+      secret: 'keyboard cat',
+      saveUninitialized: true,
+      resave: true
+    });
+
     // Use redis as the production session store.
     // http://redis.io/
-  } else if (app.get('env') === 'production') {
-    var client = redis.createClient(
-      config.redisPort, '127.0.0.1',
-      {}
-    );
-    app.use(cookieParser());
-    app.use(session(
-      {
+  }
+  else if (app.get('env') === 'production') {
 
+    sessionMiddleware = session(
+      {
         secret: 'insideoutorup',
-        store: new RedisStore({host: '127.0.0.1', port: config.redisPort, client: client}),
+        store: new RedisStore({host: '127.0.0.1', port: config.redisPort}),
         saveUninitialized: false, // don't create session until something stored,
         resave: false // don't save session if unmodified
-      }
-    ));
+      });
+
   }
 
-  // Set up authentication and session.
+  /**
+   * Google passport OAUTH2 authentication
+   */
+  let GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
+  app.use(sessionMiddleware);
+  // Passport authentication and session.
   app.use(passport.initialize());
   app.use(passport.session());
+  // for parsing the body of urlencoded post requests
+  app.use(bodyParser.urlencoded({extended: true}));
+  // angularjs posts data as json so using the json parser, too.
+  app.use(bodyParser.json());
+  app.use(cookieParser());
+
 
   // Google OAUTH2.
-  var GOOGLE_CLIENT_ID = config.googleClientId;
-  var GOOGLE_CLIENT_SECRET = config.googleClientSecret;
-  var GOOGLE_CALLBACK = config.googleCallback;
+  const GOOGLE_CLIENT_ID = config.googleClientId;
+  const GOOGLE_CLIENT_SECRET = config.googleClientSecret;
+  const GOOGLE_CALLBACK = config.googleCallback;
 
   // define serializer and deserializer
   passport.serializeUser(function (user, done) {
@@ -133,12 +117,22 @@ module.exports = function (app, config, passport) {
 
       // asynchronous verification
       process.nextTick(function () {
+
+        let emails = profile.emails;
+        let email;
+        // TODO: Google + OAUTH returning multiple email addresses; manage in app configuration by adding domain.
+        for (let i = 0; i < emails.length; i++) {
+          let userEmail = emails[i].value;
+          if (userEmail.match(/willamette\.edu/)) {
+            email = userEmail;
+          }
+        }
         // Use Sequelize to look up the user's
         // email address in the local user database.
         db.Users.find({
           attributes: ['id', 'area'],
           where: {
-            email: profile._json.email
+            email: email
           }
         }).then(function (user, err) {
           // If email lookup succeeded, pass
@@ -152,33 +146,47 @@ module.exports = function (app, config, passport) {
           // Otherwise pass null user profile
           // to the passport callback.
           done(null, null);
-        }).catch( function (err) {
-            console.log(err);
-          });
+        }).catch(function (err) {
+          console.log(err);
+        });
       });
     }
   ));
 
-  /* jshint unused: false */
-  app.isAuthenticated = function (req, res, next) {
-    if (req.isAthenticated()) {
-      return true;
-    }
-    return false;
-  };
+  // Use passport.authenticate() as middleware. The first step in Google authentication
+  // redirects the user to google.com.  After authorization, Google
+  // will redirect the user back to the callback URL /auth/google/callback
+  // jshint unused: false
+  app.get('/auth/google',
+    passport.authenticate('google', {
+      scope: ['https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email']
+    }),
 
-// Route middleware ensures user is authenticated.
-// Use this middleware on any resource that needs to be protected.  If
-// the request is authenticated (typically via a persistent login session),
-// the request will proceed.  Otherwise, the user will be redirected to the
-// login page.
+    function (req, res) {
+      // The request will be redirected to Google for authentication, so this
+      // function will not be called.
+    });
+
+  // If authentication failed, redirect the login page.  Otherwise, redirect
+  // to the admin page page.
+  app.get('/auth/google/callback',
+    passport.authenticate('google', {
+      successRedirect: '/tagger/',
+      failureRedirect: '/tagger/login'
+    }));
+
+  // Route middleware ensures user is authenticated.
+  // Use this middleware on any resource that needs to be protected.  If
+  // the request is authenticated (typically via a persistent login session),
+  // the request will proceed.  Otherwise, the user will be redirected to the
+  // login page.
   app.ensureAuthenticated = function (req, res, next) {
+    console.log(req.isAuthenticated())
     if (req.isAuthenticated() || !config.useAuth) {
       return next();
     }
     res.redirect('/tagger/login');
   };
-
-
 
 };

@@ -17,8 +17,6 @@
 'use strict';
 module.exports = function(app,config){
 
-
-
   const userInfo = require('../../server/api/tagger/controllers/user-info');
   const tag = require('../../server/api/tagger/controllers/tags/admin');
   const apiTag = require('../api/tagger/controllers/tags/public');
