@@ -38,7 +38,7 @@ Tagger persists information in a Mysql/MariaDb database. Tagger is written using
  
 ## Collections Page
  
-![Collections Page](client/dev/resources/images/docs/collection_view.png "Collections Page")
+![Collections Page](client/dev/resources/images/docs/collection_view2.png "Collections Page")
  
  
 ## Getting started
