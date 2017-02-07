@@ -122,7 +122,7 @@
         _getAreaInfo(areaId);
       });
 
-    }
+    };
 
   }
 

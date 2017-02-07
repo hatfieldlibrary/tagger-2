@@ -97,7 +97,7 @@
 
       return {
         controller: _controller
-      }
+      };
 
     });
 

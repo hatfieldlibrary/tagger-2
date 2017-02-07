@@ -22,10 +22,10 @@
 (function () {
   'use strict';
 
-  function AuthController(SetGlobalValues,
-                          UserAreaObservable,
+  function AuthController(UserAreaObservable,
                           UserObserver,
                           IsAuthObserver,
+                          SetGlobalValues,
                           getUserInfo,
                           $log) {
 
@@ -64,6 +64,7 @@
       let userInfo = getUserInfo.query();
       userInfo.$promise
         .then(function (user) {
+          console.log(user)
           IsAuthObserver.set(true);
           UserObserver.set(user.areaId);
           UserAreaObservable.set(user.areaId);

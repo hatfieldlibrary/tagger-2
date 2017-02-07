@@ -36,23 +36,25 @@ gulp.task(tasks.CLIENT_VIEWS_PREPARE, () => {
     .pipe(
       usemin(
         {
-          css: [rev()],
+          css: [rev],
           html: [
-            htmlmin({
-              collapseWhitespace: true,
-              caseSensitive: true
-            })
+            function() {
+              return htmlmin({
+                  collapseWhitespace: true,
+                  caseSensitive: true
+                })
+            }
           ],
           jsApp: [
-            uglify(),
-            rev()
+            uglify,
+            rev
           ],
           jsLib: [
             'concat',
-            rev()
+            rev
           ],
-          inlinejs: [uglify()],
-          inlinecss: [cssmin(), 'concat']
+          inlinejs: [uglify],
+          inlinecss: [cssmin, 'concat']
         }
       )
     )

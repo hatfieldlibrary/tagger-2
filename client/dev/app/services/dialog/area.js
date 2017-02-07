@@ -29,7 +29,7 @@
          * Get list of all areas.  Updates area observers.
          * @param id  the id of the current area or null.
          */
-        vm.getAreaList = function (id) {
+        vm.getAreaList = function () {
 
           let areas = AreaList.query();
 
@@ -96,7 +96,7 @@
 
         controller: _controller
 
-      }
+      };
 
     });
 

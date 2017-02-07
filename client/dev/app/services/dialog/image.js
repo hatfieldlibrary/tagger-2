@@ -51,7 +51,7 @@
 
       return {
         controller: _controller
-      }
+      };
 
     });
 
