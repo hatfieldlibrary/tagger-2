@@ -141,7 +141,7 @@
 
       return {
         controller: _controller
-      }
+      };
 
     });
 

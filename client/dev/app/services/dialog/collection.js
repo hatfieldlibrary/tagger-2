@@ -107,7 +107,7 @@
               CollectionObservable.set(id);
             }
           } else {
-            CollectionObservable.set(0)
+            CollectionObservable.set(0);
           }
 
         });
@@ -118,7 +118,7 @@
 
     return {
       controller: _controller
-    }
+    };
 
   });
 

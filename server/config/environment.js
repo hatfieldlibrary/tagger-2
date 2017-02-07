@@ -54,7 +54,7 @@ const config = {
     logLevel: 'debug',
     dbLog: console.log,
     sync: {force: false},
-    useAuth: false,
+    useAuth: true,
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',

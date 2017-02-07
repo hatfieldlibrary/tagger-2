@@ -22,10 +22,10 @@
 (function () {
   'use strict';
 
-  function AuthController(SetGlobalValues,
-                          UserAreaObservable,
+  function AuthController(UserAreaObservable,
                           UserObserver,
                           IsAuthObserver,
+                          SetGlobalValues,
                           getUserInfo,
                           $log) {
 

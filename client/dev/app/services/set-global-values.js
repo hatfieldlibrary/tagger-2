@@ -6,7 +6,7 @@
   'use strict';
 
   taggerServices.factory('SetGlobalValues',
-    (CategoryList,
+    function (CategoryList,
      GroupListObservable,
      GroupObservable,
      TagList,
@@ -14,7 +14,7 @@
      TagObservable,
      ContentTypeList,
      ContentTypeListObservable,
-     ContentTypeObservable) => {
+     ContentTypeObservable) {
 
       /**
        * Initializes global values not specific to the area.
@@ -51,8 +51,8 @@
 
       return {
         initializeGlobalValues: _initGlobals
-      }
+      };
 
-    })
+    });
 
 })();

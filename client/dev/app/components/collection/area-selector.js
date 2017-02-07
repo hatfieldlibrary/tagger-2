@@ -77,7 +77,7 @@
         }
       }
       return false;
-    };
+    }
 
     /**
      * Tests to see if the collection area is currently

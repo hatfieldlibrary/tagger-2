@@ -33,14 +33,14 @@
     return {
 
       identicalArray: (array1, array2) => {
-        if (array1.length === array2.length)
+
+        if (array1.length === array2.length) {
           return array1.every((a, index) => a === array2[index]);
-        else
-          return false
+        }
+        return false;
+
       }
-
     };
-
   });
 
 })();
