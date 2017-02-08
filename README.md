@@ -13,6 +13,7 @@ In this approach, information about a digial item or collection is added to a Co
 
 All Collections in Tagger must be associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content. Subject tags and content types can also be assigned to support browsing and discovery.
 
+
 The Collections Page image below illustrates some of these relationships.
 
 Every entity in Tagger has descriptive fields that are populated using the Tagger administrative interface. Beyond titles and descriptions, these fields include URLs, link types, link labels, and restrictions.
