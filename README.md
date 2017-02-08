@@ -55,7 +55,7 @@ Next install project dependencies using [npm](https://www.npmjs.com/) and [bower
  
      bower install
      
-Node, npm and bower need to be installedif you do not have them already.
+Node, npm and bower need to be installed if you do not have them already.
   
 ## Mysql/MariaDb
  
