@@ -59,7 +59,7 @@
             return Object.assign({}, ShowDialog, TagDialog);
 
           default:
-            console.log('WARNING: controller not found ' + constructor);
+            console.log('WARNING: controller not found ' + controller);
             return null;
 
         }
