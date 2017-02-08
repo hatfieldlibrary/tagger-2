@@ -64,7 +64,6 @@
       let userInfo = getUserInfo.query();
       userInfo.$promise
         .then(function (user) {
-          console.log(user)
           IsAuthObserver.set(true);
           UserObserver.set(user.areaId);
           UserAreaObservable.set(user.areaId);
