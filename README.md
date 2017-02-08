@@ -9,9 +9,11 @@
 
 Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization.
 
-In this approach, artifact information is added to a Collection object.  The Collection object is assigned to a general Area that can be topical or administrative (e.g. student research or University Archives). Areas in turn have one or more Collection Groups that are specific homes for Collections.
+In this approach, information about a digial item or collection is added to a Collection object.  The Collection object is immediately assigned to a general Area that can be topical or administrative (e.g. student research or University Archives). Areas in turn have one or more Collection Groups that are specific homes for Collections.
 
-All Collection objects in Tagger must be associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content. Subject tags and content types can also be assigned to support browsing and discovery.
+All Collection objects in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content. Subject tags and content types can also be assigned to support browsing and discovery.
+
+The Collections Page image below illustrates some of these relationships.
 
 Every entity in Tagger has descriptive fields that are populated using the Tagger administrative interface. Beyond titles and descriptions, these fields include URLs, link types, link labels, and restrictions.
 
@@ -37,6 +39,7 @@ Tagger persists information in a Mysql/MariaDb database. Tagger is written using
 ![Area Overview Page](client/dev/resources/images/docs/overview_page.png "Area Overview Page")
  
 ## Collections Page
+Administrative view.
  
 ![Collections Page](client/dev/resources/images/docs/collection_view2.png "Collections Page")
  
@@ -46,14 +49,14 @@ Tagger persists information in a Mysql/MariaDb database. Tagger is written using
 To get started with development, clone the project into your working directory.
  
  
-Next install project dependencies using [npm](https://www.npmjs.com/) and [bower](https://bower.io/).  Node, npm and bower need to be installed
-if you do not have them already.
- 
+Next install project dependencies using [npm](https://www.npmjs.com/) and [bower](https://bower.io/).  
+
      npm install
  
      bower install
      
-
+Node, npm and bower need to be installedif you do not have them already.
+  
 ## Mysql/MariaDb
  
 The application requires mysql or MariaDb.  For development, you need to install mysql on your machine and create databases. The database names are set in configuration and can be whatever you like so long as separate databases are created for development, testing and production.
@@ -86,7 +89,7 @@ Tagger uses Google OAUTH2 for authentication.
 Currently, we are not creating a default administrator account.  Before logging into Tagger for the first time, you first must add yourself to the database Users table.  Insert values for name, email, area (0 is administrator), createdAt and updatedAt.
  
  
-## Development Server
+## Local Development
  
 To start the development server, type:
   
@@ -112,7 +115,7 @@ For quicker tests with minimal reporting, use this npm script:
    `npm run test-server`
  
  
-## Production Build
+## Production Build and Deploy
  
 To build the optimized version of client code, use this command:
 
@@ -120,6 +123,8 @@ To build the optimized version of client code, use this command:
 
 This executes `gulp` build tasks and copies the new code into the `dist` directory.
 
-It's a good idea to remove development dependencies.  A convenient way to do this is with the [Strongloop command line tool](https://docs.strongloop.com/display/SLC/Building+applications+with+slc).  You can install this via `npm install -g strongloop`. Then build the zipped tar file using the `slc` command line tool: `slc build --install --pack`.  
+It's a good idea to remove development dependencies.  A convenient way to do this is with the [Strongloop command line tool](https://docs.strongloop.com/display/SLC/Building+applications+with+slc).  You can install this via `npm install -g strongloop`. Then build the zipped tar file using the `slc` command line tool: `slc build --install --pack`. 
+
+After packaging the application using the command line tool, copy the zip file to the server.
  
 
