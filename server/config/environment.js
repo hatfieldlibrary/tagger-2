@@ -55,6 +55,7 @@ const config = {
     dbLog: console.log,
     sync: {force: false},
     useAuth: true,
+    domain: credentials.domain,
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
@@ -63,38 +64,6 @@ const config = {
     googleCallback: 'http://localhost:3000/auth/google/callback',
     externalHostA: credentials.externalHostA,
     externalHostB: '', // not in use
-    nodeEnv: env
-  },
-
-  runlocal: {
-    app: {
-      name: 'acomtags'
-    },
-    credentialsPath: '',
-    uid: credentials.develuid,
-    gid: credentials.develgid,
-    port: 3000,
-    mysql: {
-      db: 'acomtags_development',
-      user: credentials.develdbuser,
-      password: credentials.develdbpassword,
-      host: 'localhost',
-      port: 3306,
-      dialect: 'mysql'
-    },
-    logLevel: 'debug',
-    dbLog: console.log,
-    sync: {force: false},
-    useAuth: false,
-    convert: '/usr/local/bin/convert',
-    identify: '/usr/local/bin/identify',
-    taggerImageDir: '/usr/local/taggerImages',
-    adminPath: '/views',
-    googleClientId: credentials.googleClientId,
-    googleClientSecret: credentials.googleClientSecret,
-    googleCallback: 'http://localhost:3000/auth/google/callback',
-    externalHostA: credentials.externalHostA,
-    externalHostB: credentials.externalHostB, // not in use
     nodeEnv: env
   },
 
@@ -118,6 +87,7 @@ const config = {
     dbLog: false,
     sync: {force: true},
     useAuth: false,
+    domain: credentials.domain,
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/var/taggerImages',
@@ -142,7 +112,7 @@ const config = {
     uid: credentials.uid,
     gid: credentials.gid,
     port: 3000,
-    redisPort: 6379,
+    redisPort: credentials.redisPort,
     mysql: {
       db: 'acomtags',
       user: credentials.user,
@@ -155,6 +125,7 @@ const config = {
     identify: '/usr/bin/identify',
     taggerImageDir: '/var/taggerImages',
     adminPath: '/views',
+    domain: credentials.domain,
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: credentials.googleCallback,
