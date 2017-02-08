@@ -9,9 +9,9 @@
 
 Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization.
 
-In this approach, artifacts are assigned to general Areas. These Areas can be topical or administrative (e.g. student research or University Archives). Areas in turn have one or more Collection Groups that are the more specific home of digital artifacts and sub-collections.
+In this approach, artifact information is added to a Collection object.  The Collection object is assigned to a general Area that can be topical or administrative (e.g. student research or University Archives). Areas in turn have one or more Collection Groups that are specific homes for Collections.
 
-All digital items and collections in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content. Subject tags and content types can also be assigned to support browsing and discovery.
+All Collection objects in Tagger must be associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content. Subject tags and content types can also be assigned to support browsing and discovery.
 
 Every entity in Tagger has descriptive fields that are populated using the Tagger administrative interface. Beyond titles and descriptions, these fields include URLs, link types, link labels, and restrictions.
 
