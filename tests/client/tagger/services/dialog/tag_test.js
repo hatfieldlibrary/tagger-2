@@ -277,7 +277,7 @@ describe('The tag dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    spyOn($rootScope, '$broadcast');
+    spyOn($rootScope, '$broadcast').and.callThrough();
 
     let target = {
       tagId: 1, // the tag id returned by TagObservable spy
@@ -300,7 +300,7 @@ describe('The tag dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    spyOn($rootScope, '$broadcast');
+    spyOn($rootScope, '$broadcast').and.callThrough();
 
     let target = {
       tagId: 1, // the tag id returned by TagObservable spy
