@@ -19,6 +19,8 @@
  * Created by mspalti on 12/1/16.
  */
 
+//jshint strict:false
+
 const utils = {};
 
 utils.sendResponse = function(res, data) {
@@ -26,6 +28,34 @@ utils.sendResponse = function(res, data) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.end(JSON.stringify(data));
 
+};
+
+
+/**
+ * Provides uniform API for unadorned error responses.
+ * @param res
+ */
+utils.sendErrorJson = function (res, err) {
+  utils.sendResponse(res, {status: 'Server Error', reason: err.message});
+
+};
+
+/**
+ * Provides uniform API for unadorned success responses.
+ * @param res
+ */
+utils.sendSuccessJson = function (res) {
+  utils.sendResponse(res, {status: 'success'});
+
+};
+
+/**
+ * Send json success response that includes data.
+ * @param res
+ * @param data
+ */
+utils.sendSuccessAndDataJson = function (res, data) {
+  utils.sendResponse(res, {status: 'success', data: data});
 };
 
 module.exports = utils;

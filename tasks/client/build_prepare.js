@@ -15,12 +15,8 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Tagger
- * 12/29/16
- *
- * @author Michael Spalti
- */
+
+'use strict';
 
 import gulp from 'gulp';
 import {path, tasks} from './const';
@@ -40,23 +36,25 @@ gulp.task(tasks.CLIENT_VIEWS_PREPARE, () => {
     .pipe(
       usemin(
         {
-          css: [rev()],
+          css: [rev],
           html: [
-            htmlmin({
-              collapseWhitespace: true,
-              caseSensitive: true
-            })
+            function() {
+              return htmlmin({
+                  collapseWhitespace: true,
+                  caseSensitive: true
+                })
+            }
           ],
           jsApp: [
-            uglify(),
-            rev()
+            uglify,
+            rev
           ],
           jsLib: [
             'concat',
-            rev()
+            rev
           ],
-          inlinejs: [uglify()],
-          inlinecss: [cssmin(), 'concat']
+          inlinejs: [uglify],
+          inlinecss: [cssmin, 'concat']
         }
       )
     )

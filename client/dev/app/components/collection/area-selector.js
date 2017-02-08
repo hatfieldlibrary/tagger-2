@@ -16,27 +16,39 @@
  */
 
 /**
+ * Edit areas for collection.
+ *
  * Created by mspalti on 12/13/16.
  */
 (function () {
+
+  'use strict';
 
   function AreaController(TaggerToast,
                           AreaTargetAdd,
                           AreaTargetRemove,
                           AreasForCollection,
-                          CollectionObserver,
-                          CollectionAreasObserver,
-                          AreaListObserver) {
+                          CollectionObservable,
+                          CollectionAreasObservable,
+                          AreaListObservable) {
 
     const ctrl = this;
 
-    CollectionObserver.subscribe(function onNext() {
-      _getCurrentAreaTargets(CollectionObserver.get());
-    });
+    /**
+     * Set the component subscriptions.
+     * @private
+     */
+    function _setSubscriptions() {
 
-    AreaListObserver.subscribe(function onNext() {
-      ctrl.areas = AreaListObserver.get();
-    });
+      CollectionObservable.subscribe((value) => {
+        _getCurrentAreaTargets(value);
+      });
+
+      AreaListObservable.subscribe((value) => {
+        ctrl.areas = value;
+      });
+
+    }
 
     /**
      * Gets the list of areas associated with the current
@@ -45,8 +57,8 @@
      */
     function _getCurrentAreaTargets(id) {
       const areas = AreasForCollection.query({collId: id});
-      areas.$promise.then(function(data) {
-           ctrl.areaTargets = data;
+      areas.$promise.then(function (data) {
+        ctrl.areaTargets = data;
       });
     }
 
@@ -57,15 +69,15 @@
      * @param target  {Array.<Object>} the areas associated with the collection.
      * @returns {boolean}
      */
-    var _findArea = function (areaId, targets) {
+    function _findArea(areaId, targets) {
 
-      for (var i = 0; i < targets.length; i++) {
+      for (let i = 0; i < targets.length; i++) {
         if (targets[i].AreaId === areaId) {
           return true;
         }
       }
       return false;
-    };
+    }
 
     /**
      * Tests to see if the collection area is currently
@@ -74,9 +86,10 @@
      * @returns {boolean}
      */
     ctrl.isChosen = function (areaId) {
-       if (ctrl.areaTargets) {
-         return _findArea(areaId, ctrl.areaTargets);
-       }
+
+      if (ctrl.areaTargets) {
+        return _findArea(areaId, ctrl.areaTargets);
+      }
 
     };
 
@@ -89,35 +102,42 @@
      */
     ctrl.update = function (areaId) {
 
+
       if (ctrl.areaTargets !== undefined) {
         // If the area id of the selected checkbox is a
         // already a target, then delete the area target.
+
         if (_findArea(areaId, ctrl.areaTargets)) {
           if (ctrl.areaTargets.length === 1) {
-            new TaggerToast('Cannot remove area.  Collections must belong to at least one area.');
+            TaggerToast.toast('Cannot remove area.  Collections must belong to at least one area.');
 
           } else {
-            var result = AreaTargetRemove.query({collId: CollectionObserver.get(), areaId: areaId});
-            result.$promise.then(function (data) {
-              if (data.status === 'success') {
-                ctrl.areaTargets = result.areaTargets;
-
+            let result = AreaTargetRemove.query({collId: CollectionObservable.get(), areaId: areaId});
+            result.$promise.then(function (result) {
+              if (result.status === 'success') {
+                ctrl.areaTargets = result.data.areaList;
                 // Update the collections list (one collection has just been removed from the area).
-                CollectionAreasObserver.set();
-
-                new TaggerToast('Collection removed from area.');
+                CollectionAreasObservable.set();
+                TaggerToast.toast('Collection removed from area.');
+              } else {
+                TaggerToast.toast(
+                  result.status +
+                  ': ' +
+                  result.reason);
               }
+            }).catch((err) => {
+              console.log(err);
             });
           }
         }
         // If the area id of the selected item is
         // not a target already, add a new area target.
         else {
-          var add = AreaTargetAdd.query({collId: CollectionObserver.get(), areaId: areaId});
-          add.$promise.then(function (data) {
-            if (data.status === 'success') {
-              ctrl.areaTargets = add.areaTargets;
-              new TaggerToast('Collection added to Area.');
+          let add = AreaTargetAdd.query({collId: CollectionObservable.get(), areaId: areaId});
+          add.$promise.then(function (result) {
+            if (result.status === 'success') {
+              ctrl.areaTargets = result.data.areaList;
+              TaggerToast.toast('Collection added to Area.');
             }
           });
         }
@@ -125,10 +145,14 @@
 
     };
 
-   ctrl.$onInit = function () {
-       ctrl.areas = AreaListObserver.get();
-       ctrl.areaTargets =  _getCurrentAreaTargets(CollectionObserver.get());
-   }
+    ctrl.$onInit = function () {
+
+      _setSubscriptions();
+
+      ctrl.areas = AreaListObservable.get();
+      _getCurrentAreaTargets(CollectionObservable.get());
+
+    };
 
   }
 
@@ -152,4 +176,5 @@
     controller: AreaController
 
   });
+
 })();

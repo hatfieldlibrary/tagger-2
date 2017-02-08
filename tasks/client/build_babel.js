@@ -15,12 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Tagger
- * 12/29/16
- *
- * @author Michael Spalti
- */
+'use strict';
 
 import gulp from 'gulp';
 import babel from 'gulp-babel';

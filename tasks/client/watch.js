@@ -15,6 +15,8 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 import gulp from 'gulp';
 import browserSync from 'browser-sync';
 import {path, tasks} from './const';

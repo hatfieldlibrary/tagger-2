@@ -23,7 +23,7 @@
   'use strict';
 
   function CollectionCtrl(CollectionLinkCount,
-                          AreaObserver) {
+                          AreaObservable) {
 
     let ctrl = this;
 
@@ -31,22 +31,12 @@
 
     ctrl.selectCount = 0;
 
-    AreaObserver.subscribe(function onNext() {
-      _init(AreaObserver.get());
-
-    });
-
-    ctrl.$onInit = function () {
-      _init(AreaObserver.get());
-
-    };
-
     function _init(areaId) {
 
       if (areaId) {
-        var types = CollectionLinkCount.query({areaId: areaId});
+        let types = CollectionLinkCount.query({areaId: areaId});
         types.$promise.then(function (data) {
-          for (var i = 0; i < data.length; i++) {
+          for (let i = 0; i < data.length; i++) {
             if (data[i].browseType === 'link') {
               ctrl.linkCount = data[i].count;
             } else if (data[i].browseType === 'opts') {
@@ -58,6 +48,16 @@
         });
       }
     }
+
+    ctrl.$onInit = function () {
+      _init(AreaObservable.get());
+
+      AreaObservable.subscribe((areaId) => {
+        _init(areaId);
+
+      });
+    };
+
   }
 
 

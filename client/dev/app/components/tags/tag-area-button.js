@@ -4,22 +4,20 @@
 
 (function () {
 
+  'use strict';
+
   function ToggleController(TagTargets,
-                            TagObserver,
-                            AreaObserver,
-                            TagListObserver,
-                            TaggerDialog) {
+                            TagObservable,
+                            AreaObservable,
+                            TagListObservable,
+                            DialogStrategy) {
 
     const vm = this;
 
     let targetList = [];
-    let currentArea = AreaObserver.get();
+    let currentArea = AreaObservable.get();
     const removeMessage = 'templates/dialog/removeTagFromAreaMessage.html';
     const addMessage = 'templates/dialog/addTagToAreaMessage.html';
-
-    TagListObserver.subscribe(function onNext() {
-      _getTagList();
-    });
 
     /**
      * Show the $mdDialog.
@@ -29,8 +27,8 @@
      */
     vm.showDialog = function ($event, tagId) {
 
-      var message = '';
-      TagObserver.set(tagId);
+      let message = '';
+      TagObservable.set(tagId);
 
       if (_findArea(currentArea, targetList)) {
         message = removeMessage;
@@ -38,15 +36,17 @@
       else {
         message = addMessage;
       }
-
-      new TaggerDialog($event, message);
+      vm.dialog.showDialog($event, message);
 
     };
 
-
+    /**
+     * Gets the tag targets to use in comparison.
+     * @private
+     */
     function _getTagList() {
 
-      var targets = TagTargets.query({tagId: vm.tagId});
+      let targets = TagTargets.query({tagId: vm.tagId});
       targets.$promise.then(function (data) {
         targetList = data;
         _checkArea();
@@ -74,8 +74,8 @@
     }
 
     function _findArea(areaId, tar) {
-      var targets = tar;
-      for (var i = 0; i < targets.length; i++) {
+      let targets = tar;
+      for (let i = 0; i < targets.length; i++) {
         if (targets[i].AreaId === areaId) {
           return true;
         }
@@ -84,8 +84,23 @@
     }
 
     vm.$onInit = () => {
-      _getTagList()
-    }
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+      vm.dialog = DialogStrategy.makeDialog('ToggleController');
+
+
+
+      TagListObservable.subscribe(() => {
+        _getTagList();
+      });
+
+      _getTagList();
+
+    };
   }
 
   taggerComponents.component('toggleTagAreaButton', {

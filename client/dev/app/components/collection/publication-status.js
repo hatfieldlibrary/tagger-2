@@ -16,31 +16,38 @@
  */
 
 /**
+ * Set pub status for a collection.
+ *
  * Created by mspalti on 12/22/16.
  */
 (function () {
 
+  'use strict';
+
   function PublicationController(UpdatePublicationStatus,
                                  GetPublicationStatus,
-                                 CollectionObserver,
-                                 PublicationStatusObserver,
+                                 CollectionObservable,
+                                 PublicationStatusObservable,
                                  TaggerToast) {
 
     const ctrl = this;
 
-    /**
-     * Watch for new collection id.
-     * Update the tags when collection changes.
-     */
-    CollectionObserver.subscribe(function onNext() {
-      const status = GetPublicationStatus.query({collId: CollectionObserver.get()});
-      status.$promise.then(function (pub) {
-        ctrl.pubstatus = pub.published;
-        _setPubMessage(pub.published);
-        PublicationStatusObserver.set(pub.published);
-      });
+    function _setSubscriptions() {
+      /**
+       * Watch for new collection id.
+       * Update the pub status when collection changes.
+       */
+      CollectionObservable.subscribe((id) => {
 
-    });
+        const status = GetPublicationStatus.query({collId: id});
+        status.$promise.then(function (pub) {
+          ctrl.pubstatus = pub.published;
+          _setPubMessage(pub.published);
+          PublicationStatusObservable.set(pub.published);
+        });
+
+      });
+    }
 
     ctrl.onChange = function (state) {
       if (state) {
@@ -49,13 +56,14 @@
       else {
         ctrl.message = 'Unpublished';
       }
-      const update = UpdatePublicationStatus.query({collId: CollectionObserver.get(), status: state});
+      const update = UpdatePublicationStatus.query({collId: CollectionObservable.get(), status: state});
       update.$promise.then(function (data) {
         if (data.status === 'success') {
-          new TaggerToast('Publication Status Changed.');
-          PublicationStatusObserver.set(state);
+
+          TaggerToast.toast('Publication Status Changed.');
+          PublicationStatusObservable.set(state);
         } else {
-          new TaggerToast('WARNING: Unable to update publication status!');
+          TaggerToast.toast('WARNING: Unable to update publication status!');
           return {};
         }
       });
@@ -70,13 +78,17 @@
     }
 
     ctrl.$onInit = function () {
-      const status = GetPublicationStatus.query({collId: CollectionObserver.get()});
+
+      _setSubscriptions();
+
+      // initial pub status.
+      const status = GetPublicationStatus.query({collId: CollectionObservable.get()});
       status.$promise.then(function (pub) {
         ctrl.pubstatus = pub.published;
         _setPubMessage(pub.published);
-        PublicationStatusObserver.set(pub.published);
+        PublicationStatusObservable.set(pub.published);
       });
-    }
+    };
 
   }
 

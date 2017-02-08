@@ -18,6 +18,7 @@
 /**
  * Created by mspalti on 12/1/16.
  */
+
 'use strict';
 
 const taggerSchema = require('../models/index');

@@ -23,40 +23,62 @@
   'use strict';
 
   function ListController(TaggerToast,
-                          AreaObserver,
+                          AreaObservable,
                           AreaList,
-                          AreaListObserver,
-                          AreaActionObserver,
+                          AreaListObservable,
+                          AreaActionObservable,
                           ReorderAreas) {
 
     var vm = this;
-
-    AreaListObserver.subscribe(function onNext() {
-         vm.areas = AreaListObserver.get();
-    });
 
     /**
      * Sets the current area in view model.
      * @param id  area id
      */
-    vm.resetArea = function (id) {
+    vm.resetArea = (id) => {
       if (id !== null) {
         vm.currentAreaId = id;
-        AreaActionObserver.set(id);
+        AreaActionObservable.set(id);
       }
 
     };
 
     /**
-     * Updates the view model's areas array
+     * Updates the view model's areas array.
+     *
      * @param index
      */
-    vm.orderAreaList = function (index) {
+    vm.orderAreaList = (index) => {
+      /**
+       * The api will update position values
+       * based on the removed position.
+       */
       vm.areas.splice(index, 1);
-      // now update the database
       _updatePositionsInDb();
 
     };
+
+
+    /**
+     * Set the component subscriptions.
+     * @private
+     */
+    function _setSubscriptions() {
+      /**
+       * Subscribe to be notified of changes in the area list
+       * while this component is active.
+       */
+      AreaListObservable.subscribe((areas) => {
+        vm.areas = areas;
+        /**
+         *  With any changes while this component is active,
+         *  set the current area to the first in the list and
+         *  notify subscribers.
+         */
+        AreaObservable.set(vm.areas[0].id);
+      });
+    }
+
 
     /**
      * Updates the area position attribute for
@@ -66,7 +88,7 @@
      * array.
      */
     function _updatePositionsInDb() {
-      var order = ReorderAreas.save(
+      let order = ReorderAreas.save(
         {
           areas: vm.areas
         });
@@ -74,34 +96,42 @@
         if (data.status === 'success') {
           var areas = AreaList.query();
           areas.$promise.then(function (data) {
-            AreaListObserver.set(data);
-            AreaObserver.set(data[0].id);
+            AreaListObservable.set(data);
+            AreaObservable.set(data[0].id);
           });
-          new TaggerToast('Area order updated.');
+          TaggerToast.toast('Area order updated.');
         }
       });
     }
 
 
-    vm.$onInit = function () {
+    vm.$onInit = () => {
 
-      var ar = AreaList.query();
-      ar.$promise.then(function (data) {
+      _setSubscriptions();
+
+      /**
+       * Get the areas list and set the application
+       * area observer to the first in the list.
+       */
+      let areas = AreaList.query();
+      areas.$promise.then(function (data) {
         vm.areas = data;
         vm.currentAreaId = data[0].id;
-        AreaActionObserver.set(vm.currentAreaId);
+        AreaActionObservable.set(vm.currentAreaId);
       });
-    }
+
+
+    };
   }
 
-  taggerComponents.component('areasList', {
+  taggerComponents.component('areasListComponent', {
 
     template: ' <md-card-content flex>' +
     '<div layout="column" style="height:700px">' +
     '<md-content class="sortable-list" flex="flex">' +
     '<div class="md-caption" style="margin-top: 10px">Drag item to reorder</div>' +
     '<md-list dnd-list="vm.areas">' +
-    '<md-list-item ng-repeat="area in vm.areas" dnd-draggable="area" dnd-moved="vm.orderAreaList($index, area.id)" dnd-effect-allowed="move" class="tagger-reorder-button">' +
+    '<md-list-item ng-repeat="area in vm.areas" dnd-draggable="area" dnd-moved="vm.orderAreaList($index)" dnd-effect-allowed="move" class="tagger-reorder-button">' +
     '<md-button class="md-no-style md-button nav-item-dimens md-default-theme" ng-class="{\'md-primary\': area.id==vm.currentAreaId}" ng-click="vm.resetArea(area.id);"> ' +
     '<div class="list-group-item-text md-subhead layout-fill">{{area.title}}' +
     '<div class="md-ripple-container"></div>' +

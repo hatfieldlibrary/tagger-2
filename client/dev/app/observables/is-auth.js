@@ -22,9 +22,13 @@
 
   'use strict';
 
-  taggerServices.factory('IsAuthObserver', ['rx', function(rx){
+  taggerServices.factory('IsAuthObserver', ['rxSubject', function(rxSubject){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {boolean}
+     */
     let auth = false;
 
     return {

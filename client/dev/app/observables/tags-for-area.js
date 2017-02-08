@@ -18,28 +18,37 @@
 /**
  * Created by mspalti on 12/12/16.
  */
-(function()  {
+(function () {
 
   'use strict';
 
-  taggerServices.factory('TagsForAreaObserver', ['rx', function(rx){
+  taggerServices.factory('TagsForAreaObservable', [
+    'rxSubject',
+    'observerUtils',
+    function (rxSubject, observerUtils) {
 
-    const Subject = new rx.Subject();
-    let tags = [];
+      const Subject = rxSubject.getSubject();
+      /**
+       * Default value.
+       * @type {Array}
+       */
+      let tags = [];
 
-    return {
-      set: function set(update){
-        tags = update;
-        Subject.onNext(tags);
-      },
-      get: function get() {
-        return tags;
-      },
-      subscribe: function (o) {
-        return Subject.subscribe(o);
-      }
-    };
-  }]);
+      return {
+        set: function set(update) {
+          if (!observerUtils.identicalArray(update, tags)) {
+            tags = update;
+            Subject.onNext(tags);
+          }
+        },
+        get: function get() {
+          return tags;
+        },
+        subscribe: function (o) {
+          return Subject.subscribe(o);
+        }
+      };
+    }]);
 
 
 })();

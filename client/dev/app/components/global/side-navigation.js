@@ -22,29 +22,31 @@
 
   'use strict';
 
-  function NavigationController(UserAreaObserver) {
+  function NavigationController(UserAreaObservable) {
 
     const vm = this;
 
     vm.currentIndex = 0;
-
-    /**
-     * Watches for update to the user's area. The value is obtained in the Passport
-     * OAUTH login procedure and is used here to initialize state.
-     */
-    UserAreaObserver.subscribe(function onNext() {
-
-      vm.userAreaId = UserAreaObserver.get();
-
-    });
 
     vm.setCurrentIndex = (index) => {
       vm.currentIndex = index;
     };
 
     vm.$onInit = () => {
-      vm.userAreaId = UserAreaObserver.get();
-    }
+
+      // get area id if it's already available.
+      vm.userAreaId = UserAreaObservable.get();
+
+      /**
+       * Watches for update to the user's area. The value is obtained in the Passport
+       * OAUTH login procedure and is used here to initialize state.
+       */
+      UserAreaObservable.subscribe((id) => {
+        vm.userAreaId = id;
+
+      });
+
+    };
 
   }
 
@@ -53,6 +55,7 @@
     templateUrl: 'templates/component/side-nav.html',
     controller: NavigationController,
     controllerAs: 'vm'
+
   });
 
 })();

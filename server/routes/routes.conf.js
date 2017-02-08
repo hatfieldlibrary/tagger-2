@@ -17,10 +17,8 @@
 
 'use strict';
 const express = require('express');
-const favicon = require('static-favicon');
+const favicon = require('serve-favicon');
 const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const helmet = require('helmet');
 //var helmet = require('helmet');
 const path = require('path');
@@ -82,11 +80,6 @@ module.exports = function(app, config) {
   // setup the access logger
   var accessLogStream = fs.createWriteStream('/var/log/tagger/public/access.log', {flags: 'a'});
   app.use(logger('combined', {stream: accessLogStream}));
-  // for parsing the body of urlencoded post requests
-  app.use(bodyParser.urlencoded({ extended: true }));
-  // angularjs posts data as json so using the json parser, too.
-  app.use(bodyParser.json());
-  app.use(cookieParser());
 
   app.use(helmet());
 

@@ -24,6 +24,12 @@
     "afterEach": false,
     "inject": false,
     "expect": false,
-    "spyOn": false
-  }
+    "spyOn": false ,
+    "taggerServices": false,
+    "taggerComponents": false,
+    "taggerConstants": false,
+    "angular": false,
+    "d3": false
+  },
+  "latedef": "nofunc"
 }

@@ -22,18 +22,22 @@
 
   'use strict';
 
-  taggerServices.factory('PublicationStatusObserver', ['rx', function(rx){
+  taggerServices.factory('PublicationStatusObservable', ['rxSubject', function(rxSubject){
 
-    const Subject = new rx.Subject();
-    let tag = 0;
+    const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {boolean}
+     */
+    let status = false;
 
     return {
       set: function set(update){
-        tag = update;
-        Subject.onNext(tag);
+        status = update;
+        Subject.onNext(status);
       },
       get: function get() {
-        return tag;
+        return status;
       },
       subscribe: function (o) {
         return Subject.subscribe(o);

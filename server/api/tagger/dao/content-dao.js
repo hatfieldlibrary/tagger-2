@@ -19,6 +19,8 @@
  * Created by mspalti on 12/1/16.
  */
 
+// jshint strict:false
+
 const taggerSchema = require('../models/index');
 const taggerDao = {};
 
@@ -90,7 +92,7 @@ taggerDao.updateContentType = (name, icon, id) => {
         id: id
       }
     }
-  )
+  );
 };
 
 taggerDao.deleteContentType = (contentId) => {
@@ -100,7 +102,7 @@ taggerDao.deleteContentType = (contentId) => {
       where: {
         id: contentId
       }
-    })
+    });
 };
 
 module.exports = taggerDao;

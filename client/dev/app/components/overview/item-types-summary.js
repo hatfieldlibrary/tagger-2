@@ -23,7 +23,7 @@
   'use strict';
 
   function ItemTypeCtrl(CollectionTypeCount,
-                        AreaObserver) {
+                        AreaObservable) {
 
     let ctrl = this;
 
@@ -31,17 +31,13 @@
     ctrl.itmCount = 0;
     ctrl.eadCount = 0;
 
-    AreaObserver.subscribe(function onNext() {
-      _init(AreaObserver.get());
 
-    });
 
     function _init(areaId) {
 
       if (areaId) {
         const types = CollectionTypeCount.query({areaId: areaId});
         types.$promise.then(function (data) {
-
           for (var i = 0; i < data.length; i++) {
             if (data[i].ctype === 'dig') {
               ctrl.digCount = data[i].count;
@@ -58,7 +54,12 @@
     }
 
     ctrl.$onInit = function () {
-      _init(AreaObserver.get());
+      _init(AreaObservable.get());
+
+      AreaObservable.subscribe((areaId) => {
+        _init(areaId);
+
+      });
 
     };
 

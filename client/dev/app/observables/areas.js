@@ -18,32 +18,42 @@
 /**
  * Created by mspalti on 12/11/16.
  */
-(function()  {
+(function () {
 
   'use strict';
   /**
    * Observable for the areas list.
    */
-  taggerServices.factory('AreaListObserver', ['rx', function(rx){
+  taggerServices.factory('AreaListObservable', [
+    'rxSubject',
+    'observerUtils',
+    function (rxSubject, observerUtils) {
 
-    const Subject = new rx.Subject();
-    let areas = [];
+      const Subject = rxSubject.getSubject();
+      /**
+       * Default value.
+       * @type {Array}
+       */
+      let areas = [];
 
-    return {
-      set: function set(update){
-        if (update !== areas) {
-          areas = update;
-          Subject.onNext(areas);
+      return {
+
+        set: function set(update) {
+          if (!observerUtils.identicalArray(update, areas)) {
+            areas = update;
+            Subject.onNext(areas);
+          }
+        },
+
+        get: function get() {
+          return areas;
+        },
+
+        subscribe: function (o) {
+          Subject.subscribe(o);
         }
-      },
-      get: function get() {
-        return areas;
-      },
-      subscribe: function (o) {
-        return Subject.subscribe(o);
-      }
-    };
-  }]);
+      };
+    }]);
 
 
 })();

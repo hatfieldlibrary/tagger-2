@@ -15,9 +15,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const path = require('path');
-const credentials = require('../credentials/credentials');
+'use strict';
+
 const env = process.env.NODE_ENV || 'development';
+
+let credentials;
+
+let credentialsPath = require('./require-paths');
+
+try {
+  // The path to credentials.
+  credentials = require(credentialsPath.path(env) + 'credentials');
+
+} catch (ex) {
+  // No credentials ... try travis-ci credentials.
+  console.log('Using travis credentials');
+  credentials = require('../credentials/travis-credentials')
+
+}
 
 const config = {
 
@@ -34,10 +49,13 @@ const config = {
       password: credentials.develdbpassword,
       host: 'localhost',
       port: 3306,
-      dialect: 'mysql'
+      dialect: 'mariadb'
     },
+    logLevel: 'debug',
+    dbLog: console.log,
     sync: {force: false},
-    useAuth: false,
+    useAuth: true,
+    domain: credentials.domain,
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
@@ -49,39 +67,11 @@ const config = {
     nodeEnv: env
   },
 
-  runlocal: {
-    app: {
-      name: 'acomtags'
-    },
-    uid: credentials.develuid,
-    gid: credentials.develgid,
-    port: 3000,
-    mysql: {
-      db: 'acomtags_development',
-      user: credentials.develdbuser,
-      password: credentials.develdbpassword,
-      host: 'localhost',
-      port: 3306,
-      dialect: 'mysql'
-    },
-    sync: {force: false},
-    useAuth: false,
-    convert: '/usr/local/bin/convert',
-    identify: '/usr/local/bin/identify',
-    taggerImageDir: '/usr/local/taggerImages',
-    adminPath: '/views',
-    googleClientId: credentials.googleClientId,
-    googleClientSecret: credentials.googleClientSecret,
-    googleCallback: 'http://localhost:3000/auth/google/callback',
-    externalHostA: credentials.externalHostA,
-    externalHostB: credentials.externalHostB, // not in use
-    nodeEnv: env
-  },
-
   test: {
     app: {
       name: 'tagger'
     },
+    credentialsPath: '',
     uid: credentials.develuid,
     gid: credentials.develgid,
     port: 3000,
@@ -93,8 +83,11 @@ const config = {
       port: 3306,
       dialect: 'mysql'
     },
+    logLevel: 'debug',
+    dbLog: false,
     sync: {force: true},
     useAuth: false,
+    domain: credentials.domain,
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/var/taggerImages',
@@ -111,12 +104,15 @@ const config = {
     app: {
       name: 'tagger'
     },
+    credentialsPath: '',
+    logLevel: 'info',
+    dbLog: false,
     sync: {force: false},
     useAuth: true,
     uid: credentials.uid,
     gid: credentials.gid,
     port: 3000,
-    redisPort: 6379,
+    redisPort: credentials.redisPort,
     mysql: {
       db: 'acomtags',
       user: credentials.user,
@@ -129,6 +125,7 @@ const config = {
     identify: '/usr/bin/identify',
     taggerImageDir: '/var/taggerImages',
     adminPath: '/views',
+    domain: credentials.domain,
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: credentials.googleCallback,

@@ -22,9 +22,13 @@
 
   'use strict';
 
-  taggerServices.factory('CollectionTypesObserver', ['rx', function(rx){
+  taggerServices.factory('CollectionTypesObservable', ['rxSubject', function(rxSubject){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {Array}
+     */
     let types = [];
 
     return {

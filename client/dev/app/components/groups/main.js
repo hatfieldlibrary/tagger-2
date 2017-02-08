@@ -22,18 +22,15 @@
 
   'use strict';
 
-  function GroupController(TaggerDialog,
-                           UserAreaObserver,
+  function GroupController(DialogStrategy,
+                           UserAreaObservable,
                            CategoryList,
-                           GroupListObserver,
-                           GroupObserver) {
+                           GroupListObservable,
+                           GroupObservable) {
 
     const vm = this;
 
     vm.currentCategory = {};
-
-    /** @type {number} */
-    vm.userAreaId = UserAreaObserver.get();
 
     /** @type {string} */
     vm.addMessage = 'templates/dialog/addCategoryMessage.html';
@@ -45,9 +42,8 @@
       var tags = CategoryList.query();
       tags.$promise.then(function (data) {
         if (data.length > 0) {
-          GroupListObserver.set(data);
-          GroupObserver.set(data[0].id);
-
+          GroupListObservable.set(data);
+          GroupObservable.set(data[0].id);
         }
       });
     }
@@ -57,19 +53,20 @@
       vm.currentCategory.id = id;
     };
 
-    /**
-     * Show the $mdDialog.
-     * @param $event click event object (location of event used as
-     *                    animation starting point)
-     * @param message  html template to display in dialog
-     */
-    vm.showDialog = function ($event, message) {
-      new TaggerDialog($event, message);
-    };
-
     vm.$onInit = function () {
+
+      /** @type {number} */
+      vm.userAreaId = UserAreaObservable.get();
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+      vm.dialog =  DialogStrategy.makeDialog('GroupController');
+
       _initTagList();
-    }
+    };
   }
 
   taggerComponents.component('groupsComponent', {

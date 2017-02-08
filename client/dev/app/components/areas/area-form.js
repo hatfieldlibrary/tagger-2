@@ -24,31 +24,20 @@
 
   function FormController(AreaUpdate,
                           AreaById,
-                          AreaActionObserver,
-                          AreaListObserver,
+                          AreaActionObservable,
+                          AreaListObservable,
                           AreaList,
                           TaggerToast) {
 
     const vm = this;
 
     /**
-     * Watch for changes in the shared area index
-     * and reset the area in the view model.
-     */
-    AreaActionObserver.subscribe(function onNext() {
-      var ar = AreaById.query({id: AreaActionObserver.get()});
-      ar.$promise.then(function (data) {
-        vm.area = data;
-        vm.menu({id: vm.area.id, title: vm.area.title});
-      });
-    });
-
-    /**
      *  Updates the area information.  Updates area list
      *  upon success.
      */
     vm.updateArea = function () {
-      var success = AreaUpdate.save({
+
+      let success = AreaUpdate.save({
         id: vm.area.id,
         title: vm.area.title,
         description: vm.area.description,
@@ -59,26 +48,65 @@
       });
       success.$promise.then(function (data) {
         if (data.status === 'success') {
-          var areas = AreaList.query();
-          areas.$promise.then(function (data) {
-            // observer
-            AreaListObserver.set(data);
-          });
           // Toast upon success
-          new TaggerToast('Area Updated"');
+          TaggerToast.toast('Area Updated"');
+          _getAreaList();
+
         }
       });
 
     };
 
-    vm.$onInit = function() {
-      var ar = AreaById.query({id: AreaActionObserver.get()});
+    /**
+     * Gets field data for the current area.
+     * @param areaId
+     * @private
+     */
+    function _initializeForm(areaId) {
+      let ar = AreaById.query({id: areaId});
       ar.$promise.then(function (data) {
         vm.area = data;
         vm.menu({id: vm.area.id, title: vm.area.title});
       });
     }
 
+    /**
+     * Set the component subscriptions.
+     * @private
+     */
+    function _setSubscriptions() {
+      /**
+       * Watch for changes in the area index
+       * and reset the area form view model.
+       */
+      AreaActionObservable.subscribe((areaId) => {
+        _initializeForm(areaId);
+      });
+
+    }
+
+    /**
+     * Get new area list after successful update.
+     * @private
+     */
+    function _getAreaList() {
+      let areas = AreaList.query();
+      areas.$promise.then(function (data) {
+        AreaListObservable.set(data);
+      });
+    }
+
+    vm.$onInit = function() {
+
+      _setSubscriptions();
+
+      // Check for area id in current state.
+      let areaId = AreaActionObservable.get();
+      if (areaId) {
+        _initializeForm(areaId);
+      }
+
+    };
   }
 
   taggerComponents.component('areaForm', {

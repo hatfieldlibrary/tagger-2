@@ -22,9 +22,13 @@
 
   'use strict';
 
-  taggerServices.factory('TagObserver', ['rx', function(rx){
+  taggerServices.factory('TagObservable', ['rxSubject', function(rxSubject){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {number}
+     */
     let tag = 0;
 
     return {

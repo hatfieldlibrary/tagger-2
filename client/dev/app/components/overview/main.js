@@ -21,7 +21,7 @@
 (function () {
   'use strict';
 
-  function OverviewController(AreaObserver,
+  function OverviewController(AreaObservable,
                               AreaById,
                               CollectionsByArea,
                               CategoryCountByArea,
@@ -29,15 +29,6 @@
                               TagCountForArea) {
 
     const ctrl = this;
-
-    AreaObserver.subscribe(() => {
-      let areaId = AreaObserver.get();
-      _setCollections(areaId);
-      _getCategories(areaId);
-      _getTypes(areaId);
-      _getTagCounts(areaId);
-      _getAreaInfo(areaId);
-    });
 
     function _setCollections(areaId) {
       let collections = CollectionsByArea.query({areaId: areaId});
@@ -63,7 +54,6 @@
           data: data
         };
         ctrl.categoriesReady = true;
-
       });
 
     }
@@ -112,13 +102,26 @@
     }
 
     ctrl.$postLink = function () {
+
       ctrl.collectionCount = 0;
-      let areaId = AreaObserver.get();
+      let areaId = AreaObservable.get();
       _setCollections(areaId);
       _getCategories(areaId);
       _getTypes(areaId);
       _getTagCounts(areaId);
       _getAreaInfo(areaId);
+    };
+
+    ctrl.$onInit = () => {
+
+      AreaObservable.subscribe((areaId) => {
+        _setCollections(areaId);
+        _getCategories(areaId);
+        _getTypes(areaId);
+        _getTagCounts(areaId);
+        _getAreaInfo(areaId);
+      });
+
     };
 
   }

@@ -16,6 +16,8 @@
  */
 
 /**
+ * Image link component.
+ *
  * Created by mspalti on 12/13/16.
  */
 
@@ -32,7 +34,7 @@
         return '/resources/img/thumb/' + ctrl.imgname;
       }
       return '';
-    }
+    };
   }
 
   taggerComponents.component('thumbImageLink', {
@@ -41,6 +43,6 @@
     },
     template: '<img style="max-width: 120px;" ng-src="{{$ctrl.getLink()}}">',
     controller: LinkCtrl
-  })
+  });
 
 })();

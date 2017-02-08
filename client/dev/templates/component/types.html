@@ -28,13 +28,13 @@
             <h2 class="md-display-2">{{vm.currentType.title}} (ID: {{vm.currentType.id}})</h2>
           </span>
           <span flex="flex"></span>
-          <md-button class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="vm.showDialog($event, vm.deleteMessage)"><i class="material-icons">delete</i></md-button>
+          <md-button class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="vm.dialog.showDialog($event, vm.deleteMessage)"><i class="material-icons">delete</i></md-button>
         </div>
       </md-toolbar>
       <md-content>
         <div layout="row" layout-align="start start">
           <md-card-content flex="20">
-            <md-button class="md-raised md-accent" ng-click="vm.showDialog($event, vm.addMessage)">Add Type
+            <md-button class="md-raised md-accent" ng-click="vm.dialog.showDialog($event, vm.addMessage)">Add Type
             </md-button>
           </md-card-content>
           <md-card-content layout="column" layout-padding="layout-padding" flex="80" flex-gt-md="80" style="padding-left: 20px">

@@ -23,15 +23,10 @@
   'use strict';
 
   function CollectionCtrl(CollectionsByArea,
-                          TotalCollectionsObserver,
-                          AreaObserver) {
+                          TotalCollectionsObservable,
+                          AreaObservable) {
 
     let ctrl = this;
-
-    AreaObserver.subscribe(function onNext() {
-      _init(AreaObserver.get());
-
-    });
 
     function _init(areaId) {
 
@@ -42,20 +37,20 @@
         let collections =
           CollectionsByArea.query({areaId: areaId});
         collections.$promise.then(function (data) {
-          TotalCollectionsObserver.set(data.length);
+          TotalCollectionsObservable.set(data.length);
           ctrl.collectionsCount = data.length;
-          for (var i = 0; i < data.length; i++) {
+          for (let i = 0; i < data.length; i++) {
             if (data[i].Collection.restricted !== true) {
-              if (data[i].Collection.published == true) {
+              if (data[i].Collection.published === true) {
                 publicCount++;
               }
             }
             if (data[i].Collection.restricted !== false) {
-              if (data[i].Collection.published == true) {
+              if (data[i].Collection.published === true) {
                 restrictedCount++;
               }
             }
-            if (data[i].Collection.published == false) {
+            if (data[i].Collection.published === false) {
               unpublishedCount++;
             }
           }
@@ -66,19 +61,24 @@
       }
     }
 
-    ctrl.$onInit = function() {
-      _init(AreaObserver.get());
+    ctrl.$onInit = function () {
+
+      AreaObservable.subscribe((id) => {
+        _init(id);
+
+      });
+
+      _init(AreaObservable.get());
 
     };
 
   }
 
-  taggerComponents.component('collectionGroupSummary', {
+  taggerComponents.component('collectionAccessSummary', {
     bindings: {
       collectionCount: '<'
     },
-    template:
-    '<md-grid-tile-header>' +
+    template: '<md-grid-tile-header>' +
     '<h3>Entries</h3>' +
     '</md-grid-tile-header>' +
     '<md-list style="width:100%;margin-top: 40px;">' +

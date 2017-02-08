@@ -19,27 +19,28 @@
  * Created by mspalti on 12/21/16.
  */
 (function () {
+
   'use strict';
 
 
   function PieController($element,
                          $attrs,
-                         AreaObserver) {
+                         AreaObservable) {
 
     const ctrl = this;
 
-    var data = [];
-    var DURATION = 800;
-    var DELAY = 200;
+    //let data = [];
+    const DURATION = 800;
+    const DELAY = 200;
     /**
      * Array of colors used by class attributes.
      * @type {Array<string> }*/
-    var colors = ['seagreen', 'blue', 'skyblue', 'red', 'indigo', 'yellow', 'orange', 'green', 'maroon', 'coffee'];
+    const colors = ['seagreen', 'blue', 'skyblue', 'red', 'indigo', 'yellow', 'orange', 'green', 'maroon', 'coffee'];
     /**
      * The parent element
      * @type {Element}
      */
-    var containerEl = document.getElementById($attrs.id),
+    const containerEl = document.getElementById($attrs.id),
       /**
        * The top level d3 node.
        * @type {Object}
@@ -47,31 +48,6 @@
       container = d3.select(containerEl),
       labelsEl = container.select('.chart-data');
 
-    AreaObserver.subscribe(function onNext() {
-      $element.ready(function () {
-        _initChart();
-      });
-
-    });
-
-    ctrl.$onInit = function () {
-      $element.ready(function () {
-        _initChart();
-      });
-
-    };
-
-    function _initChart() {
-      var total = 0;
-      if (ctrl.data) {
-        total = ctrl.data.total;
-        // calculate percentages
-        let ratios = _ratios(ctrl.data.data, total);
-        clearChart();
-        drawPieChart(ratios);
-      }
-
-    }
     /**
      * Calculates percentage from integer counts
      * @param values   count by type
@@ -80,7 +56,7 @@
      */
     function _ratios(values, total) {
       if (values) {
-        var data = [];
+        let data = [];
         for (var i = 0; i < values.length; i++) {
           data[i] = {
             title: values[i].title,
@@ -92,6 +68,7 @@
       }
 
     }
+
     /**
      * Return the color name from the colors array.
      * @param i  the index of the array element
@@ -109,7 +86,7 @@
      */
     function clearChart() {
 
-      var svg = container.select('svg');
+      let svg = container.select('svg');
       svg.selectAll('g').remove();
       svg.select('circle').remove();
       labelsEl.selectAll('.item-info').remove();
@@ -119,35 +96,36 @@
     /**
      * Draws the pie chart
      */
-    function drawPieChart(newData) {
+    function drawPieChart(width, newData) {
 
-      var width = containerEl.clientWidth / 2,
-        height = width * 0.8,
+      let height = width * 0.8,
         radius = Math.min(width, height) / 2,
         svg = container.select('svg')
           .attr('width', width)
           .attr('height', height);
-      var pie = svg.append('g')
+
+
+      let pie = svg.append('g')
         .attr(
           'transform',
           'translate(' + width / 2 + ',' + height / 2 + ')'
         );
 
-      var detailedInfo = svg.append('g')
-        .attr('class', 'pieChart--detailedInformation');
+      // let detailedInfo = svg.append('g')
+      // .attr('class', 'pieChart--detailedInformation');
+      // let twoPi = 2 * Math.PI;
 
-      var twoPi = 2 * Math.PI;
-      var pieData = d3.layout.pie()
+      let pieData = d3.layout.pie()
         .value(function (d) {
           return d.value;
         });
 
-      var arc = d3.svg.arc()
+      let arc = d3.svg.arc()
         .outerRadius(radius - 10)
         .innerRadius(0);
 
-
-      var pieChartPieces = pie.datum(newData)
+      // jshint unused:false
+      let pieChartPieces = pie.datum(newData)
         .selectAll('path')
         .data(pieData)
         .enter()
@@ -166,7 +144,7 @@
         .transition()
         .duration(DURATION)
         .attrTween('d', function (d) {
-          var interpolate = d3.interpolate(this._current, d);
+          let interpolate = d3.interpolate(this._current, d);
           this._current = interpolate(0);
 
           return function (t) {
@@ -178,7 +156,7 @@
         });
 
       function drawChartCenter() {
-        var centerContainer = pie.append('g')
+        let centerContainer = pie.append('g')
           .attr('class', 'pieChart--center');
 
         centerContainer.append('circle')
@@ -208,7 +186,7 @@
        * used to request colors.
        * @type {number}
        */
-      var currentColor = 0;
+      let currentColor = 0;
 
       /**
        * Adds color key, title, and count information for a single item to the DOM.
@@ -217,7 +195,7 @@
        */
       function drawDetailedInformation(data, element) {
 
-        var listItem = element.append('div').attr('class', 'item-info');
+        let listItem = element.append('div').attr('class', 'item-info');
         if (data.title === null) {
           data.title = '<span style="color: red;">No value selected</span>';
         }
@@ -233,6 +211,36 @@
 
       }
     }
+
+    AreaObservable.subscribe(function onNext() {
+      $element.ready(function () {
+        _initChart();
+      });
+
+    });
+
+    ctrl.$onInit = function () {
+      $element.ready(function () {
+        _initChart();
+      });
+
+    };
+
+    function _initChart() {
+      let total = 0;
+      if (ctrl.data) {
+        total = ctrl.data.total;
+        // calculate percentages
+        let ratios = _ratios(ctrl.data.data, total);
+        clearChart();
+        let width = containerEl.clientWidth / 2;
+        if (width > 0) {
+          drawPieChart(width, ratios);
+        }
+      }
+
+    }
+
   }
 
   taggerComponents.component('pieVisualizationComponent', {
