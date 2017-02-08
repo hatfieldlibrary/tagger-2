@@ -9,9 +9,10 @@
 
 Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization.
 
-In this approach, information about a digial item or collection is added to a Collection object.  The Collection object is immediately assigned to a general Area that can be topical or administrative (e.g. student research or University Archives). Areas in turn have one or more Collection Groups that are specific homes for Collections.
+In this approach, information about a digial item or collection is added to a Collection object.  The Collection object is immediately assigned to a general Area that can be topical or administrative (e.g. student research or University Archives). Areas in turn can have one or more Collection Groups that are specific homes for Collections.
 
-All Collection objects in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content. Subject tags and content types can also be assigned to support browsing and discovery.
+All Collections in Tagger must be associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content. Subject tags and content types can also be assigned to support browsing and discovery.
+
 
 The Collections Page image below illustrates some of these relationships.
 
@@ -127,4 +128,3 @@ It's a good idea to remove development dependencies.  A convenient way to do thi
 
 After packaging the application using the command line tool, copy the zip file to the server.
  
-

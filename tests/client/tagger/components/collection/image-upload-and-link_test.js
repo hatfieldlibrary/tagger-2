@@ -41,6 +41,7 @@ describe('The image components', () => {
     $componentController = _$componentController_;
   }));
 
+
   describe('The image link component', () => {
 
     it('should return the thumbnail image link', () => {
@@ -80,17 +81,19 @@ describe('The image components', () => {
       ThumbImageObservable = _ThumbImageObservable_;
     })));
 
+
     beforeEach(() => {
 
       let thumbImageCallback;
       testImage = 'test_image.png';
 
       spyOn(DialogStrategy,'makeDialog');
+      spyOn(ThumbImageObservable,'get').and.returnValue(testImage);
       spyOn(ThumbImageObservable,'subscribe').and.callFake((callback)=> {
         thumbImageCallback = callback;
       });
-      spyOn(ThumbImageObservable, 'set').and.callFake(() => {
-        thumbImageCallback(testImage);
+      spyOn(ThumbImageObservable, 'set').and.callFake((image) => {
+        thumbImageCallback(image);
       })
 
     });
@@ -98,6 +101,7 @@ describe('The image components', () => {
     it('should initialize the component', () => {
 
       let ctrl = $componentController('imageSelector', null);
+
 
       ctrl.$onInit();
 
@@ -113,9 +117,9 @@ describe('The image components', () => {
 
       ctrl.$onInit();
 
-      ThumbImageObservable.set();
+      ThumbImageObservable.set('new-test.png');
 
-      expect(ctrl.thumbnailImage).toEqual(testImage);
+      expect(ctrl.thumbnailImage).toEqual('new-test.png');
 
     });
 
