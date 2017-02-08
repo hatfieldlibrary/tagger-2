@@ -21,28 +21,19 @@
      ImageDialog) {
 
       /**
-       * The constructor.name property is not consistently supported in
-       * browsers, so capture the constructor name using a regex.
-       * @param constructor the object's constructor property
-       * @returns {string}
-       * @private
-       */
-      function _getConstructorName(constructor) {
-        let result = /^function\s+([\w\$]+)\s*\(/.exec(constructor);
-        return result ? result[1] : '';
-
-      }
-
-      /**
        * The case expressions are hardcoded, so beware of bugs caused
        * by refactored controller names.  The console warning will hopefully
        * help with debugging.
+       *
+       * This was originally designed to switch on the constructor
+       * for the controller that was passed into this module. Although less error
+       * prone than passing in the controller name as a String, that approach
+       * fails once the javascript has been minified because the contructor name is
+       * minified and useless.
        */
       function _makeDialog (controller) {
 
-        const constructor = _getConstructorName(controller.constructor);
-
-        switch (constructor) {
+        switch (controller) {
           case 'AreasController':
             return Object.assign({}, ShowDialog, AreaDialog);
 
@@ -68,7 +59,7 @@
             return Object.assign({}, ShowDialog, TagDialog);
 
           default:
-            console.log('WARNING: controller not found ' + constructor);
+            console.log('WARNING: controller not found ' + controller);
             return null;
 
         }

@@ -63,7 +63,7 @@
        * Call with showDialog($event,message).
        * @type {*}
        */
-      vm.dialog =  DialogStrategy.makeDialog(vm);
+      vm.dialog =  DialogStrategy.makeDialog('GroupController');
 
       _initTagList();
     };

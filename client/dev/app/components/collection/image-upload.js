@@ -44,12 +44,17 @@
 
     vm.$onInit = function () {
 
+      let thumb = ThumbImageObservable.get();
+      if (thumb.length > 0) {
+        vm.thumbnailImage = thumb;
+      }
+
       /**
        * Get the dialog object for this component.
        * Call with showDialog($event,message).
        * @type {*}
        */
-      vm.dialog =  DialogStrategy.makeDialog(vm);
+      vm.dialog =  DialogStrategy.makeDialog('ImageController');
 
 
       _setSubscriptions();

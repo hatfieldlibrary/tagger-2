@@ -64,20 +64,31 @@ module.exports = function (app, config) {
   }
   else if (app.get('env') === 'production') {
 
-    // temporary hack.
-    sessionMiddleware = session({
-      secret: 'keyboard cat',
-      saveUninitialized: true,
-      resave: true
-    });
-    // sessionMiddleware = session(
-    //   {
-    //     secret: 'insideoutorup',
-    //     store: new RedisStore({host: '127.0.0.1', port: config.redisPort}),
-    //     saveUninitialized: false, // don't create session until something stored,
-    //     resave: false // don't save session if unmodified
-    //   });
+    sessionMiddleware = session(
+      {
+        secret: 'insideoutorup',
+        store: new RedisStore({host: '127.0.0.1', port: config.redisPort}),
+        saveUninitialized: false, // don't create session until something stored,
+        resave: false // don't save session if unmodified
+      });
 
+  }
+
+  /**
+   * Returns user's email if it matches the domain provided
+   * in configuration. Otherwise returns null.
+   * @param email
+   * @returns {null}
+   */
+  function getEmail(email) {
+
+    let userEmail = email.value;
+    let emailDomain = config.domain;
+    let regex = new RegExp(emailDomain, 'i');
+    if (userEmail.match(regex)) {
+      return userEmail;
+    }
+    return null;
   }
 
   /**
@@ -109,6 +120,7 @@ module.exports = function (app, config) {
 
     done(null, user);
   });
+
   // Configure Google authentication for this application
   passport.use(new GoogleStrategy({
 
@@ -124,37 +136,57 @@ module.exports = function (app, config) {
       // asynchronous verification
       process.nextTick(function () {
 
+        // emails from profile (expecting array)
         let emails = profile.emails;
         let email;
-        // TODO: Google + OAUTH returning multiple email addresses; manage in app configuration by adding domain.
-        for (let i = 0; i < emails.length; i++) {
-          let userEmail = emails[i].value;
-          if (userEmail.match(/willamette\.edu/)) {
-            email = userEmail;
+        /* Check email array in profile. */
+        if (Array.isArray(emails)) {
+          for (let i = 0; i < emails.length; i++) {
+            let emailMatch = getEmail(emails[i]);
+            if (emailMatch !== null) {
+              email = emailMatch;
+              break;
+            }
           }
         }
-        // Use Sequelize to look up the user's
-        // email address in the local user database.
-        db.Users.find({
-          attributes: ['id', 'area'],
-          where: {
-            email: email
+        /* But also be ready in case OAUTH returns
+           a single object. */
+        else {
+          let emailMatch = getEmail(emails);
+          if (emailMatch !== null) {
+            email = emailMatch;
           }
-        }).then(function (user, err) {
-          // If email lookup succeeded, pass
-          // profile information to the passport
-          // callback.
-          if (user) {
-            profile.areaId = user.area;
-            profile.picture = user.picture;
-            return done(err, profile);
-          }
-          // Otherwise pass null user profile
-          // to the passport callback.
-          done(null, null);
-        }).catch(function (err) {
-          console.log(err);
-        });
+        }
+
+        // email will be undefined if no domain match is found.
+        if (typeof email !== 'undefined') {
+          // Use Sequelize to look up the user's
+          // email address in the local user database.
+          db.Users.find({
+            attributes: ['id', 'area'],
+            where: {
+              email: email
+            }
+          }).then(function (user, err) {
+            // If email lookup succeeded, pass
+            // profile information to the passport
+            // callback.
+            if (user) {
+              profile.areaId = user.area;
+              profile.picture = user.picture;
+              return done(err, profile);
+            }
+            // Otherwise pass null user profile
+            // to the passport callback.
+            done(null, null);
+          }).catch(function (err) {
+            console.log(err);
+          });
+        }
+        else {
+          console.log('User domain is not authorized.')
+        }
+
       });
     }
   ));

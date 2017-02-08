@@ -65,7 +65,7 @@
        * Call with showDialog($event,message).
        * @type {*}
        */
-      vm.dialog =  DialogStrategy.makeDialog(vm);
+      vm.dialog =  DialogStrategy.makeDialog('CollectionController');
 
       PublicationStatusObservable.subscribe(() => {
         vm.isPublished = PublicationStatusObservable.get();
