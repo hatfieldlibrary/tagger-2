@@ -36,7 +36,7 @@
 
     return {
       set: function set(update){
-        if (update !== thumb) {
+        if (update !== thumb && typeof update !== 'undefined') {
           thumb = update;
           Subject.onNext(thumb);
         }
