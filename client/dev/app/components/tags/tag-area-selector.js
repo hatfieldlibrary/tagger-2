@@ -23,39 +23,37 @@
 
   'use strict';
 
-  function TagAreaCtrl($scope,
-                       ShowDialog,
-                       TagDialog,
+  function TagAreaController($scope,
                        TagTargets,
-                       TagObserver,
-                       TagAreaObserver,
-                       AreaListObserver) {
+                       TagObservable,
+                       TagAreaObservable,
+                       AreaListObservable,
+                       DialogStrategy) {
 
     const vm = this;
 
     let removeMessage = 'templates/dialog/removeAreaFromTagMessage.html';
     let addMessage = 'templates/dialog/addAreaToTagMessage.html';
 
-    vm.areas = AreaListObserver.get();
-
-    /**
-     * Watch updates the current list of area targets
-     * when the current tag id changes.
-     */
-    TagObserver.subscribe(function onNext() {
-      _getCurrentAreaTargets(TagObserver.get());
-    });
-    /**
-     * Watches the global list of areas and updates local
-     * area list on change.
-     */
-    AreaListObserver.subscribe(function onNext() {
-      vm.areas = AreaListObserver.get();
-    });
-
+    function _setSubscriptions() {
+      /**
+       * Watch updates the current list of area targets
+       * when the current tag id changes.
+       */
+      TagObservable.subscribe((tag) => {
+        _getCurrentAreaTargets(tag);
+      });
+      /**
+       * Watches the global list of areas and updates local
+       * area list on change.
+       */
+      AreaListObservable.subscribe((list) => {
+        vm.areas = list;
+      });
+    }
 
     /** @type {Array.<Object>} */
-    vm.areas = AreaListObserver.get();
+    vm.areas = AreaListObservable.get();
 
     /** @type {Array.<Object>} */
     vm.areaTargets = [];
@@ -65,8 +63,10 @@
      * @param id the id of the tag
      */
     function _getCurrentAreaTargets(id) {
-      vm.areaTargets = TagTargets.query({tagId: id});
-
+      const tagTargets = TagTargets.query({tagId: id});
+      tagTargets.$promise.then((targets) => {
+        vm.areaTargets = targets;
+      });
     }
 
     /**
@@ -89,7 +89,7 @@
     vm.showDialog = function ($event, areaId) {
 
       let message = '';
-      TagAreaObserver.set(areaId);
+      TagAreaObservable.set(areaId);
       if (_findArea(areaId, vm.areaTargets)) {
         message = removeMessage;
       }
@@ -97,7 +97,7 @@
         message = addMessage;
       }
 
-      new ShowDialog.showDialog($event, message,TagDialog);
+     vm.dialog.showDialog($event, message);
 
     };
 
@@ -131,8 +131,22 @@
     }
 
     vm.$onInit = function() {
-      let id = TagObserver.get();
+
+      vm.areas = AreaListObservable.get();
+
+      _setSubscriptions();
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+       vm.dialog = DialogStrategy.makeDialog('TagAreaController');
+
+      let id = TagObservable.get();
+
       _getCurrentAreaTargets(id);
+
     };
 
 
@@ -155,7 +169,7 @@
     '      </div>' +
     '   </md-content>' +
     '</md-card>',
-    controller: TagAreaCtrl,
+    controller: TagAreaController,
     controllerAs: 'vm'
 
   });

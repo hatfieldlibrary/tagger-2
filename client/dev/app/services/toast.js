@@ -25,8 +25,8 @@
         const toastPosition = {
           bottom: false,
           top: true,
-          left: true,
-          right: false
+          left: false,
+          right: true
         };
 
         const getToastPosition = function () {
@@ -46,7 +46,9 @@
 
       }
 
-      return _toast;
+      return {
+        toast: _toast
+      };
 
     }]);
 

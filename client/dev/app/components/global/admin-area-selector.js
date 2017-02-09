@@ -22,46 +22,13 @@
 
   'use strict';
 
-  function AreasController(UserAreaObserver,
-                           AreaObserver,
-                           AreaListObserver,
+  function AreasController(UserAreaObservable,
+                           AreaObservable,
+                           AreaListObservable,
                            AreaLabelObserver,
                            AreaList) {
 
     const vm = this;
-
-    /**
-     * Watches for update to the user's area. The value is obtained in the Passport
-     * OAUTH login procedure and is used here to initialize state.
-     */
-    UserAreaObserver.subscribe(function onNext() {
-
-      vm.userAreaId = UserAreaObserver.get();
-
-      if (vm.userAreaId === 0) {
-        var areas = AreaList.query();
-        areas.$promise.then(function (data) {
-          if (data.length > 0) {
-            AreaListObserver.set(data);
-          }
-        });
-      }
-      else {
-        AreaObserver.set(vm.userAreaId);
-      }
-    });
-
-    AreaListObserver.subscribe(function onNext() {
-      const areas = AreaListObserver.get();
-      if (areas.length > 0) {
-        vm.areas = areas;
-        if (UserAreaObserver.get() === 0) {
-          vm.currentAreaId = areas[0].id;
-          AreaObserver.set(vm.currentAreaId);
-        }
-      }
-
-    });
 
     /**
      * Update the current area.
@@ -71,12 +38,48 @@
      */
     vm.updateArea = function (id, index) {
 
-      if (UserAreaObserver.get() === 0) { // admin user
-        AreaObserver.set(id);
+      if (UserAreaObservable.get() === 0) { // admin user
+        AreaObservable.set(id);
         vm.currentAreaId = id;
-        const areas = AreaListObserver.get();
+        const areas = AreaListObservable.get();
         AreaLabelObserver.set(areas[index].title);
       }
+    };
+
+    vm.$onInit = () => {
+
+      /**
+       * Watches for update to the user's area. The value is obtained in the Passport
+       * OAUTH login procedure and is used here to initialize state.
+       */
+      UserAreaObservable.subscribe((id) => {
+
+        vm.userAreaId = id;
+
+        if (vm.userAreaId === 0) {
+          let areas = AreaList.query();
+          areas.$promise.then(function (data) {
+            if (data.length > 0) {
+              AreaListObservable.set(data);
+            }
+          });
+        }
+        else {
+          AreaObservable.set(vm.userAreaId);
+        }
+      });
+
+      AreaListObservable.subscribe((list) => {
+        const areas = list;
+        if (areas.length > 0) {
+          vm.areas = areas;
+          if (UserAreaObservable.get() === 0) {
+            vm.currentAreaId = areas[0].id;
+            AreaObservable.set(vm.currentAreaId);
+          }
+        }
+
+      });
     };
 
   }

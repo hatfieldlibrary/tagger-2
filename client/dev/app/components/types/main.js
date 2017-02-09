@@ -22,61 +22,65 @@
 
   'use strict';
 
-  function TypeController(GetDialog,
-                          UserAreaObserver,
-                          TagList,
-                          TagListObserver,
-                          TagObserver) {
+  function TypeController(DialogStrategy,
+                          UserAreaObservable,
+                          ContentTypeList,
+                          ContentTypeListObservable,
+                          ContentTypeObservable) {
 
     const vm = this;
 
-    console.log(vm.constructor.name)
-
+    /**
+     * The object contains values for currently selected type.
+     * @type {{}}
+     */
     vm.currentType = {};
 
-    /** @type {number} */
-    vm.userAreaId = UserAreaObserver.get();
-
-    /** @type {string} */
+    /**
+     * Content of the add dialog.
+     * @type {string} */
     vm.addMessage = 'templates/dialog/addContentMessage.html';
 
-    /** @type {string} */
+    /**
+     * Content of the remove dialog.
+     * @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteContentMessage.html';
 
-    /**
-     * Compose the dialog object for this component.
-     * @type {*}
-     */
-    const dialog =  GetDialog(vm);
-
     function _initTagList() {
-      var tags = TagList.query();
+      let tags = ContentTypeList.query();
       tags.$promise.then(function (data) {
         if (data.length > 0) {
-          TagListObserver.set(data);
-          TagObserver.set(data[0].id);
+          ContentTypeListObservable.set(data);
+          ContentTypeObservable.set(data[0].id);
 
         }
       });
     }
 
-
+    /**
+     * Updates the title and id on the view model.
+     * This is a callback method used by children.
+     * @param id
+     * @param title
+     */
     vm.menuUpdate = function(id, title) {
       vm.currentType.title = title;
       vm.currentType.id = id;
     };
 
-    /**
-     * Show the $mdDialog.
-     * @param $event click event object (location of event used as
-     *                    animation starting point)
-     * @param message  html template to display in dialog
-     */
-    vm.showDialog = function ($event, message) {
-      dialog.showDialog($event, message);
-    };
-
     vm.$onInit = function () {
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+      vm.dialog =  DialogStrategy.makeDialog('TypeController');
+
+
+      /** @type {number} */
+      vm.userAreaId = UserAreaObservable.get();
+
       _initTagList();
     };
   }

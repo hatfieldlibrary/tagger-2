@@ -18,30 +18,37 @@
 /**
  * Created by mspalti on 12/12/16.
  */
-(function()  {
+(function () {
 
   'use strict';
 
-  taggerServices.factory('GroupListObserver', ['rx', function(rx){
+  taggerServices.factory('GroupListObservable', [
+    'rxSubject',
+    'observerUtils',
+    function (rxSubject, observerUtils) {
 
-    const Subject = new rx.Subject();
-    let categories = [];
+      const Subject = rxSubject.getSubject();
+      /**
+       * Default value.
+       * @type {Array}
+       */
+      let categories = [];
 
-    return {
-      set: function set(update){
-        if (update !== categories) {
-          categories = update;
-          Subject.onNext(categories);
+      return {
+        set: function set(update) {
+          if (!observerUtils.identicalArray(update, categories)) {
+            categories = update;
+            Subject.onNext(categories);
+          }
+        },
+        get: function get() {
+          return categories;
+        },
+        subscribe: function (o) {
+          return Subject.subscribe(o);
         }
-      },
-      get: function get() {
-        return categories;
-      },
-      subscribe: function (o) {
-        return Subject.subscribe(o);
-      }
-    };
-  }]);
+      };
+    }]);
 
 
 })();

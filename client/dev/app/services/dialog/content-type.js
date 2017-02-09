@@ -12,8 +12,8 @@
               ContentTypeDelete,
               ContentTypeList,
               ContentTypeAdd,
-              ContentTypeObserver,
-              ContentTypeListObserver,
+              ContentTypeObservable,
+              ContentTypeListObservable,
               TaggerToast) {
 
       const _controller = function() {
@@ -30,11 +30,11 @@
          */
         vm.deleteContentType = function () {
 
-          const result = ContentTypeDelete.save({id: ContentTypeObserver.get()});
+          const result = ContentTypeDelete.save({id: ContentTypeObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              new TaggerToast('Content Type Deleted');
+              TaggerToast.toast('Content Type Deleted');
               // After retrieving new content type list, we need
               // to update the content types currently in view.
               // This method is designed to take an id
@@ -59,12 +59,12 @@
           const contentTypes = ContentTypeList.query();
           // Wait for callback.
           contentTypes.$promise.then(function (data) {
-            ContentTypeListObserver.set(data);
+            ContentTypeListObservable.set(data);
             if (id === null) {
-              ContentTypeObserver.set(data[0].id);
+              ContentTypeObservable.set(data[0].id);
 
             } else {
-              ContentTypeObserver.set(id);
+              ContentTypeObservable.set(id);
             }
 
           });
@@ -79,9 +79,8 @@
 
           const result = ContentTypeAdd.save({title: title});
           result.$promise.then(function (data) {
-
             if (data.status === 'success') {
-              new TaggerToast('Content Type Added');
+              TaggerToast.toast('Content Type Added');
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
@@ -98,7 +97,7 @@
 
       return {
         controller: _controller
-      }
+      };
 
     });
 

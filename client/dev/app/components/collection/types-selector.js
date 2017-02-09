@@ -16,13 +16,15 @@
  */
 
 /**
+ * Edit item types for collection.
+ *
  * Created by mspalti on 12/13/16.
  */
 (function () {
   'use strict';
 
   function TypeController(ContentTypeList,
-                          CollectionObserver,
+                          CollectionObservable,
                           CollectionTypeTargetRemove,
                           CollectionTypeTargetAdd,
                           TypesForCollection,
@@ -43,18 +45,14 @@
     ctrl.selectedTags = [];
 
     /** @type {Array.<Object>} */
-    ctrl.globalTypes = ContentTypeList.query();
-
-    /** @type {Array.<Object>} */
     ctrl.typesForCollection = [];
 
     /**
      * Watch for new collection id.
      * Update the tags when collection changes.
      */
-    CollectionObserver.subscribe(function onNext() {
-      let collid = CollectionObserver.get();
-      _getTypesForCollection(collid);
+    CollectionObservable.subscribe((id) => {
+      _getTypesForCollection(id);
 
     });
 
@@ -100,16 +98,16 @@
 
       var result = CollectionTypeTargetAdd.query(
         {
-          collId: CollectionObserver.get(),
+          collId: CollectionObservable.get(),
           typeId: chip.id
         }
       );
       result.$promise.then(function (data) {
         if (data.status === 'success') {
-          new TaggerToast('Content Type Added');
+          TaggerToast.toast('Content Type Added');
 
         } else {
-          new TaggerToast('WARNING: Unable to add content type!');
+          TaggerToast.toast('WARNING: Unable to add content type!');
 
         }
       });
@@ -125,18 +123,18 @@
      * @param chip {Object} $chip
      */
     ctrl.removeType = function (chip) {
-      var result = CollectionTypeTargetRemove.query(
+      const result = CollectionTypeTargetRemove.query(
         {
-          collId: CollectionObserver.get(),
+          collId: CollectionObservable.get(),
           typeId: chip.id
         }
       );
 
       result.$promise.then(function (data) {
         if (data.status === 'success') {
-          new TaggerToast('Content Type Removed');
+          TaggerToast.toast('Content Type Removed');
         } else {
-          new TaggerToast('WARNING: Unable to remove content type!');
+          TaggerToast.toast('WARNING: Unable to remove content type!');
         }
       });
     };
@@ -158,9 +156,16 @@
     }
 
     ctrl.$onInit = function () {
+
+      const typeList = ContentTypeList.query();
+      typeList.$promise.then((data) => {
+        /** @type {Array.<Object>} */
+        ctrl.globalTypes = data;
+      });
       // Need to set at init to cover all cases.
-      let id = CollectionObserver.get();
+      let id = CollectionObservable.get();
       _getTypesForCollection(id);
+
     };
   }
 

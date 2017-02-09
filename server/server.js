@@ -19,7 +19,7 @@
 
 const express = require('express');
 const  http = require('http');
-const  passport = require('passport');
+
   /* jshint unused:false */
 const  multiparty = require('multiparty');
 const config = require('./config/environment');
@@ -33,14 +33,14 @@ logger.level = config.logLevel;
 // // configure express
 // require('./config/')(app, config);
 
-// configure passport and session
-require('./auth/authenticate')(app, config, passport);
+// configure passport and session before route middleware.
+require('./auth/authenticate')(app, config);
 
 // static routes
 require('./routes/routes.conf')(app, config);
 
 // configure angular and api routes
-require('./routes/routes')(app, config, passport);
+require('./routes/routes')(app, config);
 
 function startServer() {
 

@@ -1,4 +1,5 @@
 /**
+ * Public API endpoints for collection information.
  * Created by mspalti on 1/9/17.
  */
 
@@ -9,8 +10,6 @@ const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/collection-dao');
 const config = require('../../../../config/environment');
 const logger = require('../../utils/error-logger');
-
-// The following are rest endpoints for external clients (e.g. Academic Commons).
 
 /**
  * Retrieves the tags associated with a single collection. Used by
@@ -189,9 +188,10 @@ exports.allCollectionsBySubject = function (req, res) {
 };
 
 /**
- * Used by the Academic Commons.  Returns a JSON list of
- * objects retrieved from the eXist database host.  The fields
- * are the query term (title) and count.
+ * Returns a JSON list of objects retrieved from the
+ * external host defined in configuration (externalHostA).
+ * The fields returned by the current service are the query
+ * term (title) and count. This is not defined in the tagger API.
  *
  * {
  *   item: {
@@ -199,7 +199,11 @@ exports.allCollectionsBySubject = function (req, res) {
  *     count: "4"
  * }
  *
- * Uses the 'collection' request parameter in the query.
+ * Introduces a dependency on an external service and
+ * confusion about the API contract.
+ *
+ * TODO: Consider returning external host information only; remove the proxy to external service.
+ *
  *
  * @param req
  * @param res

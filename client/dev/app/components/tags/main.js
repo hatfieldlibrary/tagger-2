@@ -22,18 +22,19 @@
 
   'use strict';
 
-  function TagController(GetDialog,
-                         UserAreaObserver,
+  function TagController(DialogStrategy,
+                         UserAreaObservable,
                          TagList,
-                         TagListObserver,
-                         TagObserver) {
+                         TagListObservable,
+                         TagObservable) {
 
     const vm = this;
 
+    /**
+     * The object contains values for currently selected tag.
+     * @type {{}}
+     */
     vm.currentTag = {};
-
-    /** @type {number} */
-    vm.userAreaId = UserAreaObserver.get();
 
     /** @type {string} */
     vm.addMessage = 'templates/dialog/addTagMessage.html';
@@ -41,40 +42,42 @@
     /** @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteTagMessage.html';
 
-    /**
-     * Get the dialog object for this component.
-     * @type {*}
-     */
-    const dialog =  GetDialog(vm);
-
     function _initTagList() {
       let tags = TagList.query();
       tags.$promise.then(function (data) {
         if (data.length > 0) {
-          TagListObserver.set(data);
-          TagObserver.set(data[0].id);
+          TagListObservable.set(data);
+          TagObservable.set(data[0].id);
 
         }
       });
     }
 
+    /**
+     * Updates the title and id on the view model.
+     * This is a callback method used by children.
+     * @param id
+     * @param title
+     */
     vm.menuUpdate = function(id, title) {
       vm.currentTag.title = title;
       vm.currentTag.id = id;
     };
 
-    /**
-     * Show the $mdDialog.
-     * @param $event click event object (location of event used as
-     *                    animation starting point)
-     * @param message  html template to display in dialog
-     */
-    vm.showDialog = function ($event, message) {
-      dialog.showDialog($event, message);
-    };
-
     vm.$onInit = function () {
+
+      /** @type {number} */
+      vm.userAreaId = UserAreaObservable.get();
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+      vm.dialog =  DialogStrategy.makeDialog('TagController');
+
       _initTagList();
+
     };
   }
 

@@ -49,7 +49,7 @@
                 md-is-locked-open="$mdMedia('gt-md')">
 
       <!-- components -->
-      <authentication-component></authentication-component>
+      <authorization-component></authorization-component>
       <side-navigation-component></side-navigation-component>
 
     </md-sidenav>
@@ -79,6 +79,8 @@
 <script type="text/javascript" src="app/modules/constants.js"></script>
 <script type="text/javascript" src="app/common/constants.js"></script>
 <script type="text/javascript" src="app/config/environment.js"></script>
+<script type="text/javascript" src="app/services/toast.js"></script>
+<script type="text/javascript" src="app/services/set-global-values.js"></script>
 <script type="text/javascript" src="app/services/resources/area.js"></script>
 <script type="text/javascript" src="app/services/resources/collection.js"></script>
 <script type="text/javascript" src="app/services/resources/collection-group.js"></script>
@@ -87,8 +89,6 @@
 <script type="text/javascript" src="app/services/resources/tag-area.js"></script>
 <script type="text/javascript" src="app/services/resources/tag.js"></script>
 <script type="text/javascript" src="app/services/resources/user.js"></script>
-<script type="text/javascript" src="app/services/toast.js"></script>
-<script type="text/javascript" src="app/services/set-global-values.js"></script>
 <script type="text/javascript" src="app/services/dialog/area.js"></script>
 <script type="text/javascript" src="app/services/dialog/collection-group.js"></script>
 <script type="text/javascript" src="app/services/dialog/collection.js"></script>
@@ -131,6 +131,8 @@
 <script type="text/javascript" src="app/components/global/admin-area-selector.js"></script>
 <script type="text/javascript" src="app/components/global/auth.js"></script>
 <script type="text/javascript" src="app/components/global/side-navigation.js"></script>
+<script type="text/javascript" src="app/observables/utils.js"></script>
+<script type="text/javascript" src="app/observables/subject.js"></script>
 <script type="text/javascript" src="app/observables/current-area.js"></script>
 <script type="text/javascript" src="app/observables/areas.js"></script>
 <script type="text/javascript" src="app/observables/action-area.js"></script>

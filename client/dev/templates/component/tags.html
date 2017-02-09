@@ -31,7 +31,7 @@
       </span>
         <span flex="flex"></span>
         <md-button class="md-warn md-raised md-fab md-mini" ng-show="vm.userAreaId==0" aria-label="Delete Tag"
-                   ng-click="vm.showDialog($event, vm.deleteMessage)">
+                   ng-click="vm.dialog.showDialog($event, vm.deleteMessage)">
           <i class="material-icons">delete</i>
         </md-button>
       </div>
@@ -40,7 +40,7 @@
       <div layout="row" layout-align="start start">
         <md-card-content flex="20">
           <md-button class="md-raised md-accent responsive-button" ng-show="vm.userAreaId==0"
-                     ng-click="vm.showDialog($event, vm.addMessage)">Add Tag
+                     ng-click="vm.dialog.showDialog($event, vm.addMessage)">Add Tag
           </md-button>
         </md-card-content>
         <md-card-content layout="column" layout-padding="layout-padding" flex="80" flex-gt-md="80"

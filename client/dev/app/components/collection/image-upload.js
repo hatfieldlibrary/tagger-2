@@ -16,13 +16,15 @@
  */
 
 /**
+ * Image upload component.
+ *
  * Created by mspalti on 12/13/16.
  */
 (function () {
   'use strict';
 
-  function ImageController(ThumbImageObserver,
-                           GetDialog) {
+  function ImageController(ThumbImageObservable,
+                           DialogStrategy) {
 
     const vm = this;
 
@@ -30,33 +32,45 @@
     vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
 
     /**
-     * Get the dialog object for this controller.
-     * @type {*}
+     * Set the component subscriptions.
+     * @private
      */
-    const dialog =  GetDialog(vm);
+    function _setSubscriptions() {
 
-    ThumbImageObserver.subscribe(function onNext() {
-      vm.thumbnailImage = ThumbImageObserver.get();
-    });
-
-    vm.showDialog = function ($event, message) {
-      dialog.showDialog($event, message);
-    };
+      ThumbImageObservable.subscribe((img) => {
+        vm.thumbnailImage = img;
+      });
+    }
 
     vm.$onInit = function () {
+
+      let thumb = ThumbImageObservable.get();
+      if (thumb.length > 0) {
+        vm.thumbnailImage = thumb;
+      }
+
+      /**
+       * Get the dialog object for this component.
+       * Call with showDialog($event,message).
+       * @type {*}
+       */
+      vm.dialog =  DialogStrategy.makeDialog('ImageController');
+
+
+      _setSubscriptions();
 
     };
   }
 
   taggerComponents.component('imageSelector', {
-    template: '    ' +
+    template:
     '<md-card class="flex" flex="flex"> ' +
     ' <md-toolbar class="md_primary"> ' +
     '   <div class="md-toolbar-tools"> ' +
     '    <i class="material-icons">image</i> ' +
     '    <h3 class="md-display-1">&nbsp;Image</h3> ' +
     '    <div flex="flex"> ' +
-    '      <md-button class="md-accent md-raised md-fab md-mini" ng-click="vm.showDialog($event, vm.updateImageMessage)" style="float: right"> ' +
+    '      <md-button class="md-accent md-raised md-fab md-mini" ng-click="vm.dialog.showDialog($event, vm.updateImageMessage)" style="float: right"> ' +
     '        <i class="material-icons">file_upload</i> ' +
     '      </md-button> ' +
     '    </div> ' +
@@ -64,9 +78,9 @@
     ' </md-toolbar> ' +
     ' <md-card-content> ' +
     '   <div layout="row"> ' +
-    '     <md-card flex="40" style="margin:0;max-width: 120px"> ' +
+    '     <div flex="40" style="margin:0;max-width: 120px"> ' +
     '       <thumb-image-link imgname="{{vm.thumbnailImage}}"></thumb-image-link> ' +
-    '     </md-card> ' +
+    '     </div> ' +
     '     <md-card-content> ' +
     '     <span class="md-caption">Image size 500px wide by 600px high</span> ' +
     '   </md-card-content> ' +

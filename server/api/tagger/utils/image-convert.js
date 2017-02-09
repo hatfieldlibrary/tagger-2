@@ -30,12 +30,12 @@ const convert = (res, files, fields, config, callback) => {
   const fs = require('fs'),
     magick = require('imagemagick');
 
-  const convert = config.convert,
+  const magicConvert = config.convert,
     identify = config.identify,
     imagePath = config.taggerImageDir;
 
   magick.identify.path = identify;
-  magick.convert.path = convert;
+  magick.convert.path = magicConvert;
 
   let imageName;
 

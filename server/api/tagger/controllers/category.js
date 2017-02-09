@@ -65,7 +65,7 @@ exports.categoryCountByArea = function (req, res) {
  * @param req
  * @param res
  */
-exports.collectionsByCategory = function (req, res) {
+exports.categoryByCollection = function (req, res) {
   const collId = req.params.collId;
   taggerDao.categoriesByCollectionId(collId).then(function (categories) {
     utils.sendResponse(res, categories);

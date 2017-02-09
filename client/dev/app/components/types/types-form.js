@@ -22,9 +22,9 @@
 
   'use strict';
 
-  function FormController(UserAreaObserver,
-                          ContentTypeListObserver,
-                          ContentTypeObserver,
+  function FormController(UserAreaObservable,
+                          ContentTypeListObservable,
+                          ContentTypeObservable,
                           ContentType,
                           ContentTypeUpdate,
                           ContentTypeList,
@@ -32,10 +32,6 @@
 
     const vm = this;
 
-    ContentTypeObserver.subscribe(function onNext() {
-      const typeId = ContentTypeObserver.get();
-      _getTypeInfo(typeId);
-    });
 
     function _getTypeInfo(typeId) {
       const type = ContentType.query({id: typeId});
@@ -47,7 +43,7 @@
 
     vm.updateContentType = function () {
 
-      var success = ContentTypeUpdate.save({
+      const success = ContentTypeUpdate.save({
         id: vm.contentType.id,
         name: vm.contentType.name,
         icon: vm.contentType.icon
@@ -58,9 +54,9 @@
           let types = ContentTypeList.query();
           types.$promise.then(function (list) {
             vm.types = list;
-            ContentTypeListObserver.set(list);
+            ContentTypeListObservable.set(list);
             // Toast upon success
-            new TaggerToast('Tag Updated');
+            TaggerToast.toast('Tag Updated');
           });
 
         }
@@ -68,8 +64,14 @@
     };
 
     vm.$onInit = function () {
-      vm.userAreaId = UserAreaObserver.get();
-      let typeId = ContentTypeObserver.get();
+
+      ContentTypeObservable.subscribe((id) => {
+        _getTypeInfo(id);
+      });
+
+      vm.userAreaId = UserAreaObservable.get();
+
+      let typeId = ContentTypeObservable.get();
       if (typeId) {
         _getTypeInfo(typeId);
       }

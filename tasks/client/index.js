@@ -15,6 +15,8 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 import gulp from 'gulp';
 import runSequence from 'run-sequence';
 import {path, tasks} from './const';
@@ -22,7 +24,6 @@ import {path, tasks} from './const';
 gulp.task(tasks.CLIENT_BUILD_DIST, () => {
   return new Promise((resolve, reject) => {
     runSequence(
-      //  tasks.CLIENT_UNIT_TEST,
       tasks.CLIENT_LINT_JS,
       tasks.CLIENT_DEL_DIST,
       tasks.CLIENT_COPY,

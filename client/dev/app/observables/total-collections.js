@@ -22,9 +22,13 @@
 
   'use strict';
 
-  taggerServices.factory('TotalCollectionsObserver', ['rx', function(rx){
+  taggerServices.factory('TotalCollectionsObservable', ['rxSubject', function(rxSubject){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {number}
+     */
     let total = 0;
 
     return {

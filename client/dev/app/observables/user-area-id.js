@@ -22,15 +22,21 @@
 
   'use strict';
 
-  taggerServices.factory('UserAreaObserver', ['rx', function(rx){
+  taggerServices.factory('UserAreaObservable', ['rxSubject', function(rxSubject){
 
-    const Subject = new rx.Subject();
-    let areaId = 0;
+    const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {number}
+     */
+    let areaId = -1;
 
     return {
       set: function set(update){
-        areaId = update;
-        Subject.onNext(areaId);
+        if (update !== areaId) {
+          areaId = update;
+          Subject.onNext(areaId);
+        }
       },
       get: function get() {
         return areaId;

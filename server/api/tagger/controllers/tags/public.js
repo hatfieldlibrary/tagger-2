@@ -5,7 +5,7 @@
 'use strict';
 
 const utils = require('../../utils/response-utility');
-const taggerDao = require('../../dao/collection-dao');
+const taggerDao = require('../../dao/tags-dao');
 const logger = require('../../utils/error-logger');
 
 /**

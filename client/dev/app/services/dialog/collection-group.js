@@ -12,8 +12,8 @@
               CategoryDelete,
               CategoryAdd,
               CategoryList,
-              GroupListObserver,
-              GroupObserver,
+              GroupListObservable,
+              GroupObservable,
               TaggerToast) {
 
       const _controller = function () {
@@ -32,11 +32,11 @@
          */
         vm.deleteCategory = function () {
 
-          const result = CategoryDelete.save({id: GroupObserver.get()});
+          const result = CategoryDelete.save({id: GroupObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              new TaggerToast('Category Deleted');
+              TaggerToast.toast('Collection Group Deleted');
               // After retrieving new category list, we need
               // to update the category currently in view.
               // When the parameter is null, the method will
@@ -59,7 +59,7 @@
           const result = CategoryAdd.save({title: title});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
-              new TaggerToast('Category Added');
+              TaggerToast.toast('Collection Group Added');
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
@@ -78,26 +78,22 @@
          * @param id  id of the current collection group or null.
          */
         vm.getCategoryList = function (id) {
-
           const categories = CategoryList.query();
           categories.$promise.then(function (data) {
-            GroupListObserver.set(data);
+            GroupListObservable.set(data);
             if (id === null) {
-              GroupObserver.set(data[0].id);
-
+              GroupObservable.set(data[0].id);
             } else {
-              GroupObserver.set(id);
-
+              GroupObservable.set(id);
             }
           });
-
         };
 
       } ;
 
       return {
         controller: _controller
-      }
+      };
 
     });
 

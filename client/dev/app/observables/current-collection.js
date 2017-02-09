@@ -22,13 +22,18 @@
 
   'use strict';
 
-  taggerServices.factory('CollectionObserver', ['rx', function (rx) {
+  taggerServices.factory('CollectionObservable', ['rxSubject', function (rxSubject) {
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {number}
+     */
     let collection = 0;
 
     return {
       set: function set(update) {
+
         if (update !== collection) {
           collection = update;
           Subject.onNext(collection);

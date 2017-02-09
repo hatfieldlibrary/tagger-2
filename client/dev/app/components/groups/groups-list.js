@@ -22,40 +22,48 @@
 
   'use strict';
 
-  function ListController(GroupListObserver,
-                          GroupObserver,
-                          UserAreaObserver) {
+  function ListController(GroupListObservable,
+                          GroupObservable,
+                          UserAreaObservable) {
 
     const vm = this;
 
-    GroupListObserver.subscribe(function onNext() {
-      vm.categories = GroupListObserver.get();
-      vm.currentCategory = vm.categories[0].id;
-    });
+    function _setSubscriptions() {
 
-    GroupObserver.subscribe((id) => {
+      GroupListObservable.subscribe((categories) => {
+        vm.categories = categories;
+        vm.currentCategory = vm.categories[0].id;
+      });
+
+
+      GroupObservable.subscribe((id) => {
         vm.currentCategory = id;
-    });
+      });
 
-    vm.resetCategory = function (tagId) {
-      GroupObserver.set(tagId);
-      vm.currentCategory = tagId;
+    }
+
+    vm.resetCategory = function (catId) {
+      GroupObservable.set(catId);
+      vm.currentCategory = catId;
     };
 
     vm.$onInit = function () {
 
-      vm.userAreaId = UserAreaObserver.get();
+      _setSubscriptions();
+
+        vm.userAreaId = UserAreaObservable.get();
       // If current group exists, use it.
-      const currentCat = GroupObserver.get();
+      const currentCat = GroupObservable.get();
       if (currentCat) {
         vm.currentCategory = currentCat;
       }
       // If current group list exists, use it.
-      const groupList = GroupListObserver.get();
+      const groupList = GroupListObservable.get();
       if (groupList) {
         vm.categories = groupList;
       }
     };
+
   }
 
   taggerComponents.component('groupsList', {

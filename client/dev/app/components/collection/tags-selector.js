@@ -16,7 +16,7 @@
  */
 
 /**
- * Directive used to associate a TAG with a COLLECTION.
+ * Edit tags for collection.
  */
 
 (function () {
@@ -27,9 +27,9 @@
                     CollectionTagTargetRemove,
                     TagsForArea,
                     TagsForCollection,
-                    AreaObserver,
+                    AreaObservable,
                     TaggerToast,
-                    CollectionObserver) {
+                    CollectionObservable) {
 
     const ctrl = this;
 
@@ -37,8 +37,8 @@
      * Watch for new collection id.
      * Update the tags when collection changes.
      */
-    CollectionObserver.subscribe(function onNext() {
-      ctrl.collectionId = CollectionObserver.get();
+    CollectionObservable.subscribe((id) => {
+      ctrl.collectionId = id;
       _getTagsForCollection(ctrl.collectionId);
 
     });
@@ -47,9 +47,8 @@
      * Watch for new area id.
      * Update the area tag list when area changes.
      */
-    AreaObserver.subscribe(function onNext() {
-      let id = AreaObserver.get();
-     _getTagsForArea(id);
+    AreaObservable.subscribe((id) => {
+      _getTagsForArea(id);
     });
 
     function _getTagsForArea(id) {
@@ -57,8 +56,22 @@
         let tagsForArea = TagsForArea.query({areaId: id});
         tagsForArea.$promise.then(function (data) {
           ctrl.tagsForArea = data;
+          _getTagsForCollection(ctrl.collectionId);
         });
       }
+    }
+
+    ctrl.isRemovable = (id) => {
+      return _isTagInAreaList(id);
+    };
+
+    function _isTagInAreaList(id) {
+      for (let i = 0; i < ctrl.tagsForArea.length; i++) {
+        if (ctrl.tagsForArea[i].Tag.id === id) {
+          return true;
+        }
+      }
+      return false;
     }
 
     /**
@@ -77,7 +90,7 @@
     function _setTagsArray(set) {
       let objArray = [];
       if (set.length > 0) {
-        for (var i = 0; i < set.length; i++) {
+        for (let i = 0; i < set.length; i++) {
           objArray[i] = {id: set[i].Tag.id, name: set[i].Tag.name};
         }
         ctrl.tagsForCollection = objArray;
@@ -96,7 +109,6 @@
 
     };
 
-
     /**
      * Function called when appending a chip.  Adds a new subject association
      * for the collection. Toasts response from the service.
@@ -114,10 +126,10 @@
       );
       result.$promise.then(function (data) {
         if (data.status === 'success') {
-          new TaggerToast('Subject Tag Added');
+          TaggerToast.toast('Subject Tag Added');
 
         } else {
-          new TaggerToast('WARNING: Unable to add subject tag! ' + data.status);
+          TaggerToast.toast('WARNING: Unable to add subject tag! ' + data.status);
           return {};
         }
       });
@@ -133,19 +145,24 @@
      * @param chip  {Object} $chip
      */
     ctrl.removeTag = function (chip) {
-      const result = CollectionTagTargetRemove.query(
-        {
-          collId: CollectionObserver.get(),
-          tagId: chip.id
-        }
-      );
-      result.$promise.then(function (data) {
-        if (data.status === 'success') {
-          new TaggerToast('Subject Tag Removed');
-        } else {
-          new TaggerToast('WARNING: Unable to remove subject tag!');
-        }
-      });
+
+      if (_isTagInAreaList(chip.id)) {
+        const result = CollectionTagTargetRemove.query(
+          {
+            collId: CollectionObservable.get(),
+            tagId: chip.id
+          }
+        );
+        result.$promise.then(function (data) {
+          if (data.status === 'success') {
+            TaggerToast.toast('Subject Tag Removed');
+          } else {
+            TaggerToast.toast('WARNING: Unable to remove subject tag!');
+          }
+        });
+      } else {
+        TaggerToast.toast('Cannot remove tag.');
+      }
     };
 
     /**
@@ -164,9 +181,8 @@
     }
 
     ctrl.$onInit = function () {
-      ctrl.collectionId = CollectionObserver.get();
-      _getTagsForCollection(ctrl.collectionId);
-      _getTagsForArea(AreaObserver.get());
+      ctrl.collectionId = CollectionObservable.get();
+      _getTagsForArea(AreaObservable.get());
     };
 
   }
@@ -187,14 +203,14 @@
     '         <div layout="column" class="chips">' +
     '           <md-container>' +
     '             <label>Add Tags</label>' +
-    '             <md-chips class="tagger-chips" ng-model="$ctrl.tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="$ctrl.addTag($chip)" md-on-remove="$ctrl.removeTag($chip)">' +
+    '             <md-chips class="tagger-chips" ng-model="$ctrl.tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="$ctrl.addTag($chip)" md-on-remove="$ctrl.removeTag($chip)" >' +
     '               <md-autocomplete md-selected-item="$ctrl.selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in $ctrl.queryTags(searchText)"  md-item-text="item.tag.name">' +
     '                 <span md-highlight-text="searchText"> {{item.Tag.name}} </span>' +
     '               </md-autocomplete>' +
     '               <md-chip-template>' +
     '                 <span> {{$chip.name}} </span>' +
     '               </md-chip-template>' +
-    '               <button md-chip-remove="" class="md-primary taggerchip">' +
+    '               <button ng-if="$ctrl.isRemovable($chip.id)" md-chip-remove class="md-primary taggerchip">' +
     '                 <md-icon md-svg-icon="md-clear" aria-label="remove"></md-icon>' +
     '               </button>' +
     '             </md-chips>' +
@@ -202,6 +218,7 @@
     '         </div>' +
     '       </md-input-container>' +
     '     </div>' +
+     ' <div class="md-caption">You can only add and remove tags that belong to this area. </div> ' +
     ' </md-card-content>' +
     '</md-card>',
     controller: TagsCtrl

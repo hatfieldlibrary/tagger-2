@@ -31,6 +31,10 @@ body {
 
 }
 
+collection-form {
+  background-color: rgb(250,250,250);
+}
+
 .dialogs {
   width: 450px;
   padding: 10px;

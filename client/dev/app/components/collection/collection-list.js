@@ -23,37 +23,54 @@
 
   'use strict';
 
-  function ListController(CollectionObserver,
-                          CollectionListObserver,
+  function ListController(CollectionObservable,
+                          CollectionListObservable,
                           CollectionsByArea,
-                          CollectionAreasObserver,
-                          AreaObserver) {
+                          CollectionAreasObservable,
+                          AreaObservable,
+                          $log) {
 
     const vm = this;
 
-    AreaObserver.subscribe(function onNext() {
-      _getCollections(AreaObserver.get());
 
-    });
-
-    CollectionObserver.subscribe(function onNext() {
-      vm.collectionId = CollectionObserver.get();
-    });
-
-    CollectionListObserver.subscribe(function onNext() {
-      vm.collectionList = CollectionListObserver.get();
-    });
-
-    CollectionAreasObserver.subscribe(function onNext() {
-         _getCollections(AreaObserver.get());
-    });
-
-    vm.getCollectionById = function (id) {
-      CollectionObserver.set(id);
+    vm.setCollectionById = (id) => {
+      CollectionObservable.set(id);
     };
 
     /**
-     * Get collection list after an area change.
+     * Set the component subscriptions.
+     * @private
+     */
+    function _setSubscriptions() {
+
+      AreaObservable.subscribe((area) => {
+        _getCollections(area);
+
+      });
+
+      CollectionObservable.subscribe((collectionId) => {
+        vm.collectionId = collectionId;
+      });
+
+      CollectionListObservable.subscribe(
+        (collections) => {
+          vm.collectionList = collections;
+        });
+
+      /**
+       * Called by the area selector component. If collection
+       * was removed from area, this assures that the list is
+       * updated.
+       */
+      CollectionAreasObservable.subscribe(() => {
+        let areaId = AreaObservable.get();
+        _getCollections(areaId);
+      });
+
+    }
+
+    /**
+     * Update the collection list and collection id.
      * @param areaId
      * @private
      */
@@ -65,49 +82,34 @@
             areaId: areaId
           });
         collectionList.$promise.then(function (data) {
-          if (data[0]) {
+          try {
             vm.collectionList = data;
             vm.collectionId = data[0].Collection.id;
-            CollectionListObserver.set(data);
-            CollectionObserver.set(vm.collectionId);
-          }  else {
-            CollectionListObserver.set([]);
-            CollectionObserver.set(-1);
+            /* Set collection list and collection id observers.
+             * This updates observers only when values have changed.
+             * Should have effect only when called via the
+             * CollectionAreaObservable. */
+            CollectionListObservable.set(data);
+            CollectionObservable.set(vm.collectionId);
+          } catch (err) {
+            $log.info('Unable to find collections for this area. Initializing list with no collections.');
+            vm.collectionList = [];
+            vm.collectionId = 0;
+            CollectionObservable.set(0);
+
           }
         });
       }
-    }
-
-    /**
-     * Get collection list on page initialization.
-     * @param areaId
-     * @private
-     */
-    function _initCollections(areaId) {
-
-      if (areaId) {
-        const list = CollectionsByArea.query(
-          {
-            areaId: areaId
-          });
-        list.$promise.then(function (data) {
-          if (data[0]) {
-            CollectionObserver.set(data[0].Collection.id);
-            CollectionListObserver.set(data);
-            // Verify that the selected collection id is
-            // set.
-            vm.collectionId = CollectionObserver.get();
-          } else {
-            CollectionListObserver.set([]);
-            CollectionObserver.set(-1);
-          }
-        });
+      else {
+        throw new Error('Area id is undefined.');
       }
     }
 
     vm.$onInit = function () {
 
-      _initCollections(AreaObserver.get());
+      _setSubscriptions();
+      let areaId = AreaObservable.get();
+      _getCollections(areaId);
 
     };
 
@@ -121,7 +123,7 @@
     '     <md-list>' +
     '       <div ng-repeat="col in vm.collectionList">' +
     '         <md-list-item>' +
-    '           <md-button class="md-no-style md-button  md-default-theme nav-item-dimens" ng-class="{\'md-primary\': col.Collection.id==vm.collectionId}" ng-click="vm.getCollectionById(col.Collection.id);">' +
+    '           <md-button class="md-no-style md-button  md-default-theme nav-item-dimens" ng-class="{\'md-primary\': col.Collection.id==vm.collectionId}" ng-click="vm.setCollectionById(col.Collection.id);">' +
     '             <div class="list-group-item-text md-subhead layout-fill">{{col.Collection.title}}' +
     '               <div class="md-ripple-container"></div>' +
     '             </div>' +

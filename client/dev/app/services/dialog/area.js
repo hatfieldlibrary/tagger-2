@@ -14,11 +14,10 @@
     function ($mdDialog,
               AreaDelete,
               AreaAdd,
-              AreaActionObserver,
+              AreaActionObservable,
               AreaList,
-              AreaObserver,
-              AreaListObserver,
-              CollectionObserver,
+              AreaObservable,
+              AreaListObservable,
               TaggerToast) {
 
 
@@ -27,26 +26,18 @@
         const vm = this;
 
         /**
-         * Get list of all areas.  Optionally takes an area
-         * id parameter.
+         * Get list of all areas.  Updates area observers.
          * @param id  the id of the current area or null.
          */
-        vm.getAreaList = function (id) {
+        vm.getAreaList = function () {
 
           let areas = AreaList.query();
 
           areas.$promise.then(function (data) {
-
-            AreaListObserver.set(data);
+            AreaListObservable.set(data);
             if (data.length > 0) {
-              if (id === null) {
-                AreaActionObserver.set(data[0].id);
-                AreaObserver.set(data[0].id);
-              } else {
-                AreaObserver.set(id);
-              }
-
-              vm.closeDialog();
+                AreaActionObservable.set(data[0].id);
+                AreaObservable.set(data[0].id);
             }
           });
 
@@ -70,9 +61,9 @@
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              new TaggerToast('Area Added');
+              TaggerToast.toast('Area Added');
               // After area update succeeds, update the view.
-              vm.getAreaList(data.id);
+              vm.getAreaList();
               vm.closeDialog();
 
             }
@@ -85,15 +76,15 @@
          * @param id
          */
         vm.deleteArea = function () {
-          const result = AreaDelete.save({id: AreaActionObserver.get()});
+          const result = AreaDelete.save({id: AreaActionObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              new TaggerToast('Area Deleted');
+              TaggerToast.toast('Area Deleted');
               // after retrieving new area list, we need
               // to update the areas currently in view.
-              vm.getAreaList(null);
-              CollectionObserver.set(-1);
+              //AreaObservable.set(-1);
+              vm.getAreaList();
               vm.closeDialog();
 
             }
@@ -105,7 +96,7 @@
 
         controller: _controller
 
-      }
+      };
 
     });
 

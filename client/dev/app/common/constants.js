@@ -18,6 +18,7 @@
 /**
  * Created by mspalti on 12/14/16.
  */
+'use strict';
 
 taggerConstants.constant('Constant', {
 

@@ -25,15 +25,21 @@
 
   'use strict';
 
-  taggerServices.factory('ThumbImageObserver', ['rx', function(rx){
+  taggerServices.factory('ThumbImageObservable', ['rxSubject', function(rxSubject){
 
-    const Subject = new rx.Subject();
+    const Subject = rxSubject.getSubject();
+    /**
+     * Default value.
+     * @type {string}
+     */
     let thumb = '';
 
     return {
       set: function set(update){
-        thumb = update;
-        Subject.onNext(thumb);
+        if (update !== thumb && typeof update !== 'undefined') {
+          thumb = update;
+          Subject.onNext(thumb);
+        }
       },
       get: function get() {
         return thumb;

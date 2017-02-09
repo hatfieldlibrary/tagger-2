@@ -23,9 +23,9 @@
 
   'use strict';
 
-  function FormController(UserAreaObserver,
-                          TagListObserver,
-                          TagObserver,
+  function FormController(UserAreaObservable,
+                          TagListObservable,
+                          TagObservable,
                           TagById,
                           TagUpdate,
                           TagList,
@@ -33,19 +33,17 @@
 
     const vm = this;
 
-    TagObserver.subscribe(function onNext() {
-      const tagId = TagObserver.get();
-      _getTagInfo(tagId);
-    });
+    function _setSubscriptions() {
 
-    UserAreaObserver.subscribe(function onNext() {
-      vm.userAreaId = UserAreaObserver.get();
-    });
+      TagObservable.subscribe((id) => {
+        _getTagInfo(id);
+      });
 
-    // TagListObserver.subscribe(function onNext() {
-    //   vm.tags = TagListObserver.get();
-    //   console.log(vm.tags)
-    // });
+      UserAreaObservable.subscribe((areaId) => {
+        vm.userAreaId = areaId;
+      });
+
+    }
 
     function _getTagInfo(tagId) {
       const tag = TagById.query({id: tagId});
@@ -67,9 +65,9 @@
           let tags = TagList.query();
           tags.$promise.then(function (list) {
             vm.tags = list;
-            TagListObserver.set(list);
+            TagListObservable.set(list);
             // Toast upon success
-            new TaggerToast('Tag Updated');
+            TaggerToast.toast('Tag Updated');
           });
 
         }
@@ -77,10 +75,12 @@
     };
 
     vm.$onInit = function () {
-      vm.userAreaId = UserAreaObserver.get();
-      let tagId = TagObserver.get();
-      vm.tags = TagListObserver.get();
 
+      _setSubscriptions();
+
+      vm.userAreaId = UserAreaObservable.get();
+      let tagId = TagObservable.get();
+      vm.tags = TagListObservable.get();
       if (tagId) {
         _getTagInfo(tagId);
       }
@@ -94,23 +94,23 @@
       menu: '&'
     },
     template: '<md-content layout="row" layout-align="start start">' +
-    '<tag-list></tag-list>' +
-    '<md-card-content class="md-subhead grey-text" flex="80" layout="column">' +
-    '<md-button class="md-raised md-accent large-button" ng-show="vm.userAreaId==0" ng-click="vm.updateTag()">Update Tag </md-button>' +
-    '<md-input-container ng-show="vm.userAreaId==0">' +
-    '<label>Tag Name</label> ' +
-    '<input type="text" ng-model="vm.tag.name"/>' +
-    '</md-input-container>' +
-    '<div style="height: 507px; margin-bottom: 40px;overflow: auto;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc" flex="100" ng-show="vm.userAreaId &gt; 0">' +
-    '<md-content flex="flex"> ' +
-    '<md-list>' +
-    '<md-list-item ng-repeat="tag in vm.tags">' +
-    '<toggle-tag-area-button flex="100" tag-id="{{tag.id}}" tag-name="{{tag.name}}" area-id="vm.currentAreaIndex" ng-click="showDialog($event, vm.deleteMessage)"></toggle-tag-area-button>' +
-    '</md-list-item>' +
-    '</md-list>' +
-    '</md-content>' +
-    '</div>' +
-    '</md-card-content>' +
+    ' <tag-list></tag-list>' +
+    '   <md-card-content class="md-subhead grey-text" flex="80" layout="column">' +
+    '     <md-button class="md-raised md-accent large-button" ng-show="vm.userAreaId==0" ng-click="vm.updateTag()">Update Tag </md-button>' +
+    '      <md-input-container ng-show="vm.userAreaId==0">' +
+    '        <label>Tag Name</label> ' +
+    '       <input type="text" ng-model="vm.tag.name"/>' +
+    '      </md-input-container>' +
+    '     <div style="height: 507px; margin-bottom: 40px;overflow: auto;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc" flex="100" ng-show="vm.userAreaId &gt; 0">' +
+    '       <md-content flex="flex"> ' +
+    '      <md-list>' +
+    '         <md-list-item ng-repeat="tag in vm.tags">' +
+    '          <toggle-tag-area-button flex="100" tag-id="{{tag.id}}" tag-name="{{tag.name}}" area-id="vm.currentAreaIndex" ng-click="showDialog($event, vm.deleteMessage)"></toggle-tag-area-button>' +
+    '         </md-list-item>' +
+    '       </md-list>' +
+    '     </md-content>' +
+    '   </div>' +
+    '  </md-card-content>' +
     '</md-content>',
     controller: FormController,
     controllerAs: 'vm'

@@ -23,32 +23,37 @@
 
   'use strict';
 
-  function ListController(TagListObserver,
-                          TagObserver,
-                          UserAreaObserver) {
+  function ListController(TagListObservable,
+                          TagObservable,
+                          UserAreaObservable) {
 
     var vm = this;
 
-    TagListObserver.subscribe(function onNext() {
-      vm.tags = TagListObserver.get();
-      vm.currentTag = vm.tags[0].id;
-    });
+
+    function _setSubscriptions() {
+      TagListObservable.subscribe((list) => {
+        vm.tags = list;
+        vm.currentTag = vm.tags[0].id;
+      });
+    }
 
     vm.resetTag = function (tagId) {
-      TagObserver.set(tagId);
+      TagObservable.set(tagId);
       vm.currentTag = tagId;
     };
 
     vm.$onInit = function () {
 
-      vm.userAreaId = UserAreaObserver.get();
+      _setSubscriptions();
+
+      vm.userAreaId = UserAreaObservable.get();
       // If current tag exists, use it.
-      const currentTag = TagObserver.get();
+      const currentTag = TagObservable.get();
       if (currentTag) {
         vm.currentTag = currentTag;
       }
       // If current tag list exists, use it.
-      const tagList = TagListObserver.get();
+      const tagList = TagListObservable.get();
       if (tagList) {
         vm.tags = tagList;
       }

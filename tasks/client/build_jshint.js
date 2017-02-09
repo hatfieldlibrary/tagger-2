@@ -1,6 +1,6 @@
-/**
- * Created by mspalti on 1/6/17.
- */
+
+
+'use strict';
 
 import jshint from 'gulp-jshint';
 import gulp  from 'gulp';
