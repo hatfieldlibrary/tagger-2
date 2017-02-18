@@ -121,6 +121,28 @@ describe('The image upload dialog controller', () => {
 
   });
 
+  it('should throw error when add is called', () => {
+
+    let ctrl = $controller(dialogController, {});
+
+    let errorTest = function() {
+      ctrl.add();
+    };
+    expect(errorTest).toThrow(new Error('Call to unimplemented function.'));
+
+  });
+
+  it('should throw error when delete is called', () => {
+
+    let ctrl = $controller(dialogController, {});
+
+    let errorTest = function() {
+      ctrl.delete();
+    };
+    expect(errorTest).toThrow(new Error('Call to unimplemented function.'));
+
+  });
+
 
 });
 

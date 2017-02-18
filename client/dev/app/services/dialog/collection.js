@@ -34,7 +34,7 @@
        * Adds new collection to area.
        * @param title the collection's title.
        */
-      vm.addCollection = function (title) {
+      vm.add = function (title) {
 
         const result = CollectionAdd.save(
           {
@@ -52,7 +52,7 @@
             // Update the collection list. The
             // id parameter will be used to select
             // the newly added category for editing.
-            vm.getCollectionList(data.id);
+            _getCollectionList(data.id);
             // Does what you'd expect.
             vm.closeDialog();
 
@@ -63,7 +63,7 @@
       /**
        * Deletes a collection.
        */
-      vm.deleteCollection = function () {
+      vm.delete = function () {
 
         const result = CollectionDelete.save({id: CollectionObservable.get()});
         result.$promise.then(function (data) {
@@ -75,7 +75,7 @@
             // Given a null id parameter, the getCollectionList
             // function will use the id of the first collection in the
             // updated list.
-            vm.getCollectionList(null);
+            _getCollectionList(null);
             vm.closeDialog();
 
           }
@@ -89,7 +89,7 @@
        * id.
        * @param id  the collection id or null.
        */
-      vm.getCollectionList = function (id) {
+      const _getCollectionList = function (id) {
 
         const result = CollectionsByArea.query({areaId: AreaObservable.get()});
         result.$promise.then(function (data) {
@@ -112,6 +112,10 @@
 
         });
 
+      };
+
+      vm.uploadImage = function () {
+        throw new Error('Call to unimplemented function.');
       };
 
     };
