@@ -54,7 +54,7 @@
             return Object.assign({}, ShowDialog, ImageDialog);
 
           case 'ToggleController':
-            return Object.assign({}, ShowDialog, TagDialog);
+            return Object.assign({}, ShowDialog, TagAreaDialog);
 
           case 'TagAreaController':
             return Object.assign({}, ShowDialog, TagAreaDialog);
