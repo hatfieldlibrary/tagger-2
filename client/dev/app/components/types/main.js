@@ -23,6 +23,8 @@
   'use strict';
 
   function TypeController(DialogStrategy,
+                          DialogTypes,
+                          TaggerToast,
                           UserAreaObservable,
                           ContentTypeList,
                           ContentTypeListObservable,
@@ -63,19 +65,26 @@
      * @param id
      * @param title
      */
-    vm.menuUpdate = function(id, title) {
+    vm.menuUpdate = function (id, title) {
       vm.currentType.title = title;
       vm.currentType.id = id;
     };
 
     vm.$onInit = function () {
 
-      /**
-       * Get the dialog object for this component.
-       * Call with showDialog($event,message).
-       * @type {*}
-       */
-      vm.dialog =  DialogStrategy.makeDialog('TypeController');
+      try {
+        /**
+         * Get the dialog object for this component.
+         * Call with showDialog($event,message).
+         * @type {*}
+         */
+        vm.dialog = DialogStrategy.makeDialog(DialogTypes.CONTENT_TYPE);
+
+      } catch (err) {
+        TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');
+        console.log(err);
+
+      }
 
 
       /** @type {number} */

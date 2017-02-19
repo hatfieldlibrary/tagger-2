@@ -20,10 +20,29 @@
  */
 'use strict';
 
+/**
+ * Constants used in application. This may be an incomplete list!
+ */
 taggerConstants.constant('Constant', {
 
   defaultBrowseType: 'link',
   defaultCollectionType: 'dig',
   defaultRepoType: 'DEFAULT'
+
+});
+
+/**
+ * Dialog types.
+ */
+taggerConstants.constant('DialogTypes', {
+
+  COLLECTION: 'dialog.collection',
+  AREA: 'dialog.area',
+  GROUP: 'dialog.group',
+  TAG: 'dialog.tag',
+  IMAGE: 'dialog.image',
+  TOGGLE_TAG: 'dialog.toggle-tag-area',   // dialog for area maintainer tag/area toggle
+  TAG_AREA_SELECT: 'dialog.tag-area.select',  // dialog for the administrator tag/area selector
+  CONTENT_TYPE: 'dialog.content-type'
 
 });
