@@ -20,6 +20,28 @@
 
         const vm = this;
 
+        /**
+         * Gets list of content types. Optionally takes id
+         * parameter.
+         * @param id  the id of the current content type or null.
+         */
+        const _getContentList = function (id) {
+
+          const contentTypes = ContentTypeList.query();
+          // Wait for callback.
+          contentTypes.$promise.then(function (data) {
+            ContentTypeListObservable.set(data);
+            if (id === null) {
+              ContentTypeObservable.set(data[0].id);
+
+            } else {
+              ContentTypeObservable.set(id);
+            }
+
+          });
+
+        };
+
         vm.closeDialog = function() {
           $mdDialog.hide();
         };
@@ -49,27 +71,6 @@
           });
         };
 
-        /**
-         * Gets list of content types. Optionally takes id
-         * parameter.
-         * @param id  the id of the current content type or null.
-         */
-        const _getContentList = function (id) {
-
-          const contentTypes = ContentTypeList.query();
-          // Wait for callback.
-          contentTypes.$promise.then(function (data) {
-            ContentTypeListObservable.set(data);
-            if (id === null) {
-              ContentTypeObservable.set(data[0].id);
-
-            } else {
-              ContentTypeObservable.set(id);
-            }
-
-          });
-
-        };
 
         /**
          * Add content type to Tagger.

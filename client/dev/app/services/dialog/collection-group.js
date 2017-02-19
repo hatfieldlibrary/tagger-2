@@ -21,6 +21,23 @@
         const vm = this;
 
         /**
+         * Gets list of collection groups.  Optionally takes
+         * id parameter.
+         * @param id  id of the current collection group or null.
+         */
+        const _getCategoryList = function (id) {
+          const categories = CategoryList.query();
+          categories.$promise.then(function (data) {
+            GroupListObservable.set(data);
+            if (id === null) {
+              GroupObservable.set(data[0].id);
+            } else {
+              GroupObservable.set(id);
+            }
+          });
+        };
+
+        /**
          * Closes the dialog
          */
         vm.closeDialog = function () {
@@ -72,22 +89,6 @@
           });
         };
 
-        /**
-         * Gets list of collection groups.  Optionally takes
-         * id parameter.
-         * @param id  id of the current collection group or null.
-         */
-        const _getCategoryList = function (id) {
-          const categories = CategoryList.query();
-          categories.$promise.then(function (data) {
-            GroupListObservable.set(data);
-            if (id === null) {
-              GroupObservable.set(data[0].id);
-            } else {
-              GroupObservable.set(id);
-            }
-          });
-        };
 
         vm.uploadImage = function () {
           throw new Error('Call to unimplemented function.');

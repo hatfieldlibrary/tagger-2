@@ -27,6 +27,25 @@
         const vm = this;
 
         /**
+         * Returns a list of all tags.  The id parameter
+         * used to optionally set the current tag.
+         * @param id  id of current tag or null
+         */
+        const _getTagList = function (id) {
+
+          const tags = TagList.query();
+          tags.$promise.then(function (tags) {
+            if (id === null) {
+              TagObservable.set(tags[0].id);
+            } else {
+              TagObservable.set(id);
+            }
+            TagListObservable.set(tags);
+
+          });
+        };
+
+        /**
          * Closes the dialog
          */
         vm.closeDialog = function () {
@@ -45,7 +64,7 @@
               TaggerToast.toast('Tag Deleted');
               // after retrieving new area list, we need
               // to update the areas currently in view.
-              vm.getTagList(null);
+              _getTagList(null);
               vm.closeDialog();
             }
 
@@ -64,31 +83,12 @@
             if (data.status === 'success') {
               TaggerToast.toast('Tag Added');
               // After area update succeeds, update the view.
-              vm.getTagList(data.id);
+              _getTagList(data.id);
               vm.closeDialog();
             } else {
               TaggerToast.toast('WARNING: Unable to add tag.');
               vm.closeDialog();
             }
-          });
-        };
-
-        /**
-         * Returns a list of all tags.  The id parameter
-         * used to optionally set the current tag.
-         * @param id  id of current tag or null
-         */
-        vm.getTagList = function (id) {
-
-          const tags = TagList.query();
-          tags.$promise.then(function (tags) {
-            if (id === null) {
-              TagObservable.set(tags[0].id);
-            } else {
-              TagObservable.set(id);
-            }
-            TagListObservable.set(tags);
-
           });
         };
 
