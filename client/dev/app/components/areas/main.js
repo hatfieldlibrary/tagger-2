@@ -70,7 +70,6 @@
       try {
         /**
          * Get the dialog object for this controller.
-         * Call with showDialog($event,message).
          * @type {*}
          */
         vm.dialog = DialogStrategy.makeDialog(DialogTypes.AREA);

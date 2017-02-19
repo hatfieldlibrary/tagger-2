@@ -23,7 +23,6 @@
 
       const vm = this;
 
-
       /**
        * Returns list of collections, optionally taking a collection
        * id.
