@@ -207,8 +207,6 @@ describe('The tag dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    spyOn(ctrl, 'getTagList').and.callThrough();
-
     ctrl.add('new tag');
 
     let addedTag = {
@@ -228,8 +226,6 @@ describe('The tag dialog controller', () => {
   it('should delete a tag.', () => {
 
     let ctrl = $controller(dialogController, {});
-
-    spyOn(ctrl, 'getTagList').and.callThrough();
 
     ctrl.delete();
     deferredList.resolve(tags);
