@@ -131,8 +131,7 @@ function _removeCollectionFromArea(collId, areaId, res) {
           }).catch(function (err) {
           callback(err, null);
         });
-      }
-      ,
+      },
       getAreas: (callback) => {
         taggerDao.getAreaIdsForCollection(collId)
           .then(function (result) {
@@ -142,8 +141,7 @@ function _removeCollectionFromArea(collId, areaId, res) {
           callback(err, null);
         });
       }
-    }
-    ,
+    },
     function (err, result) {
       if (err) {
         logger.dao(err);

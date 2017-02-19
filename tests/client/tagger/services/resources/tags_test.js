@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('tag resources', () => {
 
   let $httpBackend,

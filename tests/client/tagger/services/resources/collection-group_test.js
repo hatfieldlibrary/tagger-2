@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('collection group resources', () => {
 
   let $httpBackend,

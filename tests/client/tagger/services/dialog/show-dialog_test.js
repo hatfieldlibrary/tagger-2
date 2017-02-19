@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The show dialog service', () => {
 
   let $mdDialog,

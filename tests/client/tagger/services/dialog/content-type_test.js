@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The collection group dialog controller', () => {
 
   let $controller;
@@ -146,9 +148,7 @@ describe('The collection group dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    spyOn(ctrl, 'getContentList').and.callThrough();
-
-    ctrl.addContentType('new type');
+    ctrl.add('new type');
 
     let addedContentType = {
       title: 'new type'
@@ -160,7 +160,6 @@ describe('The collection group dialog controller', () => {
 
     expect(ContentTypeAdd.save).toHaveBeenCalledWith(addedContentType);
     expect(ContentTypeListObservable.set).toHaveBeenCalledWith(types);
-    expect(ctrl.getContentList).toHaveBeenCalledWith(3);
     expect(ContentTypeList.query).toHaveBeenCalled();
     expect(ContentTypeObservable.set).toHaveBeenCalledWith(3);
     expect(TaggerToast.toast).toHaveBeenCalledWith('Content Type Added');
@@ -172,20 +171,28 @@ describe('The collection group dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    spyOn(ctrl, 'getContentList').and.callThrough();
-
-    ctrl.deleteContentType();
+    ctrl.delete();
     deferredList.resolve(types);
     deferred.resolve(success);
     $rootScope.$apply();
 
     expect(ContentTypeObservable.get).toHaveBeenCalledWith();
     expect(ContentTypeDelete.save).toHaveBeenCalledWith({id: 1});
-    expect(ctrl.getContentList).toHaveBeenCalledWith(null);
     expect(ContentTypeList.query).toHaveBeenCalled();
     expect(ContentTypeObservable.set).toHaveBeenCalledWith(types[0].id);
     expect(TaggerToast.toast).toHaveBeenCalledWith('Content Type Deleted');
     expect($mdDialog.hide).toHaveBeenCalled();
+
+  });
+
+  it('should throw error', () => {
+
+    let ctrl = $controller(dialogController, {});
+
+    let errorTest = function() {
+      ctrl.uploadImage();
+    };
+    expect(errorTest).toThrow(new Error('Call to unimplemented function.'));
 
   });
 

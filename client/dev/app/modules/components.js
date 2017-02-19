@@ -19,5 +19,7 @@
  * Created by mspalti on 12/12/16.
  */
 
+'use strict';
+
 // jshint unused:false
-var taggerComponents = angular.module('taggerComponents', []);
+const taggerComponents = angular.module('taggerComponents', []);

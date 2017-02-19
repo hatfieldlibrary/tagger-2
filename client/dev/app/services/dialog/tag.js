@@ -9,7 +9,7 @@
 
   taggerServices.factory('TagDialog',
 
-    function ($rootScope,
+    function (
               $mdDialog,
               TagDelete,
               TagTargetAdd,
@@ -36,7 +36,7 @@
         /**
          * Handles tag deletion.
          */
-        vm.deleteTag = function () {
+        vm.delete = function () {
 
           const result = TagDelete.save({id: TagObservable.get()});
           result.$promise.then(function (data) {
@@ -54,55 +54,10 @@
         };
 
         /**
-         * Adds tag to a collection area. Used with administrator view.
-         */
-        vm.addAreaToTag = function () {
-          const result = TagTargetAdd.query(
-            {
-              tagId: TagObservable.get(),
-              areaId: TagAreaObservable.get()
-            }
-          );
-          result.$promise.then(function (result) {
-            if (result.status === 'success') {
-              TaggerToast.toast('Tag Added area.');
-              // Broadcast successful deletion with the updated area list.
-              // This is inconsistent with our standard approach of using a
-              // wrapped observable to notify observers.
-              $rootScope.$broadcast('addedAreaToTag', {areaTargets: result.data.areaList});
-              vm.closeDialog();
-            }
-          });
-        };
-
-        /**
-         * Remove tag from area. Used with collection administrator view.
-         */
-        vm.removeAreaFromTag = function () {
-          const result = TagTargetRemove.query(
-            {
-              tagId: TagObservable.get(),
-              areaId: TagAreaObservable.get()
-            }
-          );
-          result.$promise.then(function (result) {
-            if (result.status === 'success') {
-              TaggerToast.toast('Tag removed from Area.');
-              // Broadcast successful deletion with the updated area list.
-              // This is inconsistent with our standard approach of using a
-              // wrapped observable to notify observers.
-              $rootScope.$broadcast('removedAreaFromTag', {areaTargets: result.areaTargets});
-              vm.closeDialog();
-            }
-
-          });
-        };
-
-        /**
          * Adds a new tag.  Used by administrative view.
          * @param name  the tag name
          */
-        vm.addTag = function (name) {
+        vm.add = function (name) {
 
           const result = TagAdd.save({name: name});
           result.$promise.then(function (data) {
@@ -135,8 +90,12 @@
             TagListObservable.set(tags);
 
           });
-
         };
+
+        vm.uploadImage = function () {
+          throw new Error('Call to unimplemented function.');
+        };
+
       };
 
       return {

@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The image upload dialog controller', () => {
 
   let $controller;
@@ -118,6 +120,28 @@ describe('The image upload dialog controller', () => {
     expect(ThumbImageObservable.set).toHaveBeenCalledWith('test.png');
     expect(ctrl.closeDialog).toHaveBeenCalled();
     expect($mdDialog.hide).toHaveBeenCalled();
+
+  });
+
+  it('should throw error when add is called', () => {
+
+    let ctrl = $controller(dialogController, {});
+
+    let errorTest = function() {
+      ctrl.add();
+    };
+    expect(errorTest).toThrow(new Error('Call to unimplemented function.'));
+
+  });
+
+  it('should throw error when delete is called', () => {
+
+    let ctrl = $controller(dialogController, {});
+
+    let errorTest = function() {
+      ctrl.delete();
+    };
+    expect(errorTest).toThrow(new Error('Call to unimplemented function.'));
 
   });
 

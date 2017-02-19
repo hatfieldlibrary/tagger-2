@@ -3,11 +3,11 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The dialog strategy for decorating with $mdDialog controller', () => {
 
   let $componentController, $controller;
-
-  let AreasController;
 
   beforeEach(module('tagger'));
 
@@ -31,8 +31,8 @@ describe('The dialog strategy for decorating with $mdDialog controller', () => {
     // get the controller for the new dialog.
     let dialogController = $controller(dialog.controller, {});
     expect(dialog.showDialog).toBeDefined();
-    expect(dialogController.addArea).toBeDefined();
-    expect(dialogController.deleteArea).toBeDefined();
+    expect(dialogController.add).toBeDefined();
+    expect(dialogController.delete).toBeDefined();
 
   });
 
@@ -47,8 +47,8 @@ describe('The dialog strategy for decorating with $mdDialog controller', () => {
     // get the controller for the new dialog.
     let dialogController = $controller(dialog.controller, {});
     expect(dialog.showDialog).toBeDefined();
-    expect(dialogController.addCollection).toBeDefined();
-    expect(dialogController.deleteCollection).toBeDefined();
+    expect(dialogController.add).toBeDefined();
+    expect(dialogController.delete).toBeDefined();
 
   });
 
@@ -63,10 +63,8 @@ describe('The dialog strategy for decorating with $mdDialog controller', () => {
     // get the controller for the new dialog.
     let dialogController = $controller(dialog.controller, {});
     expect(dialog.showDialog).toBeDefined();
-    expect(dialogController.addTag).toBeDefined();
-    expect(dialogController.deleteTag).toBeDefined();
-    expect(dialogController.addAreaToTag).toBeDefined();
-    expect(dialogController.removeAreaFromTag).toBeDefined();
+    expect(dialogController.add).toBeDefined();
+    expect(dialogController.delete).toBeDefined();
 
   });
 
@@ -81,8 +79,8 @@ describe('The dialog strategy for decorating with $mdDialog controller', () => {
     // get the controller for the new dialog.
     let dialogController = $controller(dialog.controller, {});
     expect(dialog.showDialog).toBeDefined();
-    expect(dialogController.deleteContentType).toBeDefined();
-    expect(dialogController.addContentType).toBeDefined();
+    expect(dialogController.delete).toBeDefined();
+    expect(dialogController.add).toBeDefined();
 
   });
 
@@ -97,8 +95,8 @@ describe('The dialog strategy for decorating with $mdDialog controller', () => {
     // get the controller for the new dialog.
     let dialogController = $controller(dialog.controller, {});
     expect(dialog.showDialog).toBeDefined();
-    expect(dialogController.deleteCategory).toBeDefined();
-    expect(dialogController.addCategory).toBeDefined();
+    expect(dialogController.delete).toBeDefined();
+    expect(dialogController.add).toBeDefined();
 
   });
 
@@ -128,8 +126,8 @@ describe('The dialog strategy for decorating with $mdDialog controller', () => {
     // get the controller for the new dialog.
     let dialogController = $controller(dialog.controller, {});
     expect(dialog.showDialog).toBeDefined();
-    expect(dialogController.addTag).toBeDefined();
-    expect(dialogController.deleteTag).toBeDefined();
+    expect(dialogController.add).toBeDefined();
+    expect(dialogController.delete).toBeDefined();
 
   });
 
@@ -144,8 +142,8 @@ describe('The dialog strategy for decorating with $mdDialog controller', () => {
     // get the controller for the new dialog.
     let dialogController = $controller(dialog.controller, {});
     expect(dialog.showDialog).toBeDefined();
-    expect(dialogController.addTag).toBeDefined();
-    expect(dialogController.deleteTag).toBeDefined();
+    expect(dialogController.add).toBeDefined();
+    expect(dialogController.delete).toBeDefined();
 
   });
 

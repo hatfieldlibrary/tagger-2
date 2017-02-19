@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The tag list component', () => {
 
   let $componentController;
@@ -166,7 +168,7 @@ describe('The tag list component', () => {
 
   });
 
-  
+
   it('should change the current tag', () => {
 
     let ctrl = $componentController('tagsList', null);

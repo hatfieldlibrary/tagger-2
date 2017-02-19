@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The collection group dialog controller', () => {
 
   let $controller;
@@ -146,9 +148,7 @@ describe('The collection group dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    spyOn(ctrl, 'getCategoryList').and.callThrough();
-
-    ctrl.addCategory('new group');
+    ctrl.add('new group');
 
     let addedCollectionGroup = {
       title: 'new group'
@@ -160,7 +160,6 @@ describe('The collection group dialog controller', () => {
 
     expect(CategoryAdd.save).toHaveBeenCalledWith(addedCollectionGroup);
     expect(GroupListObservable.set).toHaveBeenCalledWith(groups);
-    expect(ctrl.getCategoryList).toHaveBeenCalledWith(3);
     expect(CategoryList.query).toHaveBeenCalled();
     expect(GroupObservable.set).toHaveBeenCalledWith(3);
     expect(TaggerToast.toast).toHaveBeenCalledWith('Collection Group Added');
@@ -172,20 +171,28 @@ describe('The collection group dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    spyOn(ctrl, 'getCategoryList').and.callThrough();
-
-    ctrl.deleteCategory();
+    ctrl.delete();
     deferredList.resolve(groups);
     deferred.resolve(success);
     $rootScope.$apply();
 
     expect(GroupObservable.get).toHaveBeenCalledWith();
     expect(CategoryDelete.save).toHaveBeenCalledWith({id: 1});
-    expect(ctrl.getCategoryList).toHaveBeenCalledWith(null);
     expect(CategoryList.query).toHaveBeenCalled();
     expect(GroupObservable.set).toHaveBeenCalledWith(groups[0].id);
     expect(TaggerToast.toast).toHaveBeenCalledWith('Collection Group Deleted');
     expect($mdDialog.hide).toHaveBeenCalled();
+
+  });
+
+  it('should throw error', () => {
+
+    let ctrl = $controller(dialogController, {});
+
+    let errorTest = function() {
+      ctrl.uploadImage();
+    };
+    expect(errorTest).toThrow(new Error('Call to unimplemented function.'));
 
   });
 

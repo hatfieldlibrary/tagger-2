@@ -30,7 +30,7 @@
         /**
          * Deletes a collection group from Tagger.
          */
-        vm.deleteCategory = function () {
+        vm.delete = function () {
 
           const result = CategoryDelete.save({id: GroupObservable.get()});
           result.$promise.then(function (data) {
@@ -42,7 +42,7 @@
               // When the parameter is null, the method will
               // use the id of the first category in the
               // list. That's what we want in the case of deletions.
-              vm.getCategoryList(null);
+              _getCategoryList(null);
               vm.closeDialog();
             }
 
@@ -54,7 +54,7 @@
          * Add a collection group to Tagger.
          * @param title
          */
-        vm.addCategory = function (title) {
+        vm.add = function (title) {
 
           const result = CategoryAdd.save({title: title});
           result.$promise.then(function (data) {
@@ -63,7 +63,7 @@
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
-              vm.getCategoryList(data.id);
+              _getCategoryList(data.id);
               // Does what you'd expect.
               vm.closeDialog();
 
@@ -77,7 +77,7 @@
          * id parameter.
          * @param id  id of the current collection group or null.
          */
-        vm.getCategoryList = function (id) {
+        const _getCategoryList = function (id) {
           const categories = CategoryList.query();
           categories.$promise.then(function (data) {
             GroupListObservable.set(data);
@@ -87,6 +87,10 @@
               GroupObservable.set(id);
             }
           });
+        };
+
+        vm.uploadImage = function () {
+          throw new Error('Call to unimplemented function.');
         };
 
       } ;

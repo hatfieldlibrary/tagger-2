@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The collection group/category list component', () => {
 
   let $componentController;
@@ -21,35 +23,35 @@ describe('The collection group/category list component', () => {
 
     module(($provide) => {
       $provide.value('GroupListObservable', {
-        set: (x) => {
+        set: () => {
         },
         get: () => {
         },
-        subscribe: (o) => {
+        subscribe: () => {
         }
-      })
+      });
     });
 
     module(($provide) => {
       $provide.value('GroupObservable', {
-        set: (x) => {
+        set: () => {
         },
         get: () => {
         },
-        subscribe: (o) => {
+        subscribe: () => {
         }
-      })
+      });
     });
 
     module(($provide) => {
       $provide.value('UserAreaObservable', {
-        set: (x) => {
+        set: () => {
         },
         get: () => {
         },
-        subscribe: (o) => {
+        subscribe: () => {
         }
-      })
+      });
     });
 
 
@@ -78,15 +80,15 @@ describe('The collection group/category list component', () => {
     categories = [
       {
         id: 1,
-        title: "category one"
+        title: 'category one'
       },
       {
         id: 2,
-        title: "category two"
+        title: 'category two'
       },
       {
         id: 3,
-        title: "category three"
+        title: 'category three'
       }
     ]
 
@@ -100,34 +102,34 @@ describe('The collection group/category list component', () => {
 
 
     spyOn(GroupListObservable, 'set').and.callFake((x) => {
-      fakeCollectionCallback(x)
+      fakeCollectionCallback(x);
     });
     spyOn(GroupListObservable, 'get').and.callFake((x) => {
       return userArea;
     });
 
     spyOn(GroupListObservable, 'subscribe').and.callFake((o) => {
-      fakeCollectionCallback = o
+      fakeCollectionCallback = o;
     });
 
     spyOn(UserAreaObservable, 'set').and.callFake((x) => {
-      UserAreaObservable(x)
+      UserAreaObservable(x);
     });
-    spyOn(UserAreaObservable, 'get').and.callFake((x) => {
+    spyOn(UserAreaObservable, 'get').and.callFake(() => {
       return userArea;
     });
     spyOn(UserAreaObservable, 'subscribe').and.callFake((o) => {
-      fakeUserAreaObservableCallback = o
+      fakeUserAreaObservableCallback = o;
     });
 
     spyOn(GroupObservable, 'set').and.callFake((x) => {
-      fakeGroupObserverCallback(x)
+      fakeGroupObserverCallback(x);
     });
-    spyOn(GroupObservable, 'get').and.callFake((x) => {
+    spyOn(GroupObservable, 'get').and.callFake(() => {
       return groupId;
     });
     spyOn(GroupObservable, 'subscribe').and.callFake((o) => {
-      fakeGroupObserverCallback = o
+      fakeGroupObserverCallback = o;
     });
 
   });

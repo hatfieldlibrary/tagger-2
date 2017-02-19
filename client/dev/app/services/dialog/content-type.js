@@ -28,7 +28,7 @@
          * Deletes a content type from Tagger.
          * @param id
          */
-        vm.deleteContentType = function () {
+        vm.delete = function () {
 
           const result = ContentTypeDelete.save({id: ContentTypeObservable.get()});
           result.$promise.then(function (data) {
@@ -42,7 +42,7 @@
               // uses the id of the first category in the
               // updated list. That's what we want in the
               // case of deletions.
-              vm.getContentList(null);
+              _getContentList(null);
               vm.closeDialog();
             }
 
@@ -54,7 +54,7 @@
          * parameter.
          * @param id  the id of the current content type or null.
          */
-        vm.getContentList = function (id) {
+        const _getContentList = function (id) {
 
           const contentTypes = ContentTypeList.query();
           // Wait for callback.
@@ -75,7 +75,7 @@
          * Add content type to Tagger.
          * @param title
          */
-        vm.addContentType = function (title) {
+        vm.add = function (title) {
 
           const result = ContentTypeAdd.save({title: title});
           result.$promise.then(function (data) {
@@ -84,13 +84,17 @@
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
-              vm.getContentList(data.id);
+              _getContentList(data.id);
               // Does what you'd expect.
               vm.closeDialog();
 
             }
-
           });
+
+        };
+
+        vm.uploadImage = function () {
+          throw new Error('Call to unimplemented function.');
         };
 
       };

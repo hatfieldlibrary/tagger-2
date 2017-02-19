@@ -20,6 +20,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 import db from '../_helpers/db';
 import  contentDao from '../../../../server/api/tagger/dao/content-dao';
 import collectionDao from  '../../../../server/api/tagger/dao/collection-dao';
