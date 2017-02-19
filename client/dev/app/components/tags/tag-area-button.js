@@ -10,7 +10,9 @@
                             TagObservable,
                             AreaObservable,
                             TagListObservable,
-                            DialogStrategy) {
+                            TaggerToast,
+                            DialogStrategy,
+                            DialogTypes) {
 
     const vm = this;
 
@@ -85,13 +87,19 @@
 
     vm.$onInit = () => {
 
-      /**
-       * Get the dialog object for this component.
-       * Call with showDialog($event,message).
-       * @type {*}
-       */
-      vm.dialog = DialogStrategy.makeDialog('ToggleController');
+      try {
+        /**
+         * Get the dialog object for this component.
+         * Call with showDialog($event,message).
+         * @type {*}
+         */
+        vm.dialog = DialogStrategy.makeDialog(DialogTypes.TOGGLE_TAG);
 
+      } catch (err) {
+        TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');
+        console.log(err);
+
+      }
 
 
       TagListObservable.subscribe(() => {

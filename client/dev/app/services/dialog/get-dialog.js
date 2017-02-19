@@ -19,49 +19,46 @@
               CollectionGroupDialog,
               TagDialog,
               TagAreaDialog,
-              ImageDialog) {
+              ImageDialog,
+              DialogTypes) {
 
       /**
-       * The case expressions are hardcoded, so beware of bugs caused
-       * by refactored controller names.  The console warning will hopefully
-       * help with debugging.
+       * Returns object composed of the dialog and matching controller. Throws
+       * error if no match found.
        *
-       * This was originally designed to switch on the constructor
-       * for the controller that was passed into this module. Although less error
-       * prone than passing in the controller name as a String, that approach
-       * fails once the javascript has been minified because the contructor name is
-       * minified and useless.
+       * @param type  a string that should match one of the predefined DialogTypes.
+       * @returns {*}
+       * @private
        */
-      function _makeDialog(controller) {
+      function _makeDialog(type) {
 
-        switch (controller) {
-          case 'AreasController':
+        switch (type) {
+          case DialogTypes.AREA:
             return Object.assign({}, ShowDialog, AreaDialog);
 
-          case 'CollectionController':
+          case DialogTypes.COLLECTION:
             return Object.assign({}, ShowDialog, CollectionDialog);
 
-          case 'TagController':
+          case DialogTypes.TAG:
             return Object.assign({}, ShowDialog, TagDialog);
 
-          case 'TypeController':
+          case DialogTypes.CONTENT_TYPE:
             return Object.assign({}, ShowDialog, ContentTypeDialog);
 
-          case 'GroupController':
+          case DialogTypes.GROUP:
             return Object.assign({}, ShowDialog, CollectionGroupDialog);
 
-          case 'ImageController':
+          case DialogTypes.IMAGE:
             return Object.assign({}, ShowDialog, ImageDialog);
 
-          case 'ToggleController':
+          case DialogTypes.TOGGLE_TAG:
             return Object.assign({}, ShowDialog, TagAreaDialog);
 
-          case 'TagAreaController':
+          case DialogTypes.TAG_AREA_SELECT:
             return Object.assign({}, ShowDialog, TagAreaDialog);
 
           default:
-            console.log('WARNING: controller not found ' + controller);
-            return null;
+            throw new Error('WARNING: dialog controller not found for ' + type);
 
         }
       }

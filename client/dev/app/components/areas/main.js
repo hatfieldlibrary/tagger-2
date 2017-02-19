@@ -24,7 +24,9 @@
 
   function AreasController(DialogStrategy,
                            AreaListObservable,
-                           UserAreaObservable) {
+                           UserAreaObservable,
+                           DialogTypes,
+                           TaggerToast) {
 
     var vm = this;
 
@@ -65,12 +67,19 @@
       /** @type {Array.<Object>} */
       vm.areas = AreaListObservable.get();
 
-      /**
-       * Get the dialog object for this controller.
-       * Call with showDialog($event,message).
-       * @type {*}
-       */
-      vm.dialog = DialogStrategy.makeDialog('AreasController');
+      try {
+        /**
+         * Get the dialog object for this controller.
+         * Call with showDialog($event,message).
+         * @type {*}
+         */
+        vm.dialog = DialogStrategy.makeDialog(DialogTypes.AREA);
+
+      } catch (err) {
+        TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');
+        console.log(err);
+
+      }
     };
 
   }

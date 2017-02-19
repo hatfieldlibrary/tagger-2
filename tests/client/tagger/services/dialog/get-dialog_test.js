@@ -5,17 +5,19 @@
 
 /*jshint expr: true*/
 
-describe('The dialog strategy for decorating with $mdDialog controller', () => {
+describe('The dialog strategy for decorating $mdDialog with controller', () => {
 
-  let $componentController, $controller;
+  let $componentController, $controller, DialogStrategy;
 
   beforeEach(module('tagger'));
 
   beforeEach(inject((_$componentController_,
-                     _$controller_) => {
+                     _$controller_,
+                     _DialogStrategy_) => {
 
     $componentController = _$componentController_;
     $controller = _$controller_;
+    DialogStrategy = _DialogStrategy_;
 
   }));
 
@@ -146,5 +148,16 @@ describe('The dialog strategy for decorating with $mdDialog controller', () => {
     expect(dialogController.delete).toBeDefined();
 
   });
+
+  it('should throw error when no matching controller is found.', () => {
+
+    expect(
+      function () {
+        DialogStrategy.makeDialog('BAD_TYPE')
+      }
+    ).toThrow(new Error('WARNING: dialog controller not found for BAD_TYPE'));
+
+  });
+
 
 });
