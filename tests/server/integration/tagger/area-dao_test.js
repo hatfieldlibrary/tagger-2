@@ -17,12 +17,12 @@
 
 'use strict';
 
+/*jshint expr: true*/
+
 import db from '../_helpers/db';
 import  areaDao from '../../../../server/api/tagger/dao/area-dao';
 import {expect} from 'chai';
 import async from 'async';
-
-
 
 /** Test area names. */
 const areas = [

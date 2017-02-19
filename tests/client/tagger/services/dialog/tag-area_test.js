@@ -1,28 +1,26 @@
 /**
- * Created by mspalti on 1/30/17.
+ * Created by mspalti on 2/17/17.
  */
 'use strict';
 
 /*jshint expr: true*/
 
-describe('The tag dialog controller', () => {
+describe('The tag area dialog controller', () => {
 
   let $controller;
 
-  let $mdDialog,
-    TagDelete,
-    TagAdd,
+  let $rootScope,
+    $mdDialog,
+    TagTargetAdd,
+    TagTargetRemove,
     TagList,
     TagListObservable,
     TagObservable,
     TagAreaObservable,
     AreaObservable,
     TaggerToast,
-    $rootScope,
-    deferred,
     deferredList,
     deferredTarget,
-    tags,
     tagTargetsSuccess,
     success,
     failure,
@@ -43,15 +41,16 @@ describe('The tag dialog controller', () => {
       }
     });
 
-    $provide.value('TagAdd', {
-      save: () => {
+    $provide.value('TagTargetAdd', {
+      query: () => {
       }
     });
 
-    $provide.value('TagDelete', {
-      save: () => {
+    $provide.value('TagTargetRemove', {
+      query: () => {
       }
     });
+
 
     $provide.value('TaggerToast', {
       toast: () => {
@@ -91,9 +90,9 @@ describe('The tag dialog controller', () => {
   }));
 
   beforeEach(inject((_$mdDialog_,
-                     _TagDialog_,
-                     _TagAdd_,
-                     _TagDelete_,
+                     _TagAreaDialog_,
+                     _TagTargetAdd_,
+                     _TagTargetRemove_,
                      _TagList_,
                      _TagListObservable_,
                      _TagObservable_,
@@ -105,33 +104,21 @@ describe('The tag dialog controller', () => {
 
     $mdDialog = _$mdDialog_;
     TagList = _TagList_;
-    dialogController = _TagDialog_.controller;
-    TagAdd = _TagAdd_;
-    TagDelete = _TagDelete_;
+    dialogController = _TagAreaDialog_.controller;
+    TagTargetAdd = _TagTargetAdd_;
+    TagTargetRemove = _TagTargetRemove_;
     TagListObservable = _TagListObservable_;
     TagAreaObservable = _TagAreaObservable_;
     AreaObservable = _AreaObservable_;
     TagObservable = _TagObservable_;
     TaggerToast = _TaggerToast_;
     $rootScope = _$rootScope_;
-    deferred = _$q_.defer();
     deferredTarget = _$q_.defer();
     deferredList = _$q_.defer();
 
   }));
 
   beforeEach(() => {
-
-    tags = [
-      {
-        id: 1,
-        name: 'tag one'
-      },
-      {
-        id: 2,
-        name: 'tag two'
-      }
-    ];
 
     tagTargetsSuccess = {
 
@@ -160,14 +147,14 @@ describe('The tag dialog controller', () => {
         $promise: deferredList.promise
       }
     });
-    spyOn(TagAdd, 'save').and.callFake(() => {
+    spyOn(TagTargetAdd, 'query').and.callFake(() => {
       return {
-        $promise: deferred.promise
+        $promise: deferredTarget.promise
       }
     });
-    spyOn(TagDelete, 'save').and.callFake(() => {
+    spyOn(TagTargetRemove, 'query').and.callFake(() => {
       return {
-        $promise: deferred.promise
+        $promise: deferredTarget.promise
       }
     });
 
@@ -180,63 +167,48 @@ describe('The tag dialog controller', () => {
 
   });
 
-  it('should add a new tag.', () => {
+  it('should add tag to an area.', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    ctrl.add('new tag');
+    spyOn($rootScope, '$broadcast').and.callThrough();
 
-    let addedTag = {
-      name: 'new tag'
+    let target = {
+      tagId: 1, // the tag id returned by TagObservable spy
+      areaId: 2 // the tag id returned by AreaObservable spy
     };
 
-    deferredList.resolve(tags);
-    deferred.resolve(success);
+    ctrl.add();
+
+    deferredTarget.resolve(tagTargetsSuccess);
     $rootScope.$apply();
 
-    expect(TagAdd.save).toHaveBeenCalledWith(addedTag);
-    expect(TagListObservable.set).toHaveBeenCalledWith(tags);
-    expect(TagList.query).toHaveBeenCalled();
-    expect(TagObservable.set).toHaveBeenCalledWith(3);
-    expect(TaggerToast.toast).toHaveBeenCalledWith('Tag Added');
+    expect(TagTargetAdd.query).toHaveBeenCalledWith(target);
+    expect($rootScope.$broadcast).toHaveBeenCalled();
+    expect(TaggerToast.toast).toHaveBeenCalledWith('Tag Added area.');
     expect($mdDialog.hide).toHaveBeenCalled();
 
   });
 
-  it('should fail to add tag and toast a warning.', () => {
+  it('should delete tag from an area.', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    ctrl.add('new tag');
+    spyOn($rootScope, '$broadcast').and.callThrough();
 
-    let addedTag = {
-      name: 'new tag'
+    let target = {
+      tagId: 1, // the tag id returned by TagObservable spy
+      areaId: 2 // the tag id returned by AreaObservable spy
     };
-
-    deferredList.resolve(tags);
-    deferred.resolve(failure);
-    $rootScope.$apply();
-
-    expect(TagAdd.save).toHaveBeenCalledWith(addedTag);
-    expect(TaggerToast.toast).toHaveBeenCalledWith('WARNING: Unable to add tag.');
-    expect($mdDialog.hide).toHaveBeenCalled();
-
-  });
-
-  it('should delete a tag.', () => {
-
-    let ctrl = $controller(dialogController, {});
 
     ctrl.delete();
-    deferredList.resolve(tags);
-    deferred.resolve(success);
+
+    deferredTarget.resolve(tagTargetsSuccess);
     $rootScope.$apply();
 
-    expect(TagObservable.get).toHaveBeenCalledWith();
-    expect(TagDelete.save).toHaveBeenCalledWith({id: 1});
-    expect(TagList.query).toHaveBeenCalled();
-    expect(TagObservable.set).toHaveBeenCalledWith(tags[0].id);
-    expect(TaggerToast.toast).toHaveBeenCalledWith('Tag Deleted');
+    expect(TagTargetRemove.query).toHaveBeenCalledWith(target);
+    expect($rootScope.$broadcast).toHaveBeenCalled();
+    expect(TaggerToast.toast).toHaveBeenCalledWith('Tag removed from Area.');
     expect($mdDialog.hide).toHaveBeenCalled();
 
   });
@@ -252,7 +224,4 @@ describe('The tag dialog controller', () => {
 
   });
 
-
-
 });
-

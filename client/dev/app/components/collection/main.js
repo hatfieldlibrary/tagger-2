@@ -25,6 +25,8 @@
   'use strict';
 
   function CollectionController(DialogStrategy,
+                                DialogTypes,
+                                TaggerToast,
                                 UserAreaObservable,
                                 PublicationStatusObservable) {
 
@@ -60,12 +62,19 @@
 
     vm.$onInit = function () {
 
+      try {
       /**
        * Get the dialog object for this component.
        * Call with showDialog($event,message).
        * @type {*}
        */
-      vm.dialog =  DialogStrategy.makeDialog('CollectionController');
+      vm.dialog =  DialogStrategy.makeDialog(DialogTypes.COLLECTION);
+
+      } catch (err) {
+        TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');
+        console.log(err);
+
+      }
 
       PublicationStatusObservable.subscribe(() => {
         vm.isPublished = PublicationStatusObservable.get();

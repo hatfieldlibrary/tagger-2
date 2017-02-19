@@ -24,6 +24,8 @@
   'use strict';
 
   function ImageController(ThumbImageObservable,
+                           TaggerToast,
+                           DialogTypes,
                            DialogStrategy) {
 
     const vm = this;
@@ -49,13 +51,18 @@
         vm.thumbnailImage = thumb;
       }
 
+      try {
       /**
        * Get the dialog object for this component.
        * Call with showDialog($event,message).
        * @type {*}
        */
-      vm.dialog =  DialogStrategy.makeDialog('ImageController');
+      vm.dialog =  DialogStrategy.makeDialog(DialogTypes.IMAGE);
+      } catch (err) {
+        TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');
+        console.log(err);
 
+      }
 
       _setSubscriptions();
 

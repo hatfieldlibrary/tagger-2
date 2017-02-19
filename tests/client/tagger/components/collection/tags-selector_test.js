@@ -4,6 +4,8 @@
 
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The tag selector component', () => {
 
   let $componentController;

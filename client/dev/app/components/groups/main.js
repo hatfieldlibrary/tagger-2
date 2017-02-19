@@ -23,8 +23,10 @@
   'use strict';
 
   function GroupController(DialogStrategy,
+                           DialogTypes,
                            UserAreaObservable,
                            CategoryList,
+                           TaggerToast,
                            GroupListObservable,
                            GroupObservable) {
 
@@ -58,12 +60,19 @@
       /** @type {number} */
       vm.userAreaId = UserAreaObservable.get();
 
+      try {
       /**
        * Get the dialog object for this component.
        * Call with showDialog($event,message).
        * @type {*}
        */
-      vm.dialog =  DialogStrategy.makeDialog('GroupController');
+      vm.dialog =  DialogStrategy.makeDialog(DialogTypes.GROUP);
+      } catch (err) {
+
+        TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');
+        console.log(err);
+
+      }
 
       _initTagList();
     };

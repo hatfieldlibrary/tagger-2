@@ -18,6 +18,6 @@
 'use strict';
 
 /*jshint unused: false*/
-var taggerServices = angular.module('taggerServices', ['ngResource']);
+const taggerServices = angular.module('taggerServices', ['ngResource']);
 
 

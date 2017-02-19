@@ -2,6 +2,9 @@
  * Created by mspalti on 1/26/17.
  */
 'use strict';
+
+/*jshint expr: true*/
+
 describe('The item types summary panel', () => {
 
   let $componentController;

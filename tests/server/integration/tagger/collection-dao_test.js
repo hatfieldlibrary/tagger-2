@@ -21,6 +21,8 @@
 
 'use strict';
 
+/*jshint expr: true*/
+
 import db from '../_helpers/db';
 import areaDao from '../../../../server/api/tagger/dao/area-dao';
 import categoryDao from '../../../../server/api/tagger/dao/category-dao';

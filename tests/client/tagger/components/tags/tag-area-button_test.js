@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The tags button component', () => {
 
   let $componentController;
@@ -27,7 +29,7 @@ describe('The tags button component', () => {
       $provide.value('DialogStrategy', {
         makeDialog: () => {
         },
-        showDialog: (event, message) => {
+        showDialog: () => {
         }
       });
     });
@@ -38,7 +40,7 @@ describe('The tags button component', () => {
         },
         get: () => {
         },
-        subscribe: (o) => {
+        subscribe: () => {
         }
       })
     });
@@ -49,7 +51,7 @@ describe('The tags button component', () => {
         },
         get: () => {
         },
-        subscribe: (o) => {
+        subscribe: () => {
         }
       })
     });
@@ -60,9 +62,9 @@ describe('The tags button component', () => {
         },
         get: () => {
         },
-        subscribe: (o) => {
+        subscribe: () => {
         }
-      })
+      });
     });
 
     module(($provide) => {
@@ -118,7 +120,7 @@ describe('The tags button component', () => {
     bindings = {
       tagId: 1,
       tagName: 'tag one'
-    }
+    };
 
   });
 
@@ -142,38 +144,38 @@ describe('The tags button component', () => {
     spyOn(TagListObservable, 'set').and.callFake((x) => {
       fakeTagListCallback(x)
     });
-    spyOn(TagListObservable, 'get').and.callFake((x) => {
+    spyOn(TagListObservable, 'get').and.callFake(() => {
       return tagTargetList;
     });
 
     spyOn(TagListObservable, 'subscribe').and.callFake((o) => {
-      fakeTagListCallback = o
+      fakeTagListCallback = o;
     });
 
     spyOn(TagObservable, 'set').and.callFake((x) => {
-      fakeTagCallback(x)
+      fakeTagCallback(x);
     });
-    spyOn(TagObservable, 'get').and.callFake((x) => {
-      return
+    spyOn(TagObservable, 'get').and.callFake(() => {
+      return   ;
     });
     spyOn(TagObservable, 'subscribe').and.callFake((o) => {
-      fakeTagCallback = o
+      fakeTagCallback = o;
     });
 
     spyOn(AreaObservable, 'set').and.callFake((x) => {
-      fakeAreaCallback(x)
+      fakeAreaCallback(x);
     });
-    spyOn(AreaObservable, 'get').and.callFake((x) => {
+    spyOn(AreaObservable, 'get').and.callFake(() => {
       return tagId;
     });
     spyOn(AreaObservable, 'subscribe').and.callFake((o) => {
-      fakeAreaCallback = o
+      fakeAreaCallback = o;
     });
 
     spyOn(TagTargets, 'query').and.callFake(() => {
       return {
         $promise: deferred.promise
-      }
+      };
     });
 
   });
