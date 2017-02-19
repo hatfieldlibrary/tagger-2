@@ -19,5 +19,7 @@
  * Created by mspalti on 12/14/16.
  */
 
+'use strict';
+
 // jshint unused:false
-var taggerConstants = angular.module('taggerConstants', []);
+const taggerConstants = angular.module('taggerConstants', []);

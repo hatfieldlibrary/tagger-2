@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The authorization component', () => {
 
   let $componentController;
@@ -32,33 +34,33 @@ describe('The authorization component', () => {
 
     module(($provide) => {
       $provide.value('UserAreaObservable', {
-        set: (x) => {
+        set: () => {
         },
         get: () => {
         },
-        subscribe: (o) => {
+        subscribe: () => {
         }
       })
     });
 
     module(($provide) => {
       $provide.value('UserObserver', {
-        set: (x) => {
+        set: () => {
         },
         get: () => {
         },
-        subscribe: (o) => {
+        subscribe: () => {
         }
       })
     });
 
     module(($provide) => {
       $provide.value('IsAuthObserver', {
-        set: (x) => {
+        set: () => {
         },
         get: () => {
         },
-        subscribe: (o) => {
+        subscribe: () => {
         }
       })
     });
@@ -125,11 +127,11 @@ describe('The authorization component', () => {
     spyOn(SetGlobalValues, 'initializeGlobalValues');
 
     spyOn(UserAreaObservable, 'set').and.callFake((x) => {
-      fakeUserAreaCallback(x)
+      fakeUserAreaCallback(x);
     });
     spyOn(UserAreaObservable, 'get').and.returnValue(userArea);
     spyOn(UserAreaObservable, 'subscribe').and.callFake((o) => {
-      fakeUserAreaCallback = o
+      fakeUserAreaCallback = o;
     });
 
     spyOn(UserObserver, 'set').and.callFake((x) => {
@@ -137,21 +139,21 @@ describe('The authorization component', () => {
     });
     spyOn(UserObserver, 'get').and.returnValue(userId);
     spyOn(UserObserver, 'subscribe').and.callFake((o) => {
-      fakeUserCallback = o
+      fakeUserCallback = o;
     });
 
     spyOn(IsAuthObserver, 'set').and.callFake((x) => {
-      fakeIsAuthCallback(x)
+      fakeIsAuthCallback(x);
     });
     spyOn(IsAuthObserver, 'get');
     spyOn(IsAuthObserver, 'subscribe').and.callFake((o) => {
-      fakeIsAuthCallback = o
+      fakeIsAuthCallback = o ;
     });
 
     spyOn(getUserInfo, 'query').and.callFake(() => {
       return {
         $promise: deferred.promise
-      }
+      } ;
     });
 
   });

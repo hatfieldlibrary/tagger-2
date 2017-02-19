@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The global values service', () => {
 
   let SetGlobalValues,
@@ -36,61 +38,61 @@ describe('The global values service', () => {
     module(($provide) => {
       $provide.value('TagList', {
         query: () => {}
-      })
+      });
     });
 
     module(($provide) => {
       $provide.value('ContentTypeList', {
         query: () => {}
-      })
+      });
     });
 
     module(($provide) => {
       $provide.value('GroupObservable', {
         set: (x) => {},
         get: () => {},
-        subscribe: (o) =>{}
-      })
+        subscribe: () =>{}
+      });
     });
 
     module(($provide) => {
       $provide.value('GroupListObservable', {
         set: (x) => {},
         get: () => {},
-        subscribe: (o) =>{}
-      })
+        subscribe: () =>{}
+      });
     });
 
     module(($provide) => {
       $provide.value('ContentTypeObservable', {
         set: (x) => {},
         get: () => {},
-        subscribe: (o) =>{}
-      })
+        subscribe: () =>{}
+      });
     });
 
     module(($provide) => {
       $provide.value('ContentTypeListObservable', {
         set: (x) => {},
         get: () => {},
-        subscribe: (o) =>{}
-      })
+        subscribe: () =>{}
+      }) ;
     });
 
     module(($provide) => {
       $provide.value('TagObservable', {
         set: (x) => {},
         get: () => {},
-        subscribe: (o) =>{}
-      })
+        subscribe: () =>{}
+      });
     });
 
     module(($provide) => {
       $provide.value('TagListObservable', {
         set: (x) => {},
         get: () => {},
-        subscribe: (o) =>{}
-      })
+        subscribe: () =>{}
+      });
     });
 
   }));

@@ -13,12 +13,13 @@
 
   taggerServices.factory('DialogStrategy',
     function (ShowDialog,
-     AreaDialog,
-     CollectionDialog,
-     ContentTypeDialog,
-     CollectionGroupDialog,
-     TagDialog,
-     ImageDialog) {
+              AreaDialog,
+              CollectionDialog,
+              ContentTypeDialog,
+              CollectionGroupDialog,
+              TagDialog,
+              TagAreaDialog,
+              ImageDialog) {
 
       /**
        * The case expressions are hardcoded, so beware of bugs caused
@@ -31,7 +32,7 @@
        * fails once the javascript has been minified because the contructor name is
        * minified and useless.
        */
-      function _makeDialog (controller) {
+      function _makeDialog(controller) {
 
         switch (controller) {
           case 'AreasController':
@@ -53,10 +54,10 @@
             return Object.assign({}, ShowDialog, ImageDialog);
 
           case 'ToggleController':
-            return Object.assign({}, ShowDialog, TagDialog);
+            return Object.assign({}, ShowDialog, TagAreaDialog);
 
           case 'TagAreaController':
-            return Object.assign({}, ShowDialog, TagDialog);
+            return Object.assign({}, ShowDialog, TagAreaDialog);
 
           default:
             console.log('WARNING: controller not found ' + controller);

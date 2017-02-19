@@ -4,6 +4,8 @@
 
 'use strict';
 
+/*jshint expr: true*/
+
 describe('Area components', function () {
 
   let $componentController;
