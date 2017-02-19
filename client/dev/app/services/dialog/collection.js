@@ -23,6 +23,37 @@
 
       const vm = this;
 
+
+      /**
+       * Returns list of collections, optionally taking a collection
+       * id.
+       * @param id  the collection id or null.
+       */
+      const _getCollectionList = function (id) {
+
+        const result = CollectionsByArea.query({areaId: AreaObservable.get()});
+        result.$promise.then(function (data) {
+          if (data) {
+            CollectionListObservable.set(data);
+            // Deleting a category doesn't generate
+            // a new id. In that case, expect the
+            // id to be null. Update the view using the
+            // id of the first item in the updated category
+            // list.
+            if (id === null) {
+              CollectionObservable.set(data[0].Collection.id);
+
+            } else {
+              CollectionObservable.set(id);
+            }
+          } else {
+            CollectionObservable.set(0);
+          }
+
+        });
+
+      };
+
       /**
        * Closes the dialog
        */
@@ -78,36 +109,6 @@
             _getCollectionList(null);
             vm.closeDialog();
 
-          }
-
-        });
-
-      };
-
-      /**
-       * Returns list of collections, optionally taking a collection
-       * id.
-       * @param id  the collection id or null.
-       */
-      const _getCollectionList = function (id) {
-
-        const result = CollectionsByArea.query({areaId: AreaObservable.get()});
-        result.$promise.then(function (data) {
-          if (data) {
-            CollectionListObservable.set(data);
-            // Deleting a category doesn't generate
-            // a new id. In that case, expect the
-            // id to be null. Update the view using the
-            // id of the first item in the updated category
-            // list.
-            if (id === null) {
-              CollectionObservable.set(data[0].Collection.id);
-
-            } else {
-              CollectionObservable.set(id);
-            }
-          } else {
-            CollectionObservable.set(0);
           }
 
         });

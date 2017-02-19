@@ -3,11 +3,11 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The dialog strategy for decorating with $mdDialog controller', () => {
 
   let $componentController, $controller;
-
-  let AreasController;
 
   beforeEach(module('tagger'));
 

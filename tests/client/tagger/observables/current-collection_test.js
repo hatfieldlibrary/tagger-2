@@ -4,6 +4,8 @@
 
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The current collection observable service', () => {
 
   let

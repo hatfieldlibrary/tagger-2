@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The area action observable service', () => {
 
   let AreaActionObservable,

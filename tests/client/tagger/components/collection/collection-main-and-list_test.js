@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The primary collection component and collection list component', () => {
 
   let $componentController;

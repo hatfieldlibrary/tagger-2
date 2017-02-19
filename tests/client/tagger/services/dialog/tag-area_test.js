@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The tag area dialog controller', () => {
 
   let $controller;

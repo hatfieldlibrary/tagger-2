@@ -4,6 +4,8 @@
 
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The area list observable service', () => {
 
   let

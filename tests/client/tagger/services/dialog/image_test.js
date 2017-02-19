@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The image upload dialog controller', () => {
 
   let $controller;
