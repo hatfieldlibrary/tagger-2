@@ -92,14 +92,16 @@
     "require-dir": "^0.3.0",
     "run-sequence": "^1.1.5",
     "sinon": "^1.17.7",
-    "sinon-as-promised": "^4.0.2"
+    "sinon-as-promised": "^4.0.2",
+    "tslint": "^4.4.2",
+    "typescript": "^2.1.6"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/hatfieldlibrary/tagger-2"
   },
   "author": "Michael Spalti",
-  "license": "GNU",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/hatfieldlibrary/tagger-2/issues"
   },
