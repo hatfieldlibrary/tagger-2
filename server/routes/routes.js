@@ -67,6 +67,7 @@ module.exports = function(app,config){
   app.get('/rest/collection/:collId/remove/type/:typeId', ensureAuthenticated, collectionType.removeTypeTarget);
 
   // AREAS
+  app.use('/rest/area/collections', area.listAreasWithCount); // used by public and admin views, no authentication
   app.use('/rest/area/byId/:id', area.byId);  // used by public and admin views, no authentication
   app.use('/rest/areas',         area.list);  // used by public and admin views, no authentication
   app.post('/rest/area/add', ensureAuthenticated, area.add);

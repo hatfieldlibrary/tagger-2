@@ -21,6 +21,15 @@ const taggerDao = require('../dao/area-dao');
 const utils = require('../utils/response-utility');
 const logger = require('../utils/error-logger');
 
+exports.listAreasWithCount = function (req, res) {
+  taggerDao.areaListWithCollectionCounts()
+    .then(function(areas) {
+      utils.sendResponse(res, areas);
+    }).catch(function (err) {
+    logger.dao(err);
+  });
+};
+
 /**
  * Retrieves area information by area id.
  * @param req
@@ -141,5 +150,7 @@ exports.delete = function (req, res) {
   });
 
 };
+
+
 
 

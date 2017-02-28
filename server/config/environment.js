@@ -44,7 +44,7 @@ const config = {
     gid: credentials.develgid,
     port: 3333,
     mysql: {
-      db: 'acomtags_development',
+      db: 'tagger_development',
       user: credentials.develdbuser,
       password: credentials.develdbpassword,
       host: 'localhost',
@@ -76,7 +76,7 @@ const config = {
     gid: credentials.develgid,
     port: 3000,
     mysql: {
-      db: 'acomtags_test',
+      db: 'tagger_test',
       user: credentials.develdbuser,
       password: credentials.develdbpassword,
       host: 'localhost',
@@ -114,7 +114,7 @@ const config = {
     port: 3000,
     redisPort: credentials.redisPort,
     mysql: {
-      db: 'acomtags',
+      db: 'tagger',
       user: credentials.user,
       password: credentials.password,
       host: credentials.productiondbhost,
