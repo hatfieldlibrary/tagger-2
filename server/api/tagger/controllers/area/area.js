@@ -17,18 +17,9 @@
 
 'use strict';
 
-const taggerDao = require('../dao/area-dao');
-const utils = require('../utils/response-utility');
-const logger = require('../utils/error-logger');
-
-exports.listAreasWithCount = function (req, res) {
-  taggerDao.areaListWithCollectionCounts()
-    .then(function(areas) {
-      utils.sendResponse(res, areas);
-    }).catch(function (err) {
-    logger.dao(err);
-  });
-};
+const taggerDao = require('../../dao/area-dao');
+const utils = require('../../utils/response-utility');
+const logger = require('../../utils/error-logger');
 
 /**
  * Retrieves area information by area id.
@@ -44,21 +35,6 @@ exports.byId = function (req, res) {
   });
 };
 
-/**
- * Retrieves a list of all areas.
- * @param req
- * @param res
- */
-exports.list = function (req, res) {
-
-  taggerDao.listAllAreas().then(function (areas) {
-    utils.sendResponse(res, areas);
-
-  }).catch(function (err) {
-    logger.dao(err);
-  });
-
-};
 
 /**
  * Adds new area. Sets the area position to be at the

@@ -42,4 +42,8 @@ errorLoggers.missing = function(errorMessage) {
   logger.log(logLevel, errorMessage, {errorType: 'MISSING_DATA'});
 };
 
+errorLoggers.repository = function(errorMessage) {
+  logger.log(logLevel, errorMessage, {errorType: 'REPOSITORY'});
+};
+
 module.exports = errorLoggers;

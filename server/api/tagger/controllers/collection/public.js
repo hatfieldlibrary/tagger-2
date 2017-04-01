@@ -8,26 +8,11 @@
 const async = require('async');
 const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/collection-dao');
+const apiMapper = require('../../map/collection');
 const config = require('../../../../config/environment');
 const logger = require('../../utils/error-logger');
 
-/**
- * Retrieves the tags associated with a single collection. Used by
- * both admin interface and public REST API.
- * @param req
- * @param res
- */
-exports.tagsForCollection = function (req, res) {
-  var collId = req.params.collId;
 
-  taggerDao.findTagsForCollection(collId).then(function (tags) {
-    utils.sendResponse(res, tags);
-  }).catch(function (err) {
-    logger.dao(err);
-    utils.sendErrorJson(res, err);
-  });
-
-};
 
 /**
  * Retrieves the types associated with a single collection.  Used by
@@ -36,10 +21,9 @@ exports.tagsForCollection = function (req, res) {
  * @param res
  */
 exports.typesForCollection = function (req, res) {
-  var collId = req.params.collId;
-
+  var collId = req.params.id;
   taggerDao.findContentTypesForCollection(collId).then(function (types) {
-    utils.sendResponse(res, types);
+    utils.sendResponse(res, apiMapper.mapContentTypeList(types));
   }).catch(function (err) {
     logger.dao(err);
     utils.sendErrorJson(res, err);
@@ -53,14 +37,15 @@ exports.typesForCollection = function (req, res) {
  * @param res
  */
 exports.allCollections = function (req, res) {
-
   taggerDao.retrieveAllCollections().then(function (collections) {
-    utils.sendResponse(res, collections);
+
+    utils.sendResponse(res, apiMapper.mapCollectionList(collections, 'all'));
 
   }).catch(function (err) {
-    logger.dao(err);
+    logger.repository(err);
     utils.sendErrorJson(res, err);
   });
+
 };
 
 /**
@@ -76,7 +61,7 @@ exports.collectionById = function (req, res) {
 
         taggerDao.findCollectionById(collId).then(
           function (data) {
-            callback(null, data);
+            callback(null, apiMapper.mapSingleCollection(data));
           }).catch(
           function (err) {
             // trigger  error callback
@@ -84,22 +69,22 @@ exports.collectionById = function (req, res) {
           });
 
       },
-      categories: function (callback) {
+      category: function (callback) {
 
         taggerDao.getCategoryForCollection(collId).then(
           function (data) {
-            callback(null, data);
+            callback(null, apiMapper.mapCategory(data));
           }).catch(
           function (err) {
             callback(err);
           });
 
       },
-      itemTypes: function (callback) {
+      items: function (callback) {
 
         taggerDao.findContentTypesForCollection(collId).then(
           function (data) {
-            callback(null, data);
+            callback(null, apiMapper.mapContentTypeList(data));
           }).catch(
           function (err) {
             callback(err);
@@ -126,9 +111,10 @@ exports.collectionById = function (req, res) {
 exports.collectionsByArea = function (req, res) {
   const areaId = req.params.id;
 
+
   taggerDao.getCollectionsByArea(areaId).then(
     function (collections) {
-      utils.sendResponse(res, collections);
+      utils.sendResponse(res, apiMapper.mapCollectionList(collections, 'area'));
 
     }).catch(function (err) {
     logger.dao(err);
@@ -141,13 +127,13 @@ exports.collectionsByArea = function (req, res) {
  * @param req
  * @param res
  */
-exports.collectionsBySubject = function (req, res) {
+exports.collectionsBySubjectArea = function (req, res) {
   const subjectId = req.params.id;
   const areaId = req.params.areaId;
 
   taggerDao.getCollectionsBySubjectAndArea(subjectId, areaId).then(
     function (collections) {
-      utils.sendResponse(res, collections);
+      utils.sendResponse(res, apiMapper.mapCollectionList(collections, 'subject'));
     }).catch(function (err) {
     logger.dao(err);
     utils.sendErrorJson(res, err);
@@ -160,11 +146,11 @@ exports.collectionsBySubject = function (req, res) {
  * @param req
  * @param res
  */
-exports.allCollectionsByCategory = function (req, res) {
+exports.collectionsByCategory = function (req, res) {
   const categoryId = req.params.id;
 
   taggerDao.getCollectionsByCategory(categoryId).then(function (collections) {
-    utils.sendResponse(res, collections);
+    utils.sendResponse(res, apiMapper.mapCollectionList(collections, 'category'));
   }).catch(function (err) {
     logger.dao(err);
     utils.sendErrorJson(res, err);
@@ -175,12 +161,12 @@ exports.allCollectionsByCategory = function (req, res) {
 /**
  * Retrieves collections by subject (from all areas)
  */
-exports.allCollectionsBySubject = function (req, res) {
+exports.collectionsBySubject = function (req, res) {
   const subjectId = req.params.id;
 
   taggerDao.getCollectionsBySubject(subjectId).then(
     function (collections) {
-      utils.sendResponse(res, collections);
+      utils.sendResponse(res, apiMapper.mapCollectionList(collections, 'subject'));
     }).catch(function (err) {
     logger.dao(err);
     utils.sendErrorJson(res, err);
@@ -242,6 +228,7 @@ exports.browseList = function (req, res) {
 
   request.on('error', function (err) {
     logger.dao(err);
+    utils.sendErrorJson(res, err);
     request.end();
   });
 
