@@ -74,8 +74,8 @@ function _addArea(collId, areaId, res) {
  * @param res
  */
 exports.addAreaTarget = function (req, res) {
-  const collId = req.params.collId;
-  const areaId = req.params.areaId;
+  const collId = req.body.collId;
+  const areaId = req.body.areaId;
 
   async.series(
     {

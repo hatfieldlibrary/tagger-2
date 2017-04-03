@@ -243,7 +243,7 @@
      */
     vm.updateCollection = () => {
 
-      const update = CollectionUpdate.save({
+      const update = CollectionUpdate.update({
         id: vm.collection.id,
         title: vm.collection.title,
         url: vm.collection.url,

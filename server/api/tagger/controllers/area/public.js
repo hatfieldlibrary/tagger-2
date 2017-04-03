@@ -52,4 +52,20 @@
     });
   };
 
+  /**
+   * Retrieves areas for a given collection.
+   * @param req
+   * @param res
+   */
+  exports.areasForCollection = function (req, res) {
+    const collId = req.params.id;
+    taggerDao.findAreasForCollection(collId)
+      .then(function(areas) {
+        utils.sendResponse(res, apiMapper.mapAreasForCollectionList(areas));
+      }).catch(function (err) {
+      logger.dao(err);
+      utils.sendErrorJson(res, err);
+    });
+  };
+
 })();

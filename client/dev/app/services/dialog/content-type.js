@@ -52,7 +52,7 @@
          */
         vm.delete = function () {
 
-          const result = ContentTypeDelete.save({id: ContentTypeObservable.get()});
+          const result = ContentTypeDelete.delete({id: ContentTypeObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 

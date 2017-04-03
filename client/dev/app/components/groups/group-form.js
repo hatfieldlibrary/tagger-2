@@ -55,7 +55,7 @@
 
     vm.updateGroup = function () {
 
-      let success = CategoryUpdate.save({
+      let success = CategoryUpdate.update({
 
         title: vm.category.title,
         url: vm.category.url,

@@ -28,7 +28,7 @@
    */
   taggerServices.factory('AreaList', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'areas', {}, {
+      return $resource(config.restHost + 't/area', {}, {
         query: {method: 'GET', isArray: true}
       });
     }
@@ -38,7 +38,7 @@
    */
   taggerServices.factory('AreaById', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'area/byId/:id', {}, {
+      return $resource(config.restHost + 't/area/id/:id', {}, {
         query: {method: 'GET', isArray: false}
       });
     }
@@ -48,7 +48,7 @@
    */
   taggerServices.factory('AreaAdd', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'area/add');
+      return $resource(config.restHost + 't/area/add');
     }
   ]);
   /**
@@ -56,7 +56,7 @@
    */
   taggerServices.factory('AreaDelete', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'area/delete');
+      return $resource(config.restHost + 't/area/delete/:areaId');
     }
   ]);
   /**
@@ -64,7 +64,7 @@
    */
   taggerServices.factory('ReorderAreas', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'area/reorder');
+      return $resource(config.restHost + 't/area/reorder');
     }
   ]);
   /**
@@ -72,7 +72,9 @@
    */
   taggerServices.factory('AreaUpdate', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'area/update');
+      return $resource(config.restHost + 't/area/update', null, {
+        'update': { method:'PUT' }
+      });
     }
   ]);
 

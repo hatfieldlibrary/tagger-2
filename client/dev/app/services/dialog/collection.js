@@ -95,7 +95,7 @@
        */
       vm.delete = function () {
 
-        const result = CollectionDelete.save({id: CollectionObservable.get()});
+        const result = CollectionDelete.delete({id: CollectionObservable.get()});
         result.$promise.then(function (data) {
           if (data.status === 'success') {
 

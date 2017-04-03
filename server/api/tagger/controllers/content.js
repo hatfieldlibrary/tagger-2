@@ -133,7 +133,7 @@ exports.update = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
-  const contentId = req.body.id;
+  const contentId = req.params.id;
 
   taggerDao.deleteContentType(contentId).then(function () {
     utils.sendResponse(res, {status: 'success'});

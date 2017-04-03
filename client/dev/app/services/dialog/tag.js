@@ -57,7 +57,7 @@
          */
         vm.delete = function () {
 
-          const result = TagDelete.save({id: TagObservable.get()});
+          const result = TagDelete.delete({id: TagObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 

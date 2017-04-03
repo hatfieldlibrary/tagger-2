@@ -70,7 +70,6 @@
      * @returns {boolean}
      */
     function _findArea(areaId, targets) {
-
       for (let i = 0; i < targets.length; i++) {
         if (targets[i].AreaId === areaId) {
           return true;
@@ -102,7 +101,6 @@
      */
     ctrl.update = function (areaId) {
 
-
       if (ctrl.areaTargets !== undefined) {
         // If the area id of the selected checkbox is a
         // already a target, then delete the area target.
@@ -112,10 +110,11 @@
             TaggerToast.toast('Cannot remove area.  Collections must belong to at least one area.');
 
           } else {
-            let result = AreaTargetRemove.query({collId: CollectionObservable.get(), areaId: areaId});
+            let result = AreaTargetRemove.delete({collId: CollectionObservable.get(), areaId: areaId});
             result.$promise.then(function (result) {
               if (result.status === 'success') {
-                ctrl.areaTargets = result.data.areaList;
+                console.log(result)
+                ctrl.areaTargets = result.data.areaList.getAreas;
                 // Update the collections list (one collection has just been removed from the area).
                 CollectionAreasObservable.set();
                 TaggerToast.toast('Collection removed from area.');
@@ -133,7 +132,7 @@
         // If the area id of the selected item is
         // not a target already, add a new area target.
         else {
-          let add = AreaTargetAdd.query({collId: CollectionObservable.get(), areaId: areaId});
+          let add = AreaTargetAdd.save({collId: CollectionObservable.get(), areaId: areaId});
           add.$promise.then(function (result) {
             if (result.status === 'success') {
               ctrl.areaTargets = result.data.areaList;

@@ -69,7 +69,7 @@
       if (types.length > 0) {
         let objArray = [];
         for (let i = 0; i < types.length; i++) {
-          objArray[i] = {id: types[i].ItemContent.id, name: types[i].ItemContent.name};
+          objArray[i] = {id: types[i].id, name: types[i].name};
         }
         ctrl.typesForCollection = objArray;
       }
@@ -96,7 +96,7 @@
 
       var chipObj = {id: chip.id, name: chip.name};
 
-      var result = CollectionTypeTargetAdd.query(
+      var result = CollectionTypeTargetAdd.save(
         {
           collId: CollectionObservable.get(),
           typeId: chip.id
@@ -123,7 +123,7 @@
      * @param chip {Object} $chip
      */
     ctrl.removeType = function (chip) {
-      const result = CollectionTypeTargetRemove.query(
+      const result = CollectionTypeTargetRemove.delete(
         {
           collId: CollectionObservable.get(),
           typeId: chip.id

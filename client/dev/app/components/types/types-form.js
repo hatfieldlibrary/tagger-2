@@ -43,7 +43,7 @@
 
     vm.updateContentType = function () {
 
-      const success = ContentTypeUpdate.save({
+      const success = ContentTypeUpdate.update({
         id: vm.contentType.id,
         name: vm.contentType.name,
         icon: vm.contentType.icon

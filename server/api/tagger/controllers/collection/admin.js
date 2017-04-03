@@ -309,7 +309,7 @@ exports.update = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
-  const id = req.body.id;
+  const id = req.params.id;
 
   taggerDao.deleteCollection(id).then(function () {
     utils.sendResponse(res, {status: 'success'});

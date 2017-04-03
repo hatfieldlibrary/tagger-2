@@ -55,7 +55,7 @@
 
     vm.updateTag = function () {
 
-      var success = TagUpdate.save({
+      var success = TagUpdate.update({
         id: vm.tag.id,
         name: vm.tag.name
 

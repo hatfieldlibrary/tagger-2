@@ -76,7 +76,7 @@
          * @param id
          */
         vm.delete = function () {
-          const result = AreaDelete.save({id: AreaActionObservable.get()});
+          const result = AreaDelete.delete({areaId: AreaActionObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 

@@ -37,11 +37,11 @@
      */
     vm.updateArea = function () {
 
-      let success = AreaUpdate.save({
+      let success = AreaUpdate.update({
         id: vm.area.id,
         title: vm.area.title,
         description: vm.area.description,
-        searchUrl: vm.area.areaId,
+        searchUrl: vm.area.searchUrl,
         linkLabel: vm.area.linkLabel,
         url: vm.area.url
 
@@ -49,7 +49,7 @@
       success.$promise.then(function (data) {
         if (data.status === 'success') {
           // Toast upon success
-          TaggerToast.toast('Area Updated"');
+          TaggerToast.toast('Area Updated');
           _getAreaList();
 
         }
@@ -92,6 +92,7 @@
     function _getAreaList() {
       let areas = AreaList.query();
       areas.$promise.then(function (data) {
+        console.log(data)
         AreaListObservable.set(data);
       });
     }

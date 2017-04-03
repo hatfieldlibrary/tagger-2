@@ -158,7 +158,7 @@ exports.update = function (req, res) {
  */
 exports.delete = function (req, res) {
 
-  const catId = req.body.id;
+  const catId = req.params.id;
 
   taggerDao.delete(catId).then(function () {
     utils.sendResponse(res, {status: 'success', id: catId});

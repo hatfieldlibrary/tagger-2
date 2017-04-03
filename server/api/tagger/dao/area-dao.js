@@ -43,6 +43,16 @@ taggerDao.listAllAreas = () => {
 
 };
 
+taggerDao.findAreasForCollection = (collId) => {
+
+  return taggerSchema.AreaTarget.findAll({
+    where: {
+      CollectionId: collId
+    }
+  });
+
+};
+
 taggerDao.areaListWithCollectionCounts = () => {
 
 

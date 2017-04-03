@@ -15,8 +15,8 @@ const logger = require('../../utils/error-logger');
  * @param res
  */
 exports.addTagTarget = function (req, res) {
-  const collId = req.params.collId;
-  const tagId = req.params.tagId;
+  const collId = req.body.collId;
+  const tagId = req.body.tagId;
 
   async.series(
     {
