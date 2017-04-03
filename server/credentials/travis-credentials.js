@@ -6,7 +6,7 @@
  * Credential and path definitions for travis test build.
 */
 const credentials = {
-  develgid: 'staff',
+  develgid: '',
   develdbuser: 'test_user',
   develdbpassword: '1234',
   googleClientId: '',

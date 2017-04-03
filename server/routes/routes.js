@@ -52,8 +52,8 @@ module.exports = function(app,config){
   app.get('/rest/t/collection/:collId/pubstatus/:status', ensureAuthenticated, collection.setPublicationStatus);
   app.get('/rest/t/collection/:collId/pubstatus', ensureAuthenticated, collection.getPublicationStatus);
   app.get('/rest/t/collection/areas/:collId', ensureAuthenticated, collectionArea.areas);
-  app.get('/rest/t/collection/tags/:collId', apiTag.subjectsForCollection); // controller shared with public route
-  app.get('/rest/t/collection/types/:collId', apiCollection.typesForCollection);  // controller shared with public route
+  app.get('/rest/t/collection/tags/:collId', ensureAuthenticated, apiTag.subjectsForCollection); // controller shared with public route
+  app.get('/rest/t/collection/types/:collId', ensureAuthenticated, apiCollection.typesForCollection);  // controller shared with public route
   app.post('/tagger/collection/image', ensureAuthenticated, function (req, res) {
     collectionImage.updateImage(req, res, config);
   });
@@ -119,23 +119,22 @@ module.exports = function(app,config){
   // Public API routes
   app.get('/rest/area/collection', apiArea.listAreasWithCount);
   app.get('/rest/area/id/:id', apiArea.byId);
-  app.get('/rest/area',         apiArea.list);
+  app.get('/rest/area',  apiArea.list);
   app.get('/rest/area/collection/:id', apiArea.areasForCollection);
-  app.get('/rest/collection/id/:id',      apiCollection.collectionById);
-  app.get('/rest/collection',          apiCollection.allCollections);
-  app.get('/rest/collection/area/:id',    apiCollection.collectionsByArea);
+  app.get('/rest/collection/id/:id',   apiCollection.collectionById);
+  app.get('/rest/collection',  apiCollection.allCollections);
+  app.get('/rest/collection/area/:id', apiCollection.collectionsByArea);
   app.get('/rest/collection/subject/:id/area/:areaId', apiCollection.collectionsBySubjectArea);
   app.get('/rest/collection/category/:id', apiCollection.collectionsByCategory);
   app.get('/rest/collection/subject/:id', apiCollection.collectionsBySubject);
+  app.get('/rest/subject', apiTag.subjectList);
+  app.get('/rest/subject/area/:id', apiTag.subjectsByArea);
+  app.get('/rest/subject/collection/:id', apiTag.subjectsForCollection);
+  app.get('/rest/type/collection/:id',  apiCollection.typesForCollection);
   // This service communicates with a target host to retrieve a browse list.
   // It addresses a very specific use case, is not generalized provides no guarantees
   // about the data returned.
   app.get('/rest/options/external/:collection', apiCollection.browseList);
-  app.get('/rest/subject', apiTag.subjectList);
-  app.get('/rest/subject/area/:id',      apiTag.subjectsByArea);
-  app.get('/rest/subject/collection/:id',   apiTag.subjectsForCollection);
-  app.get('/rest/type/collection/:id',   apiCollection.typesForCollection);
-
 
   // HTML5 MODE ROUTING
   /**
