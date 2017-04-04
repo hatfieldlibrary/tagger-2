@@ -15,7 +15,7 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<md-content class="transparent" layout="column" layout-gt-md="row" layout-align="start start" >
+<md-content class="transparent" layout="column" layout-gt-sm="row" layout-align="start start" >
   <md-content class="transparent" layout="column" flex="100" flex-gt-md="75">
     <md-card class="flex primary-content" flex="flex" style="background: #EAEAE6">
       <div ng-if="vm.collectionList.$resolved"></div>
@@ -39,7 +39,7 @@
           <md-card-content flex="20">
             <md-button class="md-raised md-accent responsive-button" ng-click="vm.dialog.showDialog($event, vm.addMessage)">Add Collection</md-button>
           </md-card-content>
-          <md-card-content layout="column" layout-padding="layout-padding" flex="80" flex-gt-md="80" style="padding-left: 20px">
+          <md-card-content layout="column" layout-padding="layout-padding" flex="80" flex-gt-sm="80" style="padding-left: 20px">
             <div class="md-subhead grey-text" flex="80">
               <span>Values must be provided for ALL of the information below, with the exception of coverage dates and item counts, which can be blank.  You can use the default image if none is available. A minimum of one content type and one subject tag should be provided.</span>
             </div>
@@ -58,7 +58,7 @@
       </md-content>
     </md-card>
   </md-content>
-  <md-content class="transparent transparent" layout="column" flex="100" flex-gt-md="25">
+  <md-content class="transparent transparent" layout="column" flex="100" flex-gt-sm="25">
     <pub-status-switch collection-id="{{vm.collectionId}}"></pub-status-switch>
     <image-selector></image-selector>
     <subject-selector class="flex"></subject-selector>
