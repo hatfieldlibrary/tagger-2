@@ -4,10 +4,7 @@
 (function() {
   'use strict';
 
-  const taggerDao = require('../../dao/area-dao');
-  const utils = require('../../utils/response-utility');
-  const logger = require('../../utils/error-logger');
-  const apiMapper = require('../../map/area');
+  const publicApiRepository = require('../../repository/area/public');
 
 
   /**
@@ -16,14 +13,7 @@
    * @param res
    */
   exports.list = function (req, res) {
-
-    taggerDao.listAllAreas().then(function (areas) {
-      utils.sendResponse(res, apiMapper.mapAreaList(areas));
-
-    }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
+    publicApiRepository.list(req, res);
 
   };
 
@@ -33,23 +23,11 @@
    * @param res
    */
   exports.byId = function (req, res) {
-    const areaId = req.params.id;
-    taggerDao.findAreaById(areaId).then(function (areas) {
-      utils.sendResponse(res, apiMapper.mapArea(areas));
-    }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
+   publicApiRepository.byId(req, res);
   };
 
   exports.listAreasWithCount = function (req, res) {
-    taggerDao.areaListWithCollectionCounts()
-      .then(function(areas) {
-        utils.sendResponse(res, apiMapper.mapAreaCount(areas));
-      }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
+   publicApiRepository.listAreasWithCount(req, res);
   };
 
   /**
@@ -58,14 +36,7 @@
    * @param res
    */
   exports.areasForCollection = function (req, res) {
-    const collId = req.params.id;
-    taggerDao.findAreasForCollection(collId)
-      .then(function(areas) {
-        utils.sendResponse(res, apiMapper.mapAreasForCollectionList(areas));
-      }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
+    publicApiRepository.areasForCollection(req, res);
   };
 
 })();

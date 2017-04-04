@@ -17,29 +17,61 @@
 
 'use strict';
 
-const repository = require('../repository/users');
+const repository = require('../../repository/tag/admin');
+
 /**
- * Retrieves list of current users.
+ * Retrieves tag information by tag id.
  * @param req
  * @param res
  */
-exports.list = function (req, res) {
-  repository.list(req, res);
+exports.byId = function (req, res) {
+  repository.byId(req, res);
 
 };
 
 /**
- * Adds a new user.
+ * Retrieves list of tags associated with an area. Query
+ * by area id.
+ * @param req
+ * @param res
+ */
+exports.tagByArea = function (req, res) {
+  repository.tagByArea(req, res);
+};
+
+
+/**
+ * Retrieves tag name and use count by area id.
+ * @param req
+ * @param res
+ */
+exports.tagByAreaCount = function (req, res) {
+  repository.tagByAreaCount(req, res);
+};
+
+
+/**
+ * Adds a new tag.  First checks to see if tag with this name already
+ * exists.
  * @param req
  * @param res
  */
 exports.add = function (req, res) {
   repository.add(req, res);
+};
+
+/**
+ * Update the tag name.
+ * @param req
+ * @param res
+ */
+exports.update = function (req, res) {
+  repository.update(req, res);
 
 };
 
 /**
- * Deletes user.
+ * Delete the tag.
  * @param req
  * @param res
  */
@@ -48,12 +80,5 @@ exports.delete = function (req, res) {
 
 };
 
-/**
- * Updates user information.
- * @param req
- * @param res
- */
-exports.update = function (req, res) {
-  repository.update(req, res);
 
-};
+

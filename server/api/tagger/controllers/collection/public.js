@@ -1,18 +1,11 @@
 /**
- * Public API endpoints for collection information.
+ * Controllers for collection information available via the public API.
  * Created by mspalti on 1/9/17.
  */
 
 'use strict';
 
-const async = require('async');
-const utils = require('../../utils/response-utility');
-const taggerDao = require('../../dao/collection-dao');
-const apiMapper = require('../../map/collection');
-const config = require('../../../../config/environment');
-const logger = require('../../utils/error-logger');
-
-
+const publicApiRepository = require('../../repository/collection/public');
 
 /**
  * Retrieves the types associated with a single collection.  Used by
@@ -21,14 +14,7 @@ const logger = require('../../utils/error-logger');
  * @param res
  */
 exports.typesForCollection = function (req, res) {
-  var collId = req.params.id;
-  taggerDao.findContentTypesForCollection(collId).then(function (types) {
-    utils.sendResponse(res, apiMapper.mapContentTypeList(types));
-  }).catch(function (err) {
-    logger.dao(err);
-    utils.sendErrorJson(res, err);
-  });
-
+  publicApiRepository.typesForCollection(req, res);
 };
 
 /**
@@ -37,14 +23,7 @@ exports.typesForCollection = function (req, res) {
  * @param res
  */
 exports.allCollections = function (req, res) {
-  taggerDao.retrieveAllCollections().then(function (collections) {
-
-    utils.sendResponse(res, apiMapper.mapCollectionList(collections, 'all'));
-
-  }).catch(function (err) {
-    logger.repository(err);
-    utils.sendErrorJson(res, err);
-  });
+  publicApiRepository.allCollections(req, res);
 
 };
 
@@ -54,52 +33,7 @@ exports.allCollections = function (req, res) {
  * @param res
  */
 exports.collectionById = function (req, res) {
-  const collId = req.params.id;
-
-  async.series({
-      collection: function (callback) {
-
-        taggerDao.findCollectionById(collId).then(
-          function (data) {
-            callback(null, apiMapper.mapSingleCollection(data));
-          }).catch(
-          function (err) {
-            // trigger  error callback
-            callback(err);
-          });
-
-      },
-      category: function (callback) {
-
-        taggerDao.getCategoryForCollection(collId).then(
-          function (data) {
-            callback(null, apiMapper.mapCategory(data));
-          }).catch(
-          function (err) {
-            callback(err);
-          });
-
-      },
-      items: function (callback) {
-
-        taggerDao.findContentTypesForCollection(collId).then(
-          function (data) {
-            callback(null, apiMapper.mapContentTypeList(data));
-          }).catch(
-          function (err) {
-            callback(err);
-          });
-      }
-    },
-    function (err, result) {
-      if (err) {
-        logger.dao(err);
-        utils.sendErrorJson(res, err);
-      } else {
-        utils.sendResponse(res, result);
-      }
-    }
-  );
+  publicApiRepository.collectionById(req, res);
 
 };
 
@@ -109,17 +43,7 @@ exports.collectionById = function (req, res) {
  * @param res
  */
 exports.collectionsByArea = function (req, res) {
-  const areaId = req.params.id;
-
-
-  taggerDao.getCollectionsByArea(areaId).then(
-    function (collections) {
-      utils.sendResponse(res, apiMapper.mapCollectionList(collections, 'area'));
-
-    }).catch(function (err) {
-    logger.dao(err);
-    utils.sendErrorJson(res, err);
-  });
+  publicApiRepository.collectionsByArea(req, res);
 };
 
 /**
@@ -128,16 +52,7 @@ exports.collectionsByArea = function (req, res) {
  * @param res
  */
 exports.collectionsBySubjectArea = function (req, res) {
-  const subjectId = req.params.id;
-  const areaId = req.params.areaId;
-
-  taggerDao.getCollectionsBySubjectAndArea(subjectId, areaId).then(
-    function (collections) {
-      utils.sendResponse(res, apiMapper.mapCollectionList(collections, 'subject'));
-    }).catch(function (err) {
-    logger.dao(err);
-    utils.sendErrorJson(res, err);
-  });
+  publicApiRepository.collectionsBySubjectArea(req, res);
 
 };
 
@@ -147,14 +62,7 @@ exports.collectionsBySubjectArea = function (req, res) {
  * @param res
  */
 exports.collectionsByCategory = function (req, res) {
-  const categoryId = req.params.id;
-
-  taggerDao.getCollectionsByCategory(categoryId).then(function (collections) {
-    utils.sendResponse(res, apiMapper.mapCollectionList(collections, 'category'));
-  }).catch(function (err) {
-    logger.dao(err);
-    utils.sendErrorJson(res, err);
-  });
+  publicApiRepository.collectionsByCategory(req, res);
 
 };
 
@@ -162,15 +70,7 @@ exports.collectionsByCategory = function (req, res) {
  * Retrieves collections by subject (from all areas)
  */
 exports.collectionsBySubject = function (req, res) {
-  const subjectId = req.params.id;
-
-  taggerDao.getCollectionsBySubject(subjectId).then(
-    function (collections) {
-      utils.sendResponse(res, apiMapper.mapCollectionList(collections, 'subject'));
-    }).catch(function (err) {
-    logger.dao(err);
-    utils.sendErrorJson(res, err);
-  });
+  publicApiRepository.collectionsBySubject(req, res);
 };
 
 /**
@@ -179,58 +79,10 @@ exports.collectionsBySubject = function (req, res) {
  * The fields returned by the current service are the query
  * term (title) and count. This is not defined in the tagger API.
  *
- * {
- *   item: {
- *     title: "1906",
- *     count: "4"
- * }
- *
- * Introduces a dependency on an external service and
- * confusion about the API contract.
- *
- * TODO: Consider returning external host information only; remove the proxy to external service.
- *
- *
  * @param req
  * @param res
  */
 exports.browseList = function (req, res) {
-  const collection = req.params.collection;
+  publicApiRepository.browseList(req, res);
 
-  const http = require('http');
-  const options = {
-    headers: {
-      accept: 'application/json'
-    },
-    host: config.externalHostA.host,
-    port: config.externalHostA.port,
-    path: config.externalHostA.path + collection,
-    method: 'GET'
-  };
-  // If no error, handle response.
-  function handleResponse(response) {
-
-    var str = '';
-    response.on('data', function (chunk) {
-      // Add data as it returns.
-      str += chunk;
-    });
-
-    response.on('end', function () {
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(str);
-
-    });
-  }
-
-  const request = http.request(options, handleResponse);
-
-  request.on('error', function (err) {
-    logger.dao(err);
-    utils.sendErrorJson(res, err);
-    request.end();
-  });
-
-  request.end();
 };

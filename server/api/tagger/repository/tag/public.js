@@ -1,7 +1,6 @@
 /**
- * Created by mspalti on 1/9/17.
+ * Created by mspalti on 4/4/17.
  */
-
 'use strict';
 
 const utils = require('../../utils/response-utility');

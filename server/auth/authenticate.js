@@ -43,7 +43,7 @@ let
   RedisStore = require('connect-redis')(session);
 
 
-const db = require('../api/tagger/models');
+const db = require('../api/tagger/schema');
 
 
 module.exports = function (app, config) {

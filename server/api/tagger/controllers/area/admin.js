@@ -17,33 +17,57 @@
 
 'use strict';
 
-const repository = require('../repository/tag-target');
+const repository = require('../../repository/area/area');
 
 /**
- * Retrieves list of subject areas associated with a tag.
+ * Retrieves area information by area id.
  * @param req
  * @param res
  */
-exports.getAreaTargets = function (req, res) {
-  repository.getAreaTargets(req, res);
+exports.byId = function (req, res) {
+  repository.byId(req, res);
 };
 
+
 /**
- * Creates association between a subject tag and an area
- * if that association does not already exist.
+ * Adds new area. Sets the area position to be at the
+ * end of the list.
  * @param req
  * @param res
  */
-exports.addTarget = function (req, res) {
-  repository.addTarget(req, res);
+exports.add = function (req, res) {
+  repository.add(req, res);
 };
 
 /**
- * Removes an association between a subject tag and an area.
+ * Updates an existing area.
  * @param req
  * @param res
  */
-exports.removeTarget = function (req, res) {
-  repository.removeTarget(req, res);
+exports.update = function (req, res) {
+  repository.update(req, res);
+};
+
+/**
+ * Updates area position attribute in the database to a new value based on the
+ * order of the new areas array array.
+ * @param req
+ * @param res
+ */
+exports.reorder = function (req, res) {
+  repository.reorder(req, res);
+};
+
+/**
+ * Delete an area.
+ * @param req
+ * @param res
+ */
+exports.delete = function (req, res) {
+ repository.delete(req, res);
 
 };
+
+
+
+

@@ -21,7 +21,7 @@
 
 'use strict';
 
-const taggerSchema = require('../models/index');
+const taggerSchema = require('../schema/index');
 const taggerDao = {};
 
 taggerDao.findAreaById = (areaId) => {

@@ -1,3 +1,6 @@
+/**
+ * Created by mspalti on 4/4/17.
+ */
 /*
  * Copyright (c) 2016.
  *
@@ -16,10 +19,6 @@
  */
 
 'use strict';
-
-/**
- * Created by mspalti on 5/23/14.
- */
 
 const async = require('async');
 const utils = require('../../utils/response-utility');
@@ -50,7 +49,7 @@ exports.byId = function (req, res) {
  */
 exports.tagByArea = function (req, res) {
 
-  var areaId = req.params.areaId;
+  const areaId = req.params.areaId;
 
   taggerDao.findTagsInArea(areaId).then(function (tags) {
     utils.sendResponse(res, tags);
@@ -67,7 +66,7 @@ exports.tagByArea = function (req, res) {
  */
 exports.tagByAreaCount = function (req, res) {
 
-  var areaId = req.params.areaId;
+  const areaId = req.params.areaId;
 
   taggerDao.getTagCountByArea(areaId).then(function (tags) {
     utils.sendResponse(res, tags);

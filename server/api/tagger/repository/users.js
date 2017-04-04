@@ -1,3 +1,6 @@
+/**
+ * Created by mspalti on 4/4/17.
+ */
 /*
  * Copyright (c) 2016.
  *
@@ -17,14 +20,22 @@
 
 'use strict';
 
-const repository = require('../repository/users');
+const utils = require('../utils/response-utility');
+const taggerDao = require('../dao/users.dao');
+const logger = require('../utils/error-logger');
+
 /**
  * Retrieves list of current users.
  * @param req
  * @param res
  */
 exports.list = function (req, res) {
-  repository.list(req, res);
+
+  taggerDao.findAllUsers().then(function (users) {
+    utils.sendResponse(res, users);
+  }).catch(function (err) {
+    logger.dao(err);
+  });
 
 };
 
@@ -34,7 +45,15 @@ exports.list = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
-  repository.add(req, res);
+  const name = req.body.name;
+  const email = req.body.email;
+  const area = req.body.area;
+
+  taggerDao.createNewUser(name, email, area).then(function () {
+    utils.sendSuccessJson(res);
+  }).catch(function (err) {
+    logger.dao(err);
+  });
 
 };
 
@@ -44,7 +63,13 @@ exports.add = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
-  repository.delete(req, res);
+  const id = req.params.id;
+
+  taggerDao.deleteUser(id).then(function () {
+    utils.sendSuccessJson(res);
+  }).catch(function (err) {
+    logger.dao(err);
+  });
 
 };
 
@@ -54,6 +79,15 @@ exports.delete = function (req, res) {
  * @param res
  */
 exports.update = function (req, res) {
-  repository.update(req, res);
+  const name = req.body.name;
+  const email = req.body.email;
+  const area = req.body.area;
+  const id = req.body.id;
+
+  taggerDao.updateUser(name, email, area, id).then(function () {
+    utils.sendResponse(res, {status: 'success'});
+  }).catch(function (err) {
+    logger.dao(err);
+  });
 
 };

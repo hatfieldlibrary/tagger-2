@@ -25,7 +25,7 @@ const  multiparty = require('multiparty');
 const config = require('./config/environment');
 const app = express();
 // initialize database.
-const taggerSchema = require('./api/tagger/models/index');
+const taggerSchema = require('./api/tagger/schema/index');
 
 const logger = require('winston');
 logger.level = config.logLevel;

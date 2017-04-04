@@ -22,10 +22,8 @@
 
   };
 
-
-
   /**
-   * Maps dao collection list object to API object. The collection
+   * Maps collection list data object to API object. The collection
    * dao objects vary between those that wrap collection objects in
    * a <code>dataValue</code> object and those that do not.  Use the
    * <code>type</code> parameter to indicate presence of dataValue wrapper.
@@ -60,7 +58,7 @@
     let typeArray = [];
 
     for (let i = 0; i < contentTypes.length; i++) {
-      // squelize tomfoolery.
+      // sequelize tomfoolery.
       let type = _mapContentType(contentTypes[i].dataValues.ItemContent.dataValues);
       typeArray.push(type);
     }
@@ -109,7 +107,7 @@
 
   function _mapCategory(categoryNoNormalized) {
 
-    // more squelize tomfoolery.
+    // more sequelize tomfoolery.
     let category = categoryNoNormalized.dataValues.Category.dataValues;
 
     let cat = {

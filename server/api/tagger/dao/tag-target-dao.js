@@ -21,7 +21,7 @@
 
 // jshint strict:false
 
-const taggerSchema = require('../models/index');
+const taggerSchema = require('../schema/index');
 const taggerDao = {};
 
 taggerDao.addTagToArea = (tagId, areaId) => {
