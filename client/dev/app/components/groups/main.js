@@ -41,7 +41,7 @@
     vm.deleteMessage = 'templates/dialog/deleteCategoryMessage.html';
 
     function _initTagList() {
-      var tags = CategoryList.query();
+      let tags = CategoryList.query();
       tags.$promise.then(function (data) {
         if (data.length > 0) {
           GroupListObservable.set(data);
@@ -50,7 +50,7 @@
       });
     }
 
-    vm.menuUpdate = function(id, title) {
+    vm.menuUpdate = function (id, title) {
       vm.currentCategory.title = title;
       vm.currentCategory.id = id;
     };
@@ -61,12 +61,11 @@
       vm.userAreaId = UserAreaObservable.get();
 
       try {
-      /**
-       * Get the dialog object for this component.
-       * Call with showDialog($event,message).
-       * @type {*}
-       */
-      vm.dialog =  DialogStrategy.makeDialog(DialogTypes.GROUP);
+        /**
+         * Get the dialog object for this component.
+         * @type {*}
+         */
+        vm.dialog = DialogStrategy.makeDialog(DialogTypes.GROUP);
       } catch (err) {
 
         TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');

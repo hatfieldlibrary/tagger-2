@@ -15,9 +15,6 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Created by mspalti on 12/15/16.
- */
 (function () {
 
   'use strict';
@@ -75,22 +72,21 @@
       try {
         /**
          * Get the dialog object for this component.
-         * Call with showDialog($event,message).
          * @type {*}
          */
         vm.dialog = DialogStrategy.makeDialog(DialogTypes.CONTENT_TYPE);
 
       } catch (err) {
-        TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');
+        TaggerToast.toast('Warning: failed to create dialog. See console for error message.');
         console.log(err);
 
       }
-
 
       /** @type {number} */
       vm.userAreaId = UserAreaObservable.get();
 
       _initTagList();
+
     };
   }
 

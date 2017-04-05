@@ -55,6 +55,7 @@
       if (id) {
         let tagsForArea = TagsForArea.query({areaId: id});
         tagsForArea.$promise.then(function (data) {
+          console.log(data)
           ctrl.tagsForArea = data;
           _getTagsForCollection(ctrl.collectionId);
         });
@@ -91,7 +92,7 @@
       let objArray = [];
       if (set.length > 0) {
         for (let i = 0; i < set.length; i++) {
-          objArray[i] = {id: set[i].Tag.id, name: set[i].Tag.name};
+          objArray[i] = {id: set[i].id, name: set[i].name};
         }
         ctrl.tagsForCollection = objArray;
 
@@ -117,8 +118,7 @@
      */
     ctrl.addTag = function (chip) {
 
-      let chipObj = {id: chip.Tag.id, name: chip.Tag.name};
-      let result = CollectionTagTargetAdd.query(
+      let result = CollectionTagTargetAdd.save(
         {
           collId: ctrl.collectionId,
           tagId: chip.Tag.id
@@ -134,6 +134,8 @@
         }
       });
 
+      let chipObj = {id: chip.Tag.id, name: chip.Tag.name};
+
       return chipObj;
 
     };
@@ -147,7 +149,7 @@
     ctrl.removeTag = function (chip) {
 
       if (_isTagInAreaList(chip.id)) {
-        const result = CollectionTagTargetRemove.query(
+        const result = CollectionTagTargetRemove.delete(
           {
             collId: CollectionObservable.get(),
             tagId: chip.id

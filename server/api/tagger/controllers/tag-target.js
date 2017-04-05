@@ -83,8 +83,8 @@ exports.getAreaTargets = function (req, res) {
  * @param res
  */
 exports.addTarget = function (req, res) {
-  const tagId = req.params.tagId;
-  const areaId = req.params.areaId;
+  const tagId = req.body.tagId;
+  const areaId = req.body.areaId;
 
   async.series(
     {

@@ -26,21 +26,6 @@ const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/tags-dao');
 const logger = require('../../utils/error-logger');
 
-
-/**
- * Retrieves a list of all tags.
- * @param req
- * @param res
- */
-exports.list = function (req, res) {
-
-  taggerDao.findAllTags().then(function (tags) {
-    utils.sendResponse(res, tags);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
-};
-
 /**
  * Retrieves tag information by tag id.
  * @param req
@@ -158,7 +143,7 @@ exports.update = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
-  const id = req.body.id;
+  const id = req.params.id;
 
   taggerDao.deleteTag(id).then(function () {
     utils.sendSuccessJson(res);

@@ -43,6 +43,34 @@ taggerDao.listAllAreas = () => {
 
 };
 
+taggerDao.findAreasForCollection = (collId) => {
+
+  return taggerSchema.AreaTarget.findAll({
+    where: {
+      CollectionId: collId
+    }
+  });
+
+};
+
+taggerDao.areaListWithCollectionCounts = () => {
+
+
+  return taggerSchema.sequelize.query('select count(*), a.title, a.id from Areas a join AreaTargets at on a.id = at.AreaId ' +
+    'join Collections c on c.id = at.CollectionId group by (a.id);',
+    {
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+  // return taggerSchema.Area.findAll( {
+  //   attributes: ['Area.id', 'Area.title',
+  //     taggerSchema.sequelize.fn('count', taggerSchema.sequelize.col('Area.id'))],
+  //   group: ["Area.id"],
+  //   include: [taggerSchema.Collection]
+  // })
+
+};
+
 taggerDao.getAreaCount = () => {
 
   return taggerSchema.Area.findAll(

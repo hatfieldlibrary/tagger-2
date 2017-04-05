@@ -4,7 +4,7 @@
 
 'use strict';
 
-import area from '../../../../server/api/tagger/controllers/area';
+import area from '../../../../server/api/tagger/controllers/area/area';
 import  taggerDao from '../../../../server/api/tagger/dao/area-dao';
 import utils from '../../../../server/api/tagger/utils/response-utility'
 import Promise from 'bluebird';

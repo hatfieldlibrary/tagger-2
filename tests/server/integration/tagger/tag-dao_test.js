@@ -48,7 +48,7 @@ describe('Tag creation', () => {
   // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(5000);
+    this.timeout(7000);
     async.series(
       [
         (callback) => {

@@ -49,7 +49,7 @@
          */
         vm.delete = function () {
 
-          const result = CategoryDelete.save({id: GroupObservable.get()});
+          const result = CategoryDelete.delete({id: GroupObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 

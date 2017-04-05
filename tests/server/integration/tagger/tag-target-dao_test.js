@@ -35,7 +35,7 @@ describe('Tag area target operations', () => {
 // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(6000);
+    this.timeout(7000);
     async.series(
       [
         (callback) => {

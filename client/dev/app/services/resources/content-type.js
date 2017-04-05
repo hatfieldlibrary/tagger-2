@@ -27,7 +27,7 @@
    */
   taggerServices.factory('ContentTypeCount', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'content/byArea/count/:areaId', {}, {
+      return $resource(config.restHost + 't/content/byArea/count/:areaId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }
@@ -37,7 +37,7 @@
    */
   taggerServices.factory('ContentType', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'content/byId/:id', {}, {
+      return $resource(config.restHost + 't/content/byId/:id', {}, {
         query: {method: 'GET', isArray: false}
       });
     }
@@ -47,7 +47,7 @@
    */
   taggerServices.factory('ContentTypeList', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'content/show/list', {}, {
+      return $resource(config.restHost + 't/content/show/list', {}, {
         query: {method: 'GET', isArray: true}
       });
     }
@@ -57,7 +57,7 @@
    */
   taggerServices.factory('ContentTypeAdd', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'content/add');
+      return $resource(config.restHost + 't/content/add');
     }
   ]);
   /**
@@ -65,7 +65,7 @@
    */
   taggerServices.factory('ContentTypeDelete', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'content/delete');
+      return $resource(config.restHost + 't/content/delete/:id');
     }
   ]);
   /**
@@ -73,9 +73,10 @@
    */
   taggerServices.factory('ContentTypeUpdate', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'content/update');
+      return $resource(config.restHost + 't/content/update', null, {
+        update: {method: 'PUT'}
+      });
     }
   ]);
-
 
 })();

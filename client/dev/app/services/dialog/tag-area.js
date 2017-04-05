@@ -36,7 +36,7 @@
          * Adds tag to a collection area. Used with administrator view.
          */
         vm.add = function () {
-          const result = TagTargetAdd.query(
+          const result = TagTargetAdd.save(
             {
               tagId: TagObservable.get(),
               areaId: TagAreaObservable.get()
@@ -58,7 +58,7 @@
          * Remove tag from area. Used with collection administrator view.
          */
         vm.delete = function () {
-          const result = TagTargetRemove.query(
+          const result = TagTargetRemove.delete(
             {
               tagId: TagObservable.get(),
               areaId: TagAreaObservable.get()

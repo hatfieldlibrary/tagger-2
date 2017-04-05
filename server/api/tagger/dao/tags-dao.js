@@ -116,6 +116,19 @@ taggerDao.findTagByName = (name) => {
 
 };
 
+taggerDao.findTagsForCollection = (collId) => {
+
+  return taggerSchema.TagTarget.findAll(
+    {
+      where: {
+        CollectionId: collId
+      },
+      include: [taggerSchema.Tag],
+      attributes: ['"Tags.name"', 'id']
+    });
+
+};
+
 
 
 module.exports = taggerDao;

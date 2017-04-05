@@ -60,7 +60,7 @@ exports.add = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
-  const id = req.body.id;
+  const id = req.params.id;
 
   taggerDao.deleteUser(id).then(function () {
     utils.sendSuccessJson(res);

@@ -15,8 +15,8 @@ const logger = require('../../utils/error-logger');
  * @param res
  */
 exports.addTypeTarget = function (req, res) {
-  const collId = req.params.collId;
-  const typeId = req.params.typeId;
+  const collId = req.body.collId;
+  const typeId = req.body.typeId;
 
   async.series({
       check: function (callback) {

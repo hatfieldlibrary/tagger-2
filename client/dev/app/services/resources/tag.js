@@ -27,7 +27,7 @@
    */
   taggerServices.factory('TagCountForArea', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'tags/count/byArea/:areaId', {}, {
+      return $resource(config.restHost + 't/subject/count/byArea/:areaId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }]);
@@ -36,7 +36,7 @@
    */
   taggerServices.factory('TagsForArea', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'tags/byArea/:areaId', {}, {
+      return $resource(config.restHost + 't/subject/byArea/:areaId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }]);
@@ -45,7 +45,7 @@
    */
   taggerServices.factory('TagById', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'tag/byId/:id', {}, {
+      return $resource(config.restHost + 't/subject/byId/:id', {}, {
         query: {method: 'GET', isArray: false}
       });
     }
@@ -55,7 +55,7 @@
    */
   taggerServices.factory('TagList', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'tag/show/list', {}, {
+      return $resource(config.restHost + 't/subject', {}, {
         query: {method: 'GET', isArray: true}
       });
     }
@@ -65,7 +65,7 @@
    */
   taggerServices.factory('TagAdd', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'tag/add');
+      return $resource(config.restHost + 't/subject/add');
     }
   ]);
   /**
@@ -73,7 +73,7 @@
    */
   taggerServices.factory('TagDelete', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'tag/delete');
+      return $resource(config.restHost + 't/subject/delete/:id');
     }
   ]);
   /**
@@ -81,7 +81,9 @@
    */
   taggerServices.factory('TagUpdate', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'tag/update');
+      return $resource(config.restHost + 't/subject/update', null, {
+        update: {method: 'PUT'}
+      });
     }
   ]);
 

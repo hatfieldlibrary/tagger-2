@@ -354,19 +354,6 @@ taggerDao.updateCollectionImage = (collId, imageName) => {
 
 };
 
-taggerDao.findTagsForCollection = (collId) => {
-
-  return taggerSchema.TagTarget.findAll(
-    {
-      where: {
-        CollectionId: collId
-      },
-      include: [taggerSchema.Tag],
-      attributes: ['"Tags.name"', 'id']
-    });
-
-};
-
 taggerDao.getCollectionsByArea = (areaId) => {
 
   return taggerSchema.sequelize.query('Select * from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where at.AreaId = ? AND c.published = true order by c.title',
