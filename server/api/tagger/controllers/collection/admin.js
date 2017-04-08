@@ -27,6 +27,7 @@ const areaRepository = require('../../repository/collection/area');
 const imageRepository = require('../../repository/collection/image');
 const tagRepository = require('../../repository/collection/tag');
 const typeRepository = require('../../repository/collection/type');
+const utils = require('../../utils/response-utility');
 
 /**
  * Returns ctype (item type) counts for the overview
@@ -34,32 +35,60 @@ const typeRepository = require('../../repository/collection/type');
  * @param req
  * @param res
  */
-exports.countCTypesByArea = function (req, res) {
-  collectionRepository.countCTypesByArea(req, res);
+exports.countCTypesByArea = function (req, res, next) {
+  collectionRepository.countCTypesByArea(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Gets browse type (search option types) by area for overview dashboard.
  * @param req
  * @param res
  */
-exports.browseTypesByArea = function (req, res) {
-  collectionRepository.browseTypesByArea(req, res);
+exports.browseTypesByArea = function (req, res, next) {
+  collectionRepository.browseTypesByArea(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Sets the publication status of the collection.
  * @param req
  * @param res
  */
-exports.setPublicationStatus = function (req, res) {
-  collectionRepository.setPublicationStatus(req, res);
+exports.setPublicationStatus = function (req, res, next) {
+  collectionRepository.setPublicationStatus(
+    req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Returns the publication status of the collection.
  * @param req
  * @param res
  */
-exports.getPublicationStatus = function (req, res) {
- collectionRepository.getPublicationStatus(req, res);
+exports.getPublicationStatus = function (req, res, next) {
+  collectionRepository.getPublicationStatus(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 /**
@@ -68,8 +97,15 @@ exports.getPublicationStatus = function (req, res) {
  * @param req
  * @param res
  */
-exports.repoTypesByArea = function (req, res) {
-  collectionRepository.repoTypesByArea(req, res);
+exports.repoTypesByArea = function (req, res, next) {
+  collectionRepository.repoTypesByArea(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Retrieves the collections by area id for the administrative
@@ -77,43 +113,74 @@ exports.repoTypesByArea = function (req, res) {
  * @param req
  * @param res
  */
-exports.list = function (req, res) {
-  collectionRepository.list(req, res);
+exports.list = function (req, res, next) {
+  collectionRepository.list(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Returns the first collection for the area.
  * @param req
  * @param res
  */
-exports.getFirstCollectionInArea = function (req, res) {
- collectionRepository.getFirstCollectionInArea(req, res);
+exports.getFirstCollectionInArea = function (req, res, next) {
+  collectionRepository.getFirstCollectionInArea(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Retrieves data for a single collection by collection id.
  * @param req
  * @param res
  */
-exports.byId = function (req, res) {
-  collectionRepository.byId(req, res);
-
+exports.byId = function (req, res, next) {
+  collectionRepository.byId(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Updates metadata and associations for a single collection.
  * @param req
  * @param res
  */
-exports.update = function (req, res) {
-  collectionRepository.update(req, res);
-
+exports.update = function (req, res, next) {
+  collectionRepository.update(req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Deletes a collection.
  * @param req
  * @param res
  */
-exports.delete = function (req, res) {
-  collectionRepository.delete(req, res);
-
+exports.delete = function (req, res, next) {
+  collectionRepository.delete(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Adds a new collection with title field metadata
@@ -122,20 +189,31 @@ exports.delete = function (req, res) {
  * @param req
  * @param res
  */
-exports.add = function (req, res) {
- collectionRepository.add(req, res);
-
+exports.add = function (req, res, next) {
+  collectionRepository.add(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
-
 /**
  * Retrieves areas by collection id for the administrative
  * collections panel.
  * @param req
  * @param res
  */
-exports.areas = function (req, res) {
-  areaRepository.areas(req, res);
-
+exports.areas = function (req, res, next) {
+  areaRepository.areas(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Adds collection to a collection area after first
@@ -144,8 +222,19 @@ exports.areas = function (req, res) {
  * @param req
  * @param res
  */
-exports.addAreaTarget = function (req, res) {
-  areaRepository.addAreaTarget(req, res);
+exports.addAreaTarget = function (req, res, next) {
+  areaRepository.addAreaTarget(
+    req,
+    (data) => {
+      utils.sendSuccessAndDataJson(res, data);
+    },
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+
 };
 /**
  * Removes the association between a collection and a collection
@@ -154,8 +243,15 @@ exports.addAreaTarget = function (req, res) {
  * @param req
  * @param res
  */
-exports.removeAreaTarget = function (req, res) {
-  areaRepository.removeAreaTarget(req, res);
+exports.removeAreaTarget = function (req, res, next) {
+  areaRepository.removeAreaTarget(
+    req,
+    (data) => {
+      utils.sendSuccessAndDataJson(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Image upload. Reads multipart form data and creates
@@ -165,8 +261,16 @@ exports.removeAreaTarget = function (req, res) {
  * @param res
  * @param config
  */
-exports.updateImage = function (req, res, config) {
-  imageRepository.updateImage(req, res, config);
+exports.updateImage = function (req, res, config, next) {
+  imageRepository.updateImage(
+    req,
+    config,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Add a subject tag to the collection after first checking
@@ -174,16 +278,29 @@ exports.updateImage = function (req, res, config) {
  * @param req
  * @param res
  */
-exports.addTagTarget = function (req, res) {
-  tagRepository.addTagTarget(req, res);
+exports.addTagTarget = function (req, res, next) {
+  tagRepository.addTagTarget(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Removes a subject tag from the collection.
  * @param req
  * @param res
  */
-exports.removeTagTarget = function (req, res) {
-  tagRepository.removeTagTarget(req, res);
+exports.removeTagTarget = function (req, res, next) {
+  tagRepository.removeTagTarget(req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Adds a content type to the collection metadata after first
@@ -191,8 +308,15 @@ exports.removeTagTarget = function (req, res) {
  * @param req
  * @param res
  */
-exports.addTypeTarget = function (req, res) {
-  typeRepository.addTypeTarget(req, res);
+exports.addTypeTarget = function (req, res, next) {
+  typeRepository.addTypeTarget(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -200,6 +324,12 @@ exports.addTypeTarget = function (req, res) {
  * @param req
  * @param res
  */
-exports.removeTypeTarget = function (req, res) {
-  typeRepository.removeTypeTarget(req, res);
+exports.removeTypeTarget = function (req, res, next) {
+  typeRepository.removeTypeTarget(req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 };

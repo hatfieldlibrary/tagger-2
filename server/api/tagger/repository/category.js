@@ -27,31 +27,39 @@ const logger = require('../utils/error-logger');
 /**
  * Retrieves the list of all collection groups.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.list = function (req, res) {
+exports.list = function (req, callback, errorHandler) {
 
-  taggerDao.findAll().then(function (categories) {
-    utils.sendResponse(res, categories);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.findAll()
+    .then((categories) => {
+      callback(categories);
+    })
+    .catch((err) => {
+      logger.dao(err);
+      errorHandler(err);
+    });
 
 };
 
 /**
  * Returns collection group title and usage count for dashboard.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.categoryCountByArea = function (req, res) {
+exports.categoryCountByArea = function (req, callback, errorHandler) {
   const areaId = req.params.areaId;
 
-  taggerDao.categoryCountByArea(areaId).then(function (categories) {
-    utils.sendResponse(res, categories);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.categoryCountByArea(areaId)
+    .then((categories) => {
+      callback(categories);
+    })
+    .catch((err) => {
+      logger.dao(err);
+      errorHandler(err);
+    });
 
 };
 
@@ -66,70 +74,87 @@ exports.categoryCountByArea = function (req, res) {
  * TODO: The model could be refactored for one-to-many. Dangerous for existing data, however.
  *
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.categoryByCollection = function (req, res) {
+exports.categoryByCollection = function (req, callback, errorHandler) {
   const collId = req.params.collId;
-  taggerDao.categoriesByCollectionId(collId).then(function (categories) {
-    utils.sendResponse(res, categories);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.categoriesByCollectionId(collId)
+    .then((categories) => {
+      callback(categories);
+    })
+    .catch((err) => {
+      logger.dao(err);
+      errorHandler(err);
+    });
 };
 
 /**
  * Retrieves list of collection groups by area.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.listByArea = function (req, res) {
+exports.listByArea = function (req, callback, errorHandler) {
   const areaId = req.params.areaId;
 
-  taggerDao.listByArea(areaId).then(function (categories) {
-    utils.sendResponse(res, categories);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.listByArea(areaId)
+    .then((categories) => {
+      callback(categories);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(err);
+    });
 };
 
 /**
  * Retrieves single collection group information by category id.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.byId = function (req, res) {
+exports.byId = function (req, callback, errorHandler) {
   const categoryId = req.params.id;
 
-  taggerDao.byId(categoryId).then(function (category) {
-    utils.sendResponse(res, category);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.byId(categoryId)
+    .then((category) => {
+      callback(category);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(err);
+    });
 
 };
 
 /**
  * Adds a new collection group with title.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.add = function (req, res) {
+exports.add = function (req, callback, errorHandler) {
   const title = req.body.title;
 
-  taggerDao.add(title).then(function (result) {
-    utils.sendResponse(res, {status: 'success', id: result.id});
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.add(title)
+    .then((result) => {
+      callback({status: 'success', id: result.id});
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(err);
+    });
 
 };
 
 /**
  * Updates collection group.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.update = function (req, res) {
+exports.update = function (req, callback, errorHandler) {
 
   const title = req.body.title;
   const url = req.body.url;
@@ -146,28 +171,35 @@ exports.update = function (req, res) {
     areaId: areaId
   };
 
-  taggerDao.update(data, id).then(function () {
-    utils.sendSuccessJson(res);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.update(data, id)
+    .then(() => {
+      callback();
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(err);
+    });
 
 };
 
 /**
  * Deletes collection group.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.delete = function (req, res) {
+exports.delete = function (req, callback, errorHandler) {
 
   const catId = req.params.id;
 
-  taggerDao.delete(catId).then(function () {
-    utils.sendResponse(res, {status: 'success', id: catId});
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.delete(catId)
+    .then(() => {
+      callback({status: 'success', id: catId});
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(err);
+    });
 
 };
 

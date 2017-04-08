@@ -22,10 +22,30 @@
 // jshint strict:false
 
 const taggerSchema = require('../schema/index');
+const logger = require('../utils/error-logger');
+const path = require('path');
+const paramErrorMessage = 'A parameter for a content type query is not defined.';
+const filename = path.basename(__filename);
 const taggerDao = {};
 
+/**
+ * Returns 500 error for missing parameter. This error is thrown
+ * before the dao promise is returned.
+ * @returns {Error}
+ * @private
+ */
+function _errorResponse() {
+  let error = new Error('Error: missing query parameter - ' + filename);
+  error.status = 500;
+  return error;
+}
 
 taggerDao.retrieveContentTypeById = (id) => {
+
+  if(!id) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.ItemContent.find({
     where:{
@@ -46,6 +66,11 @@ taggerDao.getContentTypes = () => {
 
 taggerDao.getAreaContentTypeSummary = (areaId) => {
 
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.sequelize.query('Select name, COUNT(*) as count from AreaTargets left ' +
     'join Collections on AreaTargets.CollectionId = Collections.id left join ItemContentTargets ' +
     'on ItemContentTargets.CollectionId = Collections.id left join ItemContents on ' +
@@ -62,6 +87,11 @@ taggerDao.getAreaContentTypeSummary = (areaId) => {
 
 taggerDao.findContentTypeByName = (name) => {
 
+  if(!name) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.ItemContent.find(
     {
       where: {
@@ -74,6 +104,11 @@ taggerDao.findContentTypeByName = (name) => {
 
 taggerDao.createContentType = (name) => {
 
+  if(!name) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.ItemContent.create({
     name: name
   });
@@ -81,6 +116,11 @@ taggerDao.createContentType = (name) => {
 };
 
 taggerDao.updateContentType = (name, icon, id) => {
+
+  if(!name || !icon || !id) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.ItemContent.update(
     {
@@ -96,6 +136,11 @@ taggerDao.updateContentType = (name, icon, id) => {
 };
 
 taggerDao.deleteContentType = (contentId) => {
+
+  if(!contentId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.ItemContent.destroy(
     {

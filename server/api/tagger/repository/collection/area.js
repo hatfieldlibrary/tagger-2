@@ -1,7 +1,6 @@
 'use strict';
 
 const async = require('async');
-const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/collection-dao');
 const logger = require('../../utils/error-logger');
 
@@ -9,16 +8,20 @@ const logger = require('../../utils/error-logger');
  * Retrieves areas by collection id for the administrative
  * collections panel.
  * @param req
- * @param res
+ * @param callback response success callback
+ * @param errorHandler failure response callback
  */
-exports.areas = function (req, res) {
+exports.areas = function (req, callback, errorHandler) {
   const collId = req.params.collId;
 
-  taggerDao.findAreasForCollection(collId).then(function (areas) {
-    utils.sendResponse(res, areas);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.findAreasForCollection(collId)
+    .then(() => {
+    callback();
+  })
+    .catch((err) => {
+      logger.dao(err);
+      errorHandler(err);
+    });
 
 };
 
@@ -26,39 +29,35 @@ exports.areas = function (req, res) {
  * Adds a collection to a collection area.
  * @param collId    the collection id
  * @param areaId    the area id
- * @param res
+ * @param callback response success callback
+ * @param errorHandler failure response callback
  */
-function _addArea(collId, areaId, res) {
+function _addArea(collId, areaId, callback, errorHandler) {
 
   async.series(
     {
-      create: function (callback) {
+      create: function (series) {
         taggerDao.addCollectionToArea(collId, areaId)
-          .then(function (result) {
-            callback(null, result);
+          .then((result) => {
+            series(null, result);
             // see https://github.com/sequelize/sequelize/issues/4883
             return null;
-          }).catch(function (err) {
-          logger.dao(err);
-          callback(err, null);
-        });
+          });
       },
-      areaList: function (callback) {
+      areaList: function (series) {
         taggerDao.getAreaIdsForCollection(collId)
-          .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          callback(err, null);
-          logger.dao(err);
-        });
+          .then((result) => {
+            series(null, result);
+          });
       }
     },
 
     function (err, result) {
       if (err) {
-        utils.sendErrorJson(res, err);
+        errorHandler(err);
       }
-      utils.sendSuccessAndDataJson(res, result);
+      callback(result);
+
     }
   );
 }
@@ -68,9 +67,11 @@ function _addArea(collId, areaId, res) {
  * checking for a existing association then returns
  * new area list.
  * @param req
- * @param res
+ * @param callback response success callback
+ * @param existingItemCallback success callback for existing association
+ * @param errorHandler failure response callback
  */
-exports.addAreaTarget = function (req, res) {
+exports.addAreaTarget = function (req, callback, existingItemCallback, errorHandler) {
   const collId = req.body.collId;
   const areaId = req.body.areaId;
 
@@ -78,29 +79,31 @@ exports.addAreaTarget = function (req, res) {
     {
       // Check to see if collection is already associated
       // with area.
-      check: function (callback) {
+      check: function (series) {
 
-        taggerDao.checkAreaAssociation(collId, areaId).then(function (result) {
-          callback(null, result);
-          return null;
-        }).catch(function (err) {
-          callback(err, null);
-        });
+        taggerDao.checkAreaAssociation(collId, areaId)
+          .then((result) => {
+            series(null, result);
+            return null;
+          });
       }
     },
     function (err, result) {
       if (err) {
+        errorHandler(err);
         logger.dao(err);
       }
       // if new
       if (result.check === null) {
-        _addArea(collId, areaId, res);
+        _addArea(collId, areaId, callback, errorHandler);
       }
       // if not new, just return the current list.
       else {
-        taggerDao.findCollectionsInArea(areaId).then = function (areas) {
-          utils.sendResponse(res, {status: 'exists', areaTargets: areas});
-        };
+        taggerDao.findCollectionsInArea(areaId).then(
+          (areas) => {
+            existingItemCallback({status: 'exists', areaTargets: areas})
+          }
+        );
       }
 
     });
@@ -112,86 +115,86 @@ exports.addAreaTarget = function (req, res) {
  * there is no need to check the category and remove if it belongs to the area that is being removed.
  * @param collId the collection id
  * @param areaId the area id
- * @param res the response object
+ * @param callback response success callback
+ * @param errorHandler failure response callback
  * @private
  */
-function _removeCollectionFromArea(collId, areaId, res) {
+function _removeCollectionFromArea(collId, areaId, callback, errorHandler) {
 
   async.series(
     {
-      remove: (callback) => {
+      remove: (series) => {
         taggerDao.removeCollectionFromArea(areaId, collId)
           .then(function (result) {
-            callback(null, result);
+            series(null, result);
             return null;
-          }).catch(function (err) {
-          callback(err, null);
-        });
+          });
       },
-      getAreas: (callback) => {
+      getAreas: (series) => {
         taggerDao.getAreaIdsForCollection(collId)
           .then(function (result) {
-            callback(null, result);
+            series(null, result);
             return null;
-          }).catch(function (err) {
-          callback(err, null);
-        });
+          });
       }
     },
     function (err, result) {
       if (err) {
         logger.dao(err);
-        utils.sendErrorJson(res, err);
+        errorHandler(err);
       } else {
-        utils.sendSuccessAndDataJson(res, {areaList: result});
+        callback(result);
       }
     });
 
-};
+}
 
 /**
  * Removes area target from a collection that has a category (collection group) assigned. If the category
  * exists AND has been assigned to the area to be removed, the category also must be removed from the collection.
  * @param collId
  * @param areaId
- * @param res
+ * @param callback response success callback
+ * @param errorHandler failure response callback
  * @private
  */
-function _removeAreaTarget(collId, areaId, category, res) {
+function _removeAreaTarget(collId, areaId, category, callback, errorHandler) {
 
   async.series(
     {
-      deleteCategory: (callback) => {
+      deleteCategory: (series) => {
         if (category.areaId === areaId) {
-          taggerDao.deleteCategoryFromCollection(collId, category.id).then((result) => {
-            callback(null, result);
-            return null;
-          }).catch(function (err) {
-            logger.dao(err);
-          });
+          taggerDao.deleteCategoryFromCollection(collId, category.id)
+            .then((result) => {
+              series(null, result);
+              return null;
+            });
         }
       },
-      removeFromArea: (callback) => {
-        taggerDao.removeCollectionFromArea(areaId, collId).then(function (result) {
-          callback(null, result);
-          return null;
-        }).catch(function (err) {
-          callback(err, null);
-        });
+      removeFromArea: (series) => {
+        taggerDao.removeCollectionFromArea(areaId, collId)
+          .then((result) => {
+            series(null, result);
+            return null;
+          });
       },
-      areaList: (callback => {
-        taggerDao.getAreaIdsForCollection(collId).then(function (result) {
-          callback(null, result);
-          return null;
-        }).catch(function (err) {
-          callback(err, null);
-        });
+      areaList: (series => {
+        taggerDao.getAreaIdsForCollection(collId)
+          .then((result) => {
+            series(null, result);
+            return null;
+          });
       }),
       function(err, result) {
-        utils.sendSuccessAndDataJson(res, {areaList: result});
+        if (err) {
+          logger.dao(err);
+          errorHandler(err);
+        } else {
+          callback({areaList: result});
+        }
       }
 
-  });
+    });
 
 }
 
@@ -200,18 +203,19 @@ function _removeAreaTarget(collId, areaId, category, res) {
  * area.  Also removes the category (collection group) from the collection,
  * Returns new area list after completion.
  * @param req
- * @param res
+ * @param callback response success callback
+ * @param errorHandler failure response callback
  */
-exports.removeAreaTarget = function (req, res) {
+exports.removeAreaTarget = function (req, callback, errorHandler) {
 
   const collId = req.params.collId;
   const areaId = req.params.areaId;
 
   taggerDao.getCategoryForCollection(collId).then((result) => {
     if (result.Category === null) {
-      _removeCollectionFromArea(collId, areaId, res);
+      _removeCollectionFromArea(collId, areaId, callback, errorHandler);
     } else {
-      _removeAreaTarget(collId, areaId, result.Category, res);
+      _removeAreaTarget(collId, areaId, result.Category, callback, errorHandler);
     }
   });
 

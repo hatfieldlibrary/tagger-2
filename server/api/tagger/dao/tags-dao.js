@@ -22,7 +22,23 @@
 // jshint strict:false
 
 const taggerSchema = require('../schema/index');
+const logger = require('../utils/error-logger');
+const path = require('path');
+const filename = path.basename(__filename);
+const paramErrorMessage = 'A parameter for a subject tag query is not defined.';
 const taggerDao = {};
+
+/**
+ * Returns 500 error for missing parameter. This error is thrown
+ * before the dao promise is returned.
+ * @returns {Error}
+ * @private
+ */
+function _errorResponse() {
+  let error = new Error('Error: missing query parameter - ' + filename);
+  error.status = 500;
+  return error;
+}
 
 taggerDao.findAllTags = () => {
 
@@ -35,6 +51,11 @@ taggerDao.findAllTags = () => {
 
 taggerDao.createTag = (name) => {
 
+  if(!name) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.Tag.create({
     name: name
   });
@@ -42,6 +63,11 @@ taggerDao.createTag = (name) => {
 };
 
 taggerDao.updateTag = (name, id) => {
+
+  if(!name || !id) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.Tag.update(
     {
@@ -56,6 +82,11 @@ taggerDao.updateTag = (name, id) => {
 
 taggerDao.deleteTag = (tagId) => {
 
+  if(!tagId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.Tag.destroy({
     where: {
       id: tagId
@@ -65,6 +96,11 @@ taggerDao.deleteTag = (tagId) => {
 };
 
 taggerDao.findTagById = (tagId) => {
+
+  if(!tagId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.Tag.find( {
     where: {
@@ -77,6 +113,11 @@ taggerDao.findTagById = (tagId) => {
 
 
 taggerDao.findTagsInArea = (areaId) => {
+
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.TagAreaTarget.findAll( {
     where: {
@@ -94,6 +135,11 @@ taggerDao.findTagsInArea = (areaId) => {
 
 taggerDao.getTagCountByArea = (areaId) => {
 
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.sequelize.query('SELECT name, COUNT(*) as count from TagTargets left join Tags on ' +
     'TagTargets.TagId = Tags.id left join TagAreaTargets on TagAreaTargets.TagId = Tags.id  ' +
     'WHERE TagAreaTargets.AreaId = ? group by TagTargets.TagId order by Tags.name',
@@ -106,6 +152,11 @@ taggerDao.getTagCountByArea = (areaId) => {
 
 taggerDao.findTagByName = (name) => {
 
+  if(!name) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.Tag.find(
     {
       where: {
@@ -117,6 +168,11 @@ taggerDao.findTagByName = (name) => {
 };
 
 taggerDao.findTagsForCollection = (collId) => {
+
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.TagTarget.findAll(
     {

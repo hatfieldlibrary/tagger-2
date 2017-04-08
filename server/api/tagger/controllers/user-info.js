@@ -21,6 +21,7 @@
 'use strict';
 
 const repository = require('../repository/user-info');
+const utils = require('../utils/response-utility');
 
 /**
  * Returns user info from the Express session.
@@ -28,6 +29,11 @@ const repository = require('../repository/user-info');
  * @param res
  */
 exports.returnUserInfo = function (req, res, config) {
-  repository.returnUserInfo(req, res, config);
+  repository.returnUserInfo(
+    config,
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    });
 
 };

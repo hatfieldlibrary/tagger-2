@@ -691,7 +691,7 @@ describe('Collection operations', () => {
   it('should find subject tags for collection.', (done) => {
     let _onSuccess = (tags) => {
       expect(tags).to.be.defined;
-      expect(tags[0].dataValues.id).to.equal(1);
+      expect(tags[0].dataValues.TagId).to.equal(1);
       expect(tags[0].dataValues.Tag).to.be.an('object');
       done();
     };
@@ -701,6 +701,22 @@ describe('Collection operations', () => {
     };
 
     collectionDao.findTagsForCollection(1)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+  it('should find related collections.', (done) => {
+    let _onSuccess = (related) => {
+      expect(related).to.be.defined;
+      expect(related[0].title).to.have.string('Init Collection One');
+      done();
+    };
+
+    let _onError = (err) => {
+      expect(true).to.be.false; // should not come here
+    };
+    // The collection id must not be identical to test collection. Using 2.
+    collectionDao.findRelatedCollections(2, 1)
       .then(_onSuccess)
       .catch(_onError);
   });

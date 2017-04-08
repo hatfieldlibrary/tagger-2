@@ -4,7 +4,6 @@
 'use strict';
 
 const async = require('async');
-const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/collection-dao');
 const logger = require('../../utils/error-logger');
 
@@ -12,35 +11,38 @@ const logger = require('../../utils/error-logger');
  * Adds a content type to the collection metadata after first
  * checking whether the association already exists.
  * @param req
- * @param res
+ * @param callback success reponse callback
+ * @param errorHandler failure response callback
  */
-exports.addTypeTarget = function (req, res) {
+exports.addTypeTarget = function (req, callback, errorHandler) {
   const collId = req.body.collId;
   const typeId = req.body.typeId;
 
   async.series({
-      check: function (callback) {
-        taggerDao.findItemContentTarget(collId, typeId).then(function (result) {
-          callback(null, result);
-        }).catch(function (err) {
-          logger.dao(err);
-        });
+      check: function (series) {
+        taggerDao.findItemContentTarget(collId, typeId)
+          .then(function (result) {
+            series(null, result);
+          });
       }
     },
     function (err, result) {
       if (err) {
-        logger.dao(err);
+        logger.repository(err);
+        errorHandler(err);
       }
       if (result.check === null) {
-
-        taggerDao.createItemContentTarget(collId, typeId).then(function () {
-          utils.sendResponse(res, {status: 'success'});
-        }).catch(function (err) {
-          logger.dao(err);
-        });
+        taggerDao.createItemContentTarget(collId, typeId, errorHandler)
+          .then(() => {
+            callback({status: 'success'})
+          })
+          .catch((err) => {
+            logger.repository(err);
+            errorHandler(err);
+          });
 
       } else {
-        utils.sendResponse(res, {status: 'exists'});
+        callback({status: 'exists'});
 
       }
     }
@@ -50,17 +52,21 @@ exports.addTypeTarget = function (req, res) {
 /**
  * Removes a content type association from the collection.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.removeTypeTarget = function (req, res) {
+exports.removeTypeTarget = function (req, callback, errorHandler) {
   const collId = req.params.collId;
   const typeId = req.params.typeId;
 
-  taggerDao.deleteItemContentTarget(collId, typeId).then(function () {
-    utils.sendSuccessJson(res);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.deleteItemContentTarget(collId, typeId)
+    .then(() => {
+      callback()
+    })
+    .catch((err) => {
+      logger.dao(err);
+      errorHandler(err);
+    });
 
 };
 

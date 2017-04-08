@@ -26,68 +26,83 @@ const logger = require('../utils/error-logger');
 
 /**
  * Retrieves list of current users.
- * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.list = function (req, res) {
+exports.list = function (callback, errorHandler) {
 
-  taggerDao.findAllUsers().then(function (users) {
-    utils.sendResponse(res, users);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.findAllUsers()
+    .then((users) => {
+      callback(users);
+    })
+    .catch((err) => {
+      logger.repository(err);
+      errorHandler(err);
+    });
 
 };
 
 /**
  * Adds a new user.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.add = function (req, res) {
+exports.add = function (req, callback, errorHandler) {
   const name = req.body.name;
   const email = req.body.email;
   const area = req.body.area;
 
-  taggerDao.createNewUser(name, email, area).then(function () {
-    utils.sendSuccessJson(res);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.createNewUser(name, email, area)
+    .then(() => {
+      callback();
+    })
+    .catch(function (err) {
+      logger.repository(err);
+      errorHandler(err);
+    });
 
 };
 
 /**
  * Deletes user.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.delete = function (req, res) {
+exports.delete = function (req, callback, errorHandler) {
   const id = req.params.id;
 
-  taggerDao.deleteUser(id).then(function () {
-    utils.sendSuccessJson(res);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.deleteUser(id)
+    .then(() => {
+      callback();
+    })
+    .catch(function (err) {
+      logger.repository(err);
+      errorHandler(err);
+    });
 
 };
 
 /**
  * Updates user information.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.update = function (req, res) {
+exports.update = function (req, callback, errorHandler) {
   const name = req.body.name;
   const email = req.body.email;
   const area = req.body.area;
   const id = req.body.id;
 
-  taggerDao.updateUser(name, email, area, id).then(function () {
-    utils.sendResponse(res, {status: 'success'});
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.updateUser(name, email, area, id)
+    .then(() => {
+      callback({status: 'success'});
+    })
+    .catch((err) => {
+      logger.repository(err);
+      errorHandler(err);
+    });
 
 };

@@ -22,9 +22,30 @@
 // jshint strict:false
 
 const taggerSchema = require('../schema/index');
+const logger = require('../utils/error-logger');
+const path = require('path');
+const filename = path.basename(__filename);
+const paramErrorMessage = 'A parameter for a tag-target query is not defined.';
 const taggerDao = {};
 
+/**
+ * Returns 500 error for missing parameter. This error is thrown
+ * before the dao promise is returned.
+ * @returns {Error}
+ * @private
+ */
+function _errorResponse() {
+  let error = new Error('Error: missing query parameter - ' + filename);
+  error.status = 500;
+  return error;
+}
+
 taggerDao.addTagToArea = (tagId, areaId) => {
+
+  if(!tagId || !areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.TagAreaTarget.create(
     {
@@ -36,6 +57,11 @@ taggerDao.addTagToArea = (tagId, areaId) => {
 };
 
 taggerDao.findAreasForTag = (tagId) => {
+
+  if(!tagId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.TagAreaTarget.findAll({
 
@@ -49,6 +75,11 @@ taggerDao.findAreasForTag = (tagId) => {
 
 taggerDao.findTagAreaAssociation = (tagId, areaId) => {
 
+  if(!tagId || !areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.TagAreaTarget.find(
     {
       where: {
@@ -61,6 +92,11 @@ taggerDao.findTagAreaAssociation = (tagId, areaId) => {
 
 taggerDao.listTagAssociations = (tagId) => {
 
+  if(!tagId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.TagAreaTarget.findAll({
     where: {
       TagId: tagId
@@ -71,6 +107,11 @@ taggerDao.listTagAssociations = (tagId) => {
 };
 
 taggerDao.removeTagFromCollections = (areaId, tagId) => {
+
+  if(!tagId || !areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.sequelize.query('delete tt from TagTargets tt Inner Join Tags t on t.id = tt.TagId ' +
     'inner join TagAreaTargets tat on t.id = tat.TagId inner join Areas a on tat.AreaId = a.id ' +
@@ -84,6 +125,11 @@ taggerDao.removeTagFromCollections = (areaId, tagId) => {
 };
 
 taggerDao.removeTagFromArea = (areaId, tagId) => {
+
+  if(!tagId || !areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.TagAreaTarget.destroy(
     {

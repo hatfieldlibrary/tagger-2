@@ -18,16 +18,7 @@
 'use strict';
 
 const repository = require('../../repository/area/area');
-
-/**
- * Retrieves area information by area id.
- * @param req
- * @param res
- */
-exports.byId = function (req, res) {
-  repository.byId(req, res);
-};
-
+const utils = require('../../utils/response-utility');
 
 /**
  * Adds new area. Sets the area position to be at the
@@ -35,8 +26,15 @@ exports.byId = function (req, res) {
  * @param req
  * @param res
  */
-exports.add = function (req, res) {
-  repository.add(req, res);
+exports.add = function (req, res, next) {
+  repository.add(
+    req,
+    () => {
+      utils.sendSuccessJson(res)
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -44,8 +42,15 @@ exports.add = function (req, res) {
  * @param req
  * @param res
  */
-exports.update = function (req, res) {
-  repository.update(req, res);
+exports.update = function (req, res, next) {
+  repository.update(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -54,8 +59,15 @@ exports.update = function (req, res) {
  * @param req
  * @param res
  */
-exports.reorder = function (req, res) {
-  repository.reorder(req, res);
+exports.reorder = function (req, res, next) {
+  repository.reorder(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -63,8 +75,15 @@ exports.reorder = function (req, res) {
  * @param req
  * @param res
  */
-exports.delete = function (req, res) {
- repository.delete(req, res);
+exports.delete = function (req, res, next) {
+  repository.delete(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 

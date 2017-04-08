@@ -29,35 +29,33 @@ const logger = require('../utils/error-logger');
  * Private function for adding association between tag and area.
  * @param tagId   the id of the tag
  * @param areaId   the id of the area
- * @param res      response object
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-function _addArea(tagId, areaId, res) {
+function _addArea(tagId, areaId, callback, errorHandler) {
 
   async.series(
     {
-      create: function (callback) {
+      create: (series) => {
         taggerDao.addTagToArea(tagId, areaId)
-          .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          logger.dao(err);
-        });
-
+          .then((result) => {
+            series(null, result);
+          });
       },
-      areaList: function (callback) {
-        taggerDao.findAreasForTag(tagId).then(function (result) {
-          callback(null, result);
-        }).catch(function (err) {
-          logger.dao(err);
-        });
+      areaList: (series) => {
+        taggerDao.findAreasForTag(tagId)
+          .then((result) => {
+            series(null, result);
+          });
       }
     },
-
-    function (err, result) {
+    (err, result) => {
       if (err) {
-        utils.sendErrorJson(res, err);
+        logger.repository(err);
+        errorHandler(err);
+
       }
-      utils.sendSuccessAndDataJson(res, result);
+      callback(result);
 
     }
   );
@@ -66,16 +64,18 @@ function _addArea(tagId, areaId, res) {
 /**
  * Retrieves list of subject areas associated with a tag.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.getAreaTargets = function (req, res) {
+exports.getAreaTargets = function (req, callback, errorHandler) {
   const tagId = req.params.tagId;
 
   taggerDao.findAreasForTag(tagId)
-    .then(function (areas) {
-      utils.sendResponse(res, areas);
-    }).catch(function (err) {
-    logger.dao(err);
+    .then((areas) => {
+      callback(areas);
+    }).catch((err) => {
+    logger.repository(err);
+    errorHandler(err);
   });
 };
 
@@ -83,9 +83,11 @@ exports.getAreaTargets = function (req, res) {
  * Creates association between a subject tag and an area
  * if that association does not already exist.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param jsonSuccessCallback special json callback success response
+ * @param errorHandler failure response callback
  */
-exports.addTarget = function (req, res) {
+exports.addTarget = function (req, callback, jsonSuccessCallback, errorHandler) {
   const tagId = req.body.tagId;
   const areaId = req.body.areaId;
 
@@ -93,32 +95,33 @@ exports.addTarget = function (req, res) {
     {
       // Check to see if tag is already associated
       // with area.
-      check: function (callback) {
+      check: (series) => {
 
         taggerDao.findTagAreaAssociation(tagId, areaId)
-          .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          callback(err);
-        });
+          .then((result) => {
+            series(null, result);
+          });
       }
     },
     function (err, result) {
       if (err) {
-        logger.dao(err);
+        logger.repository(err);
       }
       // if new
       if (result.check === null) {
-        _addArea(tagId, areaId, res);
+        _addArea(tagId, areaId, jsonSuccessCallback, errorHandler);
 
       }
       // if not new, just return the current list.
       else {
-        taggerDao.listTagAssociations(tagId).then(function (areas) {
-          utils.sendResponse(res, {status: 'exists', areaTargets: areas});
-        }).catch(function (err) {
-          logger.dao(err);
-        });
+        taggerDao.listTagAssociations(tagId)
+          .then((areas) => {
+            callback({status: 'exists', areaTargets: areas});
+          })
+          .catch((err) => {
+            logger.repository(err);
+            errorHandler(err);
+          });
       }
 
     });
@@ -127,46 +130,43 @@ exports.addTarget = function (req, res) {
 /**
  * Removes an association between a subject tag and an area.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.removeTarget = function (req, res) {
+exports.removeTarget = function (req, callback, errorHandler) {
   const tagId = req.params.tagId;
   const areaId = req.params.areaId;
 
   async.series(
     {
       // Remove current associations between the tag and collections in the area.
-      removeSubjects: function (callback) {
+      removeSubjects: (series) => {
         taggerDao.removeTagFromCollections(areaId, tagId)
-          .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          logger.dao(err);
-        });
+          .then((result) => {
+            series(null, result);
+          });
       },
       // Remove the tag from the area.
-      delete: function (callback) {
+      delete: (series) => {
         taggerDao.removeTagFromArea(areaId, tagId)
-          .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          logger.dao(err);
-        });
+          .then((result) => {
+            series(null, result);
+          });
       },
       // Get the updated tag list for the area
-      areaList: function (callback) {
-        taggerDao.findAreasForTag(tagId).then(function (result) {
-          callback(null, result);
-        }).catch(function (err) {
-          logger.dao(err);
-        });
+      areaList: (series) => {
+        taggerDao.findAreasForTag(tagId)
+          .then((result) => {
+            series(null, result);
+          });
       }
     },
     function (err, result) {
       if (err) {
-        logger.dao(err);
+        logger.repository(err);
+        errorHandler(err);
       }
-      utils.sendResponse(res, {
+      callback({
         status: 'success',
         areaTargets: result.areaList,
         removedTags: result.removeSubjects

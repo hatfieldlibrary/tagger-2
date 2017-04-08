@@ -49,6 +49,22 @@
     <input type="text" ng-model="vm.collection.items"/>
   </md-input-container>
   <div style="margin-bottom: 15px">
+    <div class="md-caption">Collection Access</div>
+    <md-radio-group layout="column" layout-gt-sm="row" ng-model="vm.collection.restricted">
+      <div flex="100" flex-gt-lg="25">
+        <md-radio-button aria-label="Unrestricted" ng-value="false" flex="15" style="display: inline">Unrestricted
+        </md-radio-button>
+      </div>
+      <div flex="100" flex-gt-lg="25">
+        <md-radio-button aria-label="Restricted" ng-value="true" flex="15" style="display: inline">Restricted
+        </md-radio-button>
+      </div>
+      <span flex="flex"></span>
+    </md-radio-group>
+  </div>
+  <md-divider>
+  </md-divider>
+  <div style="margin-bottom: 15px">
     <div class="md-caption">Item Type</div>
     <md-radio-group layout="column" layout-gt-sm="row" ng-model="vm.collection.ctype">
       <div flex="100" flex-gt-md="25">
@@ -63,6 +79,7 @@
       <span flex="flex"></span>
     </md-radio-group>
   </div>
+
   <md-divider></md-divider>
   <div style="margin-bottom: 15px">
     <div class="md-caption">Search Options</div>
@@ -78,23 +95,6 @@
       </div>
       <div flex="100" flex-gt-md="25">
         <md-radio-button aria-label="Search Only" value="SEARCH" flex="15" style="display: inline">Search Only
-        </md-radio-button>
-      </div>
-      <span flex="flex"></span>
-    </md-radio-group>
-  </div>
-  <md-divider>
-
-  </md-divider>
-  <div style="margin-bottom: 15px">
-    <div class="md-caption">Collection Access</div>
-    <md-radio-group layout="column" layout-gt-sm="row" ng-model="vm.collection.restricted">
-      <div flex="100" flex-gt-lg="25">
-        <md-radio-button aria-label="Unrestricted" ng-value="false" flex="15" style="display: inline">Unrestricted
-        </md-radio-button>
-      </div>
-      <div flex="100" flex-gt-lg="25">
-        <md-radio-button aria-label="Restricted" ng-value="true" flex="15" style="display: inline">Restricted
         </md-radio-button>
       </div>
       <span flex="flex"></span>

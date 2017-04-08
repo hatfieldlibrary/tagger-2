@@ -17,7 +17,7 @@
 
       let tag = {};
 
-      if (type === 'collection') {
+      if (type === 'collection' || type === 'area') {
         // sequelize tomfoolery.
         tag = _mapTag(tags[i].dataValues.Tag.dataValues);
       } else {

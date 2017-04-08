@@ -18,6 +18,7 @@
 'use strict';
 
 const repository = require('../repository/content');
+const utils = require('../utils/response-utility');
 
 /**
  * Retrieves content type by id
@@ -25,7 +26,14 @@ const repository = require('../repository/content');
  * @param res
  */
 exports.byId = function (req, res) {
-  repository.byId(req, res);
+  repository.byId(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -35,7 +43,14 @@ exports.byId = function (req, res) {
  * @param res
  */
 exports.list = function (req, res) {
-  repository.list(req, res);
+  repository.list(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -46,7 +61,14 @@ exports.list = function (req, res) {
  * @param res
  */
 exports.countByArea = function (req, res) {
-  repository.countByArea(req, res);
+  repository.countByArea(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -56,7 +78,14 @@ exports.countByArea = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
-  repository.add(req, res);
+  repository.add(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 /**
  * Updates a content type.
@@ -64,7 +93,14 @@ exports.add = function (req, res) {
  * @param res
  */
 exports.update = function (req, res) {
-  repository.update(req, res);
+  repository.update(
+    req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -73,7 +109,14 @@ exports.update = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
-  repository.delete(req, res);
+  repository.delete(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 

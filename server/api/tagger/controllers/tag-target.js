@@ -18,6 +18,7 @@
 'use strict';
 
 const repository = require('../repository/tag-target');
+const utils = require('../utils/response-utility');
 
 /**
  * Retrieves list of subject areas associated with a tag.
@@ -25,7 +26,14 @@ const repository = require('../repository/tag-target');
  * @param res
  */
 exports.getAreaTargets = function (req, res) {
-  repository.getAreaTargets(req, res);
+  repository.getAreaTargets(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -35,7 +43,17 @@ exports.getAreaTargets = function (req, res) {
  * @param res
  */
 exports.addTarget = function (req, res) {
-  repository.addTarget(req, res);
+  repository.addTarget(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (data) => {
+      utils.sendSuccessAndDataJson(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -44,6 +62,13 @@ exports.addTarget = function (req, res) {
  * @param res
  */
 exports.removeTarget = function (req, res) {
-  repository.removeTarget(req, res);
+  repository.removeTarget(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };

@@ -5,64 +5,86 @@
 'use strict';
 
 const async = require('async');
-const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/collection-dao');
 const logger = require('../../utils/error-logger');
 
 /**
- * Returns ctype (item type) counts for the overview
+ * Returns item type counts for the overview
  * dashboard.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.countCTypesByArea = function (req, res) {
+exports.countCTypesByArea = function (req, callback, errorHandler) {
   const areaId = req.params.areaId;
 
-  taggerDao.countCTypesByArea(areaId).then(function (types) {
-    utils.sendResponse(res, types);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.countCTypesByArea(areaId)
+    .then((data) => {
+      callback(data)
+    })
+    .catch((err) => {
+      errorHandler(err);
+      logger.dao(err);
+    });
 };
 
 /**
  * Gets browse type (search option types) by area for overview dashboard.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.browseTypesByArea = function (req, res) {
+exports.browseTypesByArea = function (req, callback, errorHandler) {
   const areaId = req.params.areaId;
 
-  taggerDao.browseTypesByArea(areaId).then(
-    function (collections) {
-      utils.sendResponse(res, collections);
-    }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.browseTypesByArea(areaId)
+    .then((data) => {
+      callback(data)
+    })
+    .catch((err) => {
+      errorHandler(err);
+      logger.dao(err);
+    });
 };
 
-exports.setPublicationStatus = function (req, res) {
+/**
+ * Sets the collection publication status.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.setPublicationStatus = function (req, callback, errorHandler) {
   const pubStatus = req.params.status;
   const collectionId = req.params.collId;
 
-  taggerDao.setPublicationStatus(pubStatus, collectionId).then(
-    function() {
-      utils.sendSuccessJson(res);
-    }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.setPublicationStatus(pubStatus, collectionId)
+    .then(() => {
+      callback();
+    })
+    .catch((err) => {
+      errorHandler(err);
+      logger.dao(err);
+    });
 
 };
 
-exports.getPublicationStatus = function (req, res) {
+/**
+ * Gets the collection publication status.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.getPublicationStatus = function (req, callback, errorHandler) {
   const collectionId = req.params.collId;
 
-  taggerDao.getPublicationStatus(collectionId).then(
-    function(collection) {
-      utils.sendResponse(res, collection);
-    }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.getPublicationStatus(collectionId)
+    .then((collection) => {
+      callback(collection);
+    })
+    .catch((err) => {
+      errorHandler(err);
+      logger.dao(err);
+    });
 
 };
 
@@ -70,70 +92,74 @@ exports.getPublicationStatus = function (req, res) {
  * Returns repoType (search option) counts for the overview
  * dashboard.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.repoTypesByArea = function (req, res) {
+exports.repoTypesByArea = function (req, callback, errorHandler) {
   const areaId = req.params.areaId;
 
-  taggerDao.repoTypesByArea(areaId).then(function (types) {
-    utils.sendResponse(res, types);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.repoTypesByArea(areaId)
+    .then((types) => {
+      callback(types);
+    })
+    .catch((err) => {
+      errorHandler(err);
+      logger.dao(err);
+    });
 };
 
 /**
  * Retrieves the collections by area id for the administrative
  * collection panel.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.list = function (req, res) {
+exports.list = function (req, callback, errorHandler) {
   const areaId = req.params.areaId;
 
-  taggerDao.findCollectionsInArea(areaId).then(function (collections) {
-    utils.sendResponse(res, collections);
-
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.findCollectionsInArea(areaId)
+    .then((collections) => {
+      callback(collections);
+    })
+    .catch((err) => {
+      errorHandler(err);
+      logger.dao(err);
+    });
 };
 
 /**
  * Returns the first collection for the area.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.getFirstCollectionInArea = function (req, res) {
+exports.getFirstCollectionInArea = function (req, callback, errorHandler) {
   const areaId = req.params.areaId;
 
   async.waterfall([
-      function (callback) {
+      function (waterfall) {
         taggerDao.findCollectionsInArea(areaId)
           .then(
-            function(collections) {
-              callback(null, collections[0].dataValues.CollectionId);
+            (collections) => {
+              waterfall(null, collections[0].dataValues.CollectionId);
 
-            }
-          ).catch(function (err) {
-          logger.dao(err);
-        });
+            });
       },
-      function (collId, callback) {
+      function (collId, waterfall) {
         taggerDao.findCollectionById(collId)
           .then(
-            function(collection) {
-              callback(null, collection);
-
-            }
-          );
+            (collection) => {
+              waterfall(null, collection);
+            });
       }
     ],
     function (err, collection) {
       if (err) {
         logger.dao(err);
+        errorHandler(err);
       }
-      utils.sendResponse(res, collection);
+      callback(collection);
 
     });
 
@@ -142,42 +168,41 @@ exports.getFirstCollectionInArea = function (req, res) {
 /**
  * Retrieves data for a single collection by collection id.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.byId = function (req, res) {
+exports.byId = function (req, callback, errorHandler) {
 
   const collId = req.params.id;
 
   async.parallel({
-      getCollection: function (callback) {
-        taggerDao.findCollectionById(collId).then(function (result) {
-          callback(null, result);
-        }).catch(function (err) {
-          logger.dao(err);
-        });
+      getCollection: (parallel) => {
+        taggerDao.findCollectionById(collId)
+          .then((result) => {
+            parallel(null, result);
+          });
       },
-      getCategory: function (callback) {
-        taggerDao.findCategoryAssociation(collId).then(function (result) {
-          callback(null, result);
-        }).catch(function (err) {
-          logger.dao(err);
-        });
+      getCategory: (parallel) => {
+        taggerDao.findCategoryAssociation(collId)
+          .then((result) => {
+            parallel(null, result);
+          });
       },
-      getAreas: function (callback) {
-        taggerDao.findAreasForCollection(collId).then(function (result) {
-          callback(null, result);
-        }).catch(function (err) {
-          logger.dao(err);
-        });
+      getAreas: (parallel) => {
+        taggerDao.findAreasForCollection(collId)
+          .then((result) => {
+            parallel(null, result);
+          });
       }
     },
     function (err, result) {
       if (err !== null) {
         logger.dao(err);
+        errorHandler(err);
       }
 
-      var response = {};
-      var areas = [];
+      let response = {};
+      let areas = [];
       if (result.getCollection !== null) {
         response.id = result.getCollection.id;
         response.title = result.getCollection.title;
@@ -193,6 +218,7 @@ exports.byId = function (req, res) {
       }
 
       if (result.getCategory !== null) {
+
         response.category = result.getCategory.CategoryId;
       }
       if (result.getAreas !== null) {
@@ -201,16 +227,18 @@ exports.byId = function (req, res) {
         }
         response.areas = areas;
       }
-      utils.sendResponse(res, response);
+      callback(response);
+
     });
 };
 
 /**
  * Updates metadata and associations for a single collection.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.update = function (req, res) {
+exports.update = function (req, callback, errorHandler) {
 
   const id = req.body.id;
   const title = req.body.title;
@@ -238,48 +266,45 @@ exports.update = function (req, res) {
 
   async.series({
 
-      updateCollection: function (callback) {
+      updateCollection: (series) => {
         taggerDao.updateCollection(update, id)
-          .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          logger.dao(err);
-        });
+          .then((result) => {
+            series(null, result);
+          });
       },
-      checkCategory: function (callback) {
-        taggerDao.findCategoryAssociation(id).then(function (result) {
-          callback(null, result);
-        }).catch(function (err) {
-          logger.dao(err);
+      checkCategory: function (series) {
+        taggerDao.findCategoryAssociation(id)
+          .then(function (result) {
+          series(null, result);
         });
       }
     },
     function (err, result) {
       if (err !== undefined && err !== null) {
-        console.log(err);
-        utils.sendErrorJson(res, err);
+        logger.dao(err);
+        errorHandler(err);
 
       }
       // If no category exists for this collection,
       // add new entry.
       if (result.checkCategory === null) {
         taggerDao.addCollectionToCategory(id, category)
-          .then(function () {
-            utils.sendSuccessJson(res);
-
-          }).catch(function (err) {
-          logger.dao(err);
-        });
+          .then(callback())
+          .catch((err) => {
+            logger.dao(err);
+            errorHandler(err);
+          });
         // If category does exist, update to the current value.
       } else {
-        taggerDao.updateCollectionCategory(id, category).then(
-          function () {
-            utils.sendSuccessJson(res);
-
-          }).catch(
-          function (err) {
-            logger.dao(err);
-          });
+        taggerDao.updateCollectionCategory(id, category)
+          .then(() => {
+            callback()
+          })
+          .catch(
+            (err) => {
+              logger.dao(err);
+              errorHandler(err);
+            });
       }
     });
 
@@ -288,16 +313,20 @@ exports.update = function (req, res) {
 /**
  * Deletes a collection.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.delete = function (req, res) {
+exports.delete = function (req, callback, errorHandler) {
   const id = req.params.id;
 
-  taggerDao.deleteCollection(id).then(function () {
-    utils.sendResponse(res, {status: 'success'});
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.deleteCollection(id)
+    .then(() => {
+      callback({status: 'success'})
+    })
+    .catch((err) => {
+      logger.dao(err);
+      errorHandler(err);
+    });
 
 };
 
@@ -306,48 +335,47 @@ exports.delete = function (req, res) {
  * and creates the collection association with the
  * collection area.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.add = function (req, res) {
+exports.add = function (req, callback, errorHandler) {
+
   const title = req.body.title;
   const areaId = req.body.areaId;
   const browseType = req.body.browseType;
   const repoType = req.body.repoType;
   const ctype = req.body.ctype;
 
-  var newCollectionId;
+  let newCollectionId;
 
   async.series({
-      addCollection: function (callback) {
+      addCollection: (series) => {
         taggerDao.addNewCollection(title, browseType, repoType, ctype).then(function (coll) {
           newCollectionId = coll.id;
-          callback(null, coll);
-        }).catch(function (err) {
-          logger.dao(err);
+          series(null, coll);
         });
       },
-      addArea: function (callback) {
+      addArea: (series) => {
         taggerDao.addCollectionToArea(newCollectionId, areaId)
-          .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          logger.dao(err);
-        });
+          .then((result) => {
+            series(null, result);
+          });
       },
-      collections: function (callback) {
+      collections: (series) => {
         taggerDao.findCollectionsInArea(areaId)
-          .then(function (colls) {
-            callback(null, colls);
-          }).catch(function (err) {
-          logger.dao(err);
-        });
+          .then((colls) => {
+            series(null, colls);
+          });
       }
-    }, function (err, results) {
+    }, (err, results) => {
       if (err) {
         logger.dao(err);
+        errorHandler(err);
       }
-      utils.sendResponse(res, {status: 'success', id: newCollectionId, collections: results.collections});
+      callback({status: 'success', id: newCollectionId, collections: results.collections});
+
     }
   );
 
 };
+

@@ -29,15 +29,17 @@ const logger = require('../utils/error-logger');
 /**
  * Retrieves content type by id
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.byId = function (req, res) {
+exports.byId = function (req, callback, errorHandler) {
   const id = req.params.id;
 
   taggerDao.retrieveContentTypeById(id).then(function (type) {
-    utils.sendResponse(res, type);
+    callback(type);
   }).catch(function (err) {
     logger.dao(err);
+    errorHandler(err);
   });
 
 };
@@ -45,14 +47,16 @@ exports.byId = function (req, res) {
 /**
  * Retrieves list of all content types
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.list = function (req, res) {
+exports.list = function (req, callback, errorHandler) {
 
   taggerDao.getContentTypes().then(function (types) {
-    utils.sendResponse(res, types);
+    callback(types);
   }).catch(function (err) {
     logger.dao(err);
+    errorHandler(err);
   });
 
 };
@@ -61,15 +65,17 @@ exports.list = function (req, res) {
  * Returns name and frequency for content types in a single
  * area for use in dashboard.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.countByArea = function (req, res) {
+exports.countByArea = function (req, callback, errorHandler) {
   const areaId = req.params.areaId;
 
   taggerDao.getAreaContentTypeSummary(areaId).then(function (types) {
-    utils.sendResponse(res, types);
+    callback(types);
   }).catch(function (err) {
     logger.dao(err);
+    errorHandler(err);
   });
 
 };
@@ -77,38 +83,39 @@ exports.countByArea = function (req, res) {
 /**
  * Adds new content type. First checks to see if it exists.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.add = function (req, res) {
+exports.add = function (req, callback, errorHandler) {
   const name = req.body.title;
 
   async.parallel(
     {
       // Check to see if content type already exists.
-      check: function (callback) {
+      check: function (parallel) {
         taggerDao.findContentTypeByName(name)
           .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          logger.dao(err);
-        });
+            parallel(null, result);
+          });
       }
     },
     function (err, result) {
       if (err) {
         logger.dao(err);
+        errorHandler(err);
       }
       if (result.check === null) {
         // Add new content type
         taggerDao.createContentType(name)
           .then(function (result) {
-            utils.sendResponse(res, {status: 'success', id: result.id});
+            callback({status: 'success', id: result.id});
           }).catch(function (err) {
           logger.dao(err);
+          errorHandler(err);
         });
 
       } else {
-        utils.sendResponse(res, {status: 'failure'});
+        callback( {status: 'failure'});
       }
     }
   );
@@ -116,32 +123,36 @@ exports.add = function (req, res) {
 /**
  * Updates a content type.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.update = function (req, res) {
+exports.update = function (req, callback, errorHandler) {
   const id = req.body.id;
   const name = req.body.name;
   const icon = req.body.icon;
 
   taggerDao.updateContentType(name, icon, id).then(function () {
-    utils.sendSuccessJson(res);
+    callback();
   }).catch(function (err) {
     logger.dao(err);
+    errorHandler(err);
   });
 };
 
 /**
  * Deletes a content type.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.delete = function (req, res) {
+exports.delete = function (req, callback, errorHandler) {
   const contentId = req.params.id;
 
   taggerDao.deleteContentType(contentId).then(function () {
-    utils.sendResponse(res, {status: 'success'});
+    callback({status: 'success'});
   }).catch(function (err) {
     logger.dao(err);
+    errorHandler(err);
   });
 
 };

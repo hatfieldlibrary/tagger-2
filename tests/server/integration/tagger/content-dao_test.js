@@ -240,6 +240,7 @@ describe('Content type operations', () => {
   it('should find content type by id.', (done) => {
 
     let _onSuccess = (type) => {
+
       expect(type).to.be.defined;
       expect(type.dataValues.name).to.have.string(categoriesInit[0]);
       done();

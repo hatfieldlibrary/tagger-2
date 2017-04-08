@@ -18,6 +18,7 @@
 'use strict';
 
 const repository = require('../repository/category');
+const utils = require('../utils/response-utility');
 
 /**
  * Retrieves the list of all collection groups.
@@ -25,7 +26,14 @@ const repository = require('../repository/category');
  * @param res
  */
 exports.list = function (req, res) {
-  repository.list(req, res);
+  repository.list(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -35,7 +43,14 @@ exports.list = function (req, res) {
  * @param res
  */
 exports.categoryCountByArea = function (req, res) {
-    repository.categoryCountByArea(req, res);
+    repository.categoryCountByArea(
+      req,
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
 
 };
 
@@ -51,7 +66,14 @@ exports.categoryCountByArea = function (req, res) {
  * @param res
  */
 exports.categoryByCollection = function (req, res) {
-  repository.categoryByCollection(req, res);
+  repository.categoryByCollection(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -60,7 +82,14 @@ exports.categoryByCollection = function (req, res) {
  * @param res
  */
 exports.listByArea = function (req, res) {
-  repository.listByArea(req, res);
+  repository.listByArea(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -70,7 +99,14 @@ exports.listByArea = function (req, res) {
  * @param res
  */
 exports.byId = function (req, res) {
-  repository.byId(req, res);
+  repository.byId(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -80,7 +116,14 @@ exports.byId = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
-  repository.add(req, res);
+  repository.add(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -90,7 +133,14 @@ exports.add = function (req, res) {
  * @param res
  */
 exports.update = function (req, res) {
-  repository.update(req, res);
+  repository.update(
+    req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -100,7 +150,14 @@ exports.update = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
-  repository.delete(req, res);
+  repository.delete(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 

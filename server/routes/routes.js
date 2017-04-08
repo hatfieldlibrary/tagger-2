@@ -127,6 +127,7 @@ module.exports = function(app,config){
   app.get('/rest/subject/area/:id', apiTag.subjectsByArea);
   app.get('/rest/subject/collection/:id', apiTag.subjectsForCollection);
   app.get('/rest/type/collection/:id',  apiCollection.typesForCollection);
+  app.get('/rest/collection/:id/related/:subjects', apiCollection.findRelatedCollections);
   // This service communicates with a target host to retrieve a browse list.
   // It addresses a very specific use case, is not generalized provides no guarantees
   // about the data returned.
@@ -155,7 +156,7 @@ module.exports = function(app,config){
   /**
    * Catch-all required by html5 mode.
    */
-  app.get('/tagger*', function (req, res) {
+  app.get(['/tagger*', '/tagger/*'], function (req, res) {
 
       res.sendFile(
         app.get('appPath') + '/index.html'

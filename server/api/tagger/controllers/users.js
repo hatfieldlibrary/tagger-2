@@ -18,13 +18,21 @@
 'use strict';
 
 const repository = require('../repository/users');
+const utils = require('../utils/response-utility');
+
 /**
  * Retrieves list of current users.
  * @param req
  * @param res
  */
 exports.list = function (req, res) {
-  repository.list(req, res);
+  repository.list(
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -34,7 +42,14 @@ exports.list = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
-  repository.add(req, res);
+  repository.add(
+    req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -44,7 +59,14 @@ exports.add = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
-  repository.delete(req, res);
+  repository.delete(
+    req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -54,6 +76,13 @@ exports.delete = function (req, res) {
  * @param res
  */
 exports.update = function (req, res) {
-  repository.update(req, res);
+  repository.update(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };

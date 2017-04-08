@@ -1,71 +1,113 @@
 /**
  * Created by mspalti on 4/4/17.
  */
-(function() {
+(function () {
   'use strict';
 
   const taggerDao = require('../../dao/area-dao');
-  const utils = require('../../utils/response-utility');
   const logger = require('../../utils/error-logger');
   const apiMapper = require('../../map/area');
-
+  const utils = require('../../utils/response-utility');
 
   /**
    * Retrieves a list of all areas.
-   * @param req
-   * @param res
+   * @param req the request object
+   * @param callback success response callback
+   * @param errorHandler failure response callback
    */
-  exports.list = function (req, res) {
+  exports.list = function (req, callback, errorHandler) {
 
-    taggerDao.listAllAreas().then(function (areas) {
-      utils.sendResponse(res, apiMapper.mapAreaList(areas));
-
-    }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
-
+    taggerDao.listAllAreas()
+      .then((areas) => {
+          let data;
+          try {
+            data = apiMapper.mapAreaList(areas);
+          } catch (err) {
+            logger.map(err);
+            errorHandler(utils.createErrorResponse(filename, 'map', err));
+          }
+          callback(data);
+        }
+      )
+      .catch((err) => {
+        logger.repository(err);
+        errorHandler(utils.createErrorResponse(filename, 'repo', err));
+      });
   };
 
   /**
    * Retrieves area information by area id.
-   * @param req
-   * @param res
+   * @param req the request object
+   * @param callback success response callback
+   * @param errorHandler failure response callback
    */
-  exports.byId = function (req, res) {
+  exports.byId = function (req, callback, errorHandler) {
     const areaId = req.params.id;
-    taggerDao.findAreaById(areaId).then(function (areas) {
-      utils.sendResponse(res, apiMapper.mapArea(areas));
-    }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
+
+    taggerDao.findAreaById(areaId)
+      .then((area) => {
+        let data;
+        try {
+          data = apiMapper.mapArea(area);
+        } catch (err) {
+          logger.map(err);
+          errorHandler(utils.createErrorResponse(filename, 'map', err));
+        }
+        callback(data);
+      })
+      .catch(function (err) {
+        logger.repository(err);
+        errorHandler(utils.createErrorResponse(filename, 'repo', err));
+      });
   };
 
-  exports.listAreasWithCount = function (req, res) {
+  /**
+   * Retrieves list of areas with collection counts.
+   * @param req the request object
+   * @param callback success response callback
+   * @param errorHandler failure response callback
+   */
+  exports.listAreasWithCount = function (req, callback, errorHandler) {
     taggerDao.areaListWithCollectionCounts()
-      .then(function(areas) {
-        utils.sendResponse(res, apiMapper.mapAreaCount(areas));
-      }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
+      .then((area) => {
+        let data;
+        try {
+          data = apiMapper.mapAreaList(area);
+        } catch (err) {
+          logger.map(err);
+          errorHandler(utils.createErrorResponse(filename, 'map', err));
+        }
+        callback(data);
+      })
+      .catch((err) => {
+        logger.repository(err);
+        errorHandler(utils.createErrorResponse(filename, 'repo', err));
+      });
   };
 
   /**
    * Retrieves areas for a given collection.
-   * @param req
-   * @param res
+   * @param req the request object
+   * @param callback success response callback
+   * @param errorHandler failure response callback
    */
-  exports.areasForCollection = function (req, res) {
+  exports.areasForCollection = function (req, callback, errorHandler) {
     const collId = req.params.id;
     taggerDao.findAreasForCollection(collId)
-      .then(function(areas) {
-        utils.sendResponse(res, apiMapper.mapAreasForCollectionList(areas));
-      }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
+      .then((areas) => {
+        let data;
+        try {
+          data = apiMapper.mapAreaList(areas);
+        } catch (err) {
+          logger.map(err);
+          errorHandler(utils.createErrorResponse(filename, 'map', err));
+        }
+        callback(data);
+      })
+      .catch(function (err) {
+        logger.repository(err);
+        errorHandler(utils.createErrorResponse(filename, 'repo', err));
+      });
   };
 
 })();

@@ -4,7 +4,6 @@
 'use strict';
 
 const async = require('async');
-const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/collection-dao');
 const logger = require('../../utils/error-logger');
 
@@ -12,40 +11,40 @@ const logger = require('../../utils/error-logger');
  * Add a subject tag to the collection after first checking
  * whether the association already exists.
  * @param req
- * @param res
+ * @param callback success response callbak
+ * @param errorHandler failure response callback
  */
-exports.addTagTarget = function (req, res) {
+exports.addTagTarget = function (req, callback, errorHandler) {
   const collId = req.body.collId;
   const tagId = req.body.tagId;
 
   async.series(
     {
-      check: function (callback) {
-
+      check: function (series) {
         taggerDao.checkForExistingTagTarget(collId, tagId)
           .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          logger.dao(err);
-        });
+            series(null, result);
+          });
       }
     },
     function (err, result) {
       if (err) {
         logger.dao(err);
+        errorHandler(err);
       }
       // if new, add target
       if (result.check === null) {
 
         taggerDao.addTagTarget(collId, tagId)
-          .then(function () {
-            utils.sendResponse(res, {status: 'success'});
-          }).catch(function (err) {
-          logger.dao(err);
-        });
+          .then(callback({status: 'success'}))
+          .catch(function (err) {
+            logger.dao(err);
+          });
 
-      } else {
-        utils.sendResponse(res, {status: 'exists'});
+      }
+      // otherwise, just inform the client that the association already exists
+      else {
+        callback({status: 'exists'});
       }
 
     });
@@ -55,16 +54,20 @@ exports.addTagTarget = function (req, res) {
 /**
  * Removes a subject tag from the collection.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.removeTagTarget = function (req, res) {
+exports.removeTagTarget = function (req, callback, errorHandler) {
   const collId = req.params.collId;
   const tagId = req.params.tagId;
 
-  taggerDao.deleteTagTarget(collId, tagId).then(function () {
-    utils.sendSuccessJson(res);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.deleteTagTarget(collId, tagId)
+    .then(() => {
+    callback();
+  })
+    .catch((err) => {
+      logger.dao(err);
+      errorHandler(err);
+    });
 
 };

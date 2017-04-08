@@ -8,7 +8,7 @@
   };
 
   exports.mapSingleCollection = function(collection) {
-    return _mapSingleCollection(collection);
+    return _mapSingleCollection(collection.dataValues);
 
   };
 
@@ -21,6 +21,14 @@
     return _mapCategory(category);
 
   };
+
+  exports.mapTagList = function(tags) {
+    return _mapTagList(tags);
+  };
+
+  exports.mapRelatedCollections = function(collections) {
+    return _mapRelatedCollections(collections);
+  }
 
   /**
    * Maps collection list data object to API object. The collection
@@ -75,11 +83,11 @@
   function _mapSingleCollection(collection) {
 
     let coll = {
-      id: collection.id,
+      id: collection.CollectionId,
       title: collection.title,
       image: collection.image,
       url: collection.url,
-      description: collection.description,
+      desc: collection.description,
       dates: collection.dates,
       items: collection.items,
       linkOptions: collection.browseType,
@@ -104,7 +112,6 @@
 
   }
 
-
   function _mapCategory(categoryNoNormalized) {
 
     // more sequelize tomfoolery.
@@ -122,6 +129,39 @@
     };
 
     return cat;
+  }
+
+  function _mapTagList(tags) {
+
+    let tagArray = [];
+
+    for (let i = 0; i < tags.length; i++) {
+      tagArray.push(tags[0].dataValues.TagId)
+    }
+    return tagArray;
+  }
+
+  function _mapRelatedCollections(collections) {
+
+    let collectionsArray = [];
+
+    for (let i = 0; i < collections.length; i++) {
+      collectionsArray.push(_mapSingleRelatedCollection(collections[i]));
+    }
+
+    return collectionsArray;
+  }
+
+  function _mapSingleRelatedCollection(collection) {
+
+    let coll = {
+      id: collection.id,
+      title: collection.title,
+      count: collection.count,
+      image: collection.image
+    };
+
+    return coll;
   }
 
 })();

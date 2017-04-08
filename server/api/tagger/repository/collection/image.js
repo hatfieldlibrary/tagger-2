@@ -3,7 +3,6 @@
  */
 'use strict';
 
-const utils = require('../../utils/response-utility');
 const imageConvert = require('../../utils/image-convert');
 const taggerDao = require('../../dao/collection-dao');
 const logger = require('../../utils/error-logger');
@@ -13,10 +12,12 @@ const logger = require('../../utils/error-logger');
  * thumbnail image. Writes thumbnail and full size image to
  * directories in the configuration's image path directory.
  * @param req
- * @param res
  * @param config
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+
  */
-exports.updateImage = function (req, res, config) {
+exports.updateImage = function (req, config, callback, errorHandler) {
 
   const multiparty = require('multiparty');
 
@@ -26,20 +27,23 @@ exports.updateImage = function (req, res, config) {
 
     if (err) {
       logger.form(err);
-      res.end();
+      errorHandler(err);
+      //res.end();
     }
 
     if (files.file !== undefined) {
       try {
-        imageConvert(res, files, fields, config, updateImageInDb);
+        imageConvert(files, fields, config, updateImageInDb);
       } catch (err) {
         logger.image(err);
-        res.end();
+        errorHandler(err);
+        //res.end();
       }
     }
     else {
       logger.missing('No image files were received. Aborting upload.');
-      res.end();
+      errorHandler(err);
+      //res.end();
     }
   });
 
@@ -48,12 +52,15 @@ exports.updateImage = function (req, res, config) {
    * @param id
    * @param imageName
    */
-  function updateImageInDb(res, id, imageName) {
-    taggerDao.updateCollectionImage(id, imageName).then(function () {
-        utils.sendSuccessJson(res);
-      }
-    ).catch(function (err) {
-      logger.dao(err);
-    });
+  function updateImageInDb(id, imageName) {
+    taggerDao.updateCollectionImage(id, imageName)
+      .then(() => {
+          callback();
+        }
+      )
+      .catch(function (err) {
+        errorHandler(err);
+        logger.dao(err);
+      });
   }
 };

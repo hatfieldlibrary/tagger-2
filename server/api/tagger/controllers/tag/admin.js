@@ -18,6 +18,7 @@
 'use strict';
 
 const repository = require('../../repository/tag/admin');
+const utils = require('../../utils/response-utility');
 
 /**
  * Retrieves tag information by tag id.
@@ -25,7 +26,14 @@ const repository = require('../../repository/tag/admin');
  * @param res
  */
 exports.byId = function (req, res) {
-  repository.byId(req, res);
+  repository.byId(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -36,7 +44,14 @@ exports.byId = function (req, res) {
  * @param res
  */
 exports.tagByArea = function (req, res) {
-  repository.tagByArea(req, res);
+  repository.tagByArea(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 
@@ -46,7 +61,14 @@ exports.tagByArea = function (req, res) {
  * @param res
  */
 exports.tagByAreaCount = function (req, res) {
-  repository.tagByAreaCount(req, res);
+  repository.tagByAreaCount(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 
@@ -57,7 +79,14 @@ exports.tagByAreaCount = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
-  repository.add(req, res);
+  repository.add(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -66,7 +95,14 @@ exports.add = function (req, res) {
  * @param res
  */
 exports.update = function (req, res) {
-  repository.update(req, res);
+  repository.update(
+    req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -76,7 +112,14 @@ exports.update = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
-  repository.delete(req, res);
+  repository.delete(
+    req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 

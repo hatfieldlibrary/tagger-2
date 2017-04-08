@@ -25,7 +25,7 @@
 
 'use strict';
 
-const convert = (res, files, fields, config, callback) => {
+const convert = (files, fields, config) => {
 
   const fs = require('fs'),
     magick = require('imagemagick');
@@ -70,7 +70,7 @@ const convert = (res, files, fields, config, callback) => {
                 return err;
               }
               // update database even if the conversion fails
-              callback(res, id, imageName);
+              callback(id, imageName);
             });
         }
       });

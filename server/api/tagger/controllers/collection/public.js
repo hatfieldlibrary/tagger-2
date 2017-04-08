@@ -6,6 +6,7 @@
 'use strict';
 
 const publicApiRepository = require('../../repository/collection/public');
+const utils = require('../../utils/response-utility');
 
 /**
  * Retrieves the types associated with a single collection.  Used by
@@ -13,8 +14,11 @@ const publicApiRepository = require('../../repository/collection/public');
  * @param req
  * @param res
  */
-exports.typesForCollection = function (req, res) {
-  publicApiRepository.typesForCollection(req, res);
+exports.typesForCollection = function (req, res, next) {
+  publicApiRepository.typesForCollection(
+    req,
+    utils.responseCallback(res, data),
+    utils.errorHandler(next, err) );
 };
 
 /**
@@ -22,8 +26,10 @@ exports.typesForCollection = function (req, res) {
  * @param req
  * @param res
  */
-exports.allCollections = function (req, res) {
-  publicApiRepository.allCollections(req, res);
+exports.allCollections = function (req, res, next) {
+  publicApiRepository.allCollections(
+    utils.responseCallback(res, data),
+    utils.errorHandler(next, err) );
 
 };
 
@@ -32,8 +38,11 @@ exports.allCollections = function (req, res) {
  * @param req
  * @param res
  */
-exports.collectionById = function (req, res) {
-  publicApiRepository.collectionById(req, res);
+exports.collectionById = function (req, res, next) {
+  publicApiRepository.collectionById(
+    req,
+    utils.responseCallback(res, data),
+    utils.errorHandler(next, err) );
 
 };
 
@@ -42,8 +51,11 @@ exports.collectionById = function (req, res) {
  * @param req
  * @param res
  */
-exports.collectionsByArea = function (req, res) {
-  publicApiRepository.collectionsByArea(req, res);
+exports.collectionsByArea = function (req, res, next) {
+  publicApiRepository.collectionsByArea(
+    req,
+    utils.responseCallback(res, data),
+    utils.errorHandler(next, err) );
 };
 
 /**
@@ -51,8 +63,11 @@ exports.collectionsByArea = function (req, res) {
  * @param req
  * @param res
  */
-exports.collectionsBySubjectArea = function (req, res) {
-  publicApiRepository.collectionsBySubjectArea(req, res);
+exports.collectionsBySubjectArea = function (req, res, next) {
+  publicApiRepository.collectionsBySubjectArea(
+    req,
+    utils.responseCallback(res, data),
+    utils.errorHandler(next, err) );
 
 };
 
@@ -61,16 +76,22 @@ exports.collectionsBySubjectArea = function (req, res) {
  * @param req
  * @param res
  */
-exports.collectionsByCategory = function (req, res) {
-  publicApiRepository.collectionsByCategory(req, res);
+exports.collectionsByCategory = function (req, res, next) {
+  publicApiRepository.collectionsByCategory(
+    req,
+    utils.responseCallback(res, data),
+    utils.errorHandler(next, err) );
 
 };
 
 /**
  * Retrieves collections by subject (from all areas)
  */
-exports.collectionsBySubject = function (req, res) {
-  publicApiRepository.collectionsBySubject(req, res);
+exports.collectionsBySubject = function (req, res, next) {
+  publicApiRepository.collectionsBySubject(
+    req,
+    utils.responseCallback(res, data),
+    utils.errorHandler(next, err) );
 };
 
 /**
@@ -82,7 +103,19 @@ exports.collectionsBySubject = function (req, res) {
  * @param req
  * @param res
  */
-exports.browseList = function (req, res) {
-  publicApiRepository.browseList(req, res);
+exports.browseList = function (req, res, next) {
+  publicApiRepository.browseList(
+    req,
+    res,
+    utils.errorHandler(next, err) );
+
+
+};
+
+exports.findRelatedCollections = function (req, res, next) {
+  publicApiRepository.findRelatedCollections(
+    req,
+    utils.responseCallback(res, data),
+    utils.errorHandler(next, err) );
 
 };

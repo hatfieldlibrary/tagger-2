@@ -220,7 +220,7 @@ module.exports = function (app, config) {
   // the request will proceed.  Otherwise, the user will be redirected to the
   // login page.
   app.ensureAuthenticated = function (req, res, next) {
-    console.log(req.isAuthenticated())
+
     if (req.isAuthenticated() || !config.useAuth) {
       return next();
     }

@@ -24,10 +24,11 @@ const utils = require('../utils/response-utility');
 
 /**
  * Returns user info from the Express session.
+ * @param config application configuration object
  * @param req
- * @param res
+ * @param callback success repsonse callback
  */
-exports.returnUserInfo = function (req, res, config) {
+exports.returnUserInfo = function (config, req, callback) {
 
   let name = '';
   let picture = '';
@@ -44,6 +45,6 @@ exports.returnUserInfo = function (req, res, config) {
     areaId = 0;
   }
 
-  utils.sendResponse(res, {name: name, picture: picture, areaId: areaId});
+  callback({name: name, picture: picture, areaId: areaId});
 
 };

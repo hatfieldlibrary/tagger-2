@@ -23,28 +23,30 @@
 
 const utils = {};
 
-utils.sendResponse = function(res, data) {
+utils.sendResponse = (res, data) => {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.end(JSON.stringify(data));
 
 };
 
-
+utils.sendErrorStatus = (res, status, err) => {
+  res.status(500).send({error: err.message});
+};
 /**
  * Provides uniform API for unadorned error responses.
  * @param res
  */
-utils.sendErrorJson = function (res, err) {
-  utils.sendResponse(res, {status: 'Server Error', reason: err.message});
-
-};
+// utils.sendErrorJson = function (res, err) {
+//   utils.sendResponse(res, {status: 'Server Error', reason: err.message});
+//
+// };
 
 /**
  * Provides uniform API for unadorned success responses.
  * @param res
  */
-utils.sendSuccessJson = function (res) {
+utils.sendSuccessJson = (res) => {
   utils.sendResponse(res, {status: 'success'});
 
 };
@@ -54,8 +56,53 @@ utils.sendSuccessJson = function (res) {
  * @param res
  * @param data
  */
-utils.sendSuccessAndDataJson = function (res, data) {
+utils.sendSuccessAndDataJson = (res, data) => {
   utils.sendResponse(res, {status: 'success', data: data});
+};
+
+/**
+ * The generic response callback implemented by most controllers.
+ * @param res
+ * @param data
+ */
+utils.responseCallback = (res, data) => {
+  utils.sendResponse(res, data);
+};
+
+/**
+ * The error handler implemented by controllers.
+ * @param next
+ * @param err
+ * @returns {*}
+ */
+utils.errorHandler = (next, err) => {
+  return next(err);
+};
+
+/**
+ * Returns error used by public API services.
+ * @param filename the name of the file in which the error occure
+ * @param type the type of error
+ * @param err the error
+ * @returns {Error}
+ */
+utils.createErrorResponse = (filename, type, err) => {
+
+  let label = '';
+  if (type === 'map') {
+    label = 'Mapping Response'
+  } else if (type === 'repo') {
+    label = 'Repository'
+  } else if (type === 'external') {
+    label = 'Error in request for external resource'
+  } else if (type === 'reduce') {
+    label = 'Application'
+  }
+
+  let error = new Error(filename + ' - ' + label + ' Error: ' + err.message);
+  error.status = 500;
+  return error;
+
 };
 
 module.exports = utils;

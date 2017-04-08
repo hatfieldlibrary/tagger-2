@@ -38,7 +38,7 @@
   exports.config = {
     test: {
       mysql: {
-        db: 'acomtags_test',
+        db: 'tagger_test',
         user: credentials.develdbuser,
         password: credentials.develdbpassword,
         host: 'localhost',
