@@ -14,6 +14,8 @@ const config = require('../../../../config/environment');
 const logger = require('../../utils/error-logger');
 const utils = require('../../utils/response-utility');
 const _ = require('lodash');
+const path = require('path');
+const filename = path.basename(__filename);
 
 /**
  * Retrieves the types associated with a single collection.  Used by

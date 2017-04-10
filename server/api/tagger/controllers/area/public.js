@@ -17,8 +17,12 @@
   exports.list = function (req, res, next) {
     publicApiRepository.list(
       req,
-      utils.responseCallback(res, data),
-      utils.errorHandler(next, err) );
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
   };
 
   /**
@@ -30,8 +34,12 @@
   exports.byId = function (req, res, next) {
     publicApiRepository.byId(
       req,
-      utils.responseCallback(res, data),
-      utils.errorHandler(next, err) );
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
   };
 
   /**
@@ -43,8 +51,12 @@
   exports.listAreasWithCount = function (req, res, next) {
     publicApiRepository.listAreasWithCount(
       req,
-      utils.responseCallback(res, data),
-      utils.errorHandler(next, err) );
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
   };
 
   /**
@@ -56,8 +68,12 @@
   exports.areasForCollection = function (req, res, next) {
     publicApiRepository.areasForCollection(
       req,
-      utils.responseCallback(res, data),
-      utils.errorHandler(next, err) );
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
   };
 
 })();

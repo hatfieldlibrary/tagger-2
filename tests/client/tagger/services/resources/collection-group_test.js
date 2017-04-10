@@ -54,7 +54,7 @@ describe('collection group resources', () => {
 
   it('should request category by id.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'category/byId/1').respond({title: testCategoryName});
+    $httpBackend.expectGET(config.restHost + 't/category/byId/1').respond({title: testCategoryName});
     let result = Category.query({id: 1});
     $httpBackend.flush();
     expect(result.title).toEqual(testCategoryName);
@@ -63,7 +63,7 @@ describe('collection group resources', () => {
 
   it('should request category for collection.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'category/getCollections/1').respond([{title: testCategoryName}]);
+    $httpBackend.expectGET(config.restHost + 't/category/getCollections/1').respond([{title: testCategoryName}]);
     let result = CategoryForCollection.query({collId: 1});
     $httpBackend.flush();
     expect(result[0].title).toEqual(testCategoryName);
@@ -76,7 +76,7 @@ describe('collection group resources', () => {
 
   it('should list of all categories.', () => {
 
-    $httpBackend.expectGET(config.restHost +  'category/show/list').respond([{title: testCategoryName}]);
+    $httpBackend.expectGET(config.restHost +  't/category/show/list').respond([{title: testCategoryName}]);
     let result = CategoryList.query();
     $httpBackend.flush();
     expect(result[0].title).toEqual(testCategoryName);
@@ -86,7 +86,7 @@ describe('collection group resources', () => {
 
   it('should request categories assigned to an area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'category/byArea/1').respond([{title: testCategoryName}]);
+    $httpBackend.expectGET(config.restHost + 't/category/byArea/1').respond([{title: testCategoryName}]);
     let result = CategoryByArea.query({areaId: 1});
     $httpBackend.flush();
     expect(result[0].title).toEqual(testCategoryName);
@@ -95,7 +95,7 @@ describe('collection group resources', () => {
 
   it('should request category counts for an area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'category/count/1').respond([{title: testCategoryName, count: 1}]);
+    $httpBackend.expectGET(config.restHost + 't/category/count/1').respond([{title: testCategoryName, count: 1}]);
     let result = CategoryCountByArea.query({areaId: 1});
     $httpBackend.flush();
     expect(result[0].title).toEqual(testCategoryName);
@@ -105,7 +105,7 @@ describe('collection group resources', () => {
 
   it('should delete category.', () =>{
     let message = {id: 1};
-    $httpBackend.expectPOST(config.restHost + 'category/delete', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/category/delete', message).respond({status: 'success'});
     let result = CategoryDelete.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -113,7 +113,7 @@ describe('collection group resources', () => {
 
   it('should add category.', () =>{
     let message = {title: 'new category'};
-    $httpBackend.expectPOST(config.restHost + 'category/add', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/category/add', message).respond({status: 'success'});
     let result = CategoryAdd.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -130,7 +130,7 @@ describe('collection group resources', () => {
       areaId: 1
 
     };
-    $httpBackend.expectPOST(config.restHost + 'category/update', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/category/update', message).respond({status: 'success'});
     let result = CategoryUpdate.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');

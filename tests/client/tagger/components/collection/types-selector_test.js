@@ -42,14 +42,14 @@ describe('The type selector component', () => {
 
     module(($provide) => {
       $provide.value('CollectionTypeTargetRemove', {
-        query: () => {
+        delete: () => {
         }
       });
     });
 
     module(($provide) => {
       $provide.value('CollectionTypeTargetAdd', {
-        query: () => {
+        save: () => {
         }
       });
     });
@@ -115,21 +115,14 @@ describe('The type selector component', () => {
 
     typesForCollectionAdd = [
       {
-        CollectionId: 1,
-        ItemContentId: 1,
-        ItemContent: {
           id: 1,
           name: 'type one'
-        }
+
       },
       {
-        CollectionId: 1,
-        ItemContentId: 2,
-        ItemContent: {
-          id: 2,
+        id: 2,
           name: 'type two'
         }
-      }
     ];
 
     typesForCollectionRemove = [
@@ -203,13 +196,13 @@ describe('The type selector component', () => {
       }
     });
 
-    spyOn(CollectionTypeTargetAdd, 'query').and.callFake(() => {
+    spyOn(CollectionTypeTargetAdd, 'save').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
     });
 
-    spyOn(CollectionTypeTargetRemove, 'query').and.callFake(() => {
+    spyOn(CollectionTypeTargetRemove, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -254,7 +247,7 @@ describe('The type selector component', () => {
     deferred.resolve({status: 'success'});
     $rootScope.$apply();
 
-    expect(CollectionTypeTargetAdd.query).toHaveBeenCalledWith({collId: 1, typeId: 2})
+    expect(CollectionTypeTargetAdd.save).toHaveBeenCalledWith({collId: 1, typeId: 2})
 
   });
 
@@ -268,7 +261,7 @@ describe('The type selector component', () => {
     deferred.resolve({status: 'success'});
     $rootScope.$apply();
 
-    expect(CollectionTypeTargetRemove.query).toHaveBeenCalledWith({collId: 1, typeId: 1})
+    expect(CollectionTypeTargetRemove.delete).toHaveBeenCalledWith({collId: 1, typeId: 1})
 
   });
 

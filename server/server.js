@@ -93,7 +93,7 @@ if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
   app.use(function (err, req, res, next) {
 
     if(err.status !== 404) {
-      console.log('server got error')
+     console.log(err);
      _apiErrorResponse(res, err);
     }
     else {

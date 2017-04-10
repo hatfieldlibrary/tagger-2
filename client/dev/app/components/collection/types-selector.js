@@ -94,9 +94,9 @@
      */
     ctrl.addType = function (chip) {
 
-      var chipObj = {id: chip.id, name: chip.name};
+      let chipObj = {id: chip.id, name: chip.name};
 
-      var result = CollectionTypeTargetAdd.save(
+      let result = CollectionTypeTargetAdd.save(
         {
           collId: CollectionObservable.get(),
           typeId: chip.id

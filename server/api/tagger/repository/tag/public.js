@@ -49,7 +49,7 @@ exports.subjectsForCollection = function (req, callback, errorHandler) {
     .then((tags) => {
       let data;
       try {
-        data = apiMapper.mapTags(tags, "all");
+        data = apiMapper.mapTags(tags, "collection");
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))

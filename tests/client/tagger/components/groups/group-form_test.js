@@ -82,7 +82,7 @@ describe('The collection group/category form component', () => {
 
     module(($provide) => {
       $provide.value('CategoryUpdate', {
-        save: () => {
+        update: () => {
         }
       })
     });
@@ -235,7 +235,7 @@ describe('The collection group/category form component', () => {
       }
     });
 
-    spyOn(CategoryUpdate, 'save').and.callFake(() => {
+    spyOn(CategoryUpdate, 'update').and.callFake(() => {
       return {
         $promise: updateDeferred.promise
       }
@@ -299,7 +299,7 @@ describe('The collection group/category form component', () => {
     updateDeferred.resolve({status: 'success'});
     $rootScope.$apply();
 
-    expect(CategoryUpdate.save).toHaveBeenCalled();
+    expect(CategoryUpdate.update).toHaveBeenCalled();
     expect(CategoryList.query).toHaveBeenCalled();
 
   });

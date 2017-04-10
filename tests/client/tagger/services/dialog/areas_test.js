@@ -48,7 +48,7 @@ describe('The areas dialog controller', () => {
 
 
     $provide.value('AreaDelete', {
-      save: () => {
+      delete: () => {
       }
     });
 
@@ -128,7 +128,7 @@ describe('The areas dialog controller', () => {
         $promise: deferred.promise
       }
     });
-    spyOn(AreaDelete, 'save').and.callFake(() => {
+    spyOn(AreaDelete, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -174,7 +174,7 @@ describe('The areas dialog controller', () => {
     deferred.resolve(success);
     $rootScope.$apply();
 
-    expect(AreaDelete.save).toHaveBeenCalled();
+    expect(AreaDelete.delete).toHaveBeenCalled();
     expect(AreaActionObservable.get).toHaveBeenCalled();
     expect(AreaListObservable.set).toHaveBeenCalledWith(areas);
     expect(AreaActionObservable.set).toHaveBeenCalledWith(areas[0].id);

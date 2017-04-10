@@ -34,7 +34,7 @@ describe('tag resources', () => {
 
   it('should request repository type counts in area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/repoTypeByArea/1').respond([{repoType: 'DEFAULT', count: 2}]);
+    $httpBackend.expectGET(config.restHost + 't/collection/repoTypeByArea/1').respond([{repoType: 'DEFAULT', count: 2}]);
     let result = SearchOptionType.query({areaId: 1});
     $httpBackend.flush();
     expect(result[0].repoType).toEqual('DEFAULT');
@@ -43,7 +43,7 @@ describe('tag resources', () => {
 
   it('should request collection link type counts in area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/count/linkTypes/byArea/1').respond([{browseType: 'link', count: 2}]);
+    $httpBackend.expectGET(config.restHost + 't/collection/count/linkTypes/byArea/1').respond([{browseType: 'link', count: 2}]);
     let result = CollectionLinkCount.query({areaId: 1});
     $httpBackend.flush();
     expect(result[0].browseType).toEqual('link');
@@ -52,7 +52,7 @@ describe('tag resources', () => {
 
   it('should request collection type counts in area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/count/types/byArea/1').respond([{ctype: 'dig', count: 2}]);
+    $httpBackend.expectGET(config.restHost + 't/collection/count/types/byArea/1').respond([{ctype: 'dig', count: 2}]);
     let result = CollectionTypeCount.query({areaId: 1});
     $httpBackend.flush();
     expect(result[0].ctype).toEqual('dig');

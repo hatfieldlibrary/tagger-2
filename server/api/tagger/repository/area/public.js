@@ -8,6 +8,8 @@
   const logger = require('../../utils/error-logger');
   const apiMapper = require('../../map/area');
   const utils = require('../../utils/response-utility');
+  const path = require('path');
+  const filename = path.basename(__filename);
 
   /**
    * Retrieves a list of all areas.

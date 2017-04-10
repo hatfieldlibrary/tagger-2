@@ -99,7 +99,7 @@ utils.createErrorResponse = (filename, type, err) => {
     label = 'Application'
   }
 
-  let error = new Error(filename + ' - ' + label + ' Error: ' + err.message);
+  let error = new Error('['+ filename + '] ' + label + ' Error: ' + err.message);
   error.status = 500;
   return error;
 

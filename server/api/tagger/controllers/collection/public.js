@@ -17,8 +17,12 @@ const utils = require('../../utils/response-utility');
 exports.typesForCollection = function (req, res, next) {
   publicApiRepository.typesForCollection(
     req,
-    utils.responseCallback(res, data),
-    utils.errorHandler(next, err) );
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -28,8 +32,13 @@ exports.typesForCollection = function (req, res, next) {
  */
 exports.allCollections = function (req, res, next) {
   publicApiRepository.allCollections(
-    utils.responseCallback(res, data),
-    utils.errorHandler(next, err) );
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -41,8 +50,12 @@ exports.allCollections = function (req, res, next) {
 exports.collectionById = function (req, res, next) {
   publicApiRepository.collectionById(
     req,
-    utils.responseCallback(res, data),
-    utils.errorHandler(next, err) );
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -54,8 +67,12 @@ exports.collectionById = function (req, res, next) {
 exports.collectionsByArea = function (req, res, next) {
   publicApiRepository.collectionsByArea(
     req,
-    utils.responseCallback(res, data),
-    utils.errorHandler(next, err) );
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -66,8 +83,12 @@ exports.collectionsByArea = function (req, res, next) {
 exports.collectionsBySubjectArea = function (req, res, next) {
   publicApiRepository.collectionsBySubjectArea(
     req,
-    utils.responseCallback(res, data),
-    utils.errorHandler(next, err) );
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -79,8 +100,12 @@ exports.collectionsBySubjectArea = function (req, res, next) {
 exports.collectionsByCategory = function (req, res, next) {
   publicApiRepository.collectionsByCategory(
     req,
-    utils.responseCallback(res, data),
-    utils.errorHandler(next, err) );
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -90,8 +115,12 @@ exports.collectionsByCategory = function (req, res, next) {
 exports.collectionsBySubject = function (req, res, next) {
   publicApiRepository.collectionsBySubject(
     req,
-    utils.responseCallback(res, data),
-    utils.errorHandler(next, err) );
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -106,8 +135,12 @@ exports.collectionsBySubject = function (req, res, next) {
 exports.browseList = function (req, res, next) {
   publicApiRepository.browseList(
     req,
-    res,
-    utils.errorHandler(next, err) );
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 
 };
@@ -115,7 +148,10 @@ exports.browseList = function (req, res, next) {
 exports.findRelatedCollections = function (req, res, next) {
   publicApiRepository.findRelatedCollections(
     req,
-    utils.responseCallback(res, data),
-    utils.errorHandler(next, err) );
-
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };

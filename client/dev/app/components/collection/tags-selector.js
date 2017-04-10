@@ -55,7 +55,7 @@
       if (id) {
         let tagsForArea = TagsForArea.query({areaId: id});
         tagsForArea.$promise.then(function (data) {
-          console.log(data)
+
           ctrl.tagsForArea = data;
           _getTagsForCollection(ctrl.collectionId);
         });

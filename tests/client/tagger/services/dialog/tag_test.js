@@ -49,7 +49,7 @@ describe('The tag dialog controller', () => {
     });
 
     $provide.value('TagDelete', {
-      save: () => {
+      delete: () => {
       }
     });
 
@@ -165,7 +165,7 @@ describe('The tag dialog controller', () => {
         $promise: deferred.promise
       }
     });
-    spyOn(TagDelete, 'save').and.callFake(() => {
+    spyOn(TagDelete, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -233,7 +233,7 @@ describe('The tag dialog controller', () => {
     $rootScope.$apply();
 
     expect(TagObservable.get).toHaveBeenCalledWith();
-    expect(TagDelete.save).toHaveBeenCalledWith({id: 1});
+    expect(TagDelete.delete).toHaveBeenCalledWith({id: 1});
     expect(TagList.query).toHaveBeenCalled();
     expect(TagObservable.set).toHaveBeenCalledWith(tags[0].id);
     expect(TaggerToast.toast).toHaveBeenCalledWith('Tag Deleted');

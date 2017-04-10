@@ -109,7 +109,7 @@
    */
   taggerServices.factory('AreasForCollection', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 't/area/collection/:collId', {}, {
+      return $resource(config.restHost + 't/collection/areas/:collId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }

@@ -11,7 +11,6 @@
     const vm = this;
 
     vm.toggleLeft = function () {
-      console.log('clicked')
       $mdSidenav('left').toggle();
     }
 

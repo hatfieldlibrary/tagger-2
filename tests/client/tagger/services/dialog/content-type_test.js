@@ -45,7 +45,7 @@ describe('The collection group dialog controller', () => {
     });
 
     $provide.value('ContentTypeDelete', {
-      save: () => {
+      delete: () => {
       }
     });
 
@@ -129,7 +129,7 @@ describe('The collection group dialog controller', () => {
         $promise: deferred.promise
       }
     });
-    spyOn(ContentTypeDelete, 'save').and.callFake(() => {
+    spyOn(ContentTypeDelete, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -177,7 +177,7 @@ describe('The collection group dialog controller', () => {
     $rootScope.$apply();
 
     expect(ContentTypeObservable.get).toHaveBeenCalledWith();
-    expect(ContentTypeDelete.save).toHaveBeenCalledWith({id: 1});
+    expect(ContentTypeDelete.delete).toHaveBeenCalledWith({id: 1});
     expect(ContentTypeList.query).toHaveBeenCalled();
     expect(ContentTypeObservable.set).toHaveBeenCalledWith(types[0].id);
     expect(TaggerToast.toast).toHaveBeenCalledWith('Content Type Deleted');

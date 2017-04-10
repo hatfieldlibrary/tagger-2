@@ -172,9 +172,13 @@ module.exports = function (app, config) {
             // profile information to the passport
             // callback.
             if (user) {
-              profile.areaId = user.area;
-              profile.picture = user.picture;
-              return done(err, profile);
+              try {
+                profile.areaId = user.area;
+                profile.picture = user.picture;
+                return done(err, profile);
+              } catch(err) {
+                done(err, null);
+              }
             }
             // Otherwise pass null user profile
             // to the passport callback.

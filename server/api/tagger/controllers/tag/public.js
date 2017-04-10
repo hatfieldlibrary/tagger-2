@@ -16,8 +16,12 @@ const utils = require('../../utils/response-utility');
 exports.subjectList = function (req, res, next) {
   publicApiRepository.subjectList(
     req,
-    utils.responseCallback(res, data),
-    utils.errorHandler(next, err) );
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -30,8 +34,12 @@ exports.subjectList = function (req, res, next) {
 exports.subjectsForCollection = function (req, res, next) {
   publicApiRepository.subjectsForCollection(
     req,
-    utils.responseCallback(res, data),
-    utils.errorHandler(next, err) );
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -44,7 +52,11 @@ exports.subjectsForCollection = function (req, res, next) {
 exports.subjectsByArea = function (req, res, next) {
   publicApiRepository.subjectsByArea(
     req,
-    utils.responseCallback(res, data),
-    utils.errorHandler(next, err) );
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };

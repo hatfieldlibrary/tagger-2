@@ -48,7 +48,7 @@ describe('Area components', function () {
 
     module(($provide) => {
       $provide.value('AreaUpdate', {
-        save: () => {
+        update: () => {
         }
       });
     });
@@ -170,7 +170,7 @@ describe('Area components', function () {
       }
     });
 
-    spyOn(AreaUpdate, 'save').and.callFake(() => {
+    spyOn(AreaUpdate, 'update').and.callFake(() => {
       return {
         $promise: {
           then: (callback) => {
@@ -343,7 +343,7 @@ describe('Area components', function () {
       ctrl.$onInit();
       ctrl.updateArea();
       // update area
-      expect(AreaUpdate.save).toHaveBeenCalled();
+      expect(AreaUpdate.update).toHaveBeenCalled();
       // got new area list
       expect(AreaList.query).toHaveBeenCalled();
 

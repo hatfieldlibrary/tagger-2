@@ -92,7 +92,6 @@
     function _getAreaList() {
       let areas = AreaList.query();
       areas.$promise.then(function (data) {
-        console.log(data)
         AreaListObservable.set(data);
       });
     }

@@ -15,8 +15,8 @@ exports.areas = function (req, callback, errorHandler) {
   const collId = req.params.collId;
 
   taggerDao.findAreasForCollection(collId)
-    .then(() => {
-    callback();
+    .then((data) => {
+    callback(data);
   })
     .catch((err) => {
       logger.dao(err);

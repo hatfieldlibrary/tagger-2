@@ -45,7 +45,7 @@ describe('The collection group dialog controller', () => {
     });
 
     $provide.value('CategoryDelete', {
-      save: () => {
+      delete: () => {
       }
     });
 
@@ -129,7 +129,7 @@ describe('The collection group dialog controller', () => {
         $promise: deferred.promise
       }
     });
-    spyOn(CategoryDelete, 'save').and.callFake(() => {
+    spyOn(CategoryDelete, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -177,7 +177,7 @@ describe('The collection group dialog controller', () => {
     $rootScope.$apply();
 
     expect(GroupObservable.get).toHaveBeenCalledWith();
-    expect(CategoryDelete.save).toHaveBeenCalledWith({id: 1});
+    expect(CategoryDelete.delete).toHaveBeenCalledWith({id: 1});
     expect(CategoryList.query).toHaveBeenCalled();
     expect(GroupObservable.set).toHaveBeenCalledWith(groups[0].id);
     expect(TaggerToast.toast).toHaveBeenCalledWith('Collection Group Deleted');
