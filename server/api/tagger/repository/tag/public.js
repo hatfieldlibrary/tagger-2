@@ -76,7 +76,7 @@ exports.subjectsByArea = function (req, callback, errorHandler) {
     .then((tags) => {
       let data;
       try {
-        data = apiMapper.mapTags(tags, "all");
+        data = apiMapper.mapTags(tags, "area");
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))

@@ -28,7 +28,7 @@
 
   exports.mapRelatedCollections = function(collections) {
     return _mapRelatedCollections(collections);
-  }
+  };
 
   /**
    * Maps collection list data object to API object. The collection
@@ -53,7 +53,7 @@
         collection = collections[i];
       }
 
-      let coll = _mapSingleCollection(collection);
+      let coll = _mapListCollection(collection);
       collectionArray.push(coll);
 
     }
@@ -74,6 +74,25 @@
     return typeArray;
   }
 
+  function _mapListCollection(collection) {
+
+    let coll = {
+      id: collection.CollectionId,
+      title: collection.title,
+      image: collection.image,
+      url: collection.url,
+      desc: collection.description,
+      dates: collection.dates,
+      items: collection.items,
+      linkOptions: collection.browseType,
+      searchOptions: collection.repoType,
+      assetType: collection.ctype,
+      restricted: collection.restricted,
+      published: collection.published
+    };
+
+    return coll;
+  }
   /**
    * Maps a single collection to API object.
    * @param collection
@@ -83,7 +102,7 @@
   function _mapSingleCollection(collection) {
 
     let coll = {
-      id: collection.CollectionId,
+      id: collection.id,
       title: collection.title,
       image: collection.image,
       url: collection.url,
