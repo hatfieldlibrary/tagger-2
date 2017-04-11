@@ -2,21 +2,25 @@
 
   'use strict';
 
+  const logger = require('../utils/error-logger');
+
   exports.mapAreaList = function(areas) {
     return _mapAreaList(areas);
+
   };
 
   exports.mapArea = function(area) {
-    return _mapArea(area);
+      return _mapArea(area);
+
   };
 
   exports.mapAreaCount = function(areas) {
-    return _mapAreaListCount(areas);
+      return _mapAreaListCount(areas);
+
   };
 
   exports.mapAreasForCollectionList = function(areas) {
-
-    return _mapAreaForCollectionList(areas);
+      return _mapAreaForCollectionList(areas);
 
   };
 

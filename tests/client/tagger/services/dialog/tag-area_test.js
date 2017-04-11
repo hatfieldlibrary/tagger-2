@@ -42,12 +42,12 @@ describe('The tag area dialog controller', () => {
     });
 
     $provide.value('TagTargetAdd', {
-      query: () => {
+      save: () => {
       }
     });
 
     $provide.value('TagTargetRemove', {
-      query: () => {
+      delete: () => {
       }
     });
 
@@ -147,12 +147,12 @@ describe('The tag area dialog controller', () => {
         $promise: deferredList.promise
       }
     });
-    spyOn(TagTargetAdd, 'query').and.callFake(() => {
+    spyOn(TagTargetAdd, 'save').and.callFake(() => {
       return {
         $promise: deferredTarget.promise
       }
     });
-    spyOn(TagTargetRemove, 'query').and.callFake(() => {
+    spyOn(TagTargetRemove, 'delete').and.callFake(() => {
       return {
         $promise: deferredTarget.promise
       }
@@ -183,7 +183,7 @@ describe('The tag area dialog controller', () => {
     deferredTarget.resolve(tagTargetsSuccess);
     $rootScope.$apply();
 
-    expect(TagTargetAdd.query).toHaveBeenCalledWith(target);
+    expect(TagTargetAdd.save).toHaveBeenCalledWith(target);
     expect($rootScope.$broadcast).toHaveBeenCalled();
     expect(TaggerToast.toast).toHaveBeenCalledWith('Tag Added area.');
     expect($mdDialog.hide).toHaveBeenCalled();
@@ -206,7 +206,7 @@ describe('The tag area dialog controller', () => {
     deferredTarget.resolve(tagTargetsSuccess);
     $rootScope.$apply();
 
-    expect(TagTargetRemove.query).toHaveBeenCalledWith(target);
+    expect(TagTargetRemove.delete).toHaveBeenCalledWith(target);
     expect($rootScope.$broadcast).toHaveBeenCalled();
     expect(TaggerToast.toast).toHaveBeenCalledWith('Tag removed from Area.');
     expect($mdDialog.hide).toHaveBeenCalled();

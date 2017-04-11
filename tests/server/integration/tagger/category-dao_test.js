@@ -298,7 +298,7 @@ describe('Category operations', () => {
       .catch(_onError);
   });
 
-  it('should list three catgories.', (done) => {
+  it('should list three categories.', (done) => {
 
     let _onSuccess = (categories) => {
 
@@ -320,7 +320,7 @@ describe('Category operations', () => {
   });
 
 
-  it('should return something.', (done) => {
+  it('should return a category for the collection.', (done) => {
     let _onSuccess = (category) => {
       expect(category).to.be.defined;
       expect(category.length).to.equal(1);

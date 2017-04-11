@@ -1,71 +1,79 @@
 /**
  * Created by mspalti on 3/31/17.
  */
-(function() {
+(function () {
+
   'use strict';
 
-  const taggerDao = require('../../dao/area-dao');
+  const publicApiRepository = require('../../repository/area/public');
   const utils = require('../../utils/response-utility');
-  const logger = require('../../utils/error-logger');
-  const apiMapper = require('../../map/area');
-
 
   /**
    * Retrieves a list of all areas.
    * @param req
    * @param res
+   * @param next
    */
-  exports.list = function (req, res) {
-
-    taggerDao.listAllAreas().then(function (areas) {
-      utils.sendResponse(res, apiMapper.mapAreaList(areas));
-
-    }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
-
+  exports.list = function (req, res, next) {
+    publicApiRepository.list(
+      req,
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
   };
 
   /**
    * Retrieves area information by area id.
    * @param req
    * @param res
+   * @param next
    */
-  exports.byId = function (req, res) {
-    const areaId = req.params.id;
-    taggerDao.findAreaById(areaId).then(function (areas) {
-      utils.sendResponse(res, apiMapper.mapArea(areas));
-    }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
+  exports.byId = function (req, res, next) {
+    publicApiRepository.byId(
+      req,
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
   };
 
-  exports.listAreasWithCount = function (req, res) {
-    taggerDao.areaListWithCollectionCounts()
-      .then(function(areas) {
-        utils.sendResponse(res, apiMapper.mapAreaCount(areas));
-      }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
+  /**
+   * Retrieves area list with collection counts.
+   * @param req
+   * @param res
+   * @param next
+   */
+  exports.listAreasWithCount = function (req, res, next) {
+    publicApiRepository.listAreasWithCount(
+      req,
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
   };
 
   /**
    * Retrieves areas for a given collection.
    * @param req
    * @param res
+   * @param next
    */
-  exports.areasForCollection = function (req, res) {
-    const collId = req.params.id;
-    taggerDao.findAreasForCollection(collId)
-      .then(function(areas) {
-        utils.sendResponse(res, apiMapper.mapAreasForCollectionList(areas));
-      }).catch(function (err) {
-      logger.dao(err);
-      utils.sendErrorJson(res, err);
-    });
+  exports.areasForCollection = function (req, res, next) {
+    publicApiRepository.areasForCollection(
+      req,
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
   };
 
 })();

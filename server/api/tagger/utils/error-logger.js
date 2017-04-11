@@ -19,6 +19,22 @@ errorLoggers.dao = function(err)  {
 };
 
 /**
+ * Error returned from repository.
+ * @param err
+ */
+errorLoggers.repository = function(err)  {
+  logger.log(logLevel, err.message, {errorType: 'REPOSITORY'});
+};
+
+/**
+ * Error returned from map.
+ * @param err
+ */
+errorLoggers.map = function(err)  {
+  logger.log(logLevel, err.message, {errorType: 'MAPPING'});
+};
+
+/**
  * Error returned from image processing.
  * @param err
  */
@@ -40,10 +56,6 @@ errorLoggers.form = function(err) {
  */
 errorLoggers.missing = function(errorMessage) {
   logger.log(logLevel, errorMessage, {errorType: 'MISSING_DATA'});
-};
-
-errorLoggers.repository = function(errorMessage) {
-  logger.log(logLevel, errorMessage, {errorType: 'REPOSITORY'});
 };
 
 module.exports = errorLoggers;

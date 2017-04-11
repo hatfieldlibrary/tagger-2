@@ -20,6 +20,7 @@
  */
 'use strict';
 
+const repository = require('../repository/user-info');
 const utils = require('../utils/response-utility');
 
 /**
@@ -28,22 +29,11 @@ const utils = require('../utils/response-utility');
  * @param res
  */
 exports.returnUserInfo = function (req, res, config) {
-
-  let name = '';
-  let picture = '';
-  let areaId = '';
-
-  if (config.useAuth) {
-    name = req.user._json.displayName;
-    picture = req.user._json.image.url;
-    areaId = req.user.areaId;
-  }
-  else {
-    name = 'Development User';
-    picture = '/resources/images/dev/homer.jpg';
-    areaId = 0;
-  }
-
-  utils.sendResponse(res, {name: name, picture: picture, areaId: areaId});
+  repository.returnUserInfo(
+    config,
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    });
 
 };

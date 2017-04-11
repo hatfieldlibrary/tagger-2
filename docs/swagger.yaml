@@ -4,20 +4,32 @@ info:
   title: Tagger
   description: >
   
-    The *Tagger* REST API is designed to provide information about digital collections and items. Clients can be simple (like a list of hyperlinked collection and item titles) or complex (like the clearinghouse that provides descriptions, related items, publisher information and links).
+    This documentation describes the Tagger public API. Administrative operations in the *Tagger* application have their own API that is documented elsewhere. 
+        
+    The *Tagger* Public REST API is provides information about digital collections and items. API clients can be simple (like a list of hyperlinked collection and item titles) or complex (like the clearinghouse that provides descriptions, related items, publisher information and links).
     
     
-    This documentation describes only the public API. Administrative functions in the *Tagger* application have their own API that is documented elsewhere. 
+    ***Test Operations:***
+    Test operations assume that you are running a local instance of Tagger on port 3000.  This local Tagger instance must have access to a local mysql database. See Tagger docs for details.
 
 
-host: localhost:10010
+host: localhost:3000
 # basePath prefixes all resource paths 
-basePath: /
+basePath: /rest
 # 
 schemes:
   # tip: remove http to make production-grade
   - http
   - https
+
+tags:
+  - name: tagger
+    description: The Tagger Public API
+    
+externalDocs:
+      description: Additional documentation at GitHub.
+      url: 'https://github.com/hatfieldlibrary/tagger-2'
+      
 # format of bodies a client can send (Content-Type)
 consumes:
   - application/json
@@ -26,10 +38,12 @@ produces:
   - application/json
   
 paths:
-  /rest/collection:
+  /collection:
     # binds a127 app logic to a route
     x-swagger-router-controller: allCollections
     get:
+      tags:
+        - tagger
       description: Returns list of all collections and items.
       # used as the method name of the controller
       operationId: allCollections
@@ -47,10 +61,12 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /rest/collection/area/{id}:
+  /collection/area/{id}:
     # binds a127 app logic to a route
     x-swagger-router-controller: collectionsByArea
     get:
+      tags:
+        - tagger
       description: Returns list of all collections in an area.
       # used as the method name of the controller
       operationId: collectionsByArea
@@ -74,10 +90,12 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   
-  /rest/collection/subject/{id}:
+  /collection/subject/{id}:
     # binds a127 app logic to a route
     x-swagger-router-controller: collectionsBySubject
     get:
+      tags:
+        - tagger
       description: Returns list of all collections by subject.
       operationId: collectionsBySubject
       parameters:
@@ -100,10 +118,12 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /rest/collection/subject/{id}/area/{areaId}:
+  /collection/subject/{id}/area/{areaId}:
     # binds a127 app logic to a route
     x-swagger-router-controller: collectionsBySubjectArea
     get:
+      tags:
+        - tagger
       description: Returns list of all collections in an area by subject.
       operationId: collectionsBySubjectArea
       parameters:
@@ -131,10 +151,12 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
               
-  /rest/collection/category/{id}:
+  /collection/category/{id}:
     # binds a127 app logic to a route
     x-swagger-router-controller: collectionsByCategory
-    get:
+    get:  
+      tags:
+        - tagger
       description: Returns list of all collections by category. Category usually refers to the real home of the collection or item. It is more specific that a collection area.  For example, the category might be an actual collection in the real world, like a musuem's collection of modern art.  In this example, the collection area could be defined as art collections in general.
       operationId: collectionsByCategory
       parameters:
@@ -157,10 +179,12 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /rest/collection/id/{id}:
+  /collection/id/{id}:
     # binds a127 app logic to a route
     x-swagger-router-controller: collectionById
     get:
+      tags:
+        - tagger
       description: Returns collection with the provided id.
       # used as the method name of the controller
       operationId: collectionById
@@ -180,12 +204,44 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+   
+  /collection/{id}/related/{subjectId}:
+    x-swagger-router-controller: findRelatedCollections
+    get:
+      tags:
+        - tagger
+      description: Returns related collections by subject tags.
+      operationId: findRelatedCollections
+      parameters:
+        - name: id
+          in: path
+          description: The collection id.
+          required: true
+          type: string
+        - name: subjectId
+          in: path
+          description: A comma-separated list of subject ids.
+          required: true
+          type: string
+      responses: 
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/RelatedItems"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
             
-  /rest/subject:
+  /subject:
     # binds a127 app logic to a route
     x-swagger-router-controller: subjectList
     
     get:
+      tags:
+        - tagger
       description: Returns list of all subject tags.
       # used as the method name of the controller
       operationId: subjectList
@@ -203,9 +259,11 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /rest/subject/collection/{id}:
+  /subject/collection/{id}:
     x-swagger-router-controller: subjectsForCollection
     get:
+      tags:
+        - tagger
       description: Returns list of subjects for a given collection id.
       operationId: subjectsForCollection
       parameters:
@@ -226,9 +284,11 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /rest/subject/area/{id}:
+  /subject/area/{id}:
     x-swagger-router-controller: areaSubject
     get:
+      tags:
+        - tagger
       description: Returns list of subjects for a given area id.
       operationId: areaSubject
       parameters:
@@ -249,9 +309,11 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /rest/type/collection/{id}:
+  /type/collection/{id}:
     x-swagger-router-controller: typesForCollection
     get:
+      tags:
+        - tagger
       description: Returns list of item types for a given collection id.
       operationId: typesForCollection
       parameters:
@@ -272,9 +334,39 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /rest/area:
+  /area/collection/{id}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: areasByCollection
+    get:
+      tags:
+        - tagger
+      description: Returns list of all areas for a collection.
+      operationId: areasByCollection
+      parameters:
+        - name: id
+          in: path
+          description: The id of the area.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            # a pointer to a definition
+            items:
+              $ref: "#/definitions/Area"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+                        
+  /area:
     x-swagger-router-controller: areaList
     get:
+      tags:
+        - tagger
       description: Returns list of all areas.
       operationId: areaList
       responses:
@@ -289,9 +381,11 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /rest/area/id/{id}:
+  /area/id/{id}:
     x-swagger-router-controller: areaById
     get:
+      tags:
+        - tagger
       description: Returns the area by id.
       operationId: areaById
       parameters:
@@ -310,9 +404,11 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /rest/area/collection:
+  /area/collection:
     x-swagger-router-controller: listAreasWithCount
     get:
+      tags:
+        - tagger
       description: Returns area list with collection counts.
       operationId: listAreasWithCount
       responses:
@@ -329,9 +425,11 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /rest/options/external/{collection}:
+  /options/external/{collection}:
     x-swagger-router-controller: external
     get:
+      tags:
+        - tagger
       description: Returns a list of items. In our current configuration, this is a list of titles and counts. The service communicates with a target host to retrieve the list. That means structure and meaning are entirely contextual and the service provides no guarantees about the data returned. This endpoint is subject to change.
       operationId: external 
       parameters:
@@ -466,6 +564,18 @@ definitions:
       name:
         type: string
       url:
+        type: string
+  RelatedItems:
+    required:
+      - id
+      - title
+      - image
+    properties:
+      id: 
+        type: string
+      title: 
+        type: string
+      image: 
         type: string
   ExternalList:
     required:

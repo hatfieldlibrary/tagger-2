@@ -21,10 +21,31 @@
 
 'use strict';
 
-const taggerSchema = require('../models/index');
+const taggerSchema = require('../schema/index');
+const logger = require('../utils/error-logger');
+const path = require('path');
+const filename = path.basename(__filename);
+const paramErrorMessage = 'A parameter for an area query is not defined.';
 const taggerDao = {};
 
+/**
+ * Returns 500 error for missing parameter. This error is thrown
+ * before the dao promise is returned.
+ * @returns {Error}
+ * @private
+ */
+function _errorResponse() {
+  let error = new Error('Error: missing query parameter - ' + filename);
+  error.status = 500;
+  return error;
+}
+
 taggerDao.findAreaById = (areaId) => {
+
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.Area.find({
     where: {
@@ -44,6 +65,11 @@ taggerDao.listAllAreas = () => {
 };
 
 taggerDao.findAreasForCollection = (collId) => {
+
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.AreaTarget.findAll({
     where: {
@@ -82,6 +108,11 @@ taggerDao.getAreaCount = () => {
 
 taggerDao.addArea = (title, position) => {
 
+  if(!title || !position) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.Area.create({
     title: title,
     position: position
@@ -90,6 +121,10 @@ taggerDao.addArea = (title, position) => {
 
 taggerDao.updateArea = (data, id) => {
 
+  if(!data || !id) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
   return taggerSchema.Area.update(data,
     {
       where: {
@@ -100,6 +135,11 @@ taggerDao.updateArea = (data, id) => {
 };
 
 taggerDao.reorder = (areas, areaCount) => {
+
+  if(!areas || !areaCount) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   /**
    * Promise method that returns the count value if the
@@ -142,6 +182,11 @@ taggerDao.reorder = (areas, areaCount) => {
 };
 
 taggerDao.deleteArea = (id) => {
+
+  if(!id) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.Area.destroy({
     where: {

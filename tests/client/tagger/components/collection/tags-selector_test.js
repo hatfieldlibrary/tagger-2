@@ -38,14 +38,14 @@ describe('The tag selector component', () => {
 
     module(($provide) => {
       $provide.value('CollectionTagTargetAdd', {
-        query: () => {
+        save: () => {
         }
       });
     });
 
     module(($provide) => {
       $provide.value('CollectionTagTargetRemove', {
-        query: () => {
+        delete: () => {
         }
       });
     });
@@ -230,13 +230,13 @@ describe('The tag selector component', () => {
     });
 
 
-    spyOn(CollectionTagTargetAdd, 'query').and.callFake(() => {
+    spyOn(CollectionTagTargetAdd, 'save').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
     });
 
-    spyOn(CollectionTagTargetRemove, 'query').and.callFake(() => {
+    spyOn(CollectionTagTargetRemove, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -292,7 +292,7 @@ describe('The tag selector component', () => {
     deferred.resolve({status: 'success'});
     $rootScope.$apply();
 
-    expect(CollectionTagTargetAdd.query).toHaveBeenCalledWith({collId: 1, tagId: 1});
+    expect(CollectionTagTargetAdd.save).toHaveBeenCalledWith({collId: 1, tagId: 1});
 
   });
 
@@ -310,7 +310,7 @@ describe('The tag selector component', () => {
     deferred.resolve({status: 'success'});
     $rootScope.$apply();
 
-    expect(CollectionTagTargetRemove.query).toHaveBeenCalledWith({collId: 1, tagId: 1});
+    expect(CollectionTagTargetRemove.delete).toHaveBeenCalledWith({collId: 1, tagId: 1});
 
   });
 

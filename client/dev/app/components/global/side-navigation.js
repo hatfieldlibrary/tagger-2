@@ -22,11 +22,15 @@
 
   'use strict';
 
-  function NavigationController(UserAreaObservable) {
+  function NavigationController($mdSidenav, UserAreaObservable) {
 
     const vm = this;
 
     vm.currentIndex = 0;
+
+    vm.toggleLeft = () => {
+      $mdSidenav('left').toggle();
+    };
 
     vm.setCurrentIndex = (index) => {
       vm.currentIndex = index;

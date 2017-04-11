@@ -17,9 +17,8 @@
 
 'use strict';
 
+const repository = require('../repository/users');
 const utils = require('../utils/response-utility');
-const taggerDao = require('../dao/users.dao');
-const logger = require('../utils/error-logger');
 
 /**
  * Retrieves list of current users.
@@ -27,12 +26,13 @@ const logger = require('../utils/error-logger');
  * @param res
  */
 exports.list = function (req, res) {
-
-  taggerDao.findAllUsers().then(function (users) {
-    utils.sendResponse(res, users);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  repository.list(
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -42,15 +42,14 @@ exports.list = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
-  const name = req.body.name;
-  const email = req.body.email;
-  const area = req.body.area;
-
-  taggerDao.createNewUser(name, email, area).then(function () {
-    utils.sendSuccessJson(res);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  repository.add(
+    req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -60,13 +59,14 @@ exports.add = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
-  const id = req.params.id;
-
-  taggerDao.deleteUser(id).then(function () {
-    utils.sendSuccessJson(res);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  repository.delete(
+    req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -76,15 +76,13 @@ exports.delete = function (req, res) {
  * @param res
  */
 exports.update = function (req, res) {
-  const name = req.body.name;
-  const email = req.body.email;
-  const area = req.body.area;
-  const id = req.body.id;
-
-  taggerDao.updateUser(name, email, area, id).then(function () {
-    utils.sendResponse(res, {status: 'success'});
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  repository.update(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };

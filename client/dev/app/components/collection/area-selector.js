@@ -70,6 +70,7 @@
      * @returns {boolean}
      */
     function _findArea(areaId, targets) {
+
       for (let i = 0; i < targets.length; i++) {
         if (targets[i].AreaId === areaId) {
           return true;
@@ -113,7 +114,6 @@
             let result = AreaTargetRemove.delete({collId: CollectionObservable.get(), areaId: areaId});
             result.$promise.then(function (result) {
               if (result.status === 'success') {
-                console.log(result)
                 ctrl.areaTargets = result.data.areaList.getAreas;
                 // Update the collections list (one collection has just been removed from the area).
                 CollectionAreasObservable.set();

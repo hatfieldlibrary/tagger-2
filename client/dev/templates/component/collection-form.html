@@ -33,7 +33,7 @@
     </md-select>
   </md-input-container>
   <md-input-container style="margin-top: -12px;" ng-if="!vm.showCollectionCategories">
-    <h4 class="md-subhead" style="margin: 0;">Shared collection. The collection group is defined in the home area. <a
+    <h4 class="md-subhead" style="margin: 0;">This collection and its group belong to another area. <a
       href="" ng-click="vm.overrideCategory()">(Override)</a></h4>
   </md-input-container>
   <md-input-container>
@@ -49,8 +49,24 @@
     <input type="text" ng-model="vm.collection.items"/>
   </md-input-container>
   <div style="margin-bottom: 15px">
+    <div class="md-caption">Collection Access</div>
+    <md-radio-group layout="column" layout-gt-sm="row" ng-model="vm.collection.restricted">
+      <div flex="100" flex-gt-lg="25">
+        <md-radio-button aria-label="Unrestricted" ng-value="false" flex="15" style="display: inline">Unrestricted
+        </md-radio-button>
+      </div>
+      <div flex="100" flex-gt-lg="25">
+        <md-radio-button aria-label="Restricted" ng-value="true" flex="15" style="display: inline">Restricted
+        </md-radio-button>
+      </div>
+      <span flex="flex"></span>
+    </md-radio-group>
+  </div>
+  <md-divider>
+  </md-divider>
+  <div style="margin-bottom: 15px">
     <div class="md-caption">Item Type</div>
-    <md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.ctype">
+    <md-radio-group layout="column" layout-gt-sm="row" ng-model="vm.collection.ctype">
       <div flex="100" flex-gt-md="25">
         <md-radio-button aria-label="Unrestricted" value="dig" style="display: inline">Collection</md-radio-button>
       </div>
@@ -63,10 +79,11 @@
       <span flex="flex"></span>
     </md-radio-group>
   </div>
+
   <md-divider></md-divider>
   <div style="margin-bottom: 15px">
     <div class="md-caption">Search Options</div>
-    <md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.repoType">
+    <md-radio-group layout="column" layout-gt-sm="row" ng-model="vm.collection.repoType">
       <div flex="100" flex-gt-md="25">
         <md-radio-button aria-label="Search &amp; Browse" value="DEFAULT" flex="15" style="display: inline">Search &
           Browse
@@ -84,27 +101,10 @@
     </md-radio-group>
   </div>
   <md-divider>
-
   </md-divider>
   <div style="margin-bottom: 15px">
-    <div class="md-caption">Collection Access</div>
-    <md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.restricted">
-      <div flex="100" flex-gt-lg="25">
-        <md-radio-button aria-label="Unrestricted" ng-value="false" flex="15" style="display: inline">Unrestricted
-        </md-radio-button>
-      </div>
-      <div flex="100" flex-gt-lg="25">
-        <md-radio-button aria-label="Restricted" ng-value="true" flex="15" style="display: inline">Restricted
-        </md-radio-button>
-      </div>
-      <span flex="flex"></span>
-    </md-radio-group>
-  </div>
-  <md-divider>
-  </md-divider>
-  <div style="margin-bottom: 15px">
-    <div class="md-caption">Browse Type</div>
-    <md-radio-group layout="column" layout-gt-md="row" ng-model="vm.collection.browseType">
+    <div class="md-caption">Link Options</div>
+    <md-radio-group layout="column" layout-gt-sm="row" ng-model="vm.collection.browseType">
       <div flex="100" flex-gt-md="25">
         <md-radio-button aria-label="Show entire collection" value="link" flex="15" style="display: inline"
                          ng-click="vm.setBrowseType(0)">Link to collection

@@ -21,8 +21,24 @@
 
 // jshint strict:false
 
-const taggerSchema = require('../models/index');
+const taggerSchema = require('../schema/index');
+const logger = require('../utils/error-logger');
+const path = require('path');
+const filename = path.basename(__filename);
+const paramErrorMessage = 'A parameter for a category (a.k.a group) query is not defined.';
 const taggerDao = {};
+
+/**
+ * Returns 500 error for missing parameter. This error is thrown
+ * before the dao promise is returned.
+ * @returns {Error}
+ * @private
+ */
+function _errorResponse() {
+  let error = new Error('Error: missing query parameter - ' + filename);
+  error.status = 500;
+  return error;
+}
 
 taggerDao.findAll = () => {
 
@@ -35,6 +51,11 @@ taggerDao.findAll = () => {
 
 // Seems to be collection specific.  Should it be here?
 taggerDao.categoryCountByArea = (areaId) => {
+
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.sequelize.query('select Categories.title, COUNT(*) as count from AreaTargets left join ' +
     'Collections on AreaTargets.CollectionId = Collections.id left join CategoryTargets on ' +
@@ -50,6 +71,11 @@ taggerDao.categoryCountByArea = (areaId) => {
 
 taggerDao.categoriesByCollectionId = (collId) => {
 
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.CategoryTarget.findAll({
     where: {
            CollectionId: collId
@@ -62,6 +88,11 @@ taggerDao.categoriesByCollectionId = (collId) => {
 
 taggerDao.listByArea = (areaId) => {
 
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.Category.findAll({
     where: {
       areaId: areaId
@@ -72,6 +103,12 @@ taggerDao.listByArea = (areaId) => {
 };
 
 taggerDao.byId = (categoryId) => {
+
+  if(!categoryId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.Category.find({
     where: {
       id: categoryId
@@ -82,12 +119,22 @@ taggerDao.byId = (categoryId) => {
 
 taggerDao.add = (title) => {
 
+  if(!title) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.Category.create({
     title: title
   });
 };
 
 taggerDao.update = (data, id) => {
+
+  if(!data | !id) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.Category.update(
     data,
@@ -99,6 +146,11 @@ taggerDao.update = (data, id) => {
 };
 
 taggerDao.delete = (catId) => {
+
+  if(!catId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.Category.destroy({
     where: {

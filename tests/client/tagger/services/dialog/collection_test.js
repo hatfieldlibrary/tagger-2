@@ -47,7 +47,7 @@ describe('The collection dialog controller', () => {
     });
 
     $provide.value('CollectionDelete', {
-      save: () => {
+      delete: () => {
       }
     });
 
@@ -165,7 +165,7 @@ describe('The collection dialog controller', () => {
         $promise: deferred.promise
       }
     });
-    spyOn(CollectionDelete, 'save').and.callFake(() => {
+    spyOn(CollectionDelete, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -221,7 +221,7 @@ describe('The collection dialog controller', () => {
     deferred.resolve(success);
     $rootScope.$apply();
 
-    expect(CollectionDelete.save).toHaveBeenCalled();
+    expect(CollectionDelete.delete).toHaveBeenCalled();
     expect(CollectionObservable.get).toHaveBeenCalled();
     expect(CollectionsByArea.query).toHaveBeenCalledWith({areaId: 1});
     expect(AreaObservable.get).toHaveBeenCalled();

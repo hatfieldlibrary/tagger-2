@@ -80,7 +80,7 @@ describe('The type form component', () => {
 
     module(($provide) => {
       $provide.value('ContentTypeUpdate', {
-        save: () => {
+        update: () => {
         }
       })
     });
@@ -204,7 +204,7 @@ describe('The type form component', () => {
       }
     });
 
-    spyOn(ContentTypeUpdate, 'save').and.callFake(() => {
+    spyOn(ContentTypeUpdate, 'update').and.callFake(() => {
       return {
         $promise: updateDeferred.promise
       }
@@ -263,7 +263,7 @@ describe('The type form component', () => {
     updateDeferred.resolve({status: 'success'});
     $rootScope.$apply();
 
-    expect(ContentTypeUpdate.save).toHaveBeenCalled();
+    expect(ContentTypeUpdate.update).toHaveBeenCalled();
     expect(ContentTypeList.query).toHaveBeenCalled();
     expect(ContentTypeListObservable.set).toHaveBeenCalledWith(typeList);
 

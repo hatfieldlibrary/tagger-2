@@ -1,3 +1,6 @@
+/**
+ * Created by mspalti on 4/4/17.
+ */
 /*
  * Copyright (c) 2016.
  *
@@ -17,27 +20,24 @@
 
 'use strict';
 
-/**
- * Created by mspalti on 5/23/14.
- */
-
 const async = require('async');
-const utils = require('../../utils/response-utility');
 const taggerDao = require('../../dao/tags-dao');
 const logger = require('../../utils/error-logger');
 
 /**
  * Retrieves tag information by tag id.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.byId = function (req, res) {
+exports.byId = function (req, callback, errorHandler) {
   const id = req.params.id;
 
   taggerDao.findTagById(id).then(function (tag) {
-    utils.sendResponse(res, tag);
+    callback(tag);
   }).catch(function (err) {
     logger.dao(err);
+    errorHandler(err);
   });
 
 };
@@ -46,16 +46,18 @@ exports.byId = function (req, res) {
  * Retrieves list of tags associated with an area. Query
  * by area id.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.tagByArea = function (req, res) {
+exports.tagByArea = function (req, callback, errorHandler) {
 
-  var areaId = req.params.areaId;
+  const areaId = req.params.areaId;
 
   taggerDao.findTagsInArea(areaId).then(function (tags) {
-    utils.sendResponse(res, tags);
+    callback(tags);
   }).catch(function (err) {
     logger.dao(err);
+    errorHandler(err);
   });
 };
 
@@ -63,17 +65,21 @@ exports.tagByArea = function (req, res) {
 /**
  * Retrieves tag name and use count by area id.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.tagByAreaCount = function (req, res) {
+exports.tagByAreaCount = function (req, callback, errorHandler) {
 
-  var areaId = req.params.areaId;
+  const areaId = req.params.areaId;
 
-  taggerDao.getTagCountByArea(areaId).then(function (tags) {
-    utils.sendResponse(res, tags);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.getTagCountByArea(areaId)
+    .then(function (tags) {
+      callback(tags);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(err);
+    });
 };
 
 
@@ -81,40 +87,40 @@ exports.tagByAreaCount = function (req, res) {
  * Adds a new tag.  First checks to see if tag with this name already
  * exists.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.add = function (req, res) {
+exports.add = function (req, callback, errorHandler) {
   const name = req.body.name;
 
   async.parallel(
     {
       // Check to see if content type already exists.
-      check: function (callback) {
-        taggerDao.findTagByName(name).then(function (result) {
-          callback(null, result);
-        })
-          .catch(function (err) {
-            callback(err);
+      check: function (parallel) {
+        taggerDao.findTagByName(name)
+          .then(function (result) {
+            parallel(null, result);
           });
       }
     },
     function (err, result) {
       if (err) {
-        utils.sendErrorJson(res, err);
         logger.dao(err);
+        errorHandler(err);
       }
       if (result.check === null) {
         // Add new content type
-        taggerDao.createTag(name).then(function (result) {
-          utils.sendResponse(res, {status: 'success', id: result.id});
-        })
+        taggerDao.createTag(name)
+          .then(function (result) {
+            callback({status: 'success', id: result.id});
+          })
           .catch(function (err) {
-            utils.sendErrorJson(res, err);
+            errorHandler(err);
             logger.dao(err);
           });
 
       } else {
-        utils.sendErrorJson(res, {message: 'Unable to add tag.'});
+        errorHandler({message: 'Tag already exists.'});
       }
     }
   );
@@ -123,16 +129,18 @@ exports.add = function (req, res) {
 /**
  * Update the tag name.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.update = function (req, res) {
+exports.update = function (req, callback, errorHandler) {
   const id = req.body.id;
   const name = req.body.name;
 
   taggerDao.updateTag(name, id).then(function () {
-    utils.sendSuccessJson(res);
+    callback();
   }).catch(function (err) {
     logger.dao(err);
+    errorHandler(err);
   });
 
 };
@@ -140,15 +148,17 @@ exports.update = function (req, res) {
 /**
  * Delete the tag.
  * @param req
- * @param res
+ * @param callback success response callback
+ * @param errorHandler failure response callback
  */
-exports.delete = function (req, res) {
+exports.delete = function (req, callback, errorHandler) {
   const id = req.params.id;
 
   taggerDao.deleteTag(id).then(function () {
-    utils.sendSuccessJson(res);
+    callback();
   }).catch(function (err) {
     logger.dao(err);
+    errorHandler(err);
   });
 
 };

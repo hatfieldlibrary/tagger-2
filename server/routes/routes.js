@@ -18,17 +18,13 @@
 module.exports = function(app,config){
 
   const userInfo = require('../../server/api/tagger/controllers/user-info');
-  const tag = require('../../server/api/tagger/controllers/tags/admin');
-  const apiTag = require('../api/tagger/controllers/tags/public');
+  const tag = require('../api/tagger/controllers/tag/admin');
+  const apiTag = require('../api/tagger/controllers/tag/public');
   const tagTarget = require('../../server/api/tagger/controllers/tag-target.js');
-  const area = require('../api/tagger/controllers/area/area');
+  const area = require('../api/tagger/controllers/area/admin');
   const apiArea = require('../api/tagger/controllers/area/public');
   const content = require('../../server/api/tagger/controllers/content');
   const collection = require('../api/tagger/controllers/collection/admin');
-  const collectionArea = require('../api/tagger/controllers/collection/areas');
-  const collectionTag = require('../api/tagger/controllers/collection/tags');
-  const collectionType = require('../api/tagger/controllers/collection/types');
-  const collectionImage = require('../api/tagger/controllers/collection/image');
   const apiCollection = require('../api/tagger/controllers/collection/public');
   const category = require('../../server/api/tagger/controllers/category');
   const users = require('../../server/api/tagger/controllers/users');
@@ -51,20 +47,20 @@ module.exports = function(app,config){
   app.get('/rest/t/collection/first/inArea/:areaId', ensureAuthenticated, collection.getFirstCollectionInArea);
   app.get('/rest/t/collection/:collId/pubstatus/:status', ensureAuthenticated, collection.setPublicationStatus);
   app.get('/rest/t/collection/:collId/pubstatus', ensureAuthenticated, collection.getPublicationStatus);
-  app.get('/rest/t/collection/areas/:collId', ensureAuthenticated, collectionArea.areas);
+  app.get('/rest/t/collection/areas/:collId', ensureAuthenticated, collection.areas);
   app.get('/rest/t/collection/tags/:collId', ensureAuthenticated, apiTag.subjectsForCollection); // controller shared with public route
   app.get('/rest/t/collection/types/:collId', ensureAuthenticated, apiCollection.typesForCollection);  // controller shared with public route
   app.post('/tagger/collection/image', ensureAuthenticated, function (req, res) {
-    collectionImage.updateImage(req, res, config);
+    collection.updateImage(req, res, config);
   });
   app.post('/rest/t/collection/add', ensureAuthenticated, collection.add);
-  app.post('/rest/t/collection/add/area', ensureAuthenticated, collectionArea.addAreaTarget);
-  app.post('/rest/t/collection/add/tag', ensureAuthenticated, collectionTag.addTagTarget);
-  app.post('/rest/t/collection/add/type', ensureAuthenticated, collectionType.addTypeTarget);
+  app.post('/rest/t/collection/add/area', ensureAuthenticated, collection.addAreaTarget);
+  app.post('/rest/t/collection/add/tag', ensureAuthenticated, collection.addTagTarget);
+  app.post('/rest/t/collection/add/type', ensureAuthenticated, collection.addTypeTarget);
   app.put('/rest/t/collection/update', ensureAuthenticated, collection.update);
-  app.delete('/rest/t/collection/:collId/remove/area/:areaId', ensureAuthenticated, collectionArea.removeAreaTarget);
-  app.delete('/rest/t/collection/:collId/remove/tag/:tagId', ensureAuthenticated, collectionTag.removeTagTarget);
-  app.delete('/rest/t/collection/:collId/remove/type/:typeId', ensureAuthenticated, collectionType.removeTypeTarget);
+  app.delete('/rest/t/collection/:collId/remove/area/:areaId', ensureAuthenticated, collection.removeAreaTarget);
+  app.delete('/rest/t/collection/:collId/remove/tag/:tagId', ensureAuthenticated, collection.removeTagTarget);
+  app.delete('/rest/t/collection/:collId/remove/type/:typeId', ensureAuthenticated, collection.removeTypeTarget);
   app.delete('/rest/t/collection/delete/:id', ensureAuthenticated, collection.delete);
 
   // AREAS
@@ -131,6 +127,7 @@ module.exports = function(app,config){
   app.get('/rest/subject/area/:id', apiTag.subjectsByArea);
   app.get('/rest/subject/collection/:id', apiTag.subjectsForCollection);
   app.get('/rest/type/collection/:id',  apiCollection.typesForCollection);
+  app.get('/rest/collection/:id/related/:subjects', apiCollection.findRelatedCollections);
   // This service communicates with a target host to retrieve a browse list.
   // It addresses a very specific use case, is not generalized provides no guarantees
   // about the data returned.
@@ -159,7 +156,7 @@ module.exports = function(app,config){
   /**
    * Catch-all required by html5 mode.
    */
-  app.get('/tagger*', function (req, res) {
+  app.get(['/tagger*', '/tagger/*'], function (req, res) {
 
       res.sendFile(
         app.get('appPath') + '/index.html'

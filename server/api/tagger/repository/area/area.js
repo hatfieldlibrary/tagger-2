@@ -1,3 +1,6 @@
+/**
+ * Created by mspalti on 4/4/17.
+ */
 /*
  * Copyright (c) 2016.
  *
@@ -18,47 +21,33 @@
 'use strict';
 
 const taggerDao = require('../../dao/area-dao');
-const utils = require('../../utils/response-utility');
 const logger = require('../../utils/error-logger');
-
-/**
- * Retrieves area information by area id.
- * @param req
- * @param res
- */
-exports.byId = function (req, res) {
-  const areaId = req.params.id;
-  taggerDao.findAreaById(areaId).then(function (areas) {
-    utils.sendResponse(res, areas);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
-};
 
 
 /**
  * Adds new area. Sets the area position to be at the
  * end of the list.
  * @param req
- * @param res
+ * @param callback
+ * @param errorHandler failure response callback
  */
-exports.add = function (req, res) {
+exports.add = function (req, callback, errorHandler) {
   const title = req.body.title;
 
   // the area count function has been changed to return the count.
   taggerDao.getAreaCount()
     .then(function (result) {
       taggerDao.addArea(title, result[0].dataValues.count + 1)
-        .then(
-          function () {
-            utils.sendSuccessJson(res);
-          }).catch(function (err) {
-        utils.sendErrorJson(res, err);
+        .then(() => {
+            callback()
+          }
+        ).catch(function (err) {
+        errorHandler(err);
         logger.dao(err);
       });
     })
     .catch(function (err) {
-      utils.sendErrorJson(res, err);
+      errorHandler(err);
       logger.dao(err);
 
     });
@@ -67,9 +56,10 @@ exports.add = function (req, res) {
 /**
  * Updates an existing area.
  * @param req
- * @param res
+ * @param callback
+ * @param errorHandler failure response callback
  */
-exports.update = function (req, res) {
+exports.update = function (req, callback, errorHandler) {
   const title = req.body.title;
   const url = req.body.url;
   const searchUrl = req.body.searchUrl;
@@ -86,44 +76,53 @@ exports.update = function (req, res) {
   };
 
   taggerDao.updateArea(data, id)
-    .then(function (result) {
-      utils.sendResponse(res, {status: 'success', id: result.id});
-    }).catch(function (err) {
-    logger.dao(err);
-  });
+    .then((result) => {
+      callback({status: 'success', id: result.id});
+    })
+    .catch((err) => {
+      errorHandler(err);
+      logger.dao(err);
+    });
 };
 
 /**
  * Updates area position attribute in the database to a new value based on the
  * order of the new areas array array.
  * @param req
- * @param res
+ * @param callback
+ * @param errorHandler failure response callback
  */
-exports.reorder = function (req, res) {
+exports.reorder = function (req, callback, errorHandler) {
   const areas = req.body.areas;
   const areaCount = areas.length;
 
   taggerDao.reorder(areas, areaCount)
-    .then(function () {
-      utils.sendResponse(res, {status: 'success'});
-    }).catch(function (err) {
-    logger.dao(err);
-  });
+    .then(() => {
+      callback({status: 'success'});
+    })
+    .catch((err) => {
+      errorHandler(err);
+      logger.dao(err);
+    });
 };
 
 /**
  * Delete an area.
  * @param req
- * @param res
+ * @param callback
+ * @param errorHandler failure response callback
  */
-exports.delete = function (req, res) {
+exports.delete = function (req, callback, errorHandler) {
   const id = req.params.areaId;
 
-  taggerDao.deleteArea(id).then(function () {
-    utils.sendResponse(res, {status: 'success'});
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  taggerDao.deleteArea(id)
+    .then(() => {
+      callback({status: 'success'});
+    })
+    .catch((err) => {
+      logger.dao(err);
+      errorHandler(err);
+    });
 
 };
 
