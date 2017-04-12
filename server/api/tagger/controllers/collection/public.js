@@ -32,7 +32,6 @@ exports.typesForCollection = function (req, res, next) {
  */
 exports.allCollections = function (req, res, next) {
   publicApiRepository.allCollections(
-    req,
     (data) => {
       utils.sendResponse(res, data);
     },

@@ -48,6 +48,17 @@ taggerDao.retrieveAllCollections = () => {
 
 };
 
+taggerDao.retrieveAllPublishedCollections = () => {
+  return taggerSchema.Collection.findAll({
+    where: {
+      published: true
+    },
+    order: [['title', 'ASC']]
+  });
+
+
+};
+
 taggerDao.countCTypesByArea = (areaId) => {
 
   if(!areaId) {

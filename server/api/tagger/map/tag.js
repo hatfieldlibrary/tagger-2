@@ -6,6 +6,7 @@
   'use strict';
 
   exports.mapTags = function (tags, type) {
+
     return _mapTagList(tags, type);
   };
 
@@ -17,10 +18,15 @@
 
       let tag = {};
 
-      if (type === 'collection' || type === 'area') {
+      if (type === 'collection' || type === 'area' ) {
         // sequelize tomfoolery.
         tag = _mapTag(tags[i].dataValues.Tag.dataValues);
-      } else {
+      }
+      else if (type === 'all') {
+        tag = _mapTag(tags[i].dataValues);
+      }
+      else
+       {
         tag = _mapTag(tags[i]);
       }
 
