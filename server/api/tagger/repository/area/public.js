@@ -74,7 +74,7 @@
       .then((area) => {
         let data;
         try {
-          data = apiMapper.mapAreaList(area);
+          data = apiMapper.mapAreaCount(area);
         } catch (err) {
           logger.map(err);
           errorHandler(utils.createErrorResponse(filename, 'map', err));

@@ -53,7 +53,7 @@
         collection = collections[i];
       }
 
-      let coll = _mapListCollection(collection);
+      let coll = _mapListCollection(collection, type);
       collectionArray.push(coll);
 
     }
@@ -74,10 +74,16 @@
     return typeArray;
   }
 
-  function _mapListCollection(collection) {
+  function _mapListCollection(collection, type) {
 
+    let collectionId;
+    if (type === 'all') {
+      collectionId = collection.id;
+    } else {
+      collectionId = collection.CollectionId;
+    }
     let coll = {
-      id: collection.CollectionId,
+      id: collectionId,
       title: collection.title,
       image: collection.image,
       url: collection.url,

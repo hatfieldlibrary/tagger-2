@@ -50,8 +50,9 @@ exports.typesForCollection = function (req, callback, errorHandler) {
  * @param errorHandler failure response callback
  */
 exports.allCollections = function (callback, errorHandler) {
-  taggerDao.retrieveAllCollections()
+  taggerDao.retrieveAllPublishedCollections()
     .then((collections) => {
+
       let data;
       try {
         data = apiMapper.mapCollectionList(collections, 'all');
@@ -347,7 +348,6 @@ exports.browseList = function (req, res, errorHandler) {
  */
 exports.findRelatedCollections = function (req, callback, errorHandler) {
 
-  console.log('find related cllection')
   const collId = req.params.id;
   const subjects = req.params.subjects;
 
@@ -366,7 +366,7 @@ exports.findRelatedCollections = function (req, callback, errorHandler) {
           errorHandler(utils.createErrorResponse(filename, 'map', err))
         }
         relatedCollections.push(related);
-        console.log(related)
+
         if (i === subjectArray.length - 1) {
           _dedupeRelatedCollections(callback, errorHandler, relatedCollections);
         }
@@ -400,11 +400,10 @@ function _dedupeRelatedCollections(callback, errorHandler, collections) {
       return c.id;
     });
 
-    console.log('unique collections')
-    console.log(uniqueCollections)
     callback({related: uniqueCollections});
 
   } catch (err) {
+
     errorHandler('reduce', err);
   }
 
