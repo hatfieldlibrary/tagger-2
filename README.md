@@ -7,7 +7,7 @@
 [![bitHound Overall Score](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/score.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
 
 
-Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization. In this approach, information about a digital item or collection is added to a `Collection` object.  The `Collection` is assigned to a general `Area` that can be topical or administrative (e.g. student research or University Archives). Areas in turn can have one or more `Collection Groups` that are specific homes for collections.  Subject tags and content types can also be assigned to support browsing and discovery. 
+Tagger offers an approach to publishing information about the digital work produced by a community or organization. In this approach, information about a digital work or digital collection is added to a Tagger `Collection` object.  The `Collection` is assigned to a general `Area` that can be topical or administrative (e.g. student research or University Archives). Areas in turn can have one or more `Collection Groups` that are the specific  home of the work (for example, a specific collection within an archive).  Subject tags and content types can also be assigned to support browsing and discovery. 
 
 All Collections in Tagger are associated with one or more Areas and (optionally) with a single Collection Group. Like most other entities in Tagger, these Areas and Collection Groups include descriptive fields that are populated using the Tagger administrative interface. This creates the ability to discover more about the people and departments who produce and own the content. 
 
