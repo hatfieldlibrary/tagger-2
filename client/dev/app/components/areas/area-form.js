@@ -63,11 +63,15 @@
      * @private
      */
     function _initializeForm(areaId) {
-      let ar = AreaById.query({id: areaId});
-      ar.$promise.then(function (data) {
-        vm.area = data;
-        vm.menu({id: vm.area.id, title: vm.area.title});
-      });
+      if(areaId > 0) {
+        let ar = AreaById.query({id: areaId});
+        ar.$promise.then(function (data) {
+          vm.area = data;
+          vm.menu({id: vm.area.id, title: vm.area.title});
+        });
+      } else {
+        vm.area = {id: 0, title: '', linkLabel: '', searchLabel: '', description: ''};
+      }
     }
 
     /**

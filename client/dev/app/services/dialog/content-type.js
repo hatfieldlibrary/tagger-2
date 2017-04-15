@@ -20,6 +20,17 @@
 
         const vm = this;
 
+        const _setTypeObservableId = (id, data) => {
+
+          if (id === null) {
+            if(data.length > 0) {
+              ContentTypeObservable.set(data[0].id);
+            }
+          } else {
+            ContentTypeObservable.set(id);
+          }
+        };
+
         /**
          * Gets list of content types. Optionally takes id
          * parameter.
@@ -31,11 +42,11 @@
           // Wait for callback.
           contentTypes.$promise.then(function (data) {
             ContentTypeListObservable.set(data);
-            if (id === null) {
-              ContentTypeObservable.set(data[0].id);
-
-            } else {
-              ContentTypeObservable.set(id);
+            if(data.length > 0) {
+              _setTypeObservableId(id, data);
+            }
+            else {
+              ContentTypeObservable.set(0);
             }
 
           });

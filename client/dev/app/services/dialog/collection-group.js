@@ -20,6 +20,17 @@
 
         const vm = this;
 
+        const _setGroupObservableId = (id, data) => {
+
+          if (id === null) {
+            if(data.length > 0) {
+              GroupObservable.set(data[0].id);
+            }
+          } else {
+            GroupObservable.set(id);
+          }
+        };
+
         /**
          * Gets list of collection groups.  Optionally takes
          * id parameter.
@@ -29,10 +40,13 @@
           const categories = CategoryList.query();
           categories.$promise.then(function (data) {
             GroupListObservable.set(data);
-            if (id === null) {
-              GroupObservable.set(data[0].id);
-            } else {
-              GroupObservable.set(id);
+            // If we have items in list, set the observable id based on context.
+            if (data.length > 0) {
+              _setGroupObservableId(id, data);
+            }
+            // Otherwise, set the id to zero.
+            else {
+              GroupObservable.set(0);
             }
           });
         };

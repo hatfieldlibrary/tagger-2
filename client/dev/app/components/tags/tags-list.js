@@ -25,15 +25,26 @@
 
   function ListController(TagListObservable,
                           TagObservable,
-                          UserAreaObservable) {
+                          UserAreaObservable,
+                          $log) {
 
     var vm = this;
 
 
     function _setSubscriptions() {
       TagListObservable.subscribe((list) => {
-        vm.tags = list;
-        vm.currentTag = vm.tags[0].id;
+
+        try {
+          vm.tags = list;
+          vm.currentTag = vm.tags[0].id;
+        } catch (err) {
+          $log.debug(err);
+          $log.info('Initializing list with no tags.');
+          vm.tags = [];
+          vm.currentTag = 0;
+
+        }
+
       });
     }
 

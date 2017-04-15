@@ -34,8 +34,10 @@
 
 
     function _getTypeInfo(typeId) {
+      console.log(typeId)
       const type = ContentType.query({id: typeId});
       type.$promise.then(function (data) {
+
         vm.contentType = data;
         vm.menu({id: vm.contentType.id, title: vm.contentType.name});
       });

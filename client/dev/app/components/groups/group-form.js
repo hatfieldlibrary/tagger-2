@@ -37,9 +37,11 @@
     function _getGroupInfo(grpId) {
       let grp = Category.query({id: grpId});
       grp.$promise.then(function (data) {
-        vm.category = data;
-        // parent menu callback
-        vm.menu({id: vm.category.id, title: vm.category.title});
+        if (data) {
+          vm.category = data;
+          // parent menu callback
+          vm.menu({id: vm.category.id, title: vm.category.title});
+        }
       });
 
     }
@@ -81,6 +83,8 @@
     };
 
     vm.$onInit = function () {
+
+      vm.category = {};
 
       GroupObservable.subscribe((id) => {
         _getGroupInfo(id);

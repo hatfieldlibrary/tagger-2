@@ -26,6 +26,15 @@
 
         const vm = this;
 
+        const _setTagObservableId = (id, data) => {
+
+          if (id === null) {
+            TagObservable.set(tags[0].id);
+          } else {
+            TagObservable.set(id);
+          }
+        };
+
         /**
          * Returns a list of all tags.  The id parameter
          * used to optionally set the current tag.
@@ -35,12 +44,14 @@
 
           const tags = TagList.query();
           tags.$promise.then(function (tags) {
-            if (id === null) {
-              TagObservable.set(tags[0].id);
-            } else {
-              TagObservable.set(id);
-            }
+
             TagListObservable.set(tags);
+            if(tags.length > 0) {
+              _setTagObservableId(id, tags);
+            }
+            else{
+              TagObservable.set(0);
+            }
 
           });
         };
