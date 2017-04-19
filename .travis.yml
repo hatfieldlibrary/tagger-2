@@ -25,7 +25,7 @@ before_install:
   - sudo dpkg -i google-chrome*.deb
   - rm google-chrome*.deb
   - mysql -e 'CREATE DATABASE acomtags_test;'
-  - mysql -uroot -e 'GRANT ALL PRIVILEGES ON acomtags_test.* TO "test_user"@"localhost" identified by "1234";'
+  - mysql -uroot -e 'GRANT ALL PRIVILEGES ON tagger_test.* TO "test_user"@"localhost" identified by "1234";'
 
 before_script:
 
