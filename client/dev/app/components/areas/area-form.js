@@ -118,7 +118,7 @@
     bindings: {
       menu: '&'
     },
-    template: '<md-card-content class="md-subhead grey-text" layout-padding="layout-padding" layout="column" flex="80"> ' +
+    template: '<md-card-content ng-if="vm.area.id &gt; 0" class="md-subhead grey-text" layout-padding="layout-padding" layout="column" flex="80"> ' +
     '<md-button class="md-raised md-accent large-button" ng-click="vm.updateArea()">Update Area</md-button> ' +
     '<md-input-container> ' +
     '<label>Area Name</label> ' +

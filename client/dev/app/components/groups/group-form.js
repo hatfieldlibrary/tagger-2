@@ -110,7 +110,7 @@
       menu: '&'
     },
     template:
-    '<md-content layout-padding="layout-padding" flex="80" layout="column" style="padding-left: 20px"> ' +
+    '<md-content ng-if="vm.category.id &gt; 0"  layout-padding="layout-padding" flex="80" layout="column" style="padding-left: 20px"> ' +
     ' <md-button class="md-raised md-accent large-button" ng-click="vm.updateGroup()">Update Group</md-button> ' +
     ' <md-input-container> ' +
     '   <label>Collection Name</label> ' +

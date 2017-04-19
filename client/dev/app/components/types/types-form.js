@@ -87,7 +87,7 @@
       menu: '&'
     },
     template:
-    '<md-card-content layout-padding="layout-padding" layout="column" flex="80" style="padding-left: 20px"> ' +
+    '<md-card-content ng-if="vm.contentType.id &gt; 0"  layout-padding="layout-padding" layout="column" flex="80" style="padding-left: 20px"> ' +
     ' <md-button class="md-raised md-accent large-button" ng-click="vm.updateContentType()">Update Content Type</md-button> ' +
     '   <div flex="flex" layout="column"> ' +
     '     <md-input-container> ' +
