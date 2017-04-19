@@ -34,11 +34,17 @@
        */
       let categories = [];
 
+      function _updateCategories(update) {
+        if(update) {
+          Subject.onNext(update);
+        }
+      }
+
       return {
         set: function set(update) {
           if (!observerUtils.identicalArray(update, categories)) {
             categories = update;
-            Subject.onNext(categories);
+            _updateCategories(update);
           }
         },
         get: function get() {

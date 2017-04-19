@@ -38,6 +38,9 @@
             if (data.length > 0) {
                 AreaActionObservable.set(data[0].id);
                 AreaObservable.set(data[0].id);
+            } else {
+              AreaActionObservable.set(0);
+
             }
           });
 

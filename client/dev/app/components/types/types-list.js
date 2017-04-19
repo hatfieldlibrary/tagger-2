@@ -24,7 +24,8 @@
 
   function ListController(ContentTypeListObservable,
                           ContentTypeObservable,
-                          UserAreaObservable) {
+                          UserAreaObservable,
+                          $log) {
 
     let vm = this;
 
@@ -36,8 +37,17 @@
     vm.$onInit = function () {
 
       ContentTypeListObservable.subscribe((list) => {
-        vm.types = list;
-        vm.currentType = vm.types[0].id;
+        try {
+          vm.types = list;
+          vm.currentType = vm.types[0].id;
+        } catch (err) {
+          $log.debug(err);
+          $log.info('Initializing list with no content types.');
+          vm.types = [];
+          vm.currentType = 0;
+
+        }
+
       });
 
       vm.userAreaId = UserAreaObservable.get();

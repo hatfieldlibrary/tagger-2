@@ -23,6 +23,17 @@
 
       const vm = this;
 
+      const _setCollectionObservableId = (id, data) => {
+
+        if (id === null) {
+          if(data.length > 0) {
+            CollectionObservable.set(data[0].Collection.id);
+          }
+        } else {
+          CollectionObservable.set(id);
+        }
+      };
+
       /**
        * Returns list of collections, optionally taking a collection
        * id.
@@ -34,19 +45,14 @@
         result.$promise.then(function (data) {
           if (data) {
             CollectionListObservable.set(data);
-            // Deleting a category doesn't generate
-            // a new id. In that case, expect the
-            // id to be null. Update the view using the
-            // id of the first item in the updated category
-            // list.
-            if (id === null) {
-              CollectionObservable.set(data[0].Collection.id);
-
-            } else {
-              CollectionObservable.set(id);
+            // If the list contains data, set the collection id for the context.
+            if(data.length > 0) {
+              _setCollectionObservableId(id, data);
             }
-          } else {
-            CollectionObservable.set(0);
+            // Otherwise, set the collection id to zero.
+            else {
+              CollectionObservable.set(0);
+            }
           }
 
         });
