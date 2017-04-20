@@ -7,9 +7,16 @@
 [![bitHound Overall Score](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/score.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
 
 
-Tagger publishes information about the digital work produced by a community or organization. Information about a digital item or collection is added to a Tagger `Collection`.  Every `Collection` is automatically assigned to a general `Area` that can be topical or administrative (e.g. Student Research or University Archives). Areas can in turn have one or more `Collection Groups`.  A `Collection Group` is the more specific home for digital work (for example, an identifiable collection within a larger Archive). Subject `Tags` and `ContentTypes` can also be assigned to `Collections` to support browsing and discovery. 
+Tagger publishes information about the digital work produced by a community or organization. 
+
+Information in Tagger is organized around `Collection` objects that contain information about digital items or collections. Each `Collection` is automatically assigned to an `Area`. 
+
+An `Area` can be quite general (e.g. Student Research) or refer to a large organization (e.g. University Library). Areas can in turn have one or more `Collection Groups`.  A `Collection Group` is the more specific home for digital work (for example, an identifiable collection within a larger Archive). 
+
+Subject `Tags` and `ContentTypes` can also be assigned to `Collections` to support browsing and discovery. 
 
 All `Collections` are associated with one or more `Areas` and (optionally) a single `Collection Group`. Like most other entities in Tagger, these `Areas` and `Collection Groups` contain descriptive fields that are populated using the Tagger administrative interface. This creates the ability to discover more about the people and departments who produce and own the content. 
+
 Access to Tagger's administrative interface is limited to Administrators and Area Maintainers.
 
 ## Microservice
@@ -20,7 +27,7 @@ Tagger itself is not a fullstack, out-of-the-box publishing solution.  It is a m
  * The Collections in an Area
  * The Collections in a Collection Group
  * Collections by Subject Tag
- * Collection details such as link and search options
+ * Collection details such as links and search options
  * Information about the content sponsor
  * Related collections or items
  
