@@ -1,74 +1,64 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  version: "2.1.0"
+  version: 2.1.0
   title: Tagger
   description: >
-  
-    This documentation describes the Tagger public API. Administrative operations in the *Tagger* application have their own API that is documented elsewhere. 
+
+    This is documentation for the *Tagger* public API. Administrative
+    tasks in the *Tagger* application have their own API that is documented
+    elsewhere. 
         
-    The *Tagger* Public REST API is provides information about digital collections and items. API clients can be simple (like a list of hyperlinked collection and item titles) or complex (like the clearinghouse that provides descriptions, related items, publisher information and links).
-    
-    
-    ***Test Operations:***
-    Test operations assume that you are running a local instance of Tagger on port 3000.  This local Tagger instance must have access to a local mysql database. See Tagger docs for details.
+    The *Tagger* public REST API provides information about digital
+    collections and items as well as the organizations that produce or own the content. API clients can be simple (like a list of hyperlinked
+    collection and item titles) or complex (like the clearinghouse that provides
+    descriptions, related items, publisher information and links).
 
 
-host: localhost:3000
-# basePath prefixes all resource paths 
+    ***Test Operations:*** Test operations assume that you are running a local
+    instance of Tagger on port 3000.  This local Tagger instance must have
+    access to a local mysql database. See Tagger docs for details.
+host: 'localhost:3000'
 basePath: /rest
-# 
 schemes:
-  # tip: remove http to make production-grade
   - http
   - https
-
 tags:
-  - name: tagger
+  - name: public
     description: The Tagger Public API
-    
+  - name: collection
+    description: Collection management
 externalDocs:
-      description: Additional documentation at GitHub.
-      url: 'https://github.com/hatfieldlibrary/tagger-2'
-      
-# format of bodies a client can send (Content-Type)
+  description: Additional documentation at GitHub.
+  url: 'https://github.com/hatfieldlibrary/tagger-2'
 consumes:
   - application/json
-# format of the responses to the client (Accepts)
 produces:
   - application/json
-  
 paths:
   /collection:
-    # binds a127 app logic to a route
     x-swagger-router-controller: allCollections
     get:
       tags:
-        - tagger
+        - public
       description: Returns list of all collections and items.
-      # used as the method name of the controller
       operationId: allCollections
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
-            # a pointer to a definition
             items:
-              $ref: "#/definitions/Collection"
-        # responses may fall through to errors
+              $ref: '#/definitions/Collection'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-
-  /collection/area/{id}:
-    # binds a127 app logic to a route
+            $ref: '#/definitions/ErrorResponse'
+  '/collection/area/{id}':
     x-swagger-router-controller: collectionsByArea
     get:
       tags:
-        - tagger
+        - public
       description: Returns list of all collections in an area.
-      # used as the method name of the controller
       operationId: collectionsByArea
       parameters:
         - name: id
@@ -77,25 +67,21 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
-            # a pointer to a definition
             items:
-              $ref: "#/definitions/Collection"
-        # responses may fall through to errors
+              $ref: '#/definitions/Collection'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-  
-  /collection/subject/{id}:
-    # binds a127 app logic to a route
+            $ref: '#/definitions/ErrorResponse'
+  '/collection/subject/{id}':
     x-swagger-router-controller: collectionsBySubject
     get:
       tags:
-        - tagger
+        - public
       description: Returns list of all collections by subject.
       operationId: collectionsBySubject
       parameters:
@@ -105,25 +91,21 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
-            # a pointer to a definition
             items:
-              $ref: "#/definitions/Collection"
-        # responses may fall through to errors
+              $ref: '#/definitions/Collection'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-
-  /collection/subject/{id}/area/{areaId}:
-    # binds a127 app logic to a route
+            $ref: '#/definitions/ErrorResponse'
+  '/collection/subject/{id}/area/{areaId}':
     x-swagger-router-controller: collectionsBySubjectArea
     get:
       tags:
-        - tagger
+        - public
       description: Returns list of all collections in an area by subject.
       operationId: collectionsBySubjectArea
       parameters:
@@ -138,26 +120,28 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
-            # a pointer to a definition
             items:
-              $ref: "#/definitions/Collection"
-        # responses may fall through to errors
+              $ref: '#/definitions/Collection'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-              
-  /collection/category/{id}:
-    # binds a127 app logic to a route
+            $ref: '#/definitions/ErrorResponse'
+  '/collection/category/{id}':
     x-swagger-router-controller: collectionsByCategory
-    get:  
+    get:
       tags:
-        - tagger
-      description: Returns list of all collections by category. Category usually refers to the real home of the collection or item. It is more specific that a collection area.  For example, the category might be an actual collection in the real world, like a musuem's collection of modern art.  In this example, the collection area could be defined as art collections in general.
+        - public
+      description: >-
+        Returns list of all collections by category. Category usually refers to
+        the real home of the collection or item. It is more specific that a
+        collection area.  For example, the category might be an actual
+        collection in the real world, like a musuem's collection of modern art. 
+        In this example, the collection area could be defined as art collections
+        in general.
       operationId: collectionsByCategory
       parameters:
         - name: id
@@ -166,27 +150,22 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
-            # a pointer to a definition
             items:
-              $ref: "#/definitions/Collection"
-        # responses may fall through to errors
+              $ref: '#/definitions/Collection'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-            
-  /collection/id/{id}:
-    # binds a127 app logic to a route
+            $ref: '#/definitions/ErrorResponse'
+  '/collection/id/{id}':
     x-swagger-router-controller: collectionById
     get:
       tags:
-        - tagger
+        - public
       description: Returns collection with the provided id.
-      # used as the method name of the controller
       operationId: collectionById
       parameters:
         - name: id
@@ -195,21 +174,19 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/SingleCollection"
-        # responses may fall through to errors
+            $ref: '#/definitions/SingleCollection'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-   
-  /collection/{id}/related/{subjectId}:
+            $ref: '#/definitions/ErrorResponse'
+  '/collection/{id}/related/{subjectId}':
     x-swagger-router-controller: findRelatedCollections
     get:
       tags:
-        - tagger
+        - public
       description: Returns related collections by subject tags.
       operationId: findRelatedCollections
       parameters:
@@ -223,47 +200,40 @@ paths:
           description: A comma-separated list of subject ids.
           required: true
           type: string
-      responses: 
-        "200":
+      responses:
+        '200':
           description: Success
           schema:
             type: array
             items:
-              $ref: "#/definitions/RelatedItems"
+              $ref: '#/definitions/RelatedItems'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-            
+            $ref: '#/definitions/ErrorResponse'
   /subject:
-    # binds a127 app logic to a route
     x-swagger-router-controller: subjectList
-    
     get:
       tags:
-        - tagger
+        - public
       description: Returns list of all subject tags.
-      # used as the method name of the controller
       operationId: subjectList
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
-            # a pointer to a definition
             items:
-              $ref: "#/definitions/Tag"
-        # responses may fall through to errors
+              $ref: '#/definitions/Tag'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-            
-  /subject/collection/{id}:
+            $ref: '#/definitions/ErrorResponse'
+  '/subject/collection/{id}':
     x-swagger-router-controller: subjectsForCollection
     get:
       tags:
-        - tagger
+        - public
       description: Returns list of subjects for a given collection id.
       operationId: subjectsForCollection
       parameters:
@@ -273,22 +243,21 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
             items:
-              $ref: "#/definitions/Tag"
+              $ref: '#/definitions/Tag'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-
-  /subject/area/{id}:
+            $ref: '#/definitions/ErrorResponse'
+  '/subject/area/{id}':
     x-swagger-router-controller: areaSubject
     get:
       tags:
-        - tagger
+        - public
       description: Returns list of subjects for a given area id.
       operationId: areaSubject
       parameters:
@@ -298,22 +267,21 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
             items:
-              $ref: "#/definitions/Tag"
+              $ref: '#/definitions/Tag'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-            
-  /type/collection/{id}:
+            $ref: '#/definitions/ErrorResponse'
+  '/type/collection/{id}':
     x-swagger-router-controller: typesForCollection
     get:
       tags:
-        - tagger
+        - public
       description: Returns list of item types for a given collection id.
       operationId: typesForCollection
       parameters:
@@ -323,23 +291,21 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
             items:
-              $ref: "#/definitions/ItemType"
+              $ref: '#/definitions/ItemType'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-            
-  /area/collection/{id}:
-    # binds a127 app logic to a route
+            $ref: '#/definitions/ErrorResponse'
+  '/area/collection/{id}':
     x-swagger-router-controller: areasByCollection
     get:
       tags:
-        - tagger
+        - public
       description: Returns list of all areas for a collection.
       operationId: areasByCollection
       parameters:
@@ -349,43 +315,39 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
-            # a pointer to a definition
             items:
-              $ref: "#/definitions/Area"
-        # responses may fall through to errors
+              $ref: '#/definitions/Area'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-                        
+            $ref: '#/definitions/ErrorResponse'
   /area:
     x-swagger-router-controller: areaList
     get:
       tags:
-        - tagger
+        - public
       description: Returns list of all areas.
       operationId: areaList
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
-            items: 
-              $ref: "#/definitions/Area"
+            items:
+              $ref: '#/definitions/Area'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-            
-  /area/id/{id}:
+            $ref: '#/definitions/ErrorResponse'
+  '/area/id/{id}':
     x-swagger-router-controller: areaById
     get:
       tags:
-        - tagger
+        - public
       description: Returns the area by id.
       operationId: areaById
       parameters:
@@ -395,43 +357,44 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-              $ref: "#/definitions/Area"
+            $ref: '#/definitions/Area'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-            
+            $ref: '#/definitions/ErrorResponse'
   /area/collection:
     x-swagger-router-controller: listAreasWithCount
     get:
       tags:
-        - tagger
+        - public
       description: Returns area list with collection counts.
       operationId: listAreasWithCount
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
-            # a pointer to a definition
             items:
-              $ref: "#/definitions/AreaCount"
-        # responses may fall through to errors
+              $ref: '#/definitions/AreaCount'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-
-  /options/external/{collection}:
+            $ref: '#/definitions/ErrorResponse'
+  '/options/external/{collection}':
     x-swagger-router-controller: external
     get:
       tags:
-        - tagger
-      description: Returns a list of items. In our current configuration, this is a list of titles and counts. The service communicates with a target host to retrieve the list. That means structure and meaning are entirely contextual and the service provides no guarantees about the data returned. This endpoint is subject to change.
-      operationId: external 
+        - public
+      description: >-
+        Returns a list of items. In our current configuration, this is a list of
+        titles and counts. The service communicates with a target host to
+        retrieve the list. That means structure and meaning are entirely
+        contextual and the service provides no guarantees about the data
+        returned. This endpoint is subject to change.
+      operationId: external
       parameters:
         - name: collection
           in: path
@@ -439,34 +402,31 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
             type: array
             items:
-              $ref: "#/definitions/ExternalList"
+              $ref: '#/definitions/ExternalList'
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-
+            $ref: '#/definitions/ErrorResponse'
   /swagger:
     x-swagger-pipe: swagger_raw
-    
-# complex objects have schema definitions
 definitions:
   SingleCollection:
     type: object
-    required: 
+    required:
       - collection
       - category
       - items
     properties:
       collection:
         $ref: '#/definitions/Collection'
-      category: 
+      category:
         $ref: '#/definitions/Category'
-      items: 
+      items:
         type: array
         items:
           $ref: '#/definitions/ItemType'
@@ -504,20 +464,20 @@ definitions:
       - id
       - name
     properties:
-      id: 
+      id:
         type: integer
       name:
         type: string
-      icon: 
+      icon:
         type: string
   Category:
-    required: 
+    required:
       - id
       - title
     properties:
       id:
         type: integer
-      title: 
+      title:
         type: string
       url:
         type: string
@@ -534,9 +494,9 @@ definitions:
     properties:
       id:
         type: integer
-      title: 
+      title:
         type: string
-      url: 
+      url:
         type: string
       searchUrl:
         type: string
@@ -550,7 +510,7 @@ definitions:
     properties:
       id:
         type: integer
-      title: 
+      title:
         type: string
       count:
         type: integer
@@ -571,11 +531,11 @@ definitions:
       - title
       - image
     properties:
-      id: 
+      id:
         type: string
-      title: 
+      title:
         type: string
-      image: 
+      image:
         type: string
   ExternalList:
     required:
