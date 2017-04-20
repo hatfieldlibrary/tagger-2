@@ -127,7 +127,7 @@ describe('Collection init', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.addNewCollection(initCollections[0])
+    collectionDao.addNewCollection(initCollections[0], 'foo', 'foo', 'foo')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -197,7 +197,7 @@ describe('Collection operations', () => {
             .then(() => {
               callback(null);
             }).catch(function (err) {
-            callback(err);
+            console.log(err);
           });
         },
         (callback) => {
@@ -258,18 +258,18 @@ describe('Collection operations', () => {
         },
         (callback) => {
           collectionDao
-            .addNewCollection(initCollections[0])
+            .addNewCollection(initCollections[0], 'foo', 'foo', 'foo')
             .then(() => {
               collectionDao.setPublicationStatus(true, 1)
                 .then(callback(null))
-                .catch((err) => callback(err));
+                .catch((err) => console.log(err));
             })
-            .catch((err) => callback(err));
+            .catch((err) => console.log(err));
 
         },
         (callback) => {
           collectionDao
-            .addNewCollection(initCollections[1])
+            .addNewCollection(initCollections[1], 'foo', 'foo', 'foo')
             .then(() => {
               collectionDao.setPublicationStatus(true, 2)
                 .then(callback(null))

@@ -70,7 +70,7 @@ describe('Tag area target operations', () => {
 
         },
         (callback) => {
-          collectionDao.addNewCollection('mock collection')
+          collectionDao.addNewCollection('mock collection', 'foo', 'foo', 'foo')
             .then(callback(null))
             .catch((err) => callback(err));
         },
