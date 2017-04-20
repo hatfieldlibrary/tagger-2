@@ -21,8 +21,24 @@
 
 'use strict';
 
-const taggerSchema = require('../models/index');
+const taggerSchema = require('../schema/index');
+const logger = require('../utils/error-logger');
+const path = require('path');
+const filename = path.basename(__filename);
+const paramErrorMessage = 'A parameter for a collection query is not defined.';
 const taggerDao = {};
+
+/**
+ * Returns 500 error for missing parameter. This error is thrown
+ * before the dao promise is returned.
+ * @returns {Error}
+ * @private
+ */
+function _errorResponse() {
+  let error = new Error('Error: missing query parameter - ' + filename);
+  error.status = 500;
+  return error;
+}
 
 taggerDao.retrieveAllCollections = () => {
 
@@ -32,7 +48,23 @@ taggerDao.retrieveAllCollections = () => {
 
 };
 
+taggerDao.retrieveAllPublishedCollections = () => {
+  return taggerSchema.Collection.findAll({
+    where: {
+      published: true
+    },
+    order: [['title', 'ASC']]
+  });
+
+
+};
+
 taggerDao.countCTypesByArea = (areaId) => {
+
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.sequelize.query('SELECT ctype, COUNT(*) as count FROM AreaTargets ' +
     'LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id ' +
@@ -46,6 +78,11 @@ taggerDao.countCTypesByArea = (areaId) => {
 
 taggerDao.browseTypesByArea = (areaId) => {
 
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.sequelize.query('SELECT Collections.browseType, COUNT(Collections.id) as count from AreaTargets ' +
     'join Collections on AreaTargets.CollectionId=Collections.id where AreaTargets.AreaId = ? group by Collections.browseType',
     {
@@ -56,6 +93,11 @@ taggerDao.browseTypesByArea = (areaId) => {
 };
 
 taggerDao.repoTypesByArea = (areaId) => {
+
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.sequelize.query('SELECT repoType, COUNT(*) as count FROM AreaTargets ' +
     'LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id ' +
@@ -68,6 +110,11 @@ taggerDao.repoTypesByArea = (areaId) => {
 };
 
 taggerDao.findCollectionsInArea = (areaId) => {
+
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.AreaTarget.findAll({
     where: {
@@ -82,6 +129,11 @@ taggerDao.findCollectionsInArea = (areaId) => {
 
 taggerDao.findAreasForCollection = (collId) => {
 
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.AreaTarget.findAll({
     where: {
       CollectionId: collId
@@ -91,6 +143,11 @@ taggerDao.findAreasForCollection = (collId) => {
 };
 
 taggerDao.findItemContentTarget = (collId, typeId) => {
+
+  if(!collId || !typeId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.ItemContentTarget.find(
     {
@@ -104,6 +161,11 @@ taggerDao.findItemContentTarget = (collId, typeId) => {
 
 taggerDao.createItemContentTarget = (collId, typeId) => {
 
+  if(!collId || !typeId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.ItemContentTarget.create(
     {
       CollectionId: collId,
@@ -114,6 +176,11 @@ taggerDao.createItemContentTarget = (collId, typeId) => {
 };
 
 taggerDao.deleteItemContentTarget = (collId, typeId) => {
+
+  if(!collId || !typeId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.ItemContentTarget.destroy(
     {
@@ -128,6 +195,11 @@ taggerDao.deleteItemContentTarget = (collId, typeId) => {
 
 taggerDao.findContentTypesForCollection = (collId) => {
 
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.ItemContentTarget.findAll(
     {
       where: {
@@ -141,6 +213,12 @@ taggerDao.findContentTypesForCollection = (collId) => {
 
 taggerDao.checkForExistingTagTarget = (collId, tagId) => {
 
+  if(!collId || !tagId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+
   return taggerSchema.TagTarget.find(
     {
       where: {
@@ -153,6 +231,11 @@ taggerDao.checkForExistingTagTarget = (collId, tagId) => {
 
 taggerDao.addTagTarget = (collId, tagId) => {
 
+  if(!collId || !tagId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.TagTarget.create(
     {
       CollectionId: collId,
@@ -163,6 +246,11 @@ taggerDao.addTagTarget = (collId, tagId) => {
 };
 
 taggerDao.deleteTagTarget = (collId, tagId) => {
+
+  if(!collId || !tagId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.TagTarget.destroy(
     {
@@ -177,6 +265,11 @@ taggerDao.deleteTagTarget = (collId, tagId) => {
 
 taggerDao.addCollectionToArea = (collId, areaId) => {
 
+  if(!collId || !areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.AreaTarget.create(
     {
       CollectionId: collId,
@@ -186,6 +279,12 @@ taggerDao.addCollectionToArea = (collId, areaId) => {
 };
 
 taggerDao.getAreaIdsForCollection = (collId) => {
+
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
 
   return taggerSchema.AreaTarget.findAll(
     {
@@ -200,6 +299,12 @@ taggerDao.getAreaIdsForCollection = (collId) => {
 
 taggerDao.checkAreaAssociation = (collId, areaId) => {
 
+  if(!collId || !areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+
   return taggerSchema.AreaTarget.find(
     {
       where: {
@@ -211,6 +316,11 @@ taggerDao.checkAreaAssociation = (collId, areaId) => {
 };
 
 taggerDao.removeCollectionFromArea = (areaId, collId) => {
+
+  if(!collId || !areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.AreaTarget.destroy({
     where: {
@@ -224,6 +334,12 @@ taggerDao.removeCollectionFromArea = (areaId, collId) => {
 
 taggerDao.findCollectionById = (collId) => {
 
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+
   return taggerSchema.Collection.find(
     {
       where: {
@@ -233,6 +349,12 @@ taggerDao.findCollectionById = (collId) => {
 };
 
 taggerDao.findCategoryAssociation = (collId) => {
+
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
 
   return taggerSchema.CategoryTarget.find(
     {
@@ -244,6 +366,12 @@ taggerDao.findCategoryAssociation = (collId) => {
 };
 
 taggerDao.getCategoryForCollection = (collId) => {
+
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
 
   return taggerSchema.CategoryTarget.find(
     {
@@ -257,6 +385,12 @@ taggerDao.getCategoryForCollection = (collId) => {
 
 taggerDao.setPublicationStatus = (status, collId) => {
 
+  if(!collId || !status) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+
   return taggerSchema.Collection.update({
       published: status
     },
@@ -269,6 +403,12 @@ taggerDao.setPublicationStatus = (status, collId) => {
 
 taggerDao.getPublicationStatus = (collId) => {
 
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+
   return taggerSchema.Collection.find(
     {
       where: {
@@ -279,6 +419,12 @@ taggerDao.getPublicationStatus = (collId) => {
 };
 
 taggerDao.updateCollection = (update, id) => {
+
+  if(!update || !id) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
 
   return taggerSchema.Collection.update(update,
     {
@@ -291,11 +437,23 @@ taggerDao.updateCollection = (update, id) => {
 
 taggerDao.addCollectionToCategory = (id, category) => {
 
+  if(!id || !category) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+
   return taggerSchema.CategoryTarget.create({CollectionId: id, CategoryId: category});
 
 };
 
 taggerDao.updateCollectionCategory = (id, category) => {
+
+  if(!id || !category) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
 
   return taggerSchema.CategoryTarget.update({
       CategoryId: category
@@ -310,7 +468,12 @@ taggerDao.updateCollectionCategory = (id, category) => {
 
 taggerDao.deleteCategoryFromCollection = (id, category) => {
 
- return taggerSchema.CategoryTarget.destroy({
+  if(!id || !category) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+  return taggerSchema.CategoryTarget.destroy({
    where: {
      CategoryId: category,
      CollectionId: id
@@ -319,6 +482,11 @@ taggerDao.deleteCategoryFromCollection = (id, category) => {
 };
 
 taggerDao.deleteCollection = (collId) => {
+
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.Collection.destroy({
     where: {
@@ -330,6 +498,11 @@ taggerDao.deleteCollection = (collId) => {
 
 taggerDao.addNewCollection = (title, browseType, repoType, ctype) => {
 
+  if(!title || !browseType || !repoType || !ctype) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.Collection.create({
     title: title,
     browseType: browseType,
@@ -340,6 +513,11 @@ taggerDao.addNewCollection = (title, browseType, repoType, ctype) => {
 };
 
 taggerDao.updateCollectionImage = (collId, imageName) => {
+
+  if(!collId || !imageName) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.Collection.update(
     {
@@ -354,20 +532,13 @@ taggerDao.updateCollectionImage = (collId, imageName) => {
 
 };
 
-taggerDao.findTagsForCollection = (collId) => {
-
-  return taggerSchema.TagTarget.findAll(
-    {
-      where: {
-        CollectionId: collId
-      },
-      include: [taggerSchema.Tag],
-      attributes: ['"Tags.name"', 'id']
-    });
-
-};
-
 taggerDao.getCollectionsByArea = (areaId) => {
+
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
 
   return taggerSchema.sequelize.query('Select * from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where at.AreaId = ? AND c.published = true order by c.title',
     {
@@ -378,6 +549,11 @@ taggerDao.getCollectionsByArea = (areaId) => {
 };
 
 taggerDao.getCollectionsBySubjectAndArea = (subjectId, areaId) => {
+
+  if(!areaId || !subjectId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
     'on tt.CollectionId = c.id LEFT JOIN AreaTargets at on c.id=at.CollectionId where tt.TagId = ? and at.AreaId = ? and c.published = true ' +
@@ -391,6 +567,11 @@ taggerDao.getCollectionsBySubjectAndArea = (subjectId, areaId) => {
 
 taggerDao.getCollectionsBySubject = (subjectId) => {
 
+  if(!subjectId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
     'on tt.CollectionId = c.id where tt.TagId = ? and c.published = true order by c.title',
     {
@@ -403,12 +584,50 @@ taggerDao.getCollectionsBySubject = (subjectId) => {
 
 taggerDao.getCollectionsByCategory = (categoryId) => {
 
+  if(!categoryId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.sequelize.query('Select * from Collections c left join CategoryTargets ct on ct.CollectionId = c.id where ct.CategoryId = ? and c.published = true order by c.title',
     {
       replacements: [categoryId],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
 
+};
+
+taggerDao.findTagsForCollection = (collId) => {
+
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+
+  return taggerSchema.TagTarget.findAll(
+    {
+      where: {
+        CollectionId: collId
+      },
+      include: [taggerSchema.Tag],
+      attributes: ['TagId']
+    });
+
+};
+
+taggerDao.findRelatedCollections = (collId, subjectId) => {
+
+  if(!subjectId || !collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+  return taggerSchema.sequelize.query('Select c.title, c.id, c.image from Collections c left join TagTargets t on t.CollectionId = c.id where t.TagId = ? and t.CollectionId != ? and c.published = true order by c.id',
+    {
+      replacements: [subjectId, collId],
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
 };
 
 module.exports = taggerDao;

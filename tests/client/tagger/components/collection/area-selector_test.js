@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The collection area selector component', () => {
 
   let $componentController;
@@ -70,14 +72,14 @@ describe('The collection area selector component', () => {
 
     module(($provide) => {
       $provide.value('AreaTargetAdd', {
-        query: () => {
+        save: () => {
         }
       });
     });
 
     module(($provide) => {
       $provide.value('AreaTargetRemove', {
-        query: () => {
+        delete: () => {
         }
       });
     });
@@ -223,7 +225,7 @@ describe('The collection area selector component', () => {
       }
     });
 
-    spyOn(AreaTargetAdd, 'query').and.callFake(() => {
+    spyOn(AreaTargetAdd, 'save').and.callFake(() => {
       return {
         $promise: {
           then: (callback) => {
@@ -233,7 +235,7 @@ describe('The collection area selector component', () => {
       }
     });
 
-    spyOn(AreaTargetRemove, 'query').and.callFake(() => {
+    spyOn(AreaTargetRemove, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -291,7 +293,7 @@ describe('The collection area selector component', () => {
     deferred.resolve(testAreaResponse);
     $rootScope.$apply();
 
-    expect(AreaTargetRemove.query).toHaveBeenCalledWith({collId: testCollectionId, areaId: 1});
+    expect(AreaTargetRemove.delete).toHaveBeenCalledWith({collId: testCollectionId, areaId: 1});
     expect(CollectionAreasObservable.set).toHaveBeenCalled();
 
 

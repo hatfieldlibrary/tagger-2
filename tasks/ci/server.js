@@ -17,10 +17,10 @@ gulp.task(tasks.SERVER_INTEGRATION_TEST, function () {
     .on('error', util.log);
 });
 
-gulp.task(tasks.SERVER_UNIT_TESTS, function() {
-  return gulp.src(['tests/server/unit/**/*.js'], {read: false})
-    .pipe(mocha({ reporter: 'spec', timeout: 3000, globals: ['recursive','async-only'] }))
-    .pipe(istanbul.writeReports())
-    .on('error', util.log);
-
-});
+// gulp.task(tasks.SERVER_UNIT_TESTS, function() {
+//   return gulp.src(['tests/server/unit/**/*.js'], {read: false})
+//     .pipe(mocha({ reporter: 'spec', timeout: 3000, globals: ['recursive','async-only'] }))
+//     .pipe(istanbul.writeReports())
+//     .on('error', util.log);
+//
+// });

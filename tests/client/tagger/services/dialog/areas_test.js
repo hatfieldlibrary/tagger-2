@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The areas dialog controller', () => {
 
   let $controller;
@@ -46,7 +48,7 @@ describe('The areas dialog controller', () => {
 
 
     $provide.value('AreaDelete', {
-      save: () => {
+      delete: () => {
       }
     });
 
@@ -126,7 +128,7 @@ describe('The areas dialog controller', () => {
         $promise: deferred.promise
       }
     });
-    spyOn(AreaDelete, 'save').and.callFake(() => {
+    spyOn(AreaDelete, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -148,7 +150,7 @@ describe('The areas dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    ctrl.addArea('new area');
+    ctrl.add('new area');
 
     deferredList.resolve(areas);
     deferred.resolve(success);
@@ -167,12 +169,12 @@ describe('The areas dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    ctrl.deleteArea();
+    ctrl.delete();
     deferredList.resolve(areas);
     deferred.resolve(success);
     $rootScope.$apply();
 
-    expect(AreaDelete.save).toHaveBeenCalled();
+    expect(AreaDelete.delete).toHaveBeenCalled();
     expect(AreaActionObservable.get).toHaveBeenCalled();
     expect(AreaListObservable.set).toHaveBeenCalledWith(areas);
     expect(AreaActionObservable.set).toHaveBeenCalledWith(areas[0].id);
@@ -180,6 +182,14 @@ describe('The areas dialog controller', () => {
     expect(TaggerToast.toast).toHaveBeenCalledWith('Area Deleted');
     expect($mdDialog.hide).toHaveBeenCalled();
 
+
+  });
+
+  it('should throw error', () => {
+
+    let ctrl = $controller(dialogController, {});
+
+    expect(function() {ctrl.uploadImage()}).toThrow(new Error('Call to unimplemented function.'));
 
   });
 

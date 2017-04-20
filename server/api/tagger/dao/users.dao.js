@@ -21,8 +21,24 @@
 
 // jshint strict:false
 
-const taggerSchema = require('../models/index');
+const taggerSchema = require('../schema/index');
+const logger = require('../utils/error-logger');
+const path = require('path');
+const filename = path.basename(__filename);
+const paramErrorMessage = 'A parameter for a user query is not defined.';
 const taggerDao = {};
+
+/**
+ * Returns 500 error for missing parameter. This error is thrown
+ * before the dao promise is returned.
+ * @returns {Error}
+ * @private
+ */
+function _errorResponse() {
+  let error = new Error('Error: missing query parameter - ' + filename);
+  error.status = 500;
+  return error;
+}
 
 taggerDao.findAllUsers = () => {
 
@@ -37,6 +53,11 @@ taggerDao.findAllUsers = () => {
 
 taggerDao.createNewUser = (name, email, area) => {
 
+  if(!name || !email || !area) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.Users.create({
       name: name,
       email: email,
@@ -47,6 +68,11 @@ taggerDao.createNewUser = (name, email, area) => {
 
 taggerDao.deleteUser = (id) => {
 
+  if(!id) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.Users.destroy({
     where: {
       id: id
@@ -56,6 +82,11 @@ taggerDao.deleteUser = (id) => {
 };
 
 taggerDao.updateUser = (name, email, area, id) => {
+
+  if(!name || !email || !area) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.Users.update({
       name: name,

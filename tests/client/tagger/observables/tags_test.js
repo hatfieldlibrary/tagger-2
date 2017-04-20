@@ -6,6 +6,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The tag list observable service', () => {
 
   let

@@ -43,7 +43,7 @@ let
   RedisStore = require('connect-redis')(session);
 
 
-const db = require('../api/tagger/models');
+const db = require('../api/tagger/schema');
 
 
 module.exports = function (app, config) {
@@ -172,9 +172,13 @@ module.exports = function (app, config) {
             // profile information to the passport
             // callback.
             if (user) {
-              profile.areaId = user.area;
-              profile.picture = user.picture;
-              return done(err, profile);
+              try {
+                profile.areaId = user.area;
+                profile.picture = user.picture;
+                return done(err, profile);
+              } catch(err) {
+                done(err, null);
+              }
             }
             // Otherwise pass null user profile
             // to the passport callback.
@@ -220,7 +224,7 @@ module.exports = function (app, config) {
   // the request will proceed.  Otherwise, the user will be redirected to the
   // login page.
   app.ensureAuthenticated = function (req, res, next) {
-    console.log(req.isAuthenticated())
+
     if (req.isAuthenticated() || !config.useAuth) {
       return next();
     }

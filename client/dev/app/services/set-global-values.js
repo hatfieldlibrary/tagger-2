@@ -24,8 +24,10 @@
         // Initialize global collection groups.
         const categories = CategoryList.query();
         categories.$promise.then(function (data) {
-          GroupListObservable.set(data);
-          GroupObservable.set(data[0].id);
+          if (data.length > 0) {
+            GroupListObservable.set(data);
+            GroupObservable.set(data[0].id);
+          }
         });
 
         // Initialize global tags.

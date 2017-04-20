@@ -23,7 +23,9 @@
   'use strict';
 
   function TagController(DialogStrategy,
+                         DialogTypes,
                          UserAreaObservable,
+                         TaggerToast,
                          TagList,
                          TagListObservable,
                          TagObservable) {
@@ -69,12 +71,19 @@
       /** @type {number} */
       vm.userAreaId = UserAreaObservable.get();
 
+      try {
       /**
        * Get the dialog object for this component.
        * Call with showDialog($event,message).
        * @type {*}
        */
-      vm.dialog =  DialogStrategy.makeDialog('TagController');
+      vm.dialog =  DialogStrategy.makeDialog(DialogTypes.TAG);
+
+      } catch (err) {
+        TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');
+        console.log(err);
+
+      }
 
       _initTagList();
 

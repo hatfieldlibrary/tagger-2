@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The collection dialog controller', () => {
 
   let $controller;
@@ -45,7 +47,7 @@ describe('The collection dialog controller', () => {
     });
 
     $provide.value('CollectionDelete', {
-      save: () => {
+      delete: () => {
       }
     });
 
@@ -163,7 +165,7 @@ describe('The collection dialog controller', () => {
         $promise: deferred.promise
       }
     });
-    spyOn(CollectionDelete, 'save').and.callFake(() => {
+    spyOn(CollectionDelete, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -183,9 +185,7 @@ describe('The collection dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    spyOn(ctrl, 'getCollectionList').and.callThrough();
-
-    ctrl.addCollection('new collection');
+    ctrl.add('new collection');
 
     // Using the real Constants.
     let addedCollection = {
@@ -206,7 +206,6 @@ describe('The collection dialog controller', () => {
     expect(AreaObservable.get).toHaveBeenCalled();
     // use the new id returned in the resolved promise.
     expect(CollectionObservable.set).toHaveBeenCalledWith(3);
-    expect(ctrl.getCollectionList).toHaveBeenCalledWith(3);
     expect(CollectionsByArea.query).toHaveBeenCalledWith({areaId: 1});
     expect(TaggerToast.toast).toHaveBeenCalledWith('Collection Added');
     expect($mdDialog.hide).toHaveBeenCalled();
@@ -217,22 +216,30 @@ describe('The collection dialog controller', () => {
 
     let ctrl = $controller(dialogController, {});
 
-    spyOn(ctrl, 'getCollectionList').and.callThrough();
-
-    ctrl.deleteCollection();
+    ctrl.delete();
     deferredList.resolve(collections);
     deferred.resolve(success);
     $rootScope.$apply();
 
-    expect(CollectionDelete.save).toHaveBeenCalled();
+    expect(CollectionDelete.delete).toHaveBeenCalled();
     expect(CollectionObservable.get).toHaveBeenCalled();
     expect(CollectionsByArea.query).toHaveBeenCalledWith({areaId: 1});
     expect(AreaObservable.get).toHaveBeenCalled();
     expect(CollectionListObservable.set).toHaveBeenCalledWith(collections);
-    expect(ctrl.getCollectionList).toHaveBeenCalledWith(null);
     expect(CollectionObservable.set).toHaveBeenCalledWith(collections[0].Collection.id);
     expect(TaggerToast.toast).toHaveBeenCalledWith('Collection Deleted');
     expect($mdDialog.hide).toHaveBeenCalled();
+
+  });
+
+  it('should throw error', () => {
+
+    let ctrl = $controller(dialogController, {});
+
+    let errorTest = function() {
+      ctrl.uploadImage();
+    };
+    expect(errorTest).toThrow(new Error('Call to unimplemented function.'));
 
   });
 

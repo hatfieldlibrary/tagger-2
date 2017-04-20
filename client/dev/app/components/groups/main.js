@@ -23,8 +23,10 @@
   'use strict';
 
   function GroupController(DialogStrategy,
+                           DialogTypes,
                            UserAreaObservable,
                            CategoryList,
+                           TaggerToast,
                            GroupListObservable,
                            GroupObservable) {
 
@@ -39,7 +41,7 @@
     vm.deleteMessage = 'templates/dialog/deleteCategoryMessage.html';
 
     function _initTagList() {
-      var tags = CategoryList.query();
+      let tags = CategoryList.query();
       tags.$promise.then(function (data) {
         if (data.length > 0) {
           GroupListObservable.set(data);
@@ -48,7 +50,7 @@
       });
     }
 
-    vm.menuUpdate = function(id, title) {
+    vm.menuUpdate = function (id, title) {
       vm.currentCategory.title = title;
       vm.currentCategory.id = id;
     };
@@ -58,12 +60,18 @@
       /** @type {number} */
       vm.userAreaId = UserAreaObservable.get();
 
-      /**
-       * Get the dialog object for this component.
-       * Call with showDialog($event,message).
-       * @type {*}
-       */
-      vm.dialog =  DialogStrategy.makeDialog('GroupController');
+      try {
+        /**
+         * Get the dialog object for this component.
+         * @type {*}
+         */
+        vm.dialog = DialogStrategy.makeDialog(DialogTypes.GROUP);
+      } catch (err) {
+
+        TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');
+        console.log(err);
+
+      }
 
       _initTagList();
     };

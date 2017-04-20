@@ -21,6 +21,8 @@
 
 'use strict';
 
+/*jshint expr: true*/
+
 import db from '../_helpers/db';
 import  areaDao from '../../../../server/api/tagger/dao/area-dao';
 import categoryDao from '../../../../server/api/tagger/dao/category-dao';
@@ -76,7 +78,7 @@ describe('Category creation', () => {
   // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(5000);
+    this.timeout(7000);
     async.series(
       [
         (callback) => {
@@ -222,7 +224,7 @@ describe('Category operations', () => {
         },
         (callback) => {
           collectionDao
-            .addNewCollection('test collection')
+            .addNewCollection('mock collection', 'foo', 'foo', 'foo')
             .then(callback(null))
             .catch((err) => callback(err));
         },
@@ -296,7 +298,7 @@ describe('Category operations', () => {
       .catch(_onError);
   });
 
-  it('should list three catgories.', (done) => {
+  it('should list three categories.', (done) => {
 
     let _onSuccess = (categories) => {
 
@@ -318,7 +320,7 @@ describe('Category operations', () => {
   });
 
 
-  it('should return something.', (done) => {
+  it('should return a category for the collection.', (done) => {
     let _onSuccess = (category) => {
       expect(category).to.be.defined;
       expect(category.length).to.equal(1);

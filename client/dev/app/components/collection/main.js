@@ -25,6 +25,8 @@
   'use strict';
 
   function CollectionController(DialogStrategy,
+                                DialogTypes,
+                                TaggerToast,
                                 UserAreaObservable,
                                 PublicationStatusObservable) {
 
@@ -46,26 +48,25 @@
      * @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteCollectionMessage.html';
 
-    // /**
-    //  * The message used in the update image dialog.
-    //  * @type {string} */
-    // vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
-
-
-
-    vm.menuUpdate = function(id, title) {
+    vm.menuUpdate = function (id, title) {
       vm.currentCollection.title = title;
       vm.currentCollection.id = id;
     };
 
     vm.$onInit = function () {
 
-      /**
-       * Get the dialog object for this component.
-       * Call with showDialog($event,message).
-       * @type {*}
-       */
-      vm.dialog =  DialogStrategy.makeDialog('CollectionController');
+      try {
+        /**
+         * Get the dialog object for this component.
+         * @type {*}
+         */
+        vm.dialog = DialogStrategy.makeDialog(DialogTypes.COLLECTION);
+
+      } catch (err) {
+        TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');
+        console.log(err);
+
+      }
 
       PublicationStatusObservable.subscribe(() => {
         vm.isPublished = PublicationStatusObservable.get();

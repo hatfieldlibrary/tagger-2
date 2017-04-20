@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The collection area area update observable', () => {
 
   let CollectionAreasObservable,

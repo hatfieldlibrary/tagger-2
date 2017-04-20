@@ -20,6 +20,39 @@
 
         const vm = this;
 
+        const _setTypeObservableId = (id, data) => {
+
+          if (id === null) {
+            if(data.length > 0) {
+              ContentTypeObservable.set(data[0].id);
+            }
+          } else {
+            ContentTypeObservable.set(id);
+          }
+        };
+
+        /**
+         * Gets list of content types. Optionally takes id
+         * parameter.
+         * @param id  the id of the current content type or null.
+         */
+        const _getContentList = function (id) {
+
+          const contentTypes = ContentTypeList.query();
+          // Wait for callback.
+          contentTypes.$promise.then(function (data) {
+            ContentTypeListObservable.set(data);
+            if(data.length > 0) {
+              _setTypeObservableId(id, data);
+            }
+            else {
+              ContentTypeObservable.set(0);
+            }
+
+          });
+
+        };
+
         vm.closeDialog = function() {
           $mdDialog.hide();
         };
@@ -28,9 +61,9 @@
          * Deletes a content type from Tagger.
          * @param id
          */
-        vm.deleteContentType = function () {
+        vm.delete = function () {
 
-          const result = ContentTypeDelete.save({id: ContentTypeObservable.get()});
+          const result = ContentTypeDelete.delete({id: ContentTypeObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -42,40 +75,19 @@
               // uses the id of the first category in the
               // updated list. That's what we want in the
               // case of deletions.
-              vm.getContentList(null);
+              _getContentList(null);
               vm.closeDialog();
             }
 
           });
         };
 
-        /**
-         * Gets list of content types. Optionally takes id
-         * parameter.
-         * @param id  the id of the current content type or null.
-         */
-        vm.getContentList = function (id) {
-
-          const contentTypes = ContentTypeList.query();
-          // Wait for callback.
-          contentTypes.$promise.then(function (data) {
-            ContentTypeListObservable.set(data);
-            if (id === null) {
-              ContentTypeObservable.set(data[0].id);
-
-            } else {
-              ContentTypeObservable.set(id);
-            }
-
-          });
-
-        };
 
         /**
          * Add content type to Tagger.
          * @param title
          */
-        vm.addContentType = function (title) {
+        vm.add = function (title) {
 
           const result = ContentTypeAdd.save({title: title});
           result.$promise.then(function (data) {
@@ -84,13 +96,17 @@
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
-              vm.getContentList(data.id);
+              _getContentList(data.id);
               // Does what you'd expect.
               vm.closeDialog();
 
             }
-
           });
+
+        };
+
+        vm.uploadImage = function () {
+          throw new Error('Call to unimplemented function.');
         };
 
       };

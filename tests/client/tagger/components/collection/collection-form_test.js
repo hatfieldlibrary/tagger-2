@@ -4,6 +4,8 @@
 
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The collection form component', () => {
 
   let $componentController;
@@ -102,7 +104,7 @@ describe('The collection form component', () => {
 
     module(($provide) => {
       $provide.value('CollectionUpdate', {
-        save: () => {
+        update: () => {
         }
       });
     });
@@ -328,7 +330,7 @@ describe('The collection form component', () => {
     });
 
 
-    spyOn(CollectionUpdate, 'save').and.callFake(() => {
+    spyOn(CollectionUpdate, 'update').and.callFake(() => {
       return {
         $promise: deferredStatus.promise
       }
@@ -525,7 +527,7 @@ describe('The collection form component', () => {
     let ctrl = $componentController('collectionForm', null);
 
     ctrl.updateCollection();
-    expect(CollectionUpdate.save).toHaveBeenCalled();
+    expect(CollectionUpdate.update).toHaveBeenCalled();
     deferredStatus.resolve({status: 'success'});
     $rootScope.$apply();
     expect(TaggerToast.toast).toHaveBeenCalledWith('Collection Updated')
@@ -537,7 +539,7 @@ describe('The collection form component', () => {
     let ctrl = $componentController('collectionForm', null);
 
     ctrl.updateCollection();
-    expect(CollectionUpdate.save).toHaveBeenCalled();
+    expect(CollectionUpdate.update).toHaveBeenCalled();
     deferredStatus.reject();
     $rootScope.$apply();
     expect(TaggerToast.toast).toHaveBeenCalledWith('ERROR: Unable to update collection.')

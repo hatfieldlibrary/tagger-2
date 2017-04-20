@@ -26,11 +26,42 @@
   'use strict';
 
   /**
+   * Resource for getting a collection's publication status.
+   */
+  taggerServices.factory('GetPublicationStatus', ['$resource', 'config',
+    function ($resource, config) {
+      return $resource(config.restHost + 't/collection/:collId/pubstatus', {}, {
+        query: {method: 'GET', isArray: false}
+      });
+    }
+  ]);
+  /**
+   * Resource for getting the collections in an area.
+   */
+  taggerServices.factory('CollectionsByArea', ['$resource', 'config',
+    function ($resource, config) {
+      return $resource(config.restHost + 't/collection/area/:areaId', {}, {
+        query: {method: 'GET', isArray: true}
+      });
+    }
+  ]);
+  /**
+   * Resource for getting collection information by collection id.
+   */
+  taggerServices.factory('CollectionById', ['$resource', 'config',
+    function ($resource, config) {
+      return $resource(config.restHost + 't/collection/id/:id', {}, {
+        query: {method: 'GET', isArray: false}
+      });
+    }
+  ]);
+
+  /**
    * Resource fetching the first collection in the area.
    */
   taggerServices.factory('FirstCollectionInArea', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/first/inArea/:areaId', {}, {
+      return $resource(config.restHost + 't/collection/first/inArea/:areaId', {}, {
         query: {method: 'GET', isArray: false}
       });
     }
@@ -41,37 +72,7 @@
    */
   taggerServices.factory('UpdatePublicationStatus', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/:collId/pubstatus/:status', {}, {
-        query: {method: 'GET', isArray: false}
-      });
-    }
-  ]);
-  /**
-   * Resource for getting a collection's publication status.
-   */
-  taggerServices.factory('GetPublicationStatus', ['$resource', 'config',
-    function ($resource, config) {
-      return $resource(config.restHost + 'collection/:collId/pubstatus', {}, {
-        query: {method: 'GET', isArray: false}
-      });
-    }
-  ]);
-  /**
-   * Resource for getting the collections in an area.
-   */
-  taggerServices.factory('CollectionsByArea', ['$resource', 'config',
-    function ($resource, config) {
-      return $resource(config.restHost + 'collection/show/list/:areaId', {}, {
-        query: {method: 'GET', isArray: true}
-      });
-    }
-  ]);
-  /**
-   * Resource for getting collection information by collection id.
-   */
-  taggerServices.factory('CollectionById', ['$resource', 'config',
-    function ($resource, config) {
-      return $resource(config.restHost + 'collection/byId/:id', {}, {
+      return $resource(config.restHost + 't/collection/:collId/pubstatus/:status', {}, {
         query: {method: 'GET', isArray: false}
       });
     }
@@ -81,7 +82,7 @@
    */
   taggerServices.factory('CollectionAdd', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/add');
+      return $resource(config.restHost + 't/collection/add');
     }
   ]);
   /**
@@ -89,7 +90,7 @@
    */
   taggerServices.factory('CollectionDelete', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/delete');
+      return $resource(config.restHost + 't/collection/delete/:id');
     }
   ]);
   /**
@@ -97,7 +98,10 @@
    */
   taggerServices.factory('CollectionUpdate', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/update');
+      return $resource(config.restHost + 't/collection/update', null,
+        {
+          'update': { method:'PUT' }
+        });
     }
   ]);
   /**
@@ -105,7 +109,7 @@
    */
   taggerServices.factory('AreasForCollection', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/areas/:collId', {}, {
+      return $resource(config.restHost + 't/collection/areas/:collId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }
@@ -115,7 +119,7 @@
    */
   taggerServices.factory('TagsForCollection', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/tags/:collId', {}, {
+      return $resource(config.restHost + 't/subject/collection/:collId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }
@@ -125,7 +129,7 @@
    */
   taggerServices.factory('TypesForCollection', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/types/:collId', {}, {
+      return $resource(config.restHost + 't/type/collection/:collId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }
@@ -135,9 +139,7 @@
    */
   taggerServices.factory('AreaTargetAdd', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/:collId/add/area/:areaId', {}, {
-        query: {method: 'GET', isArray: false}
-      });
+      return $resource(config.restHost + 't/collection/add/area');
     }
   ]);
   /**
@@ -145,18 +147,14 @@
    */
   taggerServices.factory('AreaTargetRemove', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/:collId/remove/area/:areaId', {}, {
-        query: {method: 'GET', isArray: false}
-      });
+      return $resource(config.restHost + 't/collection/:collId/remove/area/:areaId');
     }]);
   /**
    * Resource for adding a tag to a collection.
    */
   taggerServices.factory('CollectionTagTargetAdd', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/:collId/add/tag/:tagId', {}, {
-        query: {method: 'GET', isArray: false}
-      });
+      return $resource(config.restHost + 't/collection/add/tag');
     }
   ]);
   /**
@@ -164,27 +162,21 @@
    */
   taggerServices.factory('CollectionTagTargetRemove', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/:collId/remove/tag/:tagId', {}, {
-        query: {method: 'GET', isArray: false}
-      });
+      return $resource(config.restHost + 't/collection/:collId/remove/tag/:tagId');
     }]);
   /**
    * Resource for removing a content type from a collection.
    */
   taggerServices.factory('CollectionTypeTargetRemove', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/:collId/remove/type/:typeId', {}, {
-        query: {method: 'GET', isArray: false}
-      });
+      return $resource(config.restHost + 't/collection/:collId/remove/type/:typeId');
     }]);
   /**
    * Resource for adding a content type to a collection.
    */
   taggerServices.factory('CollectionTypeTargetAdd', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/:collId/add/type/:typeId', {}, {
-        query: {method: 'GET', isArray: false}
-      });
+      return $resource(config.restHost + 't/collection/add/type');
     }]);
 
 })();

@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('area resources', () => {
 
   let $httpBackend,
@@ -38,7 +40,7 @@ describe('area resources', () => {
 
   it('should request area list.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'areas').respond([{id: 3}]);
+    $httpBackend.expectGET(config.restHost + 't/area').respond([{id: 3}]);
     let result = AreaList.query();
     $httpBackend.flush();
     expect(result[0].id).toEqual(3);
@@ -47,7 +49,7 @@ describe('area resources', () => {
 
   it('should request area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'area/byId/1').respond({name: 'test area'});
+    $httpBackend.expectGET(config.restHost + 't/area/id/1').respond({name: 'test area'});
     let result = AreaById.query({id: 1});
     $httpBackend.flush();
     expect(result.name).toEqual('test area');
@@ -56,7 +58,7 @@ describe('area resources', () => {
 
   it('should add area.', () =>{
     let message = {id: 1};
-    $httpBackend.expectPOST(config.restHost + 'area/delete', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/area/delete', message).respond({status: 'success'});
     let result = AreaDelete.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -64,7 +66,7 @@ describe('area resources', () => {
 
   it('should delete area.', () =>{
     let message = {title: 'new area'};
-    $httpBackend.expectPOST(config.restHost + 'area/add', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/area/add', message).respond({status: 'success'});
     let result = AreaAdd.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -79,7 +81,7 @@ describe('area resources', () => {
       linkLabel: 'test label',
       url:''
     };
-    $httpBackend.expectPOST(config.restHost + 'area/update', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/area/update', message).respond({status: 'success'});
     let result = AreaUpdate.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');

@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('tag resources', () => {
 
   let $httpBackend,
@@ -44,7 +46,7 @@ describe('tag resources', () => {
 
   it('should request information about the current user.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'userinfo').respond({userName: userName});
+    $httpBackend.expectGET(config.restHost + 't/user').respond({userName: userName});
     let result = getUserInfo.query();
     $httpBackend.flush();
     expect(result.userName).toEqual(userName);
@@ -53,7 +55,7 @@ describe('tag resources', () => {
 
   it('should request list of users.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'users/list').respond([{name: userName}]);
+    $httpBackend.expectGET(config.restHost + 't/user/list').respond([{name: userName}]);
     let result = UserList.query();
     $httpBackend.flush();
     expect(result[0].name).toEqual(userName);
@@ -69,7 +71,7 @@ describe('tag resources', () => {
       area: 1
 
     };
-    $httpBackend.expectPOST(config.restHost + 'users/update', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/user/update', message).respond({status: 'success'});
     let result = UserUpdate.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -80,7 +82,7 @@ describe('tag resources', () => {
       id: 1
 
     };
-    $httpBackend.expectPOST(config.restHost + 'users/delete', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/user/delete', message).respond({status: 'success'});
     let result = UserDelete.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -92,7 +94,7 @@ describe('tag resources', () => {
       email: 'userName@somewhere.com',
       area: 1
     };
-    $httpBackend.expectPOST(config.restHost + 'users/add', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/user/add', message).respond({status: 'success'});
     let result = UserAdd.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');

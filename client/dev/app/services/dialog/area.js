@@ -29,7 +29,7 @@
          * Get list of all areas.  Updates area observers.
          * @param id  the id of the current area or null.
          */
-        vm.getAreaList = function () {
+        const _getAreaList = function () {
 
           let areas = AreaList.query();
 
@@ -38,6 +38,9 @@
             if (data.length > 0) {
                 AreaActionObservable.set(data[0].id);
                 AreaObservable.set(data[0].id);
+            } else {
+              AreaActionObservable.set(0);
+
             }
           });
 
@@ -54,7 +57,7 @@
          * Add new area to Tagger.
          * @param title
          */
-        vm.addArea = function (title) {
+        vm.add = function (title) {
 
           let result = AreaAdd.save({title: title});
 
@@ -63,7 +66,7 @@
 
               TaggerToast.toast('Area Added');
               // After area update succeeds, update the view.
-              vm.getAreaList();
+              _getAreaList();
               vm.closeDialog();
 
             }
@@ -75,8 +78,8 @@
          * Delete collection area from Tagger.  Used by administrative view.
          * @param id
          */
-        vm.deleteArea = function () {
-          const result = AreaDelete.save({id: AreaActionObservable.get()});
+        vm.delete = function () {
+          const result = AreaDelete.delete({areaId: AreaActionObservable.get()});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
@@ -84,12 +87,17 @@
               // after retrieving new area list, we need
               // to update the areas currently in view.
               //AreaObservable.set(-1);
-              vm.getAreaList();
+              _getAreaList();
               vm.closeDialog();
 
             }
           });
         };
+
+        vm.uploadImage = function () {
+             throw new Error('Call to unimplemented function.');
+        };
+
       };
 
       return {

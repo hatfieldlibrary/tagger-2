@@ -20,6 +20,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 import db from '../_helpers/db';
 import areaDao from '../../../../server/api/tagger/dao/area-dao';
 import tagDao from  '../../../../server/api/tagger/dao/tags-dao';
@@ -33,7 +35,7 @@ describe('Tag area target operations', () => {
 // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(6000);
+    this.timeout(7000);
     async.series(
       [
         (callback) => {
@@ -68,9 +70,9 @@ describe('Tag area target operations', () => {
 
         },
         (callback) => {
-          collectionDao.addNewCollection('mock collection')
+          collectionDao.addNewCollection('mock collection', 'foo', 'foo', 'foo')
             .then(callback(null))
-            .catch((err) => callback(err))
+            .catch((err) => callback(err));
         },
         (callback) => {
           collectionDao
@@ -87,7 +89,7 @@ describe('Tag area target operations', () => {
         (callback) => {
           collectionDao.addTagTarget(1, 1)
             .then(callback(null))
-            .catch((err) => callback(err))
+            .catch((err) => callback(err));
         }
       ],
       (err) => {

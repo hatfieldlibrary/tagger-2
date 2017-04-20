@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The collections list observable service', () => {
 
   let CollectionListObservable,

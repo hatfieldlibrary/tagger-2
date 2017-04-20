@@ -47,6 +47,15 @@
             });
           }
         };
+
+        vm.add = function() {
+          throw new Error('Call to unimplemented function.')
+        };
+
+        vm.delete = function() {
+          throw new Error('Call to unimplemented function.')
+        };
+
       };
 
       return {

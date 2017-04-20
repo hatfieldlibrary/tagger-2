@@ -28,7 +28,7 @@
    */
   taggerServices.factory('SearchOptionType', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/repoTypeByArea/:areaId', {}, {
+      return $resource(config.restHost + 't/collection/repoTypeByArea/:areaId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }
@@ -38,7 +38,7 @@
    */
   taggerServices.factory('CollectionTypeCount', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/count/types/byArea/:areaId', {}, {
+      return $resource(config.restHost + 't/collection/count/types/byArea/:areaId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }
@@ -48,7 +48,7 @@
    */
   taggerServices.factory('CollectionLinkCount', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'collection/count/linkTypes/byArea/:areaId', {}, {
+      return $resource(config.restHost + 't/collection/count/linkTypes/byArea/:areaId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }

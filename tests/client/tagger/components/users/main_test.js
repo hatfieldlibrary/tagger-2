@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The users component', () => {
 
   let $componentController;
@@ -50,14 +52,14 @@ describe('The users component', () => {
 
     module(($provide) => {
       $provide.value('UserUpdate', {
-        save: () => {
+        update: () => {
         }
       });
     });
 
     module(($provide) => {
       $provide.value('UserDelete', {
-        save: () => {
+        delete: () => {
         }
       });
     });
@@ -156,12 +158,12 @@ describe('The users component', () => {
         $promise: deferredAdd.promise
       }
     });
-    spyOn(UserUpdate, 'save').and.callFake(() => {
+    spyOn(UserUpdate, 'update').and.callFake(() => {
       return {
         $promise: deferredUpdate.promise
       }
     });
-    spyOn(UserDelete, 'save').and.callFake(() => {
+    spyOn(UserDelete, 'delete').and.callFake(() => {
       return {
         $promise: deferredDelete.promise
       }
@@ -206,7 +208,7 @@ describe('The users component', () => {
 
     let updatedUser = {id: 1, name: 'admin@home', email: 'updated admin user', area: 0};
 
-    expect(UserUpdate.save).toHaveBeenCalledWith(updatedUser);
+    expect(UserUpdate.update).toHaveBeenCalledWith(updatedUser);
     expect(UserList.query).toHaveBeenCalled();
     expect(ctrl.users.length).toBe(3);
     expect(TaggerToast.toast).toHaveBeenCalledWith('User Updated');
@@ -252,7 +254,7 @@ describe('The users component', () => {
     deferredUserList.resolve(userList);
     $rootScope.$apply();
 
-    expect(UserDelete.save).toHaveBeenCalledWith({id: 1});
+    expect(UserDelete.delete).toHaveBeenCalledWith({id: 1});
     expect(UserList.query).toHaveBeenCalled();
     expect(ctrl.users.length).toBe(2);
     expect(TaggerToast.toast).toHaveBeenCalledWith('User Deleted');

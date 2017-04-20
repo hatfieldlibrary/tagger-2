@@ -23,6 +23,42 @@
 
       const vm = this;
 
+      const _setCollectionObservableId = (id, data) => {
+
+        if (id === null) {
+          if(data.length > 0) {
+            CollectionObservable.set(data[0].Collection.id);
+          }
+        } else {
+          CollectionObservable.set(id);
+        }
+      };
+
+      /**
+       * Returns list of collections, optionally taking a collection
+       * id.
+       * @param id  the collection id or null.
+       */
+      const _getCollectionList = function (id) {
+
+        const result = CollectionsByArea.query({areaId: AreaObservable.get()});
+        result.$promise.then(function (data) {
+          if (data) {
+            CollectionListObservable.set(data);
+            // If the list contains data, set the collection id for the context.
+            if(data.length > 0) {
+              _setCollectionObservableId(id, data);
+            }
+            // Otherwise, set the collection id to zero.
+            else {
+              CollectionObservable.set(0);
+            }
+          }
+
+        });
+
+      };
+
       /**
        * Closes the dialog
        */
@@ -34,7 +70,7 @@
        * Adds new collection to area.
        * @param title the collection's title.
        */
-      vm.addCollection = function (title) {
+      vm.add = function (title) {
 
         const result = CollectionAdd.save(
           {
@@ -52,7 +88,7 @@
             // Update the collection list. The
             // id parameter will be used to select
             // the newly added category for editing.
-            vm.getCollectionList(data.id);
+            _getCollectionList(data.id);
             // Does what you'd expect.
             vm.closeDialog();
 
@@ -63,9 +99,9 @@
       /**
        * Deletes a collection.
        */
-      vm.deleteCollection = function () {
+      vm.delete = function () {
 
-        const result = CollectionDelete.save({id: CollectionObservable.get()});
+        const result = CollectionDelete.delete({id: CollectionObservable.get()});
         result.$promise.then(function (data) {
           if (data.status === 'success') {
 
@@ -75,7 +111,7 @@
             // Given a null id parameter, the getCollectionList
             // function will use the id of the first collection in the
             // updated list.
-            vm.getCollectionList(null);
+            _getCollectionList(null);
             vm.closeDialog();
 
           }
@@ -84,34 +120,8 @@
 
       };
 
-      /**
-       * Returns list of collections, optionally taking a collection
-       * id.
-       * @param id  the collection id or null.
-       */
-      vm.getCollectionList = function (id) {
-
-        const result = CollectionsByArea.query({areaId: AreaObservable.get()});
-        result.$promise.then(function (data) {
-          if (data) {
-            CollectionListObservable.set(data);
-            // Deleting a category doesn't generate
-            // a new id. In that case, expect the
-            // id to be null. Update the view using the
-            // id of the first item in the updated category
-            // list.
-            if (id === null) {
-              CollectionObservable.set(data[0].Collection.id);
-
-            } else {
-              CollectionObservable.set(id);
-            }
-          } else {
-            CollectionObservable.set(0);
-          }
-
-        });
-
+      vm.uploadImage = function () {
+        throw new Error('Call to unimplemented function.');
       };
 
     };

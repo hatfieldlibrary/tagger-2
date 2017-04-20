@@ -37,9 +37,11 @@
     function _getGroupInfo(grpId) {
       let grp = Category.query({id: grpId});
       grp.$promise.then(function (data) {
-        vm.category = data;
-        // parent menu callback
-        vm.menu({id: vm.category.id, title: vm.category.title});
+        if (data) {
+          vm.category = data;
+          // parent menu callback
+          vm.menu({id: vm.category.id, title: vm.category.title});
+        }
       });
 
     }
@@ -55,7 +57,7 @@
 
     vm.updateGroup = function () {
 
-      let success = CategoryUpdate.save({
+      let success = CategoryUpdate.update({
 
         title: vm.category.title,
         url: vm.category.url,
@@ -82,6 +84,8 @@
 
     vm.$onInit = function () {
 
+      vm.category = {};
+
       GroupObservable.subscribe((id) => {
         _getGroupInfo(id);
       });
@@ -106,7 +110,7 @@
       menu: '&'
     },
     template:
-    '<md-content layout-padding="layout-padding" flex="80" layout="column" style="padding-left: 20px"> ' +
+    '<md-content ng-if="vm.category.id &gt; 0"  layout-padding="layout-padding" flex="80" layout="column" style="padding-left: 20px"> ' +
     ' <md-button class="md-raised md-accent large-button" ng-click="vm.updateGroup()">Update Group</md-button> ' +
     ' <md-input-container> ' +
     '   <label>Collection Name</label> ' +

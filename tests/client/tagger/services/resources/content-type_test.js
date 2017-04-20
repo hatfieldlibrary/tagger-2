@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('tag resources', () => {
 
   let $httpBackend,
@@ -47,7 +49,7 @@ describe('tag resources', () => {
 
   it('should request tag counts by area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'content/byArea/count/1').respond([{name: typeName, count: 1}]);
+    $httpBackend.expectGET(config.restHost + 't/content/byArea/count/1').respond([{name: typeName, count: 1}]);
     let result = ContentTypeCount.query({areaId: 1});
     $httpBackend.flush();
     expect(result[0].name).toEqual(typeName);
@@ -56,7 +58,7 @@ describe('tag resources', () => {
 
   it('should request type by it\'s id.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'content/byId/1').respond({name: typeName});
+    $httpBackend.expectGET(config.restHost + 't/content/byId/1').respond({name: typeName});
     let result = ContentType.query({id: 1});
     $httpBackend.flush();
     expect(result.name).toEqual(typeName);
@@ -65,7 +67,7 @@ describe('tag resources', () => {
 
   it('should request list of types.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'content/show/list').respond([{name: typeName}]);
+    $httpBackend.expectGET(config.restHost + 't/content/show/list').respond([{name: typeName}]);
     let result = ContentTypeList.query();
     $httpBackend.flush();
     expect(result[0].name).toEqual(typeName);
@@ -79,7 +81,7 @@ describe('tag resources', () => {
       id: 1
 
     };
-    $httpBackend.expectPOST(config.restHost + 'content/update', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/content/update', message).respond({status: 'success'});
     let result = ContentTypeUpdate.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -90,7 +92,7 @@ describe('tag resources', () => {
       id: 1
 
     };
-    $httpBackend.expectPOST(config.restHost + 'content/delete', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/content/delete', message).respond({status: 'success'});
     let result = ContentTypeDelete.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -101,7 +103,7 @@ describe('tag resources', () => {
       name: 'update type'
 
     };
-    $httpBackend.expectPOST(config.restHost + 'content/add', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/content/add', message).respond({status: 'success'});
     let result = ContentTypeAdd.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');

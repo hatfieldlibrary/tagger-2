@@ -17,12 +17,12 @@
 
 'use strict';
 
+/*jshint expr: true*/
+
 import db from '../_helpers/db';
 import  areaDao from '../../../../server/api/tagger/dao/area-dao';
 import {expect} from 'chai';
 import async from 'async';
-
-
 
 /** Test area names. */
 const areas = [
@@ -57,7 +57,7 @@ describe('Area creation', () => {
   // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(5000);
+    this.timeout(7000);
     async.series(
       [
         (callback) => {

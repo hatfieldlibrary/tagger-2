@@ -24,11 +24,13 @@
   'use strict';
 
   function TagAreaController($scope,
-                       TagTargets,
-                       TagObservable,
-                       TagAreaObservable,
-                       AreaListObservable,
-                       DialogStrategy) {
+                             TaggerToast,
+                             TagTargets,
+                             TagObservable,
+                             TagAreaObservable,
+                             AreaListObservable,
+                             DialogStrategy,
+                             DialogTypes) {
 
     const vm = this;
 
@@ -97,7 +99,7 @@
         message = addMessage;
       }
 
-     vm.dialog.showDialog($event, message);
+      vm.dialog.showDialog($event, message);
 
     };
 
@@ -130,18 +132,25 @@
       return false;
     }
 
-    vm.$onInit = function() {
+    vm.$onInit = function () {
 
       vm.areas = AreaListObservable.get();
 
       _setSubscriptions();
 
-      /**
-       * Get the dialog object for this component.
-       * Call with showDialog($event,message).
-       * @type {*}
-       */
-       vm.dialog = DialogStrategy.makeDialog('TagAreaController');
+      try {
+        /**
+         * Get the dialog object for this component.
+         * Call with showDialog($event,message).
+         * @type {*}
+         */
+        vm.dialog = DialogStrategy.makeDialog(DialogTypes.TAG_AREA_SELECT);
+
+      } catch (err) {
+        TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');
+        console.log(err);
+
+      }
 
       let id = TagObservable.get();
 

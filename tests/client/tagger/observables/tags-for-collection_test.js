@@ -6,6 +6,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The tags for collection observable service', () => {
 
   let

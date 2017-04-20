@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('Collection resources', () => {
 
   let $httpBackend,
@@ -74,7 +76,7 @@ describe('Collection resources', () => {
 
   it('should request first collection in the area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/first/inArea/2').respond({title: 'test collection'});
+    $httpBackend.expectGET(config.restHost + 't/collection/first/inArea/2').respond({title: 'test collection'});
     let result = FirstCollectionInArea.query({areaId: 2});
     $httpBackend.flush();
     expect(result.title).toEqual('test collection');
@@ -83,7 +85,7 @@ describe('Collection resources', () => {
 
   it('should request update of publication status.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/1/pubstatus/true').respond({status: 'success'});
+    $httpBackend.expectGET(config.restHost + 't/collection/1/pubstatus/true').respond({status: 'success'});
     let result = UpdatePublicationStatus.query({collId: 1, status: true});
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -92,7 +94,7 @@ describe('Collection resources', () => {
 
   it('should request the publication status for the collection.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/1/pubstatus').respond({published: true});
+    $httpBackend.expectGET(config.restHost + 't/collection/1/pubstatus').respond({published: true});
     let result = GetPublicationStatus.query({collId: 1});
     $httpBackend.flush();
     expect(result.published).toEqual(true);
@@ -101,7 +103,7 @@ describe('Collection resources', () => {
 
   it('should request the collections in an area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/show/list/1').respond([{title: 'test collection'}]);
+    $httpBackend.expectGET(config.restHost + 't/collection/area/1').respond([{title: 'test collection'}]);
     let result = CollectionsByArea.query({areaId: 1});
     $httpBackend.flush();
     expect(result[0].title).toEqual('test collection');
@@ -110,7 +112,7 @@ describe('Collection resources', () => {
 
   it('should request collection by id.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/byId/1').respond({title: 'test collection'});
+    $httpBackend.expectGET(config.restHost + 't/collection/id/1').respond({title: 'test collection'});
     let result = CollectionById.query({id: 1});
     $httpBackend.flush();
     expect(result.title).toEqual('test collection');
@@ -127,7 +129,7 @@ describe('Collection resources', () => {
       id: 1,
       collections: [{}]
     };
-    $httpBackend.expectPOST(config.restHost + 'collection/add', message).respond(response);
+    $httpBackend.expectPOST(config.restHost + 't/collection/add', message).respond(response);
     let result = CollectionAdd.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -141,7 +143,7 @@ describe('Collection resources', () => {
     let response = {
       status: 'success'
     };
-    $httpBackend.expectPOST(config.restHost + 'collection/delete', message).respond(response);
+    $httpBackend.expectPOST(config.restHost + 't/collection/delete', message).respond(response);
     let result = CollectionDelete.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -156,7 +158,7 @@ describe('Collection resources', () => {
     let response = {
       status: 'success'
     };
-    $httpBackend.expectPOST(config.restHost + 'collection/update', message).respond(response);
+    $httpBackend.expectPOST(config.restHost + 't/collection/update', message).respond(response);
     let result = CollectionUpdate.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -164,7 +166,7 @@ describe('Collection resources', () => {
 
   it('should request areas for collection.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/areas/1').respond([{title: 'test area'}]);
+    $httpBackend.expectGET(config.restHost + 't/collection/areas/1').respond([{title: 'test area'}]);
     let result = AreasForCollection.query({collId: 1});
     $httpBackend.flush();
     expect(result[0].title).toEqual('test area');
@@ -173,7 +175,7 @@ describe('Collection resources', () => {
 
   it('should request tags for collection.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/tags/1').respond([{name: 'test tag'}]);
+    $httpBackend.expectGET(config.restHost + 't/subject/collection/1').respond([{name: 'test tag'}]);
     let result = TagsForCollection.query({collId: 1});
     $httpBackend.flush();
     expect(result[0].name).toEqual('test tag');
@@ -182,7 +184,7 @@ describe('Collection resources', () => {
 
   it('should request types for collection.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/types/1').respond([{name: 'test type'}]);
+    $httpBackend.expectGET(config.restHost + 't/type/collection/1').respond([{name: 'test type'}]);
     let result = TypesForCollection.query({collId: 1});
     $httpBackend.flush();
     expect(result[0].name).toEqual('test type');
@@ -191,8 +193,8 @@ describe('Collection resources', () => {
 
   it('should request adding collection to area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/1/add/area/1').respond({status: 'success'});
-    let result = AreaTargetAdd.query({collId: 1, areaId: 1});
+    $httpBackend.expectPOST(config.restHost + 't/collection/add/area').respond({status: 'success'});
+    let result = AreaTargetAdd.save({collId: 1, areaId: 1});
     $httpBackend.flush();
     expect(result.status).toEqual('success');
 
@@ -200,8 +202,8 @@ describe('Collection resources', () => {
 
   it('should request removal of collection from area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/1/remove/area/1').respond({status: 'success'});
-    let result = AreaTargetRemove.query({collId: 1, areaId: 1});
+    $httpBackend.expectDELETE(config.restHost + 't/collection/1/remove/area/1').respond({status: 'success'});
+    let result = AreaTargetRemove.delete({collId: 1, areaId: 1});
     $httpBackend.flush();
     expect(result.status).toEqual('success');
 
@@ -209,8 +211,8 @@ describe('Collection resources', () => {
 
   it('should request adding tag to collection.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/1/add/tag/1').respond({status: 'success'});
-    let result = CollectionTagTargetAdd.query({collId: 1, tagId: 1});
+    $httpBackend.expectPOST(config.restHost + 't/collection/add/tag').respond({status: 'success'});
+    let result = CollectionTagTargetAdd.save({collId: 1, tagId: 1});
     $httpBackend.flush();
     expect(result.status).toEqual('success');
 
@@ -218,8 +220,8 @@ describe('Collection resources', () => {
 
   it('should request removal of tag from collection.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/1/remove/tag/1').respond({status: 'success'});
-    let result = CollectionTagTargetRemove.query({collId: 1, tagId: 1});
+    $httpBackend.expectDELETE(config.restHost + 't/collection/1/remove/tag/1').respond({status: 'success'});
+    let result = CollectionTagTargetRemove.delete({collId: 1, tagId: 1});
     $httpBackend.flush();
     expect(result.status).toEqual('success');
 
@@ -227,8 +229,8 @@ describe('Collection resources', () => {
 
   it('should request adding type to collection.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/1/add/type/1').respond({status: 'success'});
-    let result = CollectionTypeTargetAdd.query({collId: 1, typeId: 1});
+    $httpBackend.expectPOST(config.restHost + 't/collection/add/type').respond({status: 'success'});
+    let result = CollectionTypeTargetAdd.save({collId: 1, typeId: 1});
     $httpBackend.flush();
     expect(result.status).toEqual('success');
 
@@ -236,8 +238,8 @@ describe('Collection resources', () => {
 
   it('should request removal of type from collection.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'collection/1/remove/type/1').respond({status: 'success'});
-    let result = CollectionTypeTargetRemove.query({collId: 1, typeId: 1});
+    $httpBackend.expectDELETE(config.restHost + 't/collection/1/remove/type/1').respond({status: 'success'});
+    let result = CollectionTypeTargetRemove.delete({collId: 1, typeId: 1});
     $httpBackend.flush();
     expect(result.status).toEqual('success');
 

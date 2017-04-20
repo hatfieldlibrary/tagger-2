@@ -3,6 +3,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 describe('The tag form component', () => {
 
   let $componentController;
@@ -78,7 +80,7 @@ describe('The tag form component', () => {
 
     module(($provide) => {
       $provide.value('TagUpdate', {
-        save: () => {
+        update: () => {
         }
       })
     });
@@ -202,7 +204,7 @@ describe('The tag form component', () => {
       }
     });
 
-    spyOn(TagUpdate, 'save').and.callFake(() => {
+    spyOn(TagUpdate, 'update').and.callFake(() => {
       return {
         $promise: updateDeferred.promise
       }
@@ -268,7 +270,7 @@ describe('The tag form component', () => {
     updateDeferred.resolve({status: 'success'});
     $rootScope.$apply();
 
-    expect(TagUpdate.save).toHaveBeenCalled();
+    expect(TagUpdate.update).toHaveBeenCalled();
     expect(TagList.query).toHaveBeenCalled();
     expect(TagListObservable.set).toHaveBeenCalledWith(tags);
 

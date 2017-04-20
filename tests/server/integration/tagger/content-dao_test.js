@@ -20,6 +20,8 @@
  */
 'use strict';
 
+/*jshint expr: true*/
+
 import db from '../_helpers/db';
 import  contentDao from '../../../../server/api/tagger/dao/content-dao';
 import collectionDao from  '../../../../server/api/tagger/dao/collection-dao';
@@ -41,7 +43,7 @@ describe('Content type creation', () => {
   // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(5000);
+    this.timeout(7000);
     async.series(
       [
         (callback) => {
@@ -169,7 +171,7 @@ describe('Content type operations', () => {
             .catch((err) => callback(err))
         },
         (callback) => {
-          collectionDao.addNewCollection('mock collection')
+          collectionDao.addNewCollection('mock collection', 'foo', 'foo', 'foo')
             .then(callback(null))
             .catch((err) => callback(err));
         },
@@ -197,7 +199,7 @@ describe('Content type operations', () => {
 
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
-      expect(types[1].dataValues.name).to.have.string('Category Stub Two');
+      expect(types.length).to.equal(2);
       done();
     };
 
@@ -238,6 +240,7 @@ describe('Content type operations', () => {
   it('should find content type by id.', (done) => {
 
     let _onSuccess = (type) => {
+
       expect(type).to.be.defined;
       expect(type.dataValues.name).to.have.string(categoriesInit[0]);
       done();

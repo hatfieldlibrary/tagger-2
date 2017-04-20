@@ -21,10 +21,31 @@
 
 'use strict';
 
-const taggerSchema = require('../models/index');
+const taggerSchema = require('../schema/index');
+const logger = require('../utils/error-logger');
+const path = require('path');
+const filename = path.basename(__filename);
+const paramErrorMessage = 'A parameter for an area query is not defined.';
 const taggerDao = {};
 
+/**
+ * Returns 500 error for missing parameter. This error is thrown
+ * before the dao promise is returned.
+ * @returns {Error}
+ * @private
+ */
+function _errorResponse() {
+  let error = new Error('Error: missing query parameter - ' + filename);
+  error.status = 500;
+  return error;
+}
+
 taggerDao.findAreaById = (areaId) => {
+
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.Area.find({
     where: {
@@ -43,6 +64,39 @@ taggerDao.listAllAreas = () => {
 
 };
 
+taggerDao.findAreasForCollection = (collId) => {
+
+  if(!collId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+  return taggerSchema.AreaTarget.findAll({
+    where: {
+      CollectionId: collId
+    }
+  });
+
+};
+
+taggerDao.areaListWithCollectionCounts = () => {
+
+
+  return taggerSchema.sequelize.query('select count(*), a.title, a.id from Areas a join AreaTargets at on a.id = at.AreaId ' +
+    'join Collections c on c.id = at.CollectionId group by (a.id);',
+    {
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+  // return taggerSchema.Area.findAll( {
+  //   attributes: ['Area.id', 'Area.title',
+  //     taggerSchema.sequelize.fn('count', taggerSchema.sequelize.col('Area.id'))],
+  //   group: ["Area.id"],
+  //   include: [taggerSchema.Collection]
+  // })
+
+};
+
 taggerDao.getAreaCount = () => {
 
   return taggerSchema.Area.findAll(
@@ -54,6 +108,11 @@ taggerDao.getAreaCount = () => {
 
 taggerDao.addArea = (title, position) => {
 
+  if(!title || !position) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
   return taggerSchema.Area.create({
     title: title,
     position: position
@@ -62,6 +121,10 @@ taggerDao.addArea = (title, position) => {
 
 taggerDao.updateArea = (data, id) => {
 
+  if(!data || !id) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
   return taggerSchema.Area.update(data,
     {
       where: {
@@ -72,6 +135,11 @@ taggerDao.updateArea = (data, id) => {
 };
 
 taggerDao.reorder = (areas, areaCount) => {
+
+  if(!areas || !areaCount) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   /**
    * Promise method that returns the count value if the
@@ -114,6 +182,11 @@ taggerDao.reorder = (areas, areaCount) => {
 };
 
 taggerDao.deleteArea = (id) => {
+
+  if(!id) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
 
   return taggerSchema.Area.destroy({
     where: {
