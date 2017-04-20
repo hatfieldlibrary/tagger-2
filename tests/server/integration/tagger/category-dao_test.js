@@ -224,7 +224,7 @@ describe('Category operations', () => {
         },
         (callback) => {
           collectionDao
-            .addNewCollection('test collection')
+            .addNewCollection('mock collection', 'foo', 'foo', 'foo')
             .then(callback(null))
             .catch((err) => callback(err));
         },

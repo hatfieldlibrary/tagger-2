@@ -232,6 +232,7 @@ describe('The tag dialog controller', () => {
     deferred.resolve(success);
     $rootScope.$apply();
 
+
     expect(TagObservable.get).toHaveBeenCalledWith();
     expect(TagDelete.delete).toHaveBeenCalledWith({id: 1});
     expect(TagList.query).toHaveBeenCalled();

@@ -171,7 +171,7 @@ describe('Content type operations', () => {
             .catch((err) => callback(err))
         },
         (callback) => {
-          collectionDao.addNewCollection('mock collection')
+          collectionDao.addNewCollection('mock collection', 'foo', 'foo', 'foo')
             .then(callback(null))
             .catch((err) => callback(err));
         },
@@ -199,7 +199,7 @@ describe('Content type operations', () => {
 
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
-      expect(types[1].dataValues.name).to.have.string('Category Stub Two');
+      expect(types.length).to.equal(2);
       done();
     };
 

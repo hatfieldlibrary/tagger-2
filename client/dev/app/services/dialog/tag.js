@@ -26,7 +26,7 @@
 
         const vm = this;
 
-        const _setTagObservableId = (id, data) => {
+        const _setTagObservableId = (id, tags) => {
 
           if (id === null) {
             TagObservable.set(tags[0].id);
