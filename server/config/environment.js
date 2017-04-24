@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -111,7 +111,7 @@ const config = {
     useAuth: true,
     uid: credentials.uid,
     gid: credentials.gid,
-    port: 3000,
+    port: 3003,
     redisPort: credentials.redisPort,
     mysql: {
       db: 'tagger',
@@ -123,7 +123,7 @@ const config = {
     },
     convert: '/usr/bin/convert',
     identify: '/usr/bin/identify',
-    taggerImageDir: '/var/taggerImages',
+    taggerImageDir: '/var/tagger2Images',
     adminPath: '/views',
     domain: credentials.domain,
     googleClientId: credentials.googleClientId,
