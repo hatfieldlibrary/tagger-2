@@ -25,7 +25,7 @@
 
 'use strict';
 
-const convert = (files, fields, config) => {
+const convert = (files, fields, config, callback) => {
 
   const fs = require('fs'),
     magick = require('imagemagick');

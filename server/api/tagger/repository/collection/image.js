@@ -24,6 +24,8 @@ const imageConvert = require('../../utils/image-convert');
 const taggerDao = require('../../dao/collection-dao');
 const logger = require('../../utils/error-logger');
 
+
+
 /**
  * Image upload. Reads multipart form data and creates
  * thumbnail image. Writes thumbnail and full size image to
@@ -37,6 +39,22 @@ const logger = require('../../utils/error-logger');
 exports.updateImage = function (req, config, callback, errorHandler) {
 
   const multiparty = require('multiparty');
+  /**
+   * Updates the data base with new image information.
+   * @param id
+   * @param imageName
+   */
+  const updateImageInDb = function (id, imageName) {
+    taggerDao.updateCollectionImage(id, imageName)
+      .then(() => {
+          callback();
+        }
+      )
+      .catch(function (err) {
+        errorHandler(err);
+        logger.dao(err);
+      });
+  }
 
   var form = new multiparty.Form();
 
@@ -64,20 +82,5 @@ exports.updateImage = function (req, config, callback, errorHandler) {
     }
   });
 
-  /**
-   * Updates the data base with new image information.
-   * @param id
-   * @param imageName
-   */
-  function updateImageInDb(id, imageName) {
-    taggerDao.updateCollectionImage(id, imageName)
-      .then(() => {
-          callback();
-        }
-      )
-      .catch(function (err) {
-        errorHandler(err);
-        logger.dao(err);
-      });
-  }
+
 };
