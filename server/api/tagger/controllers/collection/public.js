@@ -151,9 +151,7 @@ exports.collectionsBySubject = function (req, res, next) {
 exports.browseList = function (req, res, next) {
   publicApiRepository.browseList(
     req,
-    (data) => {
-      utils.sendResponse(res, data);
-    },
+    res, // the response object is needed by the repository method.
     (err) => {
       return next(err);
     });

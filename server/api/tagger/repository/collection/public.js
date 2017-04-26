@@ -307,7 +307,7 @@ exports.collectionsBySubject = function (req, callback, errorHandler) {
  * Introduces a dependency on an external service and
  * confusion about the API contract.
  *
- * TODO: Consider returning external host information only; remove the proxy to external service.
+ * TODO: Consider returning external host information to client; remove this proxy to external service.
  *
  *
  * @param req
@@ -339,6 +339,7 @@ exports.browseList = function (req, res, errorHandler) {
     response.on('end', function () {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin', '*');
+
       res.end(str);
 
     });
