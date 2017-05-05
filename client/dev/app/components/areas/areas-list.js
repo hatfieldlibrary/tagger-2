@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
                           ReorderAreas,
                           $log) {
 
-    var vm = this;
+    let vm = this;
 
     /**
      * Sets the current area in view model.
@@ -80,7 +80,7 @@
           AreaObservable.set(vm.areas[0].id);
         } catch (err) {
           $log.debug(err);
-          $log.info("Setting area to zero.")
+          $log.info('Setting area to zero.');
           AreaObservable.set(0);
         }
       });
