@@ -36,7 +36,7 @@ module.exports = function(sequelize, DataTypes) {
       image: {
         type: DataTypes.STRING(80),
         allowNull: false,
-        defaultValue: 'no_image.gif'
+        defaultValue: 'no_image.jpg'
       },
       url: {
         type: DataTypes.STRING(255),
