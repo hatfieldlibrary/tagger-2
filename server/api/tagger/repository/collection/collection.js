@@ -228,6 +228,7 @@ exports.byId = function (req, callback, errorHandler) {
         response.items = result.getCollection.items;
         response.ctype = result.getCollection.ctype;
         response.url = result.getCollection.url;
+        response.searchUrl = result.getCollection.searchUrl;
         response.browseType = result.getCollection.browseType;
         response.repoType = result.getCollection.repoType;
         response.image = result.getCollection.image;
@@ -260,6 +261,7 @@ exports.update = function (req, callback, errorHandler) {
   const id = req.body.id;
   const title = req.body.title;
   const url = req.body.url;
+  const searchUrl = req.body.searchUrl;
   const browseType = req.body.browseType;
   const description = req.body.description;
   const dates = req.body.dates;
@@ -272,6 +274,7 @@ exports.update = function (req, callback, errorHandler) {
   const update = {
     title: title,
     url: url,
+    searchUrl: searchUrl,
     browseType: browseType,
     description: description,
     dates: dates,
