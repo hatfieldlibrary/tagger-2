@@ -62,7 +62,7 @@ const convert = (files, fields, config, callback) => {
           magick.resize({
               srcPath: fullPath,
               dstPath: thumbPath,
-              width: 200
+              width: 350
             },
             /*jshint unused:false */
             function (err, stdout, stderr) {

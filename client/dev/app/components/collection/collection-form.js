@@ -55,6 +55,8 @@
 
     vm.noCollectionMessage = 'No collections for this area.';
 
+    vm.searchUrlPlaceholder = 'Add url template for searches.';
+
     /**
      * Set the component subscriptions.
      * @private
@@ -247,6 +249,7 @@
         id: vm.collection.id,
         title: vm.collection.title,
         url: vm.collection.url,
+        searchUrl: vm.collection.searchUrl,
         description: vm.collection.description,
         dates: vm.collection.dates,
         repoType: vm.collection.repoType,
