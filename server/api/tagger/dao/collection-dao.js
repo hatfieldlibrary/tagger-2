@@ -623,7 +623,7 @@ taggerDao.findRelatedCollections = (collId, subjectId) => {
     throw _errorResponse();
   }
 
-  return taggerSchema.sequelize.query('Select c.title, c.id, c.image from Collections c left join TagTargets t on t.CollectionId = c.id where t.TagId = ? and t.CollectionId != ? and c.published = true order by c.id',
+  return taggerSchema.sequelize.query('Select c.title, c.id, c.image from Collections c left join TagTargets t on t.CollectionId = c.id where t.TagId = ? and t.CollectionId != ? and c.published = true order by c.id limit 6',
     {
       replacements: [subjectId, collId],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
