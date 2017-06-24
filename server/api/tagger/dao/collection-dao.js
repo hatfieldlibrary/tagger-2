@@ -467,7 +467,6 @@ taggerDao.updateCollectionCategory = (id, category) => {
 };
 
 taggerDao.deleteCategoryFromCollection = (id, category) => {
-
   if(!id || !category) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
@@ -539,10 +538,19 @@ taggerDao.getCollectionsByArea = (areaId) => {
     throw _errorResponse();
   }
 
+  let areaArray = areaId.split(',');
+  let areaWhereClause = '';
 
-  return taggerSchema.sequelize.query('Select * from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where at.AreaId = ? AND c.published = true order by c.title',
+  for (let i = 0; i < areaArray.length; i++) {
+    areaWhereClause += ' at.AreaId = ? ';
+    if (i < areaArray.length - 1) {
+      areaWhereClause += ' OR ';
+    }
+  }
+
+  return taggerSchema.sequelize.query('Select c.id, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where ' + areaWhereClause + ' AND c.published = true group by c.id order by c.id',
     {
-      replacements: [areaId],
+      replacements: areaArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
 

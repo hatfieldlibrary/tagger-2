@@ -33,8 +33,8 @@ exports.areas = function (req, callback, errorHandler) {
 
   taggerDao.findAreasForCollection(collId)
     .then((data) => {
-    callback(data);
-  })
+      callback(data);
+    })
     .catch((err) => {
       logger.dao(err);
       errorHandler(err);
@@ -137,7 +137,7 @@ exports.addAreaTarget = function (req, callback, existingItemCallback, errorHand
  * @private
  */
 function _removeCollectionFromArea(collId, areaId, callback, errorHandler) {
-
+  console.log('removing area')
   async.series(
     {
       remove: (series) => {
@@ -176,13 +176,13 @@ function _removeCollectionFromArea(collId, areaId, callback, errorHandler) {
  * @private
  */
 function _removeAreaTarget(collId, areaId, category, callback, errorHandler) {
-
   async.series(
     {
       deleteCategory: (series) => {
-        if (category.areaId === areaId) {
+        if (+category.areaId === +areaId) {
           taggerDao.deleteCategoryFromCollection(collId, category.id)
             .then((result) => {
+              console.log(result)
               series(null, result);
               return null;
             });
@@ -192,25 +192,27 @@ function _removeAreaTarget(collId, areaId, category, callback, errorHandler) {
         taggerDao.removeCollectionFromArea(areaId, collId)
           .then((result) => {
             series(null, result);
+            console.log(result)
             return null;
           });
       },
       areaList: (series => {
         taggerDao.getAreaIdsForCollection(collId)
           .then((result) => {
+            console.log(result)
             series(null, result);
             return null;
           });
-      }),
-      function(err, result) {
-        if (err) {
-          logger.dao(err);
-          errorHandler(err);
-        } else {
-          callback({areaList: result});
-        }
+      })
+    },
+    function (err, result) {
+      if (err) {
+        logger.dao(err);
+        errorHandler(err);
+      } else {
+        console.log('finished')
+        callback({areaList: result});
       }
-
     });
 
 }

@@ -70,7 +70,6 @@
      * @returns {boolean}
      */
     function _findArea(areaId, targets) {
-
       for (let i = 0; i < targets.length; i++) {
         if (targets[i].AreaId === areaId) {
           return true;
@@ -86,7 +85,6 @@
      * @returns {boolean}
      */
     ctrl.isChosen = function (areaId) {
-
       if (ctrl.areaTargets) {
         return _findArea(areaId, ctrl.areaTargets);
       }
