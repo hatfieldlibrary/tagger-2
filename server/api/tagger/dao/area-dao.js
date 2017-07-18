@@ -47,9 +47,15 @@ taggerDao.findAreaById = (areaId) => {
     throw _errorResponse();
   }
 
-  return taggerSchema.Area.find({
+  let areaArray = areaId.split(',');
+
+  return taggerSchema.Area.findAll({
     where: {
-      id: areaId
+      id: {
+        $or: [
+          areaArray
+        ]
+      }
     },
     order: [['title', 'ASC']]
   });

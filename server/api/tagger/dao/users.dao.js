@@ -38,7 +38,7 @@ function _errorResponse() {
   let error = new Error('Error: missing query parameter - ' + filename);
   error.status = 500;
   return error;
-}
+};
 
 taggerDao.findAllUsers = () => {
 

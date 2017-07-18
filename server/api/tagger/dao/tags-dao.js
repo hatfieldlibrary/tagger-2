@@ -119,11 +119,16 @@ taggerDao.findTagsInArea = (areaId) => {
     throw _errorResponse();
   }
 
+  let areaArray = areaId.split(',');
+
   return taggerSchema.TagAreaTarget.findAll( {
     where: {
-      AreaId: areaId
+      AreaId: {
+        $or: [
+          areaArray
+        ]
+      }
     },
-
     attributes: ['"Tags.name"', 'TagId'],
     order: [[taggerSchema.Tag, 'name', 'ASC']],
     include: [taggerSchema.Tag]

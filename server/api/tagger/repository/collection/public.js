@@ -203,6 +203,7 @@ exports.collectionsByArea = function (req, callback, errorHandler) {
   taggerDao.getCollectionsByArea(areaId).then(
     (collections) => {
       let data;
+      console.log(collections)
       try {
         data = apiMapper.mapCollectionList(collections, 'area')
       } catch (err) {

@@ -27,7 +27,7 @@
   };
 
   exports.mapArea = function(area) {
-      return _mapArea(area);
+      return _mapAreaList(area);
 
   };
 

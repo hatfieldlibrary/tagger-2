@@ -22,6 +22,7 @@
 'use strict';
 
 const taggerSchema = require('../schema/index');
+const utils = require('./utils');
 const logger = require('../utils/error-logger');
 const path = require('path');
 const filename = path.basename(__filename);
@@ -61,7 +62,7 @@ taggerDao.retrieveAllPublishedCollections = () => {
 
 taggerDao.countCTypesByArea = (areaId) => {
 
-  if(!areaId) {
+  if (!areaId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -78,7 +79,7 @@ taggerDao.countCTypesByArea = (areaId) => {
 
 taggerDao.browseTypesByArea = (areaId) => {
 
-  if(!areaId) {
+  if (!areaId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -94,7 +95,7 @@ taggerDao.browseTypesByArea = (areaId) => {
 
 taggerDao.repoTypesByArea = (areaId) => {
 
-  if(!areaId) {
+  if (!areaId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -111,7 +112,7 @@ taggerDao.repoTypesByArea = (areaId) => {
 
 taggerDao.findCollectionsInArea = (areaId) => {
 
-  if(!areaId) {
+  if (!areaId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -129,7 +130,7 @@ taggerDao.findCollectionsInArea = (areaId) => {
 
 taggerDao.findAreasForCollection = (collId) => {
 
-  if(!collId) {
+  if (!collId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -144,7 +145,7 @@ taggerDao.findAreasForCollection = (collId) => {
 
 taggerDao.findItemContentTarget = (collId, typeId) => {
 
-  if(!collId || !typeId) {
+  if (!collId || !typeId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -161,7 +162,7 @@ taggerDao.findItemContentTarget = (collId, typeId) => {
 
 taggerDao.createItemContentTarget = (collId, typeId) => {
 
-  if(!collId || !typeId) {
+  if (!collId || !typeId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -177,7 +178,7 @@ taggerDao.createItemContentTarget = (collId, typeId) => {
 
 taggerDao.deleteItemContentTarget = (collId, typeId) => {
 
-  if(!collId || !typeId) {
+  if (!collId || !typeId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -195,7 +196,7 @@ taggerDao.deleteItemContentTarget = (collId, typeId) => {
 
 taggerDao.findContentTypesForCollection = (collId) => {
 
-  if(!collId) {
+  if (!collId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -213,7 +214,7 @@ taggerDao.findContentTypesForCollection = (collId) => {
 
 taggerDao.checkForExistingTagTarget = (collId, tagId) => {
 
-  if(!collId || !tagId) {
+  if (!collId || !tagId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -231,7 +232,7 @@ taggerDao.checkForExistingTagTarget = (collId, tagId) => {
 
 taggerDao.addTagTarget = (collId, tagId) => {
 
-  if(!collId || !tagId) {
+  if (!collId || !tagId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -247,7 +248,7 @@ taggerDao.addTagTarget = (collId, tagId) => {
 
 taggerDao.deleteTagTarget = (collId, tagId) => {
 
-  if(!collId || !tagId) {
+  if (!collId || !tagId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -265,7 +266,7 @@ taggerDao.deleteTagTarget = (collId, tagId) => {
 
 taggerDao.addCollectionToArea = (collId, areaId) => {
 
-  if(!collId || !areaId) {
+  if (!collId || !areaId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -280,7 +281,7 @@ taggerDao.addCollectionToArea = (collId, areaId) => {
 
 taggerDao.getAreaIdsForCollection = (collId) => {
 
-  if(!collId) {
+  if (!collId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -299,7 +300,7 @@ taggerDao.getAreaIdsForCollection = (collId) => {
 
 taggerDao.checkAreaAssociation = (collId, areaId) => {
 
-  if(!collId || !areaId) {
+  if (!collId || !areaId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -317,7 +318,7 @@ taggerDao.checkAreaAssociation = (collId, areaId) => {
 
 taggerDao.removeCollectionFromArea = (areaId, collId) => {
 
-  if(!collId || !areaId) {
+  if (!collId || !areaId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -334,7 +335,7 @@ taggerDao.removeCollectionFromArea = (areaId, collId) => {
 
 taggerDao.findCollectionById = (collId) => {
 
-  if(!collId) {
+  if (!collId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -350,7 +351,7 @@ taggerDao.findCollectionById = (collId) => {
 
 taggerDao.findCategoryAssociation = (collId) => {
 
-  if(!collId) {
+  if (!collId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -367,7 +368,7 @@ taggerDao.findCategoryAssociation = (collId) => {
 
 taggerDao.getCategoryForCollection = (collId) => {
 
-  if(!collId) {
+  if (!collId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -385,7 +386,7 @@ taggerDao.getCategoryForCollection = (collId) => {
 
 taggerDao.setPublicationStatus = (status, collId) => {
 
-  if(!collId || !status) {
+  if (!collId || !status) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -403,7 +404,7 @@ taggerDao.setPublicationStatus = (status, collId) => {
 
 taggerDao.getPublicationStatus = (collId) => {
 
-  if(!collId) {
+  if (!collId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -420,7 +421,7 @@ taggerDao.getPublicationStatus = (collId) => {
 
 taggerDao.updateCollection = (update, id) => {
 
-  if(!update || !id) {
+  if (!update || !id) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -437,7 +438,7 @@ taggerDao.updateCollection = (update, id) => {
 
 taggerDao.addCollectionToCategory = (id, category) => {
 
-  if(!id || !category) {
+  if (!id || !category) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -449,7 +450,7 @@ taggerDao.addCollectionToCategory = (id, category) => {
 
 taggerDao.updateCollectionCategory = (id, category) => {
 
-  if(!id || !category) {
+  if (!id || !category) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -467,22 +468,22 @@ taggerDao.updateCollectionCategory = (id, category) => {
 };
 
 taggerDao.deleteCategoryFromCollection = (id, category) => {
-  if(!id || !category) {
+  if (!id || !category) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
 
   return taggerSchema.CategoryTarget.destroy({
-   where: {
-     CategoryId: category,
-     CollectionId: id
-   }
- });
+    where: {
+      CategoryId: category,
+      CollectionId: id
+    }
+  });
 };
 
 taggerDao.deleteCollection = (collId) => {
 
-  if(!collId) {
+  if (!collId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -497,7 +498,7 @@ taggerDao.deleteCollection = (collId) => {
 
 taggerDao.addNewCollection = (title, browseType, repoType, ctype) => {
 
-  if(!title || !browseType || !repoType || !ctype) {
+  if (!title || !browseType || !repoType || !ctype) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -513,7 +514,7 @@ taggerDao.addNewCollection = (title, browseType, repoType, ctype) => {
 
 taggerDao.updateCollectionImage = (collId, imageName) => {
 
-  if(!collId || !imageName) {
+  if (!collId || !imageName) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -533,20 +534,14 @@ taggerDao.updateCollectionImage = (collId, imageName) => {
 
 taggerDao.getCollectionsByArea = (areaId) => {
 
-  if(!areaId) {
+  if (!areaId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
 
   let areaArray = areaId.split(',');
-  let areaWhereClause = '';
 
-  for (let i = 0; i < areaArray.length; i++) {
-    areaWhereClause += ' at.AreaId = ? ';
-    if (i < areaArray.length - 1) {
-      areaWhereClause += ' OR ';
-    }
-  }
+  let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
 
   return taggerSchema.sequelize.query('Select c.id, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where ' + areaWhereClause + ' AND c.published = true group by c.id order by c.id',
     {
@@ -558,7 +553,7 @@ taggerDao.getCollectionsByArea = (areaId) => {
 
 taggerDao.getCollectionsBySubjectAndArea = (subjectId, areaId) => {
 
-  if(!areaId || !subjectId) {
+  if (!areaId || !subjectId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -575,7 +570,7 @@ taggerDao.getCollectionsBySubjectAndArea = (subjectId, areaId) => {
 
 taggerDao.getCollectionsBySubject = (subjectId) => {
 
-  if(!subjectId) {
+  if (!subjectId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -592,7 +587,7 @@ taggerDao.getCollectionsBySubject = (subjectId) => {
 
 taggerDao.getCollectionsByCategory = (categoryId) => {
 
-  if(!categoryId) {
+  if (!categoryId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -607,7 +602,7 @@ taggerDao.getCollectionsByCategory = (categoryId) => {
 
 taggerDao.findTagsForCollection = (collId) => {
 
-  if(!collId) {
+  if (!collId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -626,7 +621,7 @@ taggerDao.findTagsForCollection = (collId) => {
 
 taggerDao.findRelatedCollections = (collId, subjectId) => {
 
-  if(!subjectId || !collId) {
+  if (!subjectId || !collId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }

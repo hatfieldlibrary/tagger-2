@@ -31,7 +31,7 @@ gulp.task(tasks.CLIENT_RELOAD, () => {
 
 gulp.task(tasks.CLIENT_WATCH, () => {
 
-  browserSync({port: 3000, proxy: "http://localhost:3333/tagger/", reloadDelay: 1000});
+  browserSync({port: 3001, proxy: "http://localhost:3333/tagger/", reloadDelay: 1000});
 
   let _watchable = [];
 
