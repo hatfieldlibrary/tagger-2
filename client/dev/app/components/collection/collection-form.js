@@ -100,8 +100,8 @@
     function _getAreaInfo(areaId) {
       const area = AreaById.query({id: areaId});
       area.$promise.then((result) => {
-        vm.areaTitle = result.title;
-        vm.areaId = result.id;
+        vm.areaTitle = result[0].title;
+        vm.areaId = result[0].id;
       });
     }
 

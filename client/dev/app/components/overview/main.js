@@ -96,7 +96,7 @@
     function _getAreaInfo(areaId) {
       const area = AreaById.query({id: areaId});
       area.$promise.then((data) => {
-        ctrl.areaLabel = data.title;
+        ctrl.areaLabel = data[0].title;
         ctrl.areaId = areaId;
       });
     }

@@ -443,7 +443,6 @@ taggerDao.addCollectionToCategory = (id, category) => {
     throw _errorResponse();
   }
 
-
   return taggerSchema.CategoryTarget.create({CollectionId: id, CategoryId: category});
 
 };
@@ -543,7 +542,7 @@ taggerDao.getCollectionsByArea = (areaId) => {
 
   let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
 
-  return taggerSchema.sequelize.query('Select c.id, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where ' + areaWhereClause + ' AND c.published = true group by c.id order by c.id',
+  return taggerSchema.sequelize.query('Select c.id, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where ' + areaWhereClause + ' AND c.published = true group by c.id order by c.title',
     {
       replacements: areaArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT

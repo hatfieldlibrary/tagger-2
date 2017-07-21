@@ -131,6 +131,7 @@ taggerDao.findTagsInArea = (areaId) => {
     },
     attributes: ['"Tags.name"', 'TagId'],
     order: [[taggerSchema.Tag, 'name', 'ASC']],
+    group: ['TagId'],
     include: [taggerSchema.Tag]
   });
 

@@ -93,10 +93,10 @@
   function _mapListCollection(collection) {
 
     let collectionId;
-    if (collection.id) {
-      collectionId = collection.id;
-    } else {
+    if (collection.CollectionId) {
       collectionId = collection.CollectionId;
+    } else {
+      collectionId = collection.id;
     }
     let coll = {
       id: collectionId,

@@ -39,7 +39,7 @@
   taggerServices.factory('AreaById', ['$resource', 'config',
     function ($resource, config) {
       return $resource(config.restHost + 't/area/id/:id', {}, {
-        query: {method: 'GET', isArray: false}
+        query: {method: 'GET', isArray: true}
       });
     }
   ]);

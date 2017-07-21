@@ -89,7 +89,7 @@ taggerDao.areaListWithCollectionCounts = () => {
 
 
   return taggerSchema.sequelize.query('select count(*), a.title, a.id from Areas a join AreaTargets at on a.id = at.AreaId ' +
-    'join Collections c on c.id = at.CollectionId group by (a.id);',
+    'join Collections c on c.id = at.CollectionId group by (a.id) order by position;',
     {
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
