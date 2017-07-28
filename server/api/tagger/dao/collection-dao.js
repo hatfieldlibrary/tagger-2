@@ -557,11 +557,17 @@ taggerDao.getCollectionsBySubjectAndArea = (subjectId, areaId) => {
     throw _errorResponse();
   }
 
+  let queryArray = areaId.split(',');
+
+  let areaWhereClause = utils.getWhereClauseForMultipleAreas(queryArray);
+
+  queryArray.unshift(subjectId);
+
   return taggerSchema.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
-    'on tt.CollectionId = c.id LEFT JOIN AreaTargets at on c.id=at.CollectionId where tt.TagId = ? and at.AreaId = ? and c.published = true ' +
+    'on tt.CollectionId = c.id LEFT JOIN AreaTargets at on c.id=at.CollectionId where tt.TagId = ? and '+ areaWhereClause + ' and c.published = true ' +
     'order by c.title',
     {
-      replacements: [subjectId, areaId],
+      replacements: queryArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
 

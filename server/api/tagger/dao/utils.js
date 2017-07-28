@@ -15,6 +15,10 @@ utils.getWhereClauseForMultipleAreas = (areaArray) => {
       areaWhereClause += ' OR ';
     }
   }
+  if (areaArray.length > 1) {
+    areaWhereClause = '(' + areaWhereClause + ')';
+  }
+
   return areaWhereClause;
 
 };
