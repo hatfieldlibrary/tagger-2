@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  * Created by mspalti on 5/23/14.
  */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
 
   var Collection = sequelize.define('Collection',
     {
@@ -36,9 +36,13 @@ module.exports = function(sequelize, DataTypes) {
       image: {
         type: DataTypes.STRING(80),
         allowNull: false,
-        defaultValue: 'no_image.gif'
+        defaultValue: 'no_image.jpg'
       },
       url: {
+        type: DataTypes.STRING(255),
+        allowNull: true
+      },
+      searchUrl: {
         type: DataTypes.STRING(255),
         allowNull: true
       },
@@ -98,7 +102,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     {
       getterMethods: {
-        getCollectionObject: function() {
+        getCollectionObject: function () {
           return {
             'id': this.getDataValue('id'),
             'title': this.getDataValue('title'),
@@ -108,23 +112,23 @@ module.exports = function(sequelize, DataTypes) {
             'desc': this.getDataValue('description'),
             'dates': this.getDataValue('dates'),
             'items': this.getDataValue('items'),
-            'ctype':this.getDataValue('ctype'),
-            'repoType':this.getDataValue('repoType'),
-            'categoryId':this.getDataValue('categoryId'),
+            'ctype': this.getDataValue('ctype'),
+            'repoType': this.getDataValue('repoType'),
+            'categoryId': this.getDataValue('categoryId'),
             'restricted': this.getDataValue('restricted'),
             'published': this.getDataValue('published')
           };
         }
       },
       setterMethods: {
-        name: function(val) {
+        name: function (val) {
           this.setDataValue('title', val);
         }
       }
     },
     {
       classMethods: {
-        associate: function(models) {
+        associate: function (models) {
           Collection.hasMany(models.TagTarget);
           Collection.hasMany(models.ItemContentTarget);
           Collection.hasMany(models.AreaTargets);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -45,9 +45,7 @@ let
 
 const db = require('../api/tagger/schema');
 
-
 module.exports = function (app, config) {
-
 
   let sessionMiddleware;
 
@@ -176,7 +174,7 @@ module.exports = function (app, config) {
                 profile.areaId = user.area;
                 profile.picture = user.picture;
                 return done(err, profile);
-              } catch(err) {
+              } catch (err) {
                 done(err, null);
               }
             }

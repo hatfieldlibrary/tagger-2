@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -32,11 +32,11 @@ module.exports = function(app, config) {
   app.set('port', config.port);
   app.set('view engine', 'pug');
 
+  // This is hard-coded! Is cors being used?
   var corsOptions = {
     origin: 'http://localhost:3001',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   };
-
   app.use(cors(corsOptions));
 
   let _root = path.normalize(__dirname + '/../..');

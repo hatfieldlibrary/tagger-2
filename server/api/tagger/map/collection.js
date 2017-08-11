@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2017.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 (function () {
 
   'use strict';
@@ -45,15 +62,14 @@
     let collectionArray = [];
     for (let i = 0; i < collections.length; i++) {
 
-
       let collection;
+
       if(type === 'all') {
         collection = collections[i].dataValues;
       } else {
         collection = collections[i];
       }
-
-      let coll = _mapListCollection(collection, type);
+      let coll = _mapListCollection(collection);
       collectionArray.push(coll);
 
     }
@@ -74,19 +90,20 @@
     return typeArray;
   }
 
-  function _mapListCollection(collection, type) {
+  function _mapListCollection(collection) {
 
     let collectionId;
-    if (type === 'all') {
-      collectionId = collection.id;
-    } else {
+    if (collection.CollectionId) {
       collectionId = collection.CollectionId;
+    } else {
+      collectionId = collection.id;
     }
     let coll = {
       id: collectionId,
       title: collection.title,
       image: collection.image,
       url: collection.url,
+      searchUrl: collection.searchUrl,
       desc: collection.description,
       dates: collection.dates,
       items: collection.items,
@@ -112,6 +129,7 @@
       title: collection.title,
       image: collection.image,
       url: collection.url,
+      searchUrl: collection.searchUrl,
       desc: collection.description,
       dates: collection.dates,
       items: collection.items,
@@ -161,7 +179,7 @@
     let tagArray = [];
 
     for (let i = 0; i < tags.length; i++) {
-      tagArray.push(tags[0].dataValues.TagId)
+      tagArray.push(tags[i].dataValues.TagId)
     }
     return tagArray;
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -47,9 +47,15 @@ taggerDao.findAreaById = (areaId) => {
     throw _errorResponse();
   }
 
-  return taggerSchema.Area.find({
+  let areaArray = areaId.split(',');
+
+  return taggerSchema.Area.findAll({
     where: {
-      id: areaId
+      id: {
+        $or: [
+          areaArray
+        ]
+      }
     },
     order: [['title', 'ASC']]
   });
@@ -83,7 +89,7 @@ taggerDao.areaListWithCollectionCounts = () => {
 
 
   return taggerSchema.sequelize.query('select count(*), a.title, a.id from Areas a join AreaTargets at on a.id = at.AreaId ' +
-    'join Collections c on c.id = at.CollectionId group by (a.id);',
+    'join Collections c on c.id = at.CollectionId group by (a.id) order by position;',
     {
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });

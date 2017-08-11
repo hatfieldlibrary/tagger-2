@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -58,7 +58,8 @@
     };
 
     /**
-     * Gets field data for the current area.
+     * Gets field data for the current area. The public API endpoint
+     * allows multiple area IDs, so the response arrives in an array.
      * @param areaId
      * @private
      */
@@ -66,7 +67,7 @@
       if(areaId > 0) {
         let ar = AreaById.query({id: areaId});
         ar.$promise.then(function (data) {
-          vm.area = data;
+          vm.area = data[0];
           vm.menu({id: vm.area.id, title: vm.area.title});
         });
       } else {

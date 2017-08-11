@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2017.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Created by mspalti on 4/4/17.
  */
@@ -211,6 +228,7 @@ exports.byId = function (req, callback, errorHandler) {
         response.items = result.getCollection.items;
         response.ctype = result.getCollection.ctype;
         response.url = result.getCollection.url;
+        response.searchUrl = result.getCollection.searchUrl;
         response.browseType = result.getCollection.browseType;
         response.repoType = result.getCollection.repoType;
         response.image = result.getCollection.image;
@@ -243,6 +261,7 @@ exports.update = function (req, callback, errorHandler) {
   const id = req.body.id;
   const title = req.body.title;
   const url = req.body.url;
+  const searchUrl = req.body.searchUrl;
   const browseType = req.body.browseType;
   const description = req.body.description;
   const dates = req.body.dates;
@@ -255,6 +274,7 @@ exports.update = function (req, callback, errorHandler) {
   const update = {
     title: title,
     url: url,
+    searchUrl: searchUrl,
     browseType: browseType,
     description: description,
     dates: dates,

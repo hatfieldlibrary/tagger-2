@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@
     function _getAreaInfo(areaId) {
       const area = AreaById.query({id: areaId});
       area.$promise.then((data) => {
-        ctrl.areaLabel = data.title;
+        ctrl.areaLabel = data[0].title;
         ctrl.areaId = areaId;
       });
     }

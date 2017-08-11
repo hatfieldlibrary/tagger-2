@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ const taggerSchema = require('../schema/index');
 const logger = require('../utils/error-logger');
 const path = require('path');
 const filename = path.basename(__filename);
+const utils = require('./utils');
 const paramErrorMessage = 'A parameter for a subject tag query is not defined.';
 const taggerDao = {};
 
@@ -119,15 +120,28 @@ taggerDao.findTagsInArea = (areaId) => {
     throw _errorResponse();
   }
 
-  return taggerSchema.TagAreaTarget.findAll( {
-    where: {
-      AreaId: areaId
-    },
+  let areaArray = areaId.split(',');
+  let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
 
-    attributes: ['"Tags.name"', 'TagId'],
-    order: [[taggerSchema.Tag, 'name', 'ASC']],
-    include: [taggerSchema.Tag]
-  });
+  return taggerSchema.sequelize.query('Select t.id, t.name from TagAreaTargets at LEFT JOIN Tags t on at.TagId = t.id  where ' + areaWhereClause + ' group by t.id order by t.name',
+    {
+      replacements: areaArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+  // return taggerSchema.TagAreaTarget.findAll( {
+  //   where: {
+  //     AreaId: {
+  //       $or: [
+  //         areaArray
+  //       ]
+  //     }
+  //   },
+  //   attributes: ['TagId', '"Tag.name"'],
+  //   order: [[taggerSchema.Tag, 'name', 'ASC']],
+  //   group: [['TagId']],
+  //   include: [{ model: taggerSchema.Tag, attributes: id, name}]
+  // });
 
 };
 

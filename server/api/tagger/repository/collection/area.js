@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2017.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 'use strict';
 
 const async = require('async');
@@ -16,8 +33,8 @@ exports.areas = function (req, callback, errorHandler) {
 
   taggerDao.findAreasForCollection(collId)
     .then((data) => {
-    callback(data);
-  })
+      callback(data);
+    })
     .catch((err) => {
       logger.dao(err);
       errorHandler(err);
@@ -120,7 +137,6 @@ exports.addAreaTarget = function (req, callback, existingItemCallback, errorHand
  * @private
  */
 function _removeCollectionFromArea(collId, areaId, callback, errorHandler) {
-
   async.series(
     {
       remove: (series) => {
@@ -143,7 +159,7 @@ function _removeCollectionFromArea(collId, areaId, callback, errorHandler) {
         logger.dao(err);
         errorHandler(err);
       } else {
-        callback(result);
+        callback({areaList: result});
       }
     });
 
@@ -151,7 +167,7 @@ function _removeCollectionFromArea(collId, areaId, callback, errorHandler) {
 
 /**
  * Removes area target from a collection that has a category (collection group) assigned. If the category
- * exists AND has been assigned to the area to be removed, the category also must be removed from the collection.
+ * exists AND belongs to the area to be removed, the category also must be removed from the collection.
  * @param collId
  * @param areaId
  * @param callback response success callback
@@ -163,7 +179,7 @@ function _removeAreaTarget(collId, areaId, category, callback, errorHandler) {
   async.series(
     {
       deleteCategory: (series) => {
-        if (category.areaId === areaId) {
+        if (+category.areaId === +areaId) {
           taggerDao.deleteCategoryFromCollection(collId, category.id)
             .then((result) => {
               series(null, result);
@@ -184,16 +200,15 @@ function _removeAreaTarget(collId, areaId, category, callback, errorHandler) {
             series(null, result);
             return null;
           });
-      }),
-      function(err, result) {
-        if (err) {
-          logger.dao(err);
-          errorHandler(err);
-        } else {
-          callback({areaList: result});
-        }
+      })
+    },
+    function (err, result) {
+      if (err) {
+        logger.dao(err);
+        errorHandler(err);
+      } else {
+        callback({areaList: result});
       }
-
     });
 
 }
@@ -201,7 +216,7 @@ function _removeAreaTarget(collId, areaId, category, callback, errorHandler) {
 /**
  * Removes the association between a collection and a collection
  * area.  Also removes the category (collection group) from the collection,
- * Returns new area list after completion.
+ * if necessary. Returns new area list after completion.
  * @param req
  * @param callback response success callback
  * @param errorHandler failure response callback
@@ -212,10 +227,22 @@ exports.removeAreaTarget = function (req, callback, errorHandler) {
   const areaId = req.params.areaId;
 
   taggerDao.getCategoryForCollection(collId).then((result) => {
-    if (result.Category === null) {
-      _removeCollectionFromArea(collId, areaId, callback, errorHandler);
+    if (result) {
+      // No category assigned, so just remove collection from area.
+      if (result.Category === null) {
+        _removeCollectionFromArea(collId, areaId, callback, errorHandler);
+      }
+      // The category belongs to a different area, so just remove collection from area.
+      else if (+result.Category.areaId !== +areaId) {
+        _removeCollectionFromArea(collId, areaId, callback, errorHandler);
+      }
+      // The category belongs to the current area, so remove it from the collection before
+      // removing the collection from the area.
+      else {
+        _removeAreaTarget(collId, areaId, result.Category, callback, errorHandler);
+      }
     } else {
-      _removeAreaTarget(collId, areaId, result.Category, callback, errorHandler);
+      _removeCollectionFromArea(collId, areaId, callback, errorHandler);
     }
   });
 

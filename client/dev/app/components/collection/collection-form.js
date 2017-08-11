@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -55,6 +55,8 @@
 
     vm.noCollectionMessage = 'No collections for this area.';
 
+    vm.searchUrlPlaceholder = 'Add url template for searches.';
+
     /**
      * Set the component subscriptions.
      * @private
@@ -98,8 +100,8 @@
     function _getAreaInfo(areaId) {
       const area = AreaById.query({id: areaId});
       area.$promise.then((result) => {
-        vm.areaTitle = result.title;
-        vm.areaId = result.id;
+        vm.areaTitle = result[0].title;
+        vm.areaId = result[0].id;
       });
     }
 
@@ -247,6 +249,7 @@
         id: vm.collection.id,
         title: vm.collection.title,
         url: vm.collection.url,
+        searchUrl: vm.collection.searchUrl,
         description: vm.collection.description,
         dates: vm.collection.dates,
         repoType: vm.collection.repoType,
