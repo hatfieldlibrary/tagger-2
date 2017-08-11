@@ -18,7 +18,7 @@
 /**
  * Created by mspalti on 3/31/17.
  */
-(function() {
+(function () {
 
   'use strict';
 
@@ -31,19 +31,22 @@
 
     let tagArray = [];
 
-    for(let i = 0; i < tags.length; i++) {
+    for (let i = 0; i < tags.length; i++) {
 
       let tag = {};
 
-      if (type === 'collection' || type === 'area' ) {
+      // Since we started using raw queries for subject tags,
+      // this special data handling is not needed.
+      if (type === 'collection') {
         // sequelize tomfoolery.
         tag = _mapTag(tags[i].dataValues.Tag.dataValues);
       }
       else if (type === 'all') {
         tag = _mapTag(tags[i].dataValues);
       }
-      else
-       {
+      else {
+        // The query for finding tags by area no longer
+        // requires special handling.
         tag = _mapTag(tags[i]);
       }
 

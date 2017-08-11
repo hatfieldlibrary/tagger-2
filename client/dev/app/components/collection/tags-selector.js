@@ -55,7 +55,7 @@
       if (id) {
         let tagsForArea = TagsForArea.query({areaId: id});
         tagsForArea.$promise.then(function (data) {
-
+console.log(data)
           ctrl.tagsForArea = data;
           _getTagsForCollection(ctrl.collectionId);
         });
@@ -68,7 +68,7 @@
 
     function _isTagInAreaList(id) {
       for (let i = 0; i < ctrl.tagsForArea.length; i++) {
-        if (ctrl.tagsForArea[i].Tag.id === id) {
+        if (ctrl.tagsForArea[i].id === id) {
           return true;
         }
       }
@@ -83,6 +83,7 @@
     function _getTagsForCollection(id) {
       let tags = TagsForCollection.query({collId: id});
       tags.$promise.then(function (data) {
+        console.log(data)
         _setTagsArray(data);
       });
     }
@@ -121,7 +122,7 @@
       let result = CollectionTagTargetAdd.save(
         {
           collId: ctrl.collectionId,
-          tagId: chip.Tag.id
+          tagId: chip.id
         }
       );
       result.$promise.then(function (data) {
@@ -134,7 +135,7 @@
         }
       });
 
-      let chipObj = {id: chip.Tag.id, name: chip.Tag.name};
+      let chipObj = {id: chip.id, name: chip.name};
 
       return chipObj;
 
@@ -175,7 +176,7 @@
     function createFilterFor(query) {
       const regex = new RegExp(query, 'i');
       return function filterFn(tagItem) {
-        if (tagItem.Tag.name.match(regex) !== null) {
+        if (tagItem.name.match(regex) !== null) {
           return true;
         }
         return false;
@@ -207,7 +208,7 @@
     '             <label>Add Tags</label>' +
     '             <md-chips class="tagger-chips" ng-model="$ctrl.tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="$ctrl.addTag($chip)" md-on-remove="$ctrl.removeTag($chip)" >' +
     '               <md-autocomplete md-selected-item="$ctrl.selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in $ctrl.queryTags(searchText)"  md-item-text="item.tag.name">' +
-    '                 <span md-highlight-text="searchText"> {{item.Tag.name}} </span>' +
+    '                 <span md-highlight-text="searchText"> {{item.name}} </span>' +
     '               </md-autocomplete>' +
     '               <md-chip-template>' +
     '                 <span> {{$chip.name}} </span>' +
