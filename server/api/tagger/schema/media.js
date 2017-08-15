@@ -50,13 +50,11 @@ module.exports =  function(sequelize, DataTypes) {
             this.setDataValue('icon', val);
           }
         }
-      },  {
-        classMethods: {
-          associate: function(models) {
-            ItemContent.belongsTo(models.ItemContentTarget);
-          }
-        }
       });
+
+  ItemContent.associate = function(models) {
+    ItemContent.hasMany(models.ItemContentTarget);
+  };
 
   return ItemContent;
 };

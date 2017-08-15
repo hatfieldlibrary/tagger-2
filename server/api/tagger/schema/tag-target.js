@@ -29,16 +29,12 @@ module.exports = function(sequelize, DataTypes) {
                 primaryKey: true,
                 autoIncrement: true
             }
-        },
-        {
-            classMethods: {
-                associate: function(models) {
-                    TagTarget.belongsTo(models.Tag, { onDelete: 'cascade' }) ;
-                    TagTarget.belongsTo(models.Collection, { onDelete: 'cascade' });
-                }
-            }
-        }
-    );
+        });
+
+    TagTarget.associate = function(models) {
+      TagTarget.belongsTo(models.Tag, { onDelete: 'cascade' }) ;
+      TagTarget.belongsTo(models.Collection, { onDelete: 'cascade' });
+    };
 
     return TagTarget;
 };
