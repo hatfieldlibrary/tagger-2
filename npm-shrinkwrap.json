@@ -2773,7 +2773,8 @@
     "etag": {
       "version": "1.7.0",
       "from": "etag@>=1.7.0 <1.8.0",
-      "resolved": "https://registry.npmjs.org/etag/-/etag-1.7.0.tgz"
+      "resolved": "https://registry.npmjs.org/etag/-/etag-1.7.0.tgz",
+      "dev": true
     },
     "event-stream": {
       "version": "3.3.4",
@@ -3206,7 +3207,8 @@
     "fresh": {
       "version": "0.3.0",
       "from": "fresh@0.3.0",
-      "resolved": "https://registry.npmjs.org/fresh/-/fresh-0.3.0.tgz"
+      "resolved": "https://registry.npmjs.org/fresh/-/fresh-0.3.0.tgz",
+      "dev": true
     },
     "from": {
       "version": "0.1.7",
@@ -6737,7 +6739,8 @@
     "ms": {
       "version": "0.7.2",
       "from": "ms@0.7.2",
-      "resolved": "https://registry.npmjs.org/ms/-/ms-0.7.2.tgz"
+      "resolved": "https://registry.npmjs.org/ms/-/ms-0.7.2.tgz",
+      "dev": true
     },
     "multiparty": {
       "version": "4.1.2",
@@ -8121,9 +8124,31 @@
       "dev": true
     },
     "serve-favicon": {
-      "version": "2.3.2",
-      "from": "serve-favicon@>=2.3.2 <3.0.0",
-      "resolved": "https://registry.npmjs.org/serve-favicon/-/serve-favicon-2.3.2.tgz"
+      "version": "2.4.3",
+      "from": "serve-favicon@latest",
+      "resolved": "https://registry.npmjs.org/serve-favicon/-/serve-favicon-2.4.3.tgz",
+      "dependencies": {
+        "etag": {
+          "version": "1.8.0",
+          "from": "etag@>=1.8.0 <1.9.0",
+          "resolved": "https://registry.npmjs.org/etag/-/etag-1.8.0.tgz"
+        },
+        "fresh": {
+          "version": "0.5.0",
+          "from": "fresh@0.5.0",
+          "resolved": "https://registry.npmjs.org/fresh/-/fresh-0.5.0.tgz"
+        },
+        "ms": {
+          "version": "2.0.0",
+          "from": "ms@2.0.0",
+          "resolved": "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz"
+        },
+        "safe-buffer": {
+          "version": "5.0.1",
+          "from": "safe-buffer@5.0.1",
+          "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.0.1.tgz"
+        }
+      }
     },
     "serve-index": {
       "version": "1.8.0",
