@@ -335,9 +335,9 @@ describe('The collection form component', () => {
         $promise: {
           then: (callback) => {
             if (testAreaId === 1) {
-              return callback(testAreas[0]);
+              return callback(testAreas);
             } else if (testAreaId == 2) {
-              return callback(testAreas[1]);
+              return callback(testAreas);
             } else {
 
             }
@@ -576,7 +576,7 @@ describe('The collection form component', () => {
     testAreaId = 2;
     AreaObservable.set(2);
 
-    expect(ctrl.areaTitle).toEqual(testAreas[1].title);
+    expect(ctrl.areaTitle).toEqual(testAreas[0].title);
 
   });
 

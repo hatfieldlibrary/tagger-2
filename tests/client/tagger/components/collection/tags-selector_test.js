@@ -136,29 +136,25 @@ describe('The tag selector component', () => {
 
     tagsForAreaAdd = [
       {
-        Tag: {
+
           id: 1,
           name: 'tag one name',
           url: ''
-        }
       },
       {
-        Tag: {
+
           id: 2,
           name: 'tag two name',
           url: ''
-        }
 
       }
     ];
 
     tagsForAreaRemove = [
       {
-        Tag: {
           id: 2,
           name: 'tag two name',
           url: ''
-        }
 
       }
     ];
@@ -167,29 +163,28 @@ describe('The tag selector component', () => {
 
     tagsForCollectionAdd = [
       {
-        Tag: {
+
           id: 1,
           name: 'tag one name',
           url: ''
-        }
+
       },
       {
-        Tag: {
+
           id: 2,
           name: 'tag two name',
           url: ''
-        }
+
 
       }
     ];
 
     tagsForCollectionRemove = [
-      {
-        Tag: {
+
+        {
           id: 2,
           name: 'tag two name',
           url: ''
-        }
 
       }
     ];
@@ -197,10 +192,10 @@ describe('The tag selector component', () => {
     tagsForCollection = tagsForCollectionAdd;
 
     addChip = {
-      Tag: {
+
         id: 1,
         name: 'tag one name'
-      }
+
     };
 
     removeChip = {

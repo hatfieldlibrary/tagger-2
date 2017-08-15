@@ -24,8 +24,8 @@
 */
 const credentials = {
   develgid: '',
-  develdbuser: 'test_user',
-  develdbpassword: '1234',
+  dbUser: 'test_user',
+  dbPassword: '1234',
   googleClientId: '',
   googleClientSecret: '',
   googleCallback: 'http://localhost:3000/auth/google/callback',
