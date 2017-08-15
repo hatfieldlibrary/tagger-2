@@ -27,16 +27,12 @@ module.exports = function(sequelize, DataTypes) {
         primaryKey: true,
         autoIncrement: true
       }
-    },
-    {
-      classMethods: {
-        associate: function(models) {
-          TagAreaTarget.belongsTo(models.Tag, { onDelete: 'cascade' }) ;
-          TagAreaTarget.belongsTo(models.Area, { onDelete: 'cascade' });
-        }
-      }
-    }
-  );
+    });
+
+  TagAreaTarget.associate = function(models) {
+    TagAreaTarget.belongsTo(models.Tag, { onDelete: 'cascade' }) ;
+    TagAreaTarget.belongsTo(models.Area, { onDelete: 'cascade' });
+  };
 
   return TagAreaTarget;
 };

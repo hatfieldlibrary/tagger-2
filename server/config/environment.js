@@ -50,7 +50,7 @@ const config = {
       password: credentials.dbPassword,
       host: 'localhost',
       port: 3306,
-      dialect: 'mariadb'
+      dialect: 'mysql'
     },
     dbLog: console.log,
     sync: {force: false},
@@ -117,7 +117,7 @@ const config = {
       password: credentials.dbPassword,
       host: credentials.productiondbhost,
       port: 3306,
-      dialect: 'mariadb'
+      dialect: 'mysql'
     },
     convert: '/usr/bin/convert',
     identify: '/usr/bin/identify',
