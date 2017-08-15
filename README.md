@@ -58,9 +58,9 @@ Next install project dependencies using [npm](https://www.npmjs.com/) and [bower
      
 Node, npm and bower need to be installed if you do not have them already.
   
-## Mysql/MariaDb
+## Mysql
  
-The application requires mysql or MariaDb.  For development, you need to install mysql on your machine and create databases. The database names are set in configuration and can be whatever you like so long as separate databases are created for development, testing and production.
+The application requires mysql.  For development, you need to install mysql on your machine and create databases. The database names are set in configuration and can be whatever you like so long as separate databases are created for development, testing and production.
  
      tagger_development
      tagger_test
