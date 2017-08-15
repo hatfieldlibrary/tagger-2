@@ -29,16 +29,13 @@ module.exports = function(sequelize, DataTypes) {
         primaryKey: true,
         autoIncrement: true
       }
-    },
-    {
-      classMethods: {
-        associate: function(models) {
-          AreaTarget.belongsTo(models.Area, { onDelete: 'cascade' }) ;
-          AreaTarget.belongsTo(models.Collection, { onDelete: 'cascade' });
-        }
-      }
     }
   );
+
+  AreaTarget.associate = function(models) {
+    AreaTarget.belongsTo(models.Area, { onDelete: 'cascade' }) ;
+    AreaTarget.belongsTo(models.Collection, { onDelete: 'cascade' });
+  };
 
   return AreaTarget;
 };

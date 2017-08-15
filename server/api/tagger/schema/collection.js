@@ -125,17 +125,14 @@ module.exports = function (sequelize, DataTypes) {
           this.setDataValue('title', val);
         }
       }
-    },
-    {
-      classMethods: {
-        associate: function (models) {
-          Collection.hasMany(models.TagTarget);
-          Collection.hasMany(models.ItemContentTarget);
-          Collection.hasMany(models.AreaTargets);
-          Collection.hasOne((models.CategoryTarget));
-        }
-      }
     });
+
+  Collection.associate = function (models) {
+    Collection.hasMany(models.TagTarget);
+    Collection.hasMany(models.ItemContentTarget);
+    Collection.hasMany(models.AreaTarget);
+    Collection.hasOne((models.CategoryTarget));
+  };
 
   return Collection;
 };

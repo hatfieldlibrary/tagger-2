@@ -51,13 +51,11 @@ module.exports =  function(sequelize, DataTypes) {
                     this.setDataValue('name', val);
                 }
             }
-        },  {
-            classMethods: {
-                associate: function(models) {
-                    Tag.belongsTo(models.TagTarget);
-                }
-            }
         });
+
+    Tag.associate = function(models) {
+      Tag.hasMany(models.TagTarget);
+    };
 
     return Tag;
 };

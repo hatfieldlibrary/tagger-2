@@ -71,15 +71,11 @@ module.exports = function(sequelize, DataTypes) {
           this.setDataValue('title', val);
         }
       }
-    },
-    {
-      classMethods: {
-        associate: function(models) {
-          Category.hasMany((models.CategoryTarget));
-        }
-      }
-
     });
+
+  Category.associate = function(models) {
+    Category.hasMany((models.CategoryTarget));
+  };
 
   return Category;
 };
