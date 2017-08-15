@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -46,6 +46,15 @@
       }
     };
 
+    function _setAdminArea(areas)  {
+      if (areas.length > 0) {
+        if (UserAreaObservable.get() === 0) {
+          vm.currentAreaId = areas[0].id;
+          AreaObservable.set(vm.currentAreaId);
+        }
+      }
+    }
+
     vm.$onInit = () => {
 
       /**
@@ -70,14 +79,8 @@
       });
 
       AreaListObservable.subscribe((list) => {
-        const areas = list;
-        if (areas.length > 0) {
-          vm.areas = areas;
-          if (UserAreaObservable.get() === 0) {
-            vm.currentAreaId = areas[0].id;
-            AreaObservable.set(vm.currentAreaId);
-          }
-        }
+        vm.areas = list;
+        _setAdminArea(list);
 
       });
     };

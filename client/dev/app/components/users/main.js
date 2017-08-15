@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@
           }
         });
       } else {
-        let save = UserUpdate.save(
+        let save = UserUpdate.update(
           {
             id: id,
             name: name,
@@ -105,7 +105,7 @@
      * @param id  the user's id
      */
     vm.deleteUser = function (id) {
-      let result = UserDelete.save({id: id});
+      let result = UserDelete.delete({id: id});
       result.$promise.then( (data) => {
         if (data.status === 'success') {
           TaggerToast.toast('User Deleted');

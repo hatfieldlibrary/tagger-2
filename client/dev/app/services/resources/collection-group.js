@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
    */
   taggerServices.factory('Category', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'category/byId/:id', {}, {
+      return $resource(config.restHost + 't/category/byId/:id', {}, {
         query: {method: 'GET', isArray: false}
       });
     }
@@ -37,7 +37,7 @@
    */
   taggerServices.factory('CategoryForCollection', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'category/getCollections/:collId', {}, {
+      return $resource(config.restHost + 't/category/getCollections/:collId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }]);
@@ -46,7 +46,7 @@
    */
   taggerServices.factory('CategoryList', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'category/show/list', {}, {
+      return $resource(config.restHost + 't/category/show/list', {}, {
         query: {method: 'GET', isArray: true}
       });
     }
@@ -56,7 +56,7 @@
    */
   taggerServices.factory('CategoryByArea', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'category/byArea/:areaId', {}, {
+      return $resource(config.restHost + 't/category/byArea/:areaId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }]);
@@ -65,7 +65,7 @@
    */
   taggerServices.factory('CategoryCountByArea', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'category/count/:areaId', {}, {
+      return $resource(config.restHost + 't/category/count/:areaId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }]);
@@ -74,7 +74,9 @@
    */
   taggerServices.factory('CategoryUpdate', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'category/update');
+      return $resource(config.restHost + 't/category/update', null, {
+        update: {method: 'PUT'}
+      });
     }
   ]);
   /**
@@ -82,7 +84,7 @@
    */
   taggerServices.factory('CategoryAdd', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'category/add');
+      return $resource(config.restHost + 't/category/add');
     }
   ]);
   /**
@@ -90,7 +92,7 @@
    */
   taggerServices.factory('CategoryDelete', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'category/delete');
+      return $resource(config.restHost + 't/category/delete/:id');
     }
   ]);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -28,9 +28,7 @@
    */
   taggerServices.factory('TagTargetAdd', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'tag/:tagId/add/area/:areaId', {}, {
-        query: {method: 'GET', isArray: false}
-      });
+      return $resource(config.restHost + 't/subject/area/add');
     }
   ]);
   /**
@@ -38,7 +36,7 @@
    */
   taggerServices.factory('TagTargetRemove', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'tag/:tagId/remove/area/:areaId', {}, {
+      return $resource(config.restHost + 't/subject/:tagId/remove/area/:areaId', {}, {
         query: {method: 'GET', isArray: false}
       });
     }]);
@@ -47,7 +45,7 @@
    */
   taggerServices.factory('TagTargets', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'tag/targets/byId/:tagId', {}, {
+      return $resource(config.restHost + 't/subject/targets/byId/:tagId', {}, {
         query: {method: 'GET', isArray: true}
       });
     }]);

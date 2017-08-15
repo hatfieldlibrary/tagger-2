@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -25,10 +25,9 @@ const  multiparty = require('multiparty');
 const config = require('./config/environment');
 const app = express();
 // initialize database.
-const taggerSchema = require('./api/tagger/models/index');
+const taggerSchema = require('./api/tagger/schema/index');
 
 const logger = require('winston');
-logger.level = config.logLevel;
 
 // // configure express
 // require('./config/')(app, config);
@@ -65,14 +64,25 @@ function startServer() {
 
 }
 
+function _apiErrorResponse(res, err) {
+
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.status(err.status);
+  res.end(JSON.stringify(err.message));
+
+}
+
 // Catch 404 and forward to error handler. Any request
 // not handled by express or routes configuration will
 // invoke this middleware.
 app.use(function (req, res, next) {
-  var err = new Error('Not Found: ' + req.originalUrl);
+
+  let err = new Error('Not Found: ' + req.originalUrl);
   err.status = 404;
   err.request = req.originalUrl;
   next(err);
+
 });
 
 /// error handlers
@@ -81,24 +91,35 @@ app.use(function (req, res, next) {
 if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
   /* jshint unused:false   */
   app.use(function (err, req, res, next) {
-    console.error(err.stack);
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
+
+    if(err.status !== 404) {
+     console.log(err);
+     _apiErrorResponse(res, err);
+    }
+    else {
+      res.render('error', {
+        message: err.message,
+        error: err
+      });
+    }
   });
 }
+
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
-  console.error(err.stack);
-  res.status(err.status || 500).end();
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+
+  if(err.status !== 404) {
+    _apiErrorResponse(res, err);
+  }
+  else {
+    res.render('error', {
+      message: err.message,
+      error: {}
+    });
+  }
+
 });
 
 

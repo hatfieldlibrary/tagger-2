@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -36,12 +36,12 @@ const sequelize = new Sequelize(
   database = {};
 
 fs
-  .readdirSync(__dirname + '/../../../../server/api/tagger/models/')
+  .readdirSync(__dirname + '/../../../../server/api/tagger/schema/')
   .filter(function (file) {
     return (file.indexOf('.') !== 0) && (file !== 'index.js');
   })
   .forEach(function (file) {
-    var model = sequelize.import(path.join(__dirname + '/../../../../server/api/tagger/models/', file));
+    var model = sequelize.import(path.join(__dirname + '/../../../../server/api/tagger/schema/', file));
     database[model.name] = model;
   });
 

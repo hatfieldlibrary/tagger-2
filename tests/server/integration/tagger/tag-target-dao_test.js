@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -35,61 +35,44 @@ describe('Tag area target operations', () => {
 // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(6000);
+    this.timeout(7000);
     async.series(
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           areaDao
             .addArea('mock area', 1)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
-          collectionDao.addNewCollection('mock collection')
-            .then(callback(null))
-            .catch((err) => callback(err));
+          collectionDao.addNewCollection('mock collection', 'foo', 'foo', 'foo')
+            .then(callback(null));
         },
         (callback) => {
           collectionDao
             .addCollectionToArea(1, 1)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
         },
         (callback) => {
           tagDao
             .createTag('mock tag')
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
         },
         (callback) => {
           collectionDao.addTagTarget(1, 1)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
         }
       ],
       (err) => {

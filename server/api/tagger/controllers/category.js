@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,9 +17,8 @@
 
 'use strict';
 
-const taggerDao = require('../dao/category-dao');
+const repository = require('../repository/category');
 const utils = require('../utils/response-utility');
-const logger = require('../utils/error-logger');
 
 /**
  * Retrieves the list of all collection groups.
@@ -27,12 +26,14 @@ const logger = require('../utils/error-logger');
  * @param res
  */
 exports.list = function (req, res) {
-
-  taggerDao.findAll().then(function (categories) {
-    utils.sendResponse(res, categories);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  repository.list(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -42,13 +43,14 @@ exports.list = function (req, res) {
  * @param res
  */
 exports.categoryCountByArea = function (req, res) {
-  const areaId = req.params.areaId;
-
-  taggerDao.categoryCountByArea(areaId).then(function (categories) {
-    utils.sendResponse(res, categories);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+    repository.categoryCountByArea(
+      req,
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
 
 };
 
@@ -60,18 +62,18 @@ exports.categoryCountByArea = function (req, res) {
  * The method returns an array of length one if the collection exists.
  * The join will return Category information or null.
  *
- * TODO: The model could be refactored for one-to-many. Dangerous for existing data, however.
- *
  * @param req
  * @param res
  */
 exports.categoryByCollection = function (req, res) {
-  const collId = req.params.collId;
-  taggerDao.categoriesByCollectionId(collId).then(function (categories) {
-    utils.sendResponse(res, categories);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  repository.categoryByCollection(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -80,13 +82,15 @@ exports.categoryByCollection = function (req, res) {
  * @param res
  */
 exports.listByArea = function (req, res) {
-  const areaId = req.params.areaId;
+  repository.listByArea(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
-  taggerDao.listByArea(areaId).then(function (categories) {
-    utils.sendResponse(res, categories);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
 };
 
 /**
@@ -95,13 +99,14 @@ exports.listByArea = function (req, res) {
  * @param res
  */
 exports.byId = function (req, res) {
-  const categoryId = req.params.id;
-
-  taggerDao.byId(categoryId).then(function (category) {
-    utils.sendResponse(res, category);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  repository.byId(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -111,13 +116,14 @@ exports.byId = function (req, res) {
  * @param res
  */
 exports.add = function (req, res) {
-  const title = req.body.title;
-
-  taggerDao.add(title).then(function (result) {
-    utils.sendResponse(res, {status: 'success', id: result.id});
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  repository.add(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -127,27 +133,14 @@ exports.add = function (req, res) {
  * @param res
  */
 exports.update = function (req, res) {
-
-  const title = req.body.title;
-  const url = req.body.url;
-  const description = req.body.description;
-  const linkLabel = req.body.linkLabel;
-  const id = req.body.id;
-  const areaId = req.body.areaId;
-
-  const data = {
-    title: title,
-    url: url,
-    linkLabel: linkLabel,
-    description: description,
-    areaId: areaId
-  };
-
-  taggerDao.update(data, id).then(function () {
-    utils.sendSuccessJson(res);
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  repository.update(
+    req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 
@@ -157,14 +150,14 @@ exports.update = function (req, res) {
  * @param res
  */
 exports.delete = function (req, res) {
-
-  const catId = req.body.id;
-
-  taggerDao.delete(catId).then(function () {
-    utils.sendResponse(res, {status: 'success', id: catId});
-  }).catch(function (err) {
-    logger.dao(err);
-  });
+  repository.delete(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 
 };
 

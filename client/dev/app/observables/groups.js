@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -34,11 +34,17 @@
        */
       let categories = [];
 
+      function _updateCategories(update) {
+        if(update) {
+          Subject.onNext(update);
+        }
+      }
+
       return {
         set: function set(update) {
           if (!observerUtils.identicalArray(update, categories)) {
             categories = update;
-            Subject.onNext(categories);
+            _updateCategories(update);
           }
         },
         get: function get() {

@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2017.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Created by mspalti on 1/23/17.
  */
@@ -38,14 +55,14 @@ describe('The tag selector component', () => {
 
     module(($provide) => {
       $provide.value('CollectionTagTargetAdd', {
-        query: () => {
+        save: () => {
         }
       });
     });
 
     module(($provide) => {
       $provide.value('CollectionTagTargetRemove', {
-        query: () => {
+        delete: () => {
         }
       });
     });
@@ -119,29 +136,25 @@ describe('The tag selector component', () => {
 
     tagsForAreaAdd = [
       {
-        Tag: {
+
           id: 1,
           name: 'tag one name',
           url: ''
-        }
       },
       {
-        Tag: {
+
           id: 2,
           name: 'tag two name',
           url: ''
-        }
 
       }
     ];
 
     tagsForAreaRemove = [
       {
-        Tag: {
           id: 2,
           name: 'tag two name',
           url: ''
-        }
 
       }
     ];
@@ -150,29 +163,28 @@ describe('The tag selector component', () => {
 
     tagsForCollectionAdd = [
       {
-        Tag: {
+
           id: 1,
           name: 'tag one name',
           url: ''
-        }
+
       },
       {
-        Tag: {
+
           id: 2,
           name: 'tag two name',
           url: ''
-        }
+
 
       }
     ];
 
     tagsForCollectionRemove = [
-      {
-        Tag: {
+
+        {
           id: 2,
           name: 'tag two name',
           url: ''
-        }
 
       }
     ];
@@ -180,10 +192,10 @@ describe('The tag selector component', () => {
     tagsForCollection = tagsForCollectionAdd;
 
     addChip = {
-      Tag: {
+
         id: 1,
         name: 'tag one name'
-      }
+
     };
 
     removeChip = {
@@ -230,13 +242,13 @@ describe('The tag selector component', () => {
     });
 
 
-    spyOn(CollectionTagTargetAdd, 'query').and.callFake(() => {
+    spyOn(CollectionTagTargetAdd, 'save').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
     });
 
-    spyOn(CollectionTagTargetRemove, 'query').and.callFake(() => {
+    spyOn(CollectionTagTargetRemove, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -292,7 +304,7 @@ describe('The tag selector component', () => {
     deferred.resolve({status: 'success'});
     $rootScope.$apply();
 
-    expect(CollectionTagTargetAdd.query).toHaveBeenCalledWith({collId: 1, tagId: 1});
+    expect(CollectionTagTargetAdd.save).toHaveBeenCalledWith({collId: 1, tagId: 1});
 
   });
 
@@ -310,7 +322,7 @@ describe('The tag selector component', () => {
     deferred.resolve({status: 'success'});
     $rootScope.$apply();
 
-    expect(CollectionTagTargetRemove.query).toHaveBeenCalledWith({collId: 1, tagId: 1});
+    expect(CollectionTagTargetRemove.delete).toHaveBeenCalledWith({collId: 1, tagId: 1});
 
   });
 

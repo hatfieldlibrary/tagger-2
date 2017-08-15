@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 'use strict';
 
-const convert = (res, files, fields, config, callback) => {
+const convert = (files, fields, config, callback) => {
 
   const fs = require('fs'),
     magick = require('imagemagick');
@@ -62,7 +62,7 @@ const convert = (res, files, fields, config, callback) => {
           magick.resize({
               srcPath: fullPath,
               dstPath: thumbPath,
-              width: 200
+              width: 350
             },
             /*jshint unused:false */
             function (err, stdout, stderr) {
@@ -70,7 +70,7 @@ const convert = (res, files, fields, config, callback) => {
                 return err;
               }
               // update database even if the conversion fails
-              callback(res, id, imageName);
+              callback(id, imageName);
             });
         }
       });

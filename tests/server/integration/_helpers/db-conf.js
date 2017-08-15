@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -38,9 +38,9 @@
   exports.config = {
     test: {
       mysql: {
-        db: 'acomtags_test',
-        user: credentials.develdbuser,
-        password: credentials.develdbpassword,
+        db: 'tagger_test',
+        user: credentials.dbUser,
+        password: credentials.dbPassword,
         host: 'localhost',
         port: 3306,
         dialect: 'mysql'

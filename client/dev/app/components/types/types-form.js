@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
     function _getTypeInfo(typeId) {
       const type = ContentType.query({id: typeId});
       type.$promise.then(function (data) {
+
         vm.contentType = data;
         vm.menu({id: vm.contentType.id, title: vm.contentType.name});
       });
@@ -43,7 +44,7 @@
 
     vm.updateContentType = function () {
 
-      const success = ContentTypeUpdate.save({
+      const success = ContentTypeUpdate.update({
         id: vm.contentType.id,
         name: vm.contentType.name,
         icon: vm.contentType.icon
@@ -85,7 +86,7 @@
       menu: '&'
     },
     template:
-    '<md-card-content layout-padding="layout-padding" layout="column" flex="80" style="padding-left: 20px"> ' +
+    '<md-card-content ng-if="vm.contentType.id &gt; 0"  layout-padding="layout-padding" layout="column" flex="80" style="padding-left: 20px"> ' +
     ' <md-button class="md-raised md-accent large-button" ng-click="vm.updateContentType()">Update Content Type</md-button> ' +
     '   <div flex="flex" layout="column"> ' +
     '     <md-input-container> ' +

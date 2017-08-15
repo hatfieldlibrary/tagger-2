@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
    */
   taggerServices.factory('getUserInfo', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'userinfo', {}, {
+      return $resource(config.restHost + 't/user', {}, {
         query: {method: 'GET', isArray: false}
       });
     }
@@ -37,7 +37,7 @@
    */
   taggerServices.factory('UserList', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'users/list');
+      return $resource(config.restHost + 't/user/list');
     }
   ]);
   /**
@@ -45,7 +45,7 @@
    */
   taggerServices.factory('UserAdd', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'users/add');
+      return $resource(config.restHost + 't/user/add');
     }
   ]);
   /**
@@ -53,7 +53,7 @@
    */
   taggerServices.factory('UserDelete', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'users/delete');
+      return $resource(config.restHost + 't/user/delete/:id');
     }
   ]);
   /**
@@ -61,7 +61,9 @@
    */
   taggerServices.factory('UserUpdate', ['$resource', 'config',
     function ($resource, config) {
-      return $resource(config.restHost + 'users/update');
+      return $resource(config.restHost + 't/user/update', null, {
+        update: {method: 'PUT'}
+      });
     }
   ]);
 

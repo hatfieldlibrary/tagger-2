@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
                           AreasForCollection,
                           CollectionObservable,
                           CollectionAreasObservable,
+                          AreaObservable,
                           AreaListObservable) {
 
     const ctrl = this;
@@ -70,7 +71,6 @@
      * @returns {boolean}
      */
     function _findArea(areaId, targets) {
-
       for (let i = 0; i < targets.length; i++) {
         if (targets[i].AreaId === areaId) {
           return true;
@@ -86,12 +86,24 @@
      * @returns {boolean}
      */
     ctrl.isChosen = function (areaId) {
-
       if (ctrl.areaTargets) {
         return _findArea(areaId, ctrl.areaTargets);
       }
 
     };
+
+    /**
+     * Updates the collections list if the collection was removed from the current area.
+     * @param areaId
+     * @private
+     */
+    function _updateCollectionList(areaId) {
+      console.log(AreaObservable.get())
+      console.log(areaId)
+      if (AreaObservable.get() === areaId) {
+        CollectionAreasObservable.set();
+      }
+    }
 
     /**
      * Adds or removes the association between a collection and a
@@ -102,23 +114,21 @@
      */
     ctrl.update = function (areaId) {
 
-
       if (ctrl.areaTargets !== undefined) {
         // If the area id of the selected checkbox is a
         // already a target, then delete the area target.
-
         if (_findArea(areaId, ctrl.areaTargets)) {
           if (ctrl.areaTargets.length === 1) {
             TaggerToast.toast('Cannot remove area.  Collections must belong to at least one area.');
-
-          } else {
-            let result = AreaTargetRemove.query({collId: CollectionObservable.get(), areaId: areaId});
+          }
+          else {
+            let result = AreaTargetRemove.delete({collId: CollectionObservable.get(), areaId: areaId});
             result.$promise.then(function (result) {
               if (result.status === 'success') {
-                ctrl.areaTargets = result.data.areaList;
-                // Update the collections list (one collection has just been removed from the area).
-                CollectionAreasObservable.set();
                 TaggerToast.toast('Collection removed from area.');
+                ctrl.areaTargets = result.data.areaList.getAreas;
+                _updateCollectionList(areaId);
+
               } else {
                 TaggerToast.toast(
                   result.status +
@@ -133,7 +143,7 @@
         // If the area id of the selected item is
         // not a target already, add a new area target.
         else {
-          let add = AreaTargetAdd.query({collId: CollectionObservable.get(), areaId: areaId});
+          let add = AreaTargetAdd.save({collId: CollectionObservable.get(), areaId: areaId});
           add.$promise.then(function (result) {
             if (result.status === 'success') {
               ctrl.areaTargets = result.data.areaList;

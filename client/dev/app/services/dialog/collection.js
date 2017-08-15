@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2017.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Created by mspalti on 1/11/17.
  */
@@ -23,6 +40,16 @@
 
       const vm = this;
 
+      const _setCollectionObservableId = (id, data) => {
+
+        if (id === null) {
+          if(data.length > 0) {
+            CollectionObservable.set(data[0].Collection.id);
+          }
+        } else {
+          CollectionObservable.set(id);
+        }
+      };
 
       /**
        * Returns list of collections, optionally taking a collection
@@ -35,19 +62,14 @@
         result.$promise.then(function (data) {
           if (data) {
             CollectionListObservable.set(data);
-            // Deleting a category doesn't generate
-            // a new id. In that case, expect the
-            // id to be null. Update the view using the
-            // id of the first item in the updated category
-            // list.
-            if (id === null) {
-              CollectionObservable.set(data[0].Collection.id);
-
-            } else {
-              CollectionObservable.set(id);
+            // If the list contains data, set the collection id for the context.
+            if(data.length > 0) {
+              _setCollectionObservableId(id, data);
             }
-          } else {
-            CollectionObservable.set(0);
+            // Otherwise, set the collection id to zero.
+            else {
+              CollectionObservable.set(0);
+            }
           }
 
         });
@@ -96,7 +118,7 @@
        */
       vm.delete = function () {
 
-        const result = CollectionDelete.save({id: CollectionObservable.get()});
+        const result = CollectionDelete.delete({id: CollectionObservable.get()});
         result.$promise.then(function (data) {
           if (data.status === 'success') {
 

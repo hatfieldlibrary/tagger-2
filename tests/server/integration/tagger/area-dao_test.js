@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -57,32 +57,20 @@ describe('Area creation', () => {
   // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(5000);
+    this.timeout(7000);
     async.series(
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(() => callback(null));
         }
       ], (err) => {
         if (err) {
@@ -142,47 +130,32 @@ describe('Area operations', () => {
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-              console.log(err);
-            });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           areaDao
             .addArea(areas[0], count++)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           areaDao
             .addArea(areas[1], count++)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           areaDao
             .addArea(areas[2], count++)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         }
       ],
@@ -225,7 +198,7 @@ describe('Area operations', () => {
   it('should return area with the updated title.', (done) => {
 
     let _onSuccess = (result) => {
-      expect(result.dataValues.title).to.equal('Updated Area');
+      expect(result[0].dataValues.title).to.equal('Updated Area');
       done();
     };
 
@@ -235,7 +208,7 @@ describe('Area operations', () => {
     };
 
     areaDao
-      .findAreaById(1)
+      .findAreaById('1')
       .then(_onSuccess)
       .catch(_onError);
   });

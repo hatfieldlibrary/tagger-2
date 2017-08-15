@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  ~ Copyright (c) 2016.
+  ~ Copyright (c) 2017.
   ~
   ~     This program is free software: you can redistribute it and/or modify
   ~     it under the terms of the GNU General Public License as published by
@@ -28,32 +28,21 @@
 </head>
 <body ng-cloak>
 <div layout-fill layout="column">
-  <md-toolbar>
-    <div class="md-toolbar-tools">
-      <md-button class="md-icon-button" style="padding-top: 8px" aria-label="Settings" ng-click="vm.toggleLeft()"
-                 hide-gt-md="true">
-        <i class="material-icons">menu</i>
-      </md-button>
-      <span>
-        <h2 class="md-display-1">Tagger</h2>
-      </span>
-      <span flex></span>
 
-      <!-- component -->
-      <admin-area-selector></admin-area-selector>
+  <top-menu></top-menu>
 
-    </div>
-  </md-toolbar>
   <div class="view-container" layout="row" flex>
-    <md-sidenav class="md-sidenav-left transparent" style="height: 650px" flex="5" md-component-id="left"
-                md-is-locked-open="$mdMedia('gt-md')">
 
+    <md-sidenav class="md-sidenav-left transparent" style="height: 650px" md-component-id="left"
+                md-is-locked-open="$mdMedia('gt-md')">
       <!-- components -->
       <authorization-component></authorization-component>
       <side-navigation-component></side-navigation-component>
 
     </md-sidenav>
-    <div ng-view style="overflow:auto" layout="row" layout-gt-md="column" flex></div>
+
+    <div ng-view style="overflow:auto" layout="row" layout-gt-xs="column" flex></div>
+
   </div>
 </div>
 </body>
@@ -131,6 +120,7 @@
 <script type="text/javascript" src="app/components/visualization/d3bar.js"></script>
 <script type="text/javascript" src="app/components/global/admin-area-selector.js"></script>
 <script type="text/javascript" src="app/components/global/auth.js"></script>
+<script type="text/javascript" src="app/components/global/top-menu.js"></script>
 <script type="text/javascript" src="app/components/global/side-navigation.js"></script>
 <script type="text/javascript" src="app/observables/utils.js"></script>
 <script type="text/javascript" src="app/observables/subject.js"></script>

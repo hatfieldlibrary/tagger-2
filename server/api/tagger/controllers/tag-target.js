@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -17,48 +17,8 @@
 
 'use strict';
 
-const async = require('async');
+const repository = require('../repository/tag-target');
 const utils = require('../utils/response-utility');
-const taggerDao = require('../dao/tag-target-dao');
-const logger = require('../utils/error-logger');
-
-/**
- * Private function for adding association between tag and area.
- * @param tagId   the id of the tag
- * @param areaId   the id of the area
- * @param res      response object
- */
-function _addArea(tagId, areaId, res) {
-
-  async.series(
-    {
-      create: function (callback) {
-        taggerDao.addTagToArea(tagId, areaId)
-          .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          logger.dao(err);
-        });
-
-      },
-      areaList: function (callback) {
-        taggerDao.findAreasForTag(tagId).then(function (result) {
-          callback(null, result);
-        }).catch(function (err) {
-          logger.dao(err);
-        });
-      }
-    },
-
-    function (err, result) {
-      if (err) {
-        utils.sendErrorJson(res, err);
-      }
-      utils.sendSuccessAndDataJson(res, result);
-
-    }
-  );
-}
 
 /**
  * Retrieves list of subject areas associated with a tag.
@@ -66,14 +26,14 @@ function _addArea(tagId, areaId, res) {
  * @param res
  */
 exports.getAreaTargets = function (req, res) {
-  const tagId = req.params.tagId;
-
-  taggerDao.findAreasForTag(tagId)
-    .then(function (areas) {
-      utils.sendResponse(res, areas);
-    }).catch(function (err) {
-    logger.dao(err);
-  });
+  repository.getAreaTargets(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
 };
 
 /**
@@ -83,41 +43,16 @@ exports.getAreaTargets = function (req, res) {
  * @param res
  */
 exports.addTarget = function (req, res) {
-  const tagId = req.params.tagId;
-  const areaId = req.params.areaId;
-
-  async.series(
-    {
-      // Check to see if tag is already associated
-      // with area.
-      check: function (callback) {
-
-        taggerDao.findTagAreaAssociation(tagId, areaId)
-          .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-            callback(err);
-          });
-      }
+  repository.addTarget(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
     },
-    function (err, result) {
-      if (err) {
-        logger.dao(err);
-      }
-      // if new
-      if (result.check === null) {
-        _addArea(tagId, areaId, res);
-
-      }
-      // if not new, just return the current list.
-      else {
-        taggerDao.listTagAssociations(tagId).then(function (areas) {
-          utils.sendResponse(res, {status: 'exists', areaTargets: areas});
-        }).catch(function (err) {
-          logger.dao(err);
-        });
-      }
-
+    (data) => {
+      utils.sendSuccessAndDataJson(res, data);
+    },
+    (err) => {
+      return next(err);
     });
 };
 
@@ -127,49 +62,13 @@ exports.addTarget = function (req, res) {
  * @param res
  */
 exports.removeTarget = function (req, res) {
-  const tagId = req.params.tagId;
-  const areaId = req.params.areaId;
-
-  async.series(
-    {
-      // Remove current associations between the tag and collections in the area.
-      removeSubjects: function (callback) {
-        taggerDao.removeTagFromCollections(areaId, tagId)
-          .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          logger.dao(err);
-        });
-      },
-      // Remove the tag from the area.
-      delete: function (callback) {
-        taggerDao.removeTagFromArea(areaId, tagId)
-          .then(function (result) {
-            callback(null, result);
-          }).catch(function (err) {
-          logger.dao(err);
-        });
-      },
-      // Get the updated tag list for the area
-      areaList: function (callback) {
-        taggerDao.findAreasForTag(tagId).then(function (result) {
-          callback(null, result);
-        }).catch(function (err) {
-          logger.dao(err);
-        });
-      }
+  repository.removeTarget(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
     },
-    function (err, result) {
-      if (err) {
-        logger.dao(err);
-      }
-      utils.sendResponse(res, {
-        status: 'success',
-        areaTargets: result.areaList,
-        removedTags: result.removeSubjects
-      });
-
-    }
-  );
+    (err) => {
+      return next(err);
+    });
 
 };

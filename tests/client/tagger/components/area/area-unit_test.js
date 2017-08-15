@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2017.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Created by mspalti on 1/4/17.
  */
@@ -20,12 +37,12 @@ describe('Area components', function () {
     ReorderAreas,
     $q;
 
-  let areas;
-  let areasUpdated = [{name: 'updated area', id: 1}, {name: 'area two', id: 2}];
-  let areasObserved = [{name: 'the observed area one', id: 1}, {name: 'area two', id: 2}, {name: 'area three', id: 3}];
-  let areasQueried = [{name: 'areas queried', id: 1}, {name: 'area two', id: 2}];
+  let areasUpdated = [{title: 'updated area', id: 1}, {title: 'area two', id: 2}];
+  let areasObserved = [{title: 'the observed area one', id: 1}, {title: 'area two', id: 2}, {title: 'area three', id: 3}];
+  let areasQueried = [ {title: 'area two', id: 2, url: '', description: '', searchUrl: ''}];
+  let areaQueryResult = {title: 'areas queried', id: 1};
   let actionAreaId = 2;
-  let actionArea = {id: 2, title: 'action title'};
+  let actionArea = {id: 2, title: 'area two'};
   let success = {status: 'success'};
 
   beforeEach(module('tagger'));
@@ -48,7 +65,7 @@ describe('Area components', function () {
 
     module(($provide) => {
       $provide.value('AreaUpdate', {
-        save: () => {
+        update: () => {
         }
       });
     });
@@ -154,7 +171,7 @@ describe('Area components', function () {
       return {
         $promise: {
           then: (callback) => {
-            return callback(areasQueried);
+            return callback(areasObserved);
           }
         }
       }
@@ -164,13 +181,13 @@ describe('Area components', function () {
       return {
         $promise: {
           then: (callback) => {
-            return callback(actionArea);
+            return callback(areasQueried);
           }
         }
       }
     });
 
-    spyOn(AreaUpdate, 'save').and.callFake(() => {
+    spyOn(AreaUpdate, 'update').and.callFake(() => {
       return {
         $promise: {
           then: (callback) => {
@@ -204,7 +221,7 @@ describe('Area components', function () {
 
       expect(ctrl.areas).toBeDefined();
       expect(AreaListObservable.get).toHaveBeenCalled();
-      expect(ctrl.areas[0].name).toBe('the observed area one');
+      expect(ctrl.areas[0].title).toBe('the observed area one');
 
     });
 
@@ -225,7 +242,7 @@ describe('Area components', function () {
       AreaListObservable.set(areasUpdated);
 
       expect(ctrl.areas).toBeDefined();
-      expect(ctrl.areas[0].name).toBe('updated area');
+      expect(ctrl.areas[0].title).toBe('updated area');
 
     });
 
@@ -251,7 +268,7 @@ describe('Area components', function () {
       ctrl.$onInit();
 
       expect(AreaList.query).toHaveBeenCalled();
-      expect(ctrl.areas[0].name).toBe(areasQueried[0].name);
+      expect(ctrl.areas[0].title).toBe(areasObserved[0].title);
       expect(AreaListObservable.subscribe).toHaveBeenCalled();
 
     });
@@ -282,12 +299,13 @@ describe('Area components', function () {
 
     it('should prepare the area list to be reordered.', () => {
       // test for reordered areas using integration or e2e
-      let bindings = {areas: areasQueried};
+      let bindings = {areas: areasObserved};
       let ctrl = $componentController('areasListComponent', null, bindings);
-
+      //let ctrl = $componentController('areasListComponent', null);
+      console.log(ctrl.areas)
       ctrl.orderAreaList(0);
-      expect(ctrl.areas.length).toBe(1);
-      expect(ctrl.areas[0].name).toBe('area two');
+      expect(ctrl.areas.length).toBe(2);
+      expect(ctrl.areas[0].title).toBe('area two');
       expect(ReorderAreas.save).toHaveBeenCalled();
       expect(AreaListObservable.set).toHaveBeenCalled();
 
@@ -320,7 +338,8 @@ describe('Area components', function () {
       ctrl.$onInit();
 
       expect(ctrl.area).toBeDefined();
-      expect(ctrl.area.id).toEqual(actionArea.id);
+      console.log(ctrl.area)
+      expect(ctrl.area.id).toEqual(areasQueried[0].id);
       expect(AreaActionObservable.subscribe).toHaveBeenCalled;
       expect(menuSpy).toHaveBeenCalledWith(actionArea);
 
@@ -343,7 +362,7 @@ describe('Area components', function () {
       ctrl.$onInit();
       ctrl.updateArea();
       // update area
-      expect(AreaUpdate.save).toHaveBeenCalled();
+      expect(AreaUpdate.update).toHaveBeenCalled();
       // got new area list
       expect(AreaList.query).toHaveBeenCalled();
 

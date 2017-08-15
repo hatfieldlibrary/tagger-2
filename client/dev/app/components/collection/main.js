@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -48,14 +48,7 @@
      * @type {string} */
     vm.deleteMessage = 'templates/dialog/deleteCollectionMessage.html';
 
-    // /**
-    //  * The message used in the update image dialog.
-    //  * @type {string} */
-    // vm.updateImageMessage = 'templates/dialog/updateImageMessage.html';
-
-
-
-    vm.menuUpdate = function(id, title) {
+    vm.menuUpdate = function (id, title) {
       vm.currentCollection.title = title;
       vm.currentCollection.id = id;
     };
@@ -63,12 +56,11 @@
     vm.$onInit = function () {
 
       try {
-      /**
-       * Get the dialog object for this component.
-       * Call with showDialog($event,message).
-       * @type {*}
-       */
-      vm.dialog =  DialogStrategy.makeDialog(DialogTypes.COLLECTION);
+        /**
+         * Get the dialog object for this component.
+         * @type {*}
+         */
+        vm.dialog = DialogStrategy.makeDialog(DialogTypes.COLLECTION);
 
       } catch (err) {
         TaggerToast.toast('Warning: failed to create dialog.  See console for error message.');

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -25,15 +25,26 @@
 
   function ListController(TagListObservable,
                           TagObservable,
-                          UserAreaObservable) {
+                          UserAreaObservable,
+                          $log) {
 
     var vm = this;
 
 
     function _setSubscriptions() {
       TagListObservable.subscribe((list) => {
-        vm.tags = list;
-        vm.currentTag = vm.tags[0].id;
+
+        try {
+          vm.tags = list;
+          vm.currentTag = vm.tags[0].id;
+        } catch (err) {
+          $log.debug(err);
+          $log.info('Initializing list with no tags.');
+          vm.tags = [];
+          vm.currentTag = 0;
+
+        }
+
       });
     }
 

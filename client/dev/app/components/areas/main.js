@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -70,7 +70,6 @@
       try {
         /**
          * Get the dialog object for this controller.
-         * Call with showDialog($event,message).
          * @type {*}
          */
         vm.dialog = DialogStrategy.makeDialog(DialogTypes.AREA);

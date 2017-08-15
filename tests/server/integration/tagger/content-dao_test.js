@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ import async from 'async';
 
 /** Test area names. */
 const categoriesInit = [
-  'Category Stub One',
-  'Category Stub Two'
+  'Content Type Stub One',
+  'Content Type Stub Two'
 ];
 
 const newTypeTitle = 'new category';
@@ -43,32 +43,21 @@ describe('Content type creation', () => {
   // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(5000);
+    this.timeout(8000);
+
     async.series(
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(() => callback(null));
         }
       ], (err) => {
         if (err) {
@@ -124,66 +113,48 @@ describe('Content type operations', () => {
 // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(5000);
+    this.timeout(10000);
     async.series(
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
+        },
+        (callback) => {
+          collectionDao.addNewCollection('mock collection', 'foo', 'foo', 'foo')
+            .then(callback(null));
+        },
+        (callback) => {
+          areaDao.addArea(1, 1)
+            .then(callback(null));
         },
         (callback) => {
           contentDao
             .createContentType(categoriesInit[0])
-            .then(callback(null))
-            .catch((err) => callback(err));
-
+            .then(callback(null));
         },
         (callback) => {
           contentDao
             .createContentType(categoriesInit[1])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
+        },
 
-        },
-        (callback) => {
-          areaDao.addArea(1, 1)
-            .then(callback(null))
-            .catch((err) => callback(err))
-        },
-        (callback) => {
-          collectionDao.addNewCollection('mock collection')
-            .then(callback(null))
-            .catch((err) => callback(err));
-        },
+
         (callback) => {
           collectionDao.createItemContentTarget(1, 1)
-            .then(callback(null))
-            .catch((err) => callback(err))
+            .then(callback(null));
         },
         (callback) => {
           collectionDao.addCollectionToArea(1, 1)
-            .then(callback(null))
-            .catch((err) => callback(err))
+            .then(callback(null));
         }
       ],
       (err) => {
@@ -199,7 +170,7 @@ describe('Content type operations', () => {
 
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
-      expect(types[1].dataValues.name).to.have.string('Category Stub Two');
+      expect(types.length).to.equal(2);
       done();
     };
 
@@ -240,6 +211,7 @@ describe('Content type operations', () => {
   it('should find content type by id.', (done) => {
 
     let _onSuccess = (type) => {
+
       expect(type).to.be.defined;
       expect(type.dataValues.name).to.have.string(categoriesInit[0]);
       done();
@@ -255,6 +227,26 @@ describe('Content type operations', () => {
       .then(_onSuccess)
       .catch(_onError);
 
+  });
+
+  it('should return content type summary for area', (done) => {
+
+    let _onSuccess = (type) => {
+      expect(type[0]).to.be.defined;
+      expect(type[0].name).to.have.string('Content Type Stub One');
+      expect(type[0].count).to.equal(1);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    contentDao
+      .getAreaContentTypeSummary(1)
+      .then(_onSuccess)
+      .catch(_onError);
   });
 
 
@@ -278,23 +270,6 @@ describe('Content type operations', () => {
 
   });
 
-  it('should return content type summary for area', (done) => {
-    let _onSuccess = (type) => {
-      expect(type).to.be.defined;
-      expect(type[0].name).to.have.string('Updated Content Type');
-      expect(type[0].count).to.equal(1);
-      done();
-    };
 
-    let _onError = (err) => {
-      console.log(err);
-      expect(true).to.be.false; // should not come here
-    };
-
-    contentDao
-      .getAreaContentTypeSummary(1)
-      .then(_onSuccess)
-      .catch(_onError);
-  });
 
 });

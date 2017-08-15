@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -37,11 +37,11 @@
      */
     vm.updateArea = function () {
 
-      let success = AreaUpdate.save({
+      let success = AreaUpdate.update({
         id: vm.area.id,
         title: vm.area.title,
         description: vm.area.description,
-        searchUrl: vm.area.areaId,
+        searchUrl: vm.area.searchUrl,
         linkLabel: vm.area.linkLabel,
         url: vm.area.url
 
@@ -49,7 +49,7 @@
       success.$promise.then(function (data) {
         if (data.status === 'success') {
           // Toast upon success
-          TaggerToast.toast('Area Updated"');
+          TaggerToast.toast('Area Updated');
           _getAreaList();
 
         }
@@ -58,16 +58,21 @@
     };
 
     /**
-     * Gets field data for the current area.
+     * Gets field data for the current area. The public API endpoint
+     * allows multiple area IDs, so the response arrives in an array.
      * @param areaId
      * @private
      */
     function _initializeForm(areaId) {
-      let ar = AreaById.query({id: areaId});
-      ar.$promise.then(function (data) {
-        vm.area = data;
-        vm.menu({id: vm.area.id, title: vm.area.title});
-      });
+      if(areaId > 0) {
+        let ar = AreaById.query({id: areaId});
+        ar.$promise.then(function (data) {
+          vm.area = data[0];
+          vm.menu({id: vm.area.id, title: vm.area.title});
+        });
+      } else {
+        vm.area = {id: 0, title: '', linkLabel: '', searchLabel: '', description: ''};
+      }
     }
 
     /**
@@ -114,7 +119,7 @@
     bindings: {
       menu: '&'
     },
-    template: '<md-card-content class="md-subhead grey-text" layout-padding="layout-padding" layout="column" flex="80"> ' +
+    template: '<md-card-content ng-if="vm.area.id &gt; 0" class="md-subhead grey-text" layout-padding="layout-padding" layout="column" flex="80"> ' +
     '<md-button class="md-raised md-accent large-button" ng-click="vm.updateArea()">Update Area</md-button> ' +
     '<md-input-container> ' +
     '<label>Area Name</label> ' +

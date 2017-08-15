@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2017.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Created by mspalti on 1/20/17.
  */
@@ -104,7 +121,7 @@ describe('The collection form component', () => {
 
     module(($provide) => {
       $provide.value('CollectionUpdate', {
-        save: () => {
+        update: () => {
         }
       });
     });
@@ -318,9 +335,9 @@ describe('The collection form component', () => {
         $promise: {
           then: (callback) => {
             if (testAreaId === 1) {
-              return callback(testAreas[0]);
+              return callback(testAreas);
             } else if (testAreaId == 2) {
-              return callback(testAreas[1]);
+              return callback(testAreas);
             } else {
 
             }
@@ -330,7 +347,7 @@ describe('The collection form component', () => {
     });
 
 
-    spyOn(CollectionUpdate, 'save').and.callFake(() => {
+    spyOn(CollectionUpdate, 'update').and.callFake(() => {
       return {
         $promise: deferredStatus.promise
       }
@@ -527,7 +544,7 @@ describe('The collection form component', () => {
     let ctrl = $componentController('collectionForm', null);
 
     ctrl.updateCollection();
-    expect(CollectionUpdate.save).toHaveBeenCalled();
+    expect(CollectionUpdate.update).toHaveBeenCalled();
     deferredStatus.resolve({status: 'success'});
     $rootScope.$apply();
     expect(TaggerToast.toast).toHaveBeenCalledWith('Collection Updated')
@@ -539,7 +556,7 @@ describe('The collection form component', () => {
     let ctrl = $componentController('collectionForm', null);
 
     ctrl.updateCollection();
-    expect(CollectionUpdate.save).toHaveBeenCalled();
+    expect(CollectionUpdate.update).toHaveBeenCalled();
     deferredStatus.reject();
     $rootScope.$apply();
     expect(TaggerToast.toast).toHaveBeenCalledWith('ERROR: Unable to update collection.')
@@ -559,7 +576,7 @@ describe('The collection form component', () => {
     testAreaId = 2;
     AreaObservable.set(2);
 
-    expect(ctrl.areaTitle).toEqual(testAreas[1].title);
+    expect(ctrl.areaTitle).toEqual(testAreas[0].title);
 
   });
 

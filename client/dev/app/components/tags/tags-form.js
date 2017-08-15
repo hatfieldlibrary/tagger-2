@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@
 
     vm.updateTag = function () {
 
-      var success = TagUpdate.save({
+      var success = TagUpdate.update({
         id: vm.tag.id,
         name: vm.tag.name
 
@@ -93,7 +93,7 @@
     bindings: {
       menu: '&'
     },
-    template: '<md-content layout="row" layout-align="start start">' +
+    template: '<md-content ng-if="vm.tag.id &gt; 0"  layout="row" layout-align="start start">' +
     ' <tag-list></tag-list>' +
     '   <md-card-content class="md-subhead grey-text" flex="80" layout="column">' +
     '     <md-button class="md-raised md-accent large-button" ng-show="vm.userAreaId==0" ng-click="vm.updateTag()">Update Tag </md-button>' +

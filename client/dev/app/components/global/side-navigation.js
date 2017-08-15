@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -22,11 +22,15 @@
 
   'use strict';
 
-  function NavigationController(UserAreaObservable) {
+  function NavigationController($mdSidenav, UserAreaObservable) {
 
     const vm = this;
 
     vm.currentIndex = 0;
+
+    vm.toggleLeft = () => {
+      $mdSidenav('left').toggle();
+    };
 
     vm.setCurrentIndex = (index) => {
       vm.currentIndex = index;

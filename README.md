@@ -7,11 +7,15 @@
 [![bitHound Overall Score](https://www.bithound.io/github/hatfieldlibrary/tagger-2/badges/score.svg)](https://www.bithound.io/github/hatfieldlibrary/tagger-2)
 
 
-Tagger implements a specific approach to publishing information about the digital artifacts produced by a community or organization. In this approach, information about a digital item or collection is added to a `Collection` object.  The `Collection` is assigned to a general `Area` that can be topical or administrative (e.g. student research or University Archives). Areas in turn can have one or more `Collection Groups` that are specific homes for collections.
+Tagger publishes information about the digital work produced by a community or organization. 
 
-All Collections in Tagger must be associated with one or more Areas and (optionally) with a single Collection Group. This provides structure, context and the ability to discover more about the people and departments who produce and own the content. Subject tags and content types can also be assigned to support browsing and discovery. The Collections Page image below illustrates some of these relationships.
+Information in Tagger is organized around `Collection` objects that describe individual digital works or collections of works. Each `Collection` is automatically assigned to an `Area`.  An `Area` can be general and topical (e.g. Student Research) or refer to a large organization (e.g. University Library). Areas in turn have one or more `Collection Groups`.  A `Collection Group` is the more specific home for digital works (e.g. a single, identifiable collection within a larger Archive). 
 
-Every entity in Tagger has descriptive fields that are populated using the Tagger administrative interface. Beyond titles and descriptions, these fields include URLs, link types, link labels, and restrictions. Access to Tagger's administrative interface is limited to Administrators and Area Maintainers.
+All `Collections` are associated with one or more `Areas` and (optionally) a single `Collection Group`. Like most other entities in Tagger, these `Areas` and `Collection Groups` contain descriptive fields that are populated using the Tagger administrative interface. This facilitates learning more about the people and departments who produce and own the content. 
+
+To support browsing and discovery, subject `Tags` and `ContentTypes` can be assigned to `Collections`. 
+
+Access to Tagger's administrative interface is limited to Administrators and Area Maintainers.
 
 ## Microservice
 
@@ -21,6 +25,9 @@ Tagger itself is not a fullstack, out-of-the-box publishing solution.  It is a m
  * The Collections in an Area
  * The Collections in a Collection Group
  * Collections by Subject Tag
+ * Collection details such as links and search options
+ * Information about the content sponsor
+ * Related collections or items
  
 See documentation for the [Public API](https://github.com/hatfieldlibrary/tagger-2/wiki/Public-API).
 

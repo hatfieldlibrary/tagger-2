@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -27,9 +27,10 @@
                           AreaList,
                           AreaListObservable,
                           AreaActionObservable,
-                          ReorderAreas) {
+                          ReorderAreas,
+                          $log) {
 
-    var vm = this;
+    let vm = this;
 
     /**
      * Sets the current area in view model.
@@ -70,12 +71,18 @@
        */
       AreaListObservable.subscribe((areas) => {
         vm.areas = areas;
-        /**
-         *  With any changes while this component is active,
-         *  set the current area to the first in the list and
-         *  notify subscribers.
-         */
-        AreaObservable.set(vm.areas[0].id);
+        try {
+          /**
+           *  With any changes while this component is active,
+           *  set the current area to the first in the list and
+           *  notify subscribers.
+           */
+          AreaObservable.set(vm.areas[0].id);
+        } catch (err) {
+          $log.debug(err);
+          $log.info('Setting area to zero.');
+          AreaObservable.set(0);
+        }
       });
     }
 
@@ -97,7 +104,13 @@
           var areas = AreaList.query();
           areas.$promise.then(function (data) {
             AreaListObservable.set(data);
-            AreaObservable.set(data[0].id);
+            try {
+              AreaObservable.set(data[0].id);
+            } catch(err) {
+              $log.debug(err);
+              $log.info('Initializing list with no areas.');
+              AreaObservable.set(0);
+            }
           });
           TaggerToast.toast('Area order updated.');
         }
@@ -116,7 +129,13 @@
       let areas = AreaList.query();
       areas.$promise.then(function (data) {
         vm.areas = data;
-        vm.currentAreaId = data[0].id;
+        try {
+          vm.currentAreaId = data[0].id;
+        } catch(err) {
+          $log.info('Initializing with area id zero.');
+          $log.debug(err);
+          vm.currentAreaId = 0;
+        }
         AreaActionObservable.set(vm.currentAreaId);
       });
 
@@ -131,7 +150,7 @@
     '<md-content class="sortable-list" flex="flex">' +
     '<div class="md-caption" style="margin-top: 10px">Drag item to reorder</div>' +
     '<md-list dnd-list="vm.areas">' +
-    '<md-list-item ng-repeat="area in vm.areas" dnd-draggable="area" dnd-moved="vm.orderAreaList($index)" dnd-effect-allowed="move" class="tagger-reorder-button">' +
+    '<md-list-item ng-repeat="area in vm.areas" dnd-draggable="area" dnd-moved="vm.orderAreaList($index)" dnd-effect-allowed="move" class="tagger-reorder-button" track by $index>' +
     '<md-button class="md-no-style md-button nav-item-dimens md-default-theme" ng-class="{\'md-primary\': area.id==vm.currentAreaId}" ng-click="vm.resetArea(area.id);"> ' +
     '<div class="list-group-item-text md-subhead layout-fill">{{area.title}}' +
     '<div class="md-ripple-container"></div>' +

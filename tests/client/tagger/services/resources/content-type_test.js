@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2017.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Created by mspalti on 2/2/17.
  */
@@ -49,7 +66,7 @@ describe('tag resources', () => {
 
   it('should request tag counts by area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'content/byArea/count/1').respond([{name: typeName, count: 1}]);
+    $httpBackend.expectGET(config.restHost + 't/content/byArea/count/1').respond([{name: typeName, count: 1}]);
     let result = ContentTypeCount.query({areaId: 1});
     $httpBackend.flush();
     expect(result[0].name).toEqual(typeName);
@@ -58,7 +75,7 @@ describe('tag resources', () => {
 
   it('should request type by it\'s id.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'content/byId/1').respond({name: typeName});
+    $httpBackend.expectGET(config.restHost + 't/content/byId/1').respond({name: typeName});
     let result = ContentType.query({id: 1});
     $httpBackend.flush();
     expect(result.name).toEqual(typeName);
@@ -67,7 +84,7 @@ describe('tag resources', () => {
 
   it('should request list of types.', () => {
 
-    $httpBackend.expectGET(config.restHost + 'content/show/list').respond([{name: typeName}]);
+    $httpBackend.expectGET(config.restHost + 't/content/show/list').respond([{name: typeName}]);
     let result = ContentTypeList.query();
     $httpBackend.flush();
     expect(result[0].name).toEqual(typeName);
@@ -81,7 +98,7 @@ describe('tag resources', () => {
       id: 1
 
     };
-    $httpBackend.expectPOST(config.restHost + 'content/update', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/content/update', message).respond({status: 'success'});
     let result = ContentTypeUpdate.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -92,7 +109,7 @@ describe('tag resources', () => {
       id: 1
 
     };
-    $httpBackend.expectPOST(config.restHost + 'content/delete', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/content/delete', message).respond({status: 'success'});
     let result = ContentTypeDelete.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');
@@ -103,7 +120,7 @@ describe('tag resources', () => {
       name: 'update type'
 
     };
-    $httpBackend.expectPOST(config.restHost + 'content/add', message).respond({status: 'success'});
+    $httpBackend.expectPOST(config.restHost + 't/content/add', message).respond({status: 'success'});
     let result = ContentTypeAdd.save(message);
     $httpBackend.flush();
     expect(result.status).toEqual('success');

@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2017.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Created by mspalti on 1/23/17.
  */
@@ -12,6 +29,7 @@ describe('The collection area selector component', () => {
   let CollectionObservable,
     CollectionAreasObservable,
     AreaListObservable,
+    AreaObservable,
     AreasForCollection,
     AreaTargetAdd,
     AreaTargetRemove,
@@ -35,6 +53,16 @@ describe('The collection area selector component', () => {
 
     module(($provide) => {
       $provide.value('AreaListObservable', {
+        set: (x) => {
+        },
+        get: () => {
+        },
+        subscribe: (o) => {
+        }
+      });
+    });
+    module(($provide) => {
+      $provide.value('AreaObservable', {
         set: (x) => {
         },
         get: () => {
@@ -72,14 +100,14 @@ describe('The collection area selector component', () => {
 
     module(($provide) => {
       $provide.value('AreaTargetAdd', {
-        query: () => {
+        save: () => {
         }
       });
     });
 
     module(($provide) => {
       $provide.value('AreaTargetRemove', {
-        query: () => {
+        delete: () => {
         }
       });
     });
@@ -94,6 +122,7 @@ describe('The collection area selector component', () => {
 
 
   beforeEach(inject((_AreaListObservable_,
+                     _AreaObservable_,
                      _CollectionObservable_,
                      _CollectionAreasObservable_,
                      _AreasForCollection_,
@@ -104,6 +133,7 @@ describe('The collection area selector component', () => {
                      _$q_) => {
 
     AreaListObservable = _AreaListObservable_;
+    AreaObservable = _AreaObservable_;
     CollectionAreasObservable = _CollectionAreasObservable_;
     CollectionObservable = _CollectionObservable_;
     AreasForCollection = _AreasForCollection_;
@@ -205,6 +235,17 @@ describe('The collection area selector component', () => {
     spyOn(TaggerToast, 'toast');
 
     // area list observable.
+    spyOn(AreaObservable, 'set').and.callFake(() => {
+      fakeAreaListCallback(testAreaId);
+    });
+    spyOn(AreaObservable, 'get').and.callFake(() => {
+      return testAreaId;
+    });
+    spyOn(AreaObservable, 'subscribe').and.callFake((o) => {
+      fakeAreaListCallback = o;
+    });
+
+    // area list observable.
     spyOn(AreaListObservable, 'set').and.callFake(() => {
       fakeAreaListCallback(testAreaResponse);
     });
@@ -225,7 +266,7 @@ describe('The collection area selector component', () => {
       }
     });
 
-    spyOn(AreaTargetAdd, 'query').and.callFake(() => {
+    spyOn(AreaTargetAdd, 'save').and.callFake(() => {
       return {
         $promise: {
           then: (callback) => {
@@ -235,7 +276,7 @@ describe('The collection area selector component', () => {
       }
     });
 
-    spyOn(AreaTargetRemove, 'query').and.callFake(() => {
+    spyOn(AreaTargetRemove, 'delete').and.callFake(() => {
       return {
         $promise: deferred.promise
       }
@@ -293,7 +334,7 @@ describe('The collection area selector component', () => {
     deferred.resolve(testAreaResponse);
     $rootScope.$apply();
 
-    expect(AreaTargetRemove.query).toHaveBeenCalledWith({collId: testCollectionId, areaId: 1});
+    expect(AreaTargetRemove.delete).toHaveBeenCalledWith({collId: testCollectionId, areaId: 1});
     expect(CollectionAreasObservable.set).toHaveBeenCalled();
 
 

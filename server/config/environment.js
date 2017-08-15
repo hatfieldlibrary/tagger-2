@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -40,28 +40,28 @@ const config = {
     app: {
       name: 'tagger'
     },
-    uid: credentials.develuid,
-    gid: credentials.develgid,
-    port: 3333,
+    uid: credentials.uid,
+    gid: credentials.gid,
+    logLevel: 'debug',
+    port: credentials.hostPort,
     mysql: {
-      db: 'acomtags_development',
-      user: credentials.develdbuser,
-      password: credentials.develdbpassword,
+      db: credentials.dbName,
+      user: credentials.dbUser,
+      password: credentials.dbPassword,
       host: 'localhost',
       port: 3306,
       dialect: 'mariadb'
     },
-    logLevel: 'debug',
     dbLog: console.log,
     sync: {force: false},
-    useAuth: true,
-    domain: credentials.domain,
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
-    taggerImageDir: '/usr/local/taggerImages',
+    taggerImageDir: credentials.taggerImageDir,
+    domain: credentials.domain,
+    useAuth: true,
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
-    googleCallback: 'http://localhost:3000/auth/google/callback',
+    googleCallback: credentials.googleCallback,
     externalHostA: credentials.externalHostA,
     externalHostB: '', // not in use
     nodeEnv: env
@@ -74,11 +74,11 @@ const config = {
     credentialsPath: '',
     uid: credentials.develuid,
     gid: credentials.develgid,
-    port: 3000,
+    port: credentials.hostPort,
     mysql: {
-      db: 'acomtags_test',
-      user: credentials.develdbuser,
-      password: credentials.develdbpassword,
+      db: 'tagger_test',
+      user: credentials.dbUser,
+      password: credentials.dbPassword,
       host: 'localhost',
       port: 3306,
       dialect: 'mysql'
@@ -90,11 +90,10 @@ const config = {
     domain: credentials.domain,
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
-    taggerImageDir: '/var/taggerImages',
-    adminPath: '/views',
+    taggerImageDir: credentials.taggerImageDir,
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
-    googleCallback: 'http://localhost:3000/auth/google/callback',
+    googleCallback: credentials.googleCallback,
     externalHostA: credentials.externalHostA,
     externalHostB: '', // not in use
     nodeEnv: env
@@ -108,24 +107,23 @@ const config = {
     logLevel: 'info',
     dbLog: false,
     sync: {force: false},
-    useAuth: true,
     uid: credentials.uid,
     gid: credentials.gid,
-    port: 3000,
+    port: credentials.hostPort,
     redisPort: credentials.redisPort,
     mysql: {
-      db: 'acomtags',
-      user: credentials.user,
-      password: credentials.password,
+      db: credentials.dbName,
+      user: credentials.dbUser,
+      password: credentials.dbPassword,
       host: credentials.productiondbhost,
       port: 3306,
       dialect: 'mariadb'
     },
     convert: '/usr/bin/convert',
     identify: '/usr/bin/identify',
-    taggerImageDir: '/var/taggerImages',
-    adminPath: '/views',
+    taggerImageDir: credentials.taggerImageDir,
     domain: credentials.domain,
+    useAuth: true,
     googleClientId: credentials.googleClientId,
     googleClientSecret: credentials.googleClientSecret,
     googleCallback: credentials.googleCallback,

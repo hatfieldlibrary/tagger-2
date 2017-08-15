@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -24,15 +24,25 @@
 
   function ListController(GroupListObservable,
                           GroupObservable,
-                          UserAreaObservable) {
+                          UserAreaObservable,
+                          $log) {
 
     const vm = this;
 
     function _setSubscriptions() {
 
       GroupListObservable.subscribe((categories) => {
-        vm.categories = categories;
-        vm.currentCategory = vm.categories[0].id;
+
+        try {
+          vm.categories = categories;
+          vm.currentCategory = vm.categories[0].id;
+        } catch (err) {
+          $log.debug(err);
+          $log.info('Initializing list with no collection groups.');
+          vm.categories = [];
+          vm.currentCategory = 0;
+
+        }
       });
 
 
@@ -51,7 +61,7 @@
 
       _setSubscriptions();
 
-        vm.userAreaId = UserAreaObservable.get();
+      vm.userAreaId = UserAreaObservable.get();
       // If current group exists, use it.
       const currentCat = GroupObservable.get();
       if (currentCat) {
@@ -68,8 +78,7 @@
 
   taggerComponents.component('groupsList', {
 
-    template:
-    ' <md-content flex="flex"> ' +
+    template: ' <md-content flex="flex"> ' +
     '   <md-list> ' +
     '     <div ng-repeat="cat in vm.categories"> ' +
     '       <md-list-item> ' +

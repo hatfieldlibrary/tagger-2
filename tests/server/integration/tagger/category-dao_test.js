@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016.
+ * Copyright (c) 2017.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -24,14 +24,12 @@
 /*jshint expr: true*/
 
 import db from '../_helpers/db';
-import  areaDao from '../../../../server/api/tagger/dao/area-dao';
+import areaDao from '../../../../server/api/tagger/dao/area-dao';
 import categoryDao from '../../../../server/api/tagger/dao/category-dao';
 import collectionDao from '../../../../server/api/tagger/dao/collection-dao';
 import {expect} from 'chai';
 import async from 'async';
 
-
-let newCategoryId = 0;
 
 const categoryOne =
   {
@@ -78,32 +76,20 @@ describe('Category creation', () => {
   // Don't use fat arrow. We need this binding for timeout.
   before(function (done) {
 
-    this.timeout(5000);
+    this.timeout(7000);
     async.series(
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(callback(null));
         }
       ], (err) => {
         if (err) {
@@ -165,73 +151,54 @@ describe('Category operations', () => {
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           areaDao
             .addArea(initAreas[0], count++)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           areaDao
             .addArea(initAreas[1], count++)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           categoryDao
             .add(initCategories[0])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           categoryDao
             .add(initCategories[1])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           categoryDao
             .add(initCategories[2])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           collectionDao
-            .addNewCollection('test collection')
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .addNewCollection('mock collection', 'foo', 'foo', 'foo')
+            .then(callback(null));
         },
         (callback) => {
           collectionDao.addCollectionToCategory(1, 1)
-            .then(callback(null))
-            .catch((err) => callback(err))
+            .then(callback(null));
         }
       ],
       (err) => {
@@ -298,7 +265,7 @@ describe('Category operations', () => {
       .catch(_onError);
   });
 
-  it('should list three catgories.', (done) => {
+  it('should list three categories.', (done) => {
 
     let _onSuccess = (categories) => {
 
@@ -320,7 +287,7 @@ describe('Category operations', () => {
   });
 
 
-  it('should return something.', (done) => {
+  it('should return a category for the collection.', (done) => {
     let _onSuccess = (category) => {
       expect(category).to.be.defined;
       expect(category.length).to.equal(1);
