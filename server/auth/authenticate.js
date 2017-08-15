@@ -57,19 +57,25 @@ module.exports = function (app, config) {
       resave: true
     });
 
-    // Use redis as the production session store.
+    // Ideally, use redis as the production session store.
     // http://redis.io/
   }
   else if (app.get('env') === 'production') {
 
-    sessionMiddleware = session(
+    const redisPort = config.redisPort || 6379;
+    let client = redis.createClient(
+      redisPort, '127.0.0.1',
+      {}
+    );
+    app.use(cookieParser());
+    app.use(session(
       {
-        secret: 'insideoutorup',
-        store: new RedisStore({host: '127.0.0.1', port: config.redisPort}),
+        secret: 'insideoutorupagain',
+        store: new RedisStore({host: '127.0.0.1', port: redisPort, client: client}),
         saveUninitialized: false, // don't create session until something stored,
         resave: false // don't save session if unmodified
-      });
-
+      }
+    ));
   }
 
   /**
