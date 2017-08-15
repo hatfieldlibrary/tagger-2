@@ -66,10 +66,10 @@ describe('area resources', () => {
 
   it('should request area.', () => {
 
-    $httpBackend.expectGET(config.restHost + 't/area/id/1').respond({name: 'test area'});
+    $httpBackend.expectGET(config.restHost + 't/area/id/1').respond([{title: 'test area'}]);
     let result = AreaById.query({id: 1});
     $httpBackend.flush();
-    expect(result.name).toEqual('test area');
+    expect(result[0].title).toEqual('test area');
 
   });
 

@@ -53,27 +53,15 @@ describe('Tag creation', () => {
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(() => callback(null));
         }
       ], (err) => {
         if (err) {
@@ -134,33 +122,20 @@ describe('Tag operations', () => {
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            (err) =>console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            (err) =>console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           tagDao
             .createTag(initTags[0])
-            .then(callback(null))
-            .catch((err) =>console.log(err));
+            .then(callback(null));
 
         },
         (callback) => {
@@ -173,31 +148,26 @@ describe('Tag operations', () => {
         (callback) => {
           areaDao
             .addArea(initAreas[0], count++)
-            .then(callback(null))
-            .catch((err) =>console.log(err));
+            .then(callback(null));
 
         },
         (callback) => {
           areaDao
             .addArea(initAreas[1], count++)
-            .then(callback(null))
-            .catch((err) =>console.log(err));
+            .then(callback(null));
 
         },
         (callback) => {
           collectionDao.addNewCollection('mock collection', 'foo', 'foo', 'foo')
-            .then(callback(null))
-            .catch((err) =>console.log(err))
+            .then(callback(null));
         },
         (callback) => {
           targetDao.addTagToArea(1, 1)
-            .then(callback(null))
-            .catch((err) => console.log(err))
+            .then(callback(null));
         },
         (callback) => {
           collectionDao.addTagTarget(1, 1)
-            .then(callback(null))
-            .catch((err) =>console.log(err))
+            .then(callback(null));
         }
       ],
       (err) => {
@@ -248,7 +218,7 @@ describe('Tag operations', () => {
   it('should find tags associated with area.', (done) => {
     let _onSuccess = (tags) => {
       expect(tags).to.be.defined;
-      expect(tags[0].dataValues.Tag).to.be.an('object');
+      expect(tags[0]).to.be.an('object');
       done();
     };
 
@@ -257,14 +227,13 @@ describe('Tag operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    tagDao.findTagsInArea(1)
+    tagDao.findTagsInArea('1')
       .then(_onSuccess)
       .catch(_onError);
   });
 
   it('should get tag count by area.', (done) => {
     let _onSuccess = (count) => {
-      console.log(count)
       expect(count).to.be.defined;
       expect(count[0].name).to.have.string('cats');
       expect(count[0].count).to.equal(1);

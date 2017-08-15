@@ -40,56 +40,39 @@ describe('Tag area target operations', () => {
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           areaDao
             .addArea('mock area', 1)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           collectionDao.addNewCollection('mock collection', 'foo', 'foo', 'foo')
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
         },
         (callback) => {
           collectionDao
             .addCollectionToArea(1, 1)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
         },
         (callback) => {
           tagDao
             .createTag('mock tag')
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
         },
         (callback) => {
           collectionDao.addTagTarget(1, 1)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
         }
       ],
       (err) => {

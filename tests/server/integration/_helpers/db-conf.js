@@ -39,8 +39,8 @@
     test: {
       mysql: {
         db: 'tagger_test',
-        user: credentials.develdbuser,
-        password: credentials.develdbpassword,
+        user: credentials.dbUser,
+        password: credentials.dbPassword,
         host: 'localhost',
         port: 3306,
         dialect: 'mysql'

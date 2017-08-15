@@ -29,6 +29,7 @@ describe('The collection area selector component', () => {
   let CollectionObservable,
     CollectionAreasObservable,
     AreaListObservable,
+    AreaObservable,
     AreasForCollection,
     AreaTargetAdd,
     AreaTargetRemove,
@@ -52,6 +53,16 @@ describe('The collection area selector component', () => {
 
     module(($provide) => {
       $provide.value('AreaListObservable', {
+        set: (x) => {
+        },
+        get: () => {
+        },
+        subscribe: (o) => {
+        }
+      });
+    });
+    module(($provide) => {
+      $provide.value('AreaObservable', {
         set: (x) => {
         },
         get: () => {
@@ -111,6 +122,7 @@ describe('The collection area selector component', () => {
 
 
   beforeEach(inject((_AreaListObservable_,
+                     _AreaObservable_,
                      _CollectionObservable_,
                      _CollectionAreasObservable_,
                      _AreasForCollection_,
@@ -121,6 +133,7 @@ describe('The collection area selector component', () => {
                      _$q_) => {
 
     AreaListObservable = _AreaListObservable_;
+    AreaObservable = _AreaObservable_;
     CollectionAreasObservable = _CollectionAreasObservable_;
     CollectionObservable = _CollectionObservable_;
     AreasForCollection = _AreasForCollection_;
@@ -220,6 +233,17 @@ describe('The collection area selector component', () => {
     spyOn(CollectionAreasObservable, 'subscribe');
 
     spyOn(TaggerToast, 'toast');
+
+    // area list observable.
+    spyOn(AreaObservable, 'set').and.callFake(() => {
+      fakeAreaListCallback(testAreaId);
+    });
+    spyOn(AreaObservable, 'get').and.callFake(() => {
+      return testAreaId;
+    });
+    spyOn(AreaObservable, 'subscribe').and.callFake((o) => {
+      fakeAreaListCallback = o;
+    });
 
     // area list observable.
     spyOn(AreaListObservable, 'set').and.callFake(() => {

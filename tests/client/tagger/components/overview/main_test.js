@@ -163,10 +163,10 @@ describe('The main overview component', () => {
       }
     ];
 
-    area = {
+    area = [{
       title: 'test area',
       id: 1
-    };
+    }];
 
     tags = [
       {
@@ -259,8 +259,8 @@ describe('The main overview component', () => {
 
     expect(ctrl.collectionCount).toEqual(3);
 
-    expect(ctrl.areaLabel).toEqual(area.title);
-    expect(ctrl.areaId).toEqual(area.id);
+    expect(ctrl.areaLabel).toEqual(area[0].title);
+    expect(ctrl.areaId).toEqual(area[0].id);
 
 
   });
