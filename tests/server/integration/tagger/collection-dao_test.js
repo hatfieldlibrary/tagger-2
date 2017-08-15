@@ -178,33 +178,20 @@ describe('Collection operations', () => {
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           areaDao
             .addArea(initAreas[0], count++)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
@@ -217,43 +204,37 @@ describe('Collection operations', () => {
         (callback) => {
           categoryDao
             .add(initCategories[0])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           categoryDao
             .add(initCategories[1])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           typeDao
             .createContentType(initTypes[0])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           typeDao
             .createContentType(initTypes[1])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           tagDao
             .createTag(initTags[0])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           tagDao
             .createTag(initTags[1])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
@@ -261,10 +242,8 @@ describe('Collection operations', () => {
             .addNewCollection(initCollections[0], 'foo', 'foo', 'foo')
             .then(() => {
               collectionDao.setPublicationStatus(true, 1)
-                .then(callback(null))
-                .catch((err) => console.log(err));
-            })
-            .catch((err) => console.log(err));
+                .then(callback(null));
+            });
 
         },
         (callback) => {
@@ -272,10 +251,8 @@ describe('Collection operations', () => {
             .addNewCollection(initCollections[1], 'foo', 'foo', 'foo')
             .then(() => {
               collectionDao.setPublicationStatus(true, 2)
-                .then(callback(null))
-                .catch((err) => callback(err));
-            })
-            .catch((err) => callback(err));
+                .then(callback(null));
+            });
         }
       ],
       (err) => {
@@ -429,7 +406,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByArea(1)
+    collectionDao.getCollectionsByArea('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -732,7 +709,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByArea(1)
+    collectionDao.getCollectionsByArea('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -749,7 +726,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsBySubjectAndArea(1, 1)
+    collectionDao.getCollectionsBySubjectAndArea('1', '1')
       .then(_onSuccess)
       .catch(_onError);
   });

@@ -55,7 +55,6 @@
       if (id) {
         let tagsForArea = TagsForArea.query({areaId: id});
         tagsForArea.$promise.then(function (data) {
-console.log(data)
           ctrl.tagsForArea = data;
           _getTagsForCollection(ctrl.collectionId);
         });
@@ -83,7 +82,6 @@ console.log(data)
     function _getTagsForCollection(id) {
       let tags = TagsForCollection.query({collId: id});
       tags.$promise.then(function (data) {
-        console.log(data)
         _setTagsArray(data);
       });
     }

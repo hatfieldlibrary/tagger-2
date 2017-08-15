@@ -98,6 +98,8 @@
      * @private
      */
     function _updateCollectionList(areaId) {
+      console.log(AreaObservable.get())
+      console.log(areaId)
       if (AreaObservable.get() === areaId) {
         CollectionAreasObservable.set();
       }
@@ -124,7 +126,6 @@
             result.$promise.then(function (result) {
               if (result.status === 'success') {
                 TaggerToast.toast('Collection removed from area.');
-                console.log(result)
                 ctrl.areaTargets = result.data.areaList.getAreas;
                 _updateCollectionList(areaId);
 
