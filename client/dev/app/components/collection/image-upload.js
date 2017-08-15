@@ -87,7 +87,7 @@
     '       <thumb-image-link imgname="{{vm.thumbnailImage}}"></thumb-image-link> ' +
     '     </div> ' +
     '     <md-card-content> ' +
-    '     <span class="md-caption">Image size 500px wide by 600px high</span> ' +
+    '     <span class="md-caption">Image size 1425px wide by 750px high</span> ' +
     '   </md-card-content> ' +
     '  </div> ' +
     ' </md-card-content> ' +

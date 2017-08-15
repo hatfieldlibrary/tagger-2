@@ -24,14 +24,12 @@
 /*jshint expr: true*/
 
 import db from '../_helpers/db';
-import  areaDao from '../../../../server/api/tagger/dao/area-dao';
+import areaDao from '../../../../server/api/tagger/dao/area-dao';
 import categoryDao from '../../../../server/api/tagger/dao/category-dao';
 import collectionDao from '../../../../server/api/tagger/dao/collection-dao';
 import {expect} from 'chai';
 import async from 'async';
 
-
-let newCategoryId = 0;
 
 const categoryOne =
   {
@@ -83,27 +81,15 @@ describe('Category creation', () => {
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch((err) => {
-            callback(err);
-          });
+            .then(callback(null));
         }
       ], (err) => {
         if (err) {
@@ -165,73 +151,54 @@ describe('Category operations', () => {
       [
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 0')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            console.log(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.sync({force: true})
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           db.sequelize.query('SET foreign_key_checks = 1')
-            .then(() => {
-              callback(null);
-            }).catch(function (err) {
-            callback(err);
-          });
+            .then(() => callback(null));
         },
         (callback) => {
           areaDao
             .addArea(initAreas[0], count++)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           areaDao
             .addArea(initAreas[1], count++)
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           categoryDao
             .add(initCategories[0])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           categoryDao
             .add(initCategories[1])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           categoryDao
             .add(initCategories[2])
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
 
         },
         (callback) => {
           collectionDao
             .addNewCollection('mock collection', 'foo', 'foo', 'foo')
-            .then(callback(null))
-            .catch((err) => callback(err));
+            .then(callback(null));
         },
         (callback) => {
           collectionDao.addCollectionToCategory(1, 1)
-            .then(callback(null))
-            .catch((err) => callback(err))
+            .then(callback(null));
         }
       ],
       (err) => {

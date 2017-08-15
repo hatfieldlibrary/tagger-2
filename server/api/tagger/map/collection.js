@@ -62,15 +62,14 @@
     let collectionArray = [];
     for (let i = 0; i < collections.length; i++) {
 
-
       let collection;
+
       if(type === 'all') {
         collection = collections[i].dataValues;
       } else {
         collection = collections[i];
       }
-
-      let coll = _mapListCollection(collection, type);
+      let coll = _mapListCollection(collection);
       collectionArray.push(coll);
 
     }
@@ -91,13 +90,13 @@
     return typeArray;
   }
 
-  function _mapListCollection(collection, type) {
+  function _mapListCollection(collection) {
 
     let collectionId;
-    if (type === 'all') {
-      collectionId = collection.id;
-    } else {
+    if (collection.CollectionId) {
       collectionId = collection.CollectionId;
+    } else {
+      collectionId = collection.id;
     }
     let coll = {
       id: collectionId,
