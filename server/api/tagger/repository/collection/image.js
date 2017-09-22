@@ -24,8 +24,6 @@ const imageConvert = require('../../utils/image-convert');
 const taggerDao = require('../../dao/collection-dao');
 const logger = require('../../utils/error-logger');
 
-
-
 /**
  * Image upload. Reads multipart form data and creates
  * thumbnail image. Writes thumbnail and full size image to
@@ -54,9 +52,9 @@ exports.updateImage = function (req, config, callback, errorHandler) {
         errorHandler(err);
         logger.dao(err);
       });
-  }
+  };
 
-  var form = new multiparty.Form();
+  let form = new multiparty.Form();
 
   form.parse(req, function (err, fields, files) {
 
