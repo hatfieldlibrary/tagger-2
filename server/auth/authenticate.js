@@ -37,6 +37,8 @@ let
 
   bodyParser = require('body-parser'),
 
+  redis = require('redis'),
+
   /**
    * Redis session store
    */
@@ -47,15 +49,14 @@ const db = require('../api/tagger/schema');
 
 module.exports = function (app, config) {
 
-  let sessionMiddleware;
-
   // For development purposes, use express-session in lieu of Redisstore.
   if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
-    sessionMiddleware = session({
-      secret: 'keyboard cat',
-      saveUninitialized: true,
-      resave: true
-    });
+    app.use(session({
+        secret: 'keyboard cat',
+        saveUninitialized: true,
+        resave: true
+      })
+    );
 
     // Ideally, use redis as the production session store.
     // http://redis.io/
@@ -100,7 +101,6 @@ module.exports = function (app, config) {
    */
   let GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-  app.use(sessionMiddleware);
   // Passport authentication and session.
   app.use(passport.initialize());
   app.use(passport.session());
@@ -109,7 +109,6 @@ module.exports = function (app, config) {
   // angularjs posts data as json so using the json parser, too.
   app.use(bodyParser.json());
   app.use(cookieParser());
-
 
   // Google OAUTH2.
   const GOOGLE_CLIENT_ID = config.googleClientId;
