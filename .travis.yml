@@ -5,7 +5,7 @@ node_js:
 
 sudo: required
 
-dist: trusty
+dist: precise
 
 env:
   - CXX=g++-4.8
@@ -36,5 +36,8 @@ before_script:
 
 script:
   - npm run-script test-on-travis
+
+#after_script:
+#  - kill -9 $(ps aux | grep 'selenium' | awk '{print $2}')
 
 services: mysql
