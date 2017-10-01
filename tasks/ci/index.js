@@ -28,7 +28,7 @@ gulp.task(tasks.TRAVIS_CI, () => {
     runSequence(
       tasks.SERVER_LINT_JS,
       tasks.ISTANBUL_PREFIGHT,
-      tasks.SERVER_INTEGRATION_TEST,
+     // tasks.SERVER_INTEGRATION_TEST,
     //  tasks.SERVER_UNIT_TESTS,
       tasks.CLIENT_UNIT_TESTS,
       tasks.COVERALLS,
