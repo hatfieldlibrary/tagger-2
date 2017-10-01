@@ -30,7 +30,10 @@ import util from 'gulp-util';
 gulp.task(tasks.SERVER_INTEGRATION_TEST, function () {
   return gulp.src(['tests/server/integration/**/*.js'], { read: false })
     .pipe(mocha({ reporter: 'spec', timeout: 3000, globals: ['recursive','async-only'] }))
-    .pipe(istanbul.writeReports())
+    .once('end', function () {
+      process.exit();
+    })
+   // .pipe(istanbul.writeReports())
     .on('error', util.log);
 });
 
