@@ -38,8 +38,6 @@ script:
   - npm run-script test-on-travis
 
 after_script:
-#  - kill -9 $(ps aux | grep 'selenium' | awk '{print $2}')
-#- kill -9 $(ps aux | grep 'mysql' | awk '{print $2}')
- - ps auxf
+
 
 services: mysql
