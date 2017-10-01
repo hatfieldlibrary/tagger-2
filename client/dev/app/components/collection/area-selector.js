@@ -98,8 +98,6 @@
      * @private
      */
     function _updateCollectionList(areaId) {
-      console.log(AreaObservable.get())
-      console.log(areaId)
       if (AreaObservable.get() === areaId) {
         CollectionAreasObservable.set();
       }
