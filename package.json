@@ -2,6 +2,10 @@
   "name": "Tagger",
   "version": "2.1.0",
   "main": "index.js",
+  "engines": {
+    "node": "6.11.3",
+    "npm": "3.10.10"
+  },
   "scripts": {
     "start": "node index",
     "watch": "gulp",
