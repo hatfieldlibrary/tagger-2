@@ -551,6 +551,23 @@ describe('Collection operations', () => {
       .catch(_onError);
   });
 
+  it('should retrieve collections for content type 1', (done) => {
+    let _onSuccess = (collection) => {
+      expect(collection).to.be.defined;
+      expect(collection[0].title).to.equal('Init Collection One');
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    collectionDao.getCollectionsByItemType(1)
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
   it('should check for existing association between tag and collection.', (done) => {
     let _onSuccess = (tag) => {
       expect(tag).to.be.defined;

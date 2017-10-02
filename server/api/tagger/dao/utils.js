@@ -4,23 +4,42 @@
 
 const utils = {};
 
+const areaField = ' at.AreaId = ? ';
 
-utils.getWhereClauseForMultipleAreas = (areaArray) => {
+/**
+ * Generates where clause from input values and field string.
+ * @param inputArray
+ * @param field
+ * @returns {string}
+ * @private
+ */
+const _getWhereClause = (inputArray, field) =>  {
 
-  let areaWhereClause = '';
+  let whereClause = '';
 
-  for (let i = 0; i < areaArray.length; i++) {
-    areaWhereClause += ' at.AreaId = ? ';
-    if (i < areaArray.length - 1) {
-      areaWhereClause += ' OR ';
+  for (let i = 0; i < inputArray.length; i++) {
+    whereClause += field;
+    if (i < inputArray.length - 1) {
+      whereClause += ' OR ';
     }
   }
-  if (areaArray.length > 1) {
-    areaWhereClause = '(' + areaWhereClause + ')';
+  if (inputArray.length > 1) {
+    whereClause = '(' + whereClause + ')';
   }
 
-  return areaWhereClause;
+  return whereClause;
 
 };
+
+/**
+ * Returns the where clause for areas.
+ * @param areaArray
+ */
+utils.getWhereClauseForMultipleAreas = (areaArray) => {
+
+  return _getWhereClause(areaArray, areaField)
+
+};
+
 
 module.exports =  utils;
