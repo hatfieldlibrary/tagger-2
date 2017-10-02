@@ -604,6 +604,20 @@ taggerDao.getCollectionsByCategory = (categoryId) => {
 
 };
 
+taggerDao.getCollectionsByItemType = (itemTypeId) => {
+
+  if (!itemTypeId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+  return taggerSchema.sequelize.query('Select * from Collections c left join ItemContentTargets it on it.CollectionId = c.id where it.ItemContentId = ? and c.published = true order by c.title',
+    {
+      replacements: [itemTypeId],
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+};
+
 taggerDao.findTagsForCollection = (collId) => {
 
   if (!collId) {
