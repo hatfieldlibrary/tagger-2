@@ -666,7 +666,7 @@ taggerDao.getCollectionsByAreaSubjectAndItemType = (areaId, contentTypeId, subje
  * Gets collections assigned to a single subject tag.  To provide functionality consistent
  * with other methods, this may need to be modified to support multiple, comma-separated
  * subject ids.
- * @param subjectId the single subject id.
+ * @param subjectId string containing comma separated or single subject id.
  */
 taggerDao.getCollectionsBySubject = (subjectId) => {
 
@@ -674,11 +674,17 @@ taggerDao.getCollectionsBySubject = (subjectId) => {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
+  if (typeof subjectId !== 'string') {
+    logger.dao(paramTypeErrorMessage);
+    throw _errorResponse();
+  }
+  const subjectArray = subjectId.split(',');
+  const subjectWhereClause = utils.getWhereClauseForSubjects(subjectArray);
 
   return taggerSchema.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
-    'on tt.CollectionId = c.id where tt.TagId = ? and c.published = true order by c.title',
+    'on tt.CollectionId = c.id where (' + subjectWhereClause + ') and c.published = true order by c.title',
     {
-      replacements: [subjectId],
+      replacements: [subjectArray],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
 
     });
@@ -716,10 +722,19 @@ taggerDao.getCollectionsByItemType = (itemTypeId) => {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
+  if (typeof itemTypeId !== 'string') {
+    logger.dao(paramTypeErrorMessage);
+    throw _errorResponse();
+  }
+  const typeArray = itemTypeId.split(',');
+  const typeWhereClause = utils.getWhereClauseForContentTypes(typeArray);
 
-  return taggerSchema.sequelize.query('Select * from Collections c left join ItemContentTargets it on it.CollectionId = c.id where it.ItemContentId = ? and c.published = true order by c.title',
+
+  return taggerSchema.sequelize.query('Select * from Collections c ' +
+    'LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
+    'where (' + typeWhereClause + ') and c.published = true order by c.title',
     {
-      replacements: [itemTypeId],
+      replacements: [typeArray],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
 };

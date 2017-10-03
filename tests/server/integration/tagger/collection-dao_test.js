@@ -389,7 +389,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.updateCollection(updateCollectionData, 2)
+    collectionDao.updateCollection(updateCollectionData, '2')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -423,7 +423,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getPublicationStatus(1)
+    collectionDao.getPublicationStatus('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -441,7 +441,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.countCTypesByArea(1)
+    collectionDao.countCTypesByArea('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -459,7 +459,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.browseTypesByArea(1)
+    collectionDao.browseTypesByArea('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -478,7 +478,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.repoTypesByArea(1)
+    collectionDao.repoTypesByArea('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -495,7 +495,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findCollectionsInArea(1)
+    collectionDao.findCollectionsInArea('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -512,7 +512,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findAreasForCollection(2)
+    collectionDao.findAreasForCollection('2')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -529,7 +529,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findItemContentTarget(1, 1)
+    collectionDao.findItemContentTarget('1', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -546,7 +546,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findContentTypesForCollection(1)
+    collectionDao.findContentTypesForCollection('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -563,7 +563,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByItemType(1)
+    collectionDao.getCollectionsByItemType('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -616,7 +616,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.checkForExistingTagTarget(2, 1)
+    collectionDao.checkForExistingTagTarget('2', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -632,7 +632,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getAreaIdsForCollection(2)
+    collectionDao.getAreaIdsForCollection('2')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -648,7 +648,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.checkAreaAssociation(2, 1)
+    collectionDao.checkAreaAssociation('2', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -664,7 +664,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findCollectionById(2)
+    collectionDao.findCollectionById('2')
       .then(_onSuccess)
       .catch(_onError)
   });
@@ -680,7 +680,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findCategoryAssociation(1)
+    collectionDao.findCategoryAssociation('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -697,7 +697,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.updateCollectionCategory(1, 2)
+    collectionDao.updateCollectionCategory('1', '2')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -730,7 +730,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findTagsForCollection(2)
+    collectionDao.findTagsForCollection('2')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -746,7 +746,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
     // The collection id must not be identical to test collection. Using 2.
-    collectionDao.findRelatedCollections(1, 1)
+    collectionDao.findRelatedCollections('1', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -795,7 +795,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsBySubject(1)
+    collectionDao.getCollectionsBySubject('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -812,7 +812,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByCategory(2)
+    collectionDao.getCollectionsByCategory('2')
       .then(_onSuccess)
       .catch(_onError);
   });
