@@ -4,22 +4,71 @@
 
 const utils = {};
 
+const areaField = ' at.AreaId = ? ';
+const itemTypeField = ' it.ItemContentId = ? ';
+const subjectField = ' tt.TagId = ? ';
 
-utils.getWhereClauseForMultipleAreas = (areaArray) => {
+/**
+ * Generates where clause from input values and field string.
+ * @param inputArray
+ * @param field
+ * @returns {string}
+ * @private
+ */
+const _getWhereClause = (inputArray, field) =>  {
 
-  let areaWhereClause = '';
+  let whereClause = '';
 
-  for (let i = 0; i < areaArray.length; i++) {
-    areaWhereClause += ' at.AreaId = ? ';
-    if (i < areaArray.length - 1) {
-      areaWhereClause += ' OR ';
+  for (let i = 0; i < inputArray.length; i++) {
+    whereClause += field;
+    if (i < inputArray.length - 1) {
+      whereClause += ' OR ';
     }
   }
-  if (areaArray.length > 1) {
-    areaWhereClause = '(' + areaWhereClause + ')';
+  if (inputArray.length > 1) {
+    whereClause = '(' + whereClause + ')';
   }
 
-  return areaWhereClause;
+  return whereClause;
+
+};
+
+/**
+ * Returns the where clause for areas.
+ * @param areaArray
+ */
+utils.getWhereClauseForMultipleAreas = (areaArray) => {
+
+  return _getWhereClause(areaArray, areaField)
+
+};
+/**
+ * Gets collections where clause elements for one or more areas and one or more content types.
+ * @param areaArray the list of areas to query
+ * @param itemArray the list if content types to query
+ * @returns {string}
+ */
+utils.getWhereClauseForMultipleAreasAndContentTypes = (areaArray, itemArray) => {
+  const areasClause = _getWhereClause(areaArray, areaField);
+  const itemTypeClause = _getWhereClause(itemArray, itemTypeField);
+
+  return areasClause + ' AND ' + itemTypeClause;
+
+};
+
+/**
+ * Gets collections  where clause elements for one or more of areas, content types and subjects.
+ * @param areaArray the list of area ids
+ * @param itemArray the list of item type ids
+ * @param subjectArray the list of subject ids
+ * @returns {string}
+ */
+utils.getWhereClauseForAllFields = (areaArray, itemArray, subjectArray) => {
+  const areasClause = _getWhereClause(areaArray, areaField);
+  const itemTypeClause = _getWhereClause(itemArray, itemTypeField);
+  const subjectClause = _getWhereClause(subjectArray, subjectField);
+
+  return areasClause + ' AND ' + itemTypeClause + ' AND ' + subjectClause;
 
 };
 
