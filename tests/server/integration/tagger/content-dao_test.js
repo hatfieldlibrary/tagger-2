@@ -290,6 +290,60 @@ describe('Content type operations', () => {
 
   });
 
+  it('should find content types available for subject', (done) => {
+    let _onSuccess = (types) => {
+      expect(types).to.be.defined;
+      expect(types[0].name).to.have.string(categoriesInit[0]);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    contentDao.getContentTypesForSubject('1')
+      .then(_onSuccess)
+      .catch(_onError);
+
+  });
+
+  it('should find additional content types available for content type', (done) => {
+    let _onSuccess = (types) => {
+      expect(types).to.be.defined;
+      expect(types[0].name).to.have.string(categoriesInit[0]);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    contentDao.getContentTypesForContentType('1')
+      .then(_onSuccess)
+      .catch(_onError);
+
+  });
+
+  it('should find content types available for subject and content type query', (done) => {
+    let _onSuccess = (types) => {
+      expect(types).to.be.defined;
+      expect(types[0].name).to.have.string(categoriesInit[0]);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    contentDao.getContentTypesForSubjectContentTypeQuery('1', '1')
+      .then(_onSuccess)
+      .catch(_onError);
+
+  });
+
   it('should find content types available for area and content type query', (done) => {
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
