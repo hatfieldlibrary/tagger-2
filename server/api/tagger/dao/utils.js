@@ -6,6 +6,7 @@ const utils = {};
 
 const areaField = ' at.AreaId = ? ';
 const itemTypeField = ' it.ItemContentId = ? ';
+const subjectField = ' tt.TagId = ? ';
 
 /**
  * Generates where clause from input values and field string.
@@ -42,7 +43,7 @@ utils.getWhereClauseForMultipleAreas = (areaArray) => {
 
 };
 /**
- * Gets collections for one or more areas and one or more content types.
+ * Gets collections where clause elements for one or more areas and one or more content types.
  * @param areaArray the list of areas to query
  * @param itemArray the list if content types to query
  * @returns {string}
@@ -52,6 +53,22 @@ utils.getWhereClauseForMultipleAreasAndContentTypes = (areaArray, itemArray) => 
   const itemTypeClause = _getWhereClause(itemArray, itemTypeField);
 
   return areasClause + ' AND ' + itemTypeClause;
+
+};
+
+/**
+ * Gets collections  where clause elements for one or more of areas, content types and subjects.
+ * @param areaArray the list of area ids
+ * @param itemArray the list of item type ids
+ * @param subjectArray the list of subject ids
+ * @returns {string}
+ */
+utils.getWhereClauseForAllFields = (areaArray, itemArray, subjectArray) => {
+  const areasClause = _getWhereClause(areaArray, areaField);
+  const itemTypeClause = _getWhereClause(itemArray, itemTypeField);
+  const subjectClause = _getWhereClause(subjectArray, subjectField);
+
+  return areasClause + ' AND ' + itemTypeClause + ' AND ' + subjectClause;
 
 };
 
