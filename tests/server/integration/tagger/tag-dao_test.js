@@ -251,7 +251,26 @@ describe('Tag operations', () => {
       .catch(_onError);
   });
 
-  it('should find tags associated with area and content type.', (done) => {
+  it('should find tags associated collections that have content type.', (done) => {
+    let _onSuccess = (tags) => {
+      expect(tags).to.be.defined;
+      expect(tags[0]).to.be.an('object');
+      expect(tags[0].name).to.equal('cats');
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    tagDao.findTagsForContentType('1')
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+
+  it('should find tags associated with collections that have area and content type.', (done) => {
     let _onSuccess = (tags) => {
       expect(tags).to.be.defined;
       expect(tags[0]).to.be.an('object');

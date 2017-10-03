@@ -134,6 +134,37 @@ taggerDao.findTagsInArea = (areaId) => {
 
 };
 
+/**
+ * Gets the tags available for a collection list that has been limited content type.
+ * @param contentTypeId content type ids as comma separated string or a single value string
+ */
+taggerDao.findTagsForContentType = (contentTypeId) => {
+
+  if(!contentTypeId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+  let typeArray = contentTypeId.split(',');
+  let whereClause = utils.getWhereClauseForContentTypes(typeArray);
+
+  return taggerSchema.sequelize.query('SELECT t.id, t.name ' +
+  'from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id ' +
+  'LEFT JOIN Collections c on tt.CollectionId = c.id ' +
+  'LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
+  'where ' + whereClause + ' group by t.id order by t.name',
+    {
+      replacements: typeArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+};
+
+/**
+ * Gets the tags available for a collection list that has been limited by area and content type.
+ * @param areaId area ids as comma separated string or a single value string
+ * @param contentTypeId content type ids as comma separated string or a single value string
+ */
 taggerDao.findTagsForAreaAndContentType = (areaId, contentTypeId) => {
 
   if(!areaId || !contentTypeId) {
@@ -159,8 +190,7 @@ taggerDao.findTagsForAreaAndContentType = (areaId, contentTypeId) => {
     {
       replacements: queryArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
-    })
-
+    });
 
 };
 
