@@ -23,9 +23,10 @@
 /*jshint expr: true*/
 
 import db from '../_helpers/db';
-import  contentDao from '../../../../server/api/tagger/dao/content-dao';
-import collectionDao from  '../../../../server/api/tagger/dao/collection-dao';
-import areaDao from  '../../../../server/api/tagger/dao/area-dao';
+import contentDao from '../../../../server/api/tagger/dao/content-dao';
+import collectionDao from '../../../../server/api/tagger/dao/collection-dao';
+import areaDao from '../../../../server/api/tagger/dao/area-dao';
+import subjectDao from '../../../../server/api/tagger/dao/tags-dao';
 import {expect} from 'chai';
 import async from 'async';
 
@@ -33,6 +34,16 @@ import async from 'async';
 const categoriesInit = [
   'Content Type Stub One',
   'Content Type Stub Two'
+];
+
+const areasInit = [
+  'Init Area One',
+  'Init Area Two'
+];
+
+const subjectsInit = [
+  'Init Subject One',
+  'Init Subject Two'
 ];
 
 const newTypeTitle = 'new category';
@@ -133,7 +144,19 @@ describe('Content type operations', () => {
             .then(callback(null));
         },
         (callback) => {
-          areaDao.addArea(1, 1)
+          areaDao.addArea(areasInit[0], 1)
+            .then(callback(null));
+        },
+        (callback) => {
+          areaDao.addArea(areasInit[1], 1)
+            .then(callback(null));
+        },
+        (callback) => {
+          subjectDao.createTag(subjectsInit[0])
+            .then(callback(null));
+        },
+        (callback) => {
+          subjectDao.createTag(subjectsInit[1])
             .then(callback(null));
         },
         (callback) => {
@@ -146,14 +169,16 @@ describe('Content type operations', () => {
             .createContentType(categoriesInit[1])
             .then(callback(null));
         },
-
-
         (callback) => {
           collectionDao.createItemContentTarget(1, 1)
             .then(callback(null));
         },
         (callback) => {
           collectionDao.addCollectionToArea(1, 1)
+            .then(callback(null));
+        },
+        (callback) => {
+          collectionDao.addTagTarget(1, 1)
             .then(callback(null));
         }
       ],
@@ -229,6 +254,24 @@ describe('Content type operations', () => {
 
   });
 
+  it('should find content types available for area and subject query', (done) => {
+    let _onSuccess = (types) => {
+      expect(types).to.be.defined;
+      expect(types[0].name).to.have.string(categoriesInit[0]);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    contentDao.getContentTypesForAreaSubjectQuery('1', '1')
+      .then(_onSuccess)
+      .catch(_onError);
+
+  });
+
   it('should return content type summary for area', (done) => {
 
     let _onSuccess = (type) => {
@@ -269,7 +312,6 @@ describe('Content type operations', () => {
       .catch(_onError);
 
   });
-
 
 
 });

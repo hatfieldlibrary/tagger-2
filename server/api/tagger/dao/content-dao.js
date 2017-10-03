@@ -24,6 +24,7 @@
 const taggerSchema = require('../schema/index');
 const logger = require('../utils/error-logger');
 const path = require('path');
+const utils = require('./utils');
 const paramErrorMessage = 'A parameter for a content type query is not defined.';
 const filename = path.basename(__filename);
 const taggerDao = {};
@@ -42,13 +43,13 @@ function _errorResponse() {
 
 taggerDao.retrieveContentTypeById = (id) => {
 
-  if(!id) {
+  if (!id) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
 
   return taggerSchema.ItemContent.find({
-    where:{
+    where: {
       id: id
     }
   });
@@ -64,9 +65,35 @@ taggerDao.getContentTypes = () => {
 
 };
 
+/**
+ * Gets the content types that are available for collections that have been limited by area and subject.
+ * @param areaId area ids as comma separated string or a single value string
+ * @param subjectId subject tag ids as comma separated string or a single value string
+ */
+taggerDao.getContentTypesForAreaSubjectQuery = (areaId, subjectId) => {
+
+  const areaArray = areaId.split(',');
+  const subjectArray = subjectId.split(',');
+
+  const combinedWhereClause = utils.getWhereClauseForAreasAndSubjects(areaArray, subjectArray);
+
+  const queryArray = areaArray.concat(subjectArray);
+
+  return taggerSchema.sequelize.query('Select i.id, i.name ' +
+    'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
+    'LEFT JOIN AreaTargets at on c.id=at.CollectionId ' +
+    'LEFT JOIN TagTargets tt on tt.CollectionId = c.id ' +
+    'LEFT JOIN ItemContents i on i.id = it.ItemContentId ' +
+    'where (' + combinedWhereClause + ') group by i.id order by i.name',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+};
+
 taggerDao.getAreaContentTypeSummary = (areaId) => {
 
-  if(!areaId) {
+  if (!areaId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -87,7 +114,7 @@ taggerDao.getAreaContentTypeSummary = (areaId) => {
 
 taggerDao.findContentTypeByName = (name) => {
 
-  if(!name) {
+  if (!name) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -95,7 +122,7 @@ taggerDao.findContentTypeByName = (name) => {
   return taggerSchema.ItemContent.find(
     {
       where: {
-        name:  name
+        name: name
       }
     }
   );
@@ -104,7 +131,7 @@ taggerDao.findContentTypeByName = (name) => {
 
 taggerDao.createContentType = (name) => {
 
-  if(!name) {
+  if (!name) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -117,7 +144,7 @@ taggerDao.createContentType = (name) => {
 
 taggerDao.updateContentType = (name, icon, id) => {
 
-  if(!name || !icon || !id) {
+  if (!name || !icon || !id) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
@@ -137,7 +164,7 @@ taggerDao.updateContentType = (name, icon, id) => {
 
 taggerDao.deleteContentType = (contentId) => {
 
-  if(!contentId) {
+  if (!contentId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
