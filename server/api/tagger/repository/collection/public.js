@@ -227,7 +227,7 @@ exports.collectionsBySubjectArea = function (req, callback, errorHandler) {
   const subjectId = req.params.id;
   const areaId = req.params.areaId;
 
-  taggerDao.getCollectionsBySubjectAndArea(subjectId, areaId).then(
+  taggerDao.getCollectionsBySubjectAndArea(areaId, subjectId).then(
     (collections) => {
       let data;
       try {

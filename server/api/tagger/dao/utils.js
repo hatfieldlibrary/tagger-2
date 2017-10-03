@@ -35,7 +35,7 @@ const _getWhereClause = (inputArray, field) =>  {
 
 /**
  * Returns the where clause for areas.
- * @param areaArray
+ * @param areaArray list of areas
  */
 utils.getWhereClauseForMultipleAreas = (areaArray) => {
 
@@ -43,7 +43,20 @@ utils.getWhereClauseForMultipleAreas = (areaArray) => {
 
 };
 /**
- * Gets collections where clause elements for one or more areas and one or more content types.
+ * Constructs the where clause for one or more areas and one or more subjects.
+ * @param areaArray list of areas to query
+ * @param subjectArray list of subjects to query
+ * @returns {string}
+ */
+utils.getWhereClauseForAreasAndSubjects = (areaArray, subjectArray) => {
+  const areasClause = _getWhereClause(areaArray, areaField);
+  const subjectsClause = _getWhereClause(subjectArray, subjectField);
+
+  return areasClause + ' AND ' + subjectsClause;
+};
+
+/**
+ * Constructs the where clause for one or more areas and one or more content types.
  * @param areaArray the list of areas to query
  * @param itemArray the list if content types to query
  * @returns {string}
