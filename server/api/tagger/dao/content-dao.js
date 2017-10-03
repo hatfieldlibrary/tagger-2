@@ -66,6 +66,31 @@ taggerDao.getContentTypes = () => {
 };
 
 /**
+ * Gets the content types that are available for collections that have been limited by area and content type.
+ * @param areaId area ids as comma separated string or a single value string
+ * @param contentTypeId content type ids as comma separated string or a single value string
+ */
+taggerDao.getContentTypesForAreaContentTypeQuery = (areaId, contentTypeId) => {
+
+  const areaArray = areaId.split(',');
+  const typeArray = contentTypeId.split(',');
+
+  const combinedWhereClause = utils.getWhereClauseForMultipleAreasAndContentTypes(areaArray, typeArray);
+
+  const queryArray = areaArray.concat(typeArray);
+
+  return taggerSchema.sequelize.query('Select i.id, i.name ' +
+    'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
+    'LEFT JOIN AreaTargets at on c.id=at.CollectionId ' +
+    'LEFT JOIN ItemContents i on i.id = it.ItemContentId ' +
+    'where (' + combinedWhereClause + ') group by i.id order by i.name',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+};
+
+/**
  * Gets the content types that are available for collections that have been limited by area and subject.
  * @param areaId area ids as comma separated string or a single value string
  * @param subjectId subject tag ids as comma separated string or a single value string
@@ -97,7 +122,7 @@ taggerDao.getContentTypesForAreaSubjectQuery = (areaId, subjectId) => {
  * @param contentTypeId content type ids as comma separated string or single value string
  * @param subjectId subject tag ids as comma separated string or a single value string
  */
-taggerDao.getContentTypesForAreaSubjectItemTypeQuery = (areaId, contentTypeId, subjectId) => {
+taggerDao.getContentTypesForAreaSubjectContentTypeQuery = (areaId, contentTypeId, subjectId) => {
 
   const areaArray = areaId.split(',');
   const typeArray = contentTypeId.split(',');

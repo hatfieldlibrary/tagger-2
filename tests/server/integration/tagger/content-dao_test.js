@@ -272,6 +272,25 @@ describe('Content type operations', () => {
 
   });
 
+
+  it('should find content types available for area and content type query', (done) => {
+    let _onSuccess = (types) => {
+      expect(types).to.be.defined;
+      expect(types[0].name).to.have.string(categoriesInit[0]);
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    contentDao.getContentTypesForAreaContentTypeQuery('1', '1')
+      .then(_onSuccess)
+      .catch(_onError);
+
+  });
+
   it('should find content types available for area, content type, and subject query', (done) => {
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
@@ -284,7 +303,7 @@ describe('Content type operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    contentDao.getContentTypesForAreaSubjectItemTypeQuery('1', '1', '1')
+    contentDao.getContentTypesForAreaSubjectContentTypeQuery('1', '1', '1')
       .then(_onSuccess)
       .catch(_onError);
 
