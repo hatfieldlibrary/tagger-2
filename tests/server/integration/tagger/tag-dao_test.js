@@ -24,9 +24,10 @@
 /*jshint expr: true*/
 
 import areaDao from '../../../../server/api/tagger/dao/area-dao';
-import tagDao from  '../../../../server/api/tagger/dao/tags-dao';
+import tagDao from '../../../../server/api/tagger/dao/tags-dao';
 import targetDao from '../../../../server/api/tagger/dao/tag-target-dao';
 import collectionDao from '../../../../server/api/tagger/dao/collection-dao';
+import contentDao from '../../../../server/api/tagger/dao/content-dao';
 import db from '../_helpers/db';
 import {expect} from 'chai';
 import async from 'async';
@@ -39,6 +40,11 @@ const initAreas = [
 const initTags = [
   'cats',
   'dogs'
+];
+
+const contentTypeInit = [
+  'Content Type Stub One',
+  'Content Type Stub Two'
 ];
 
 let count = 1;
@@ -136,13 +142,12 @@ describe('Tag operations', () => {
           tagDao
             .createTag(initTags[0])
             .then(callback(null));
-
         },
         (callback) => {
           tagDao
             .createTag(initTags[1])
             .then(callback(null))
-            .catch((err) =>console.log(err));
+            .catch((err) => console.log(err));
 
         },
         (callback) => {
@@ -168,7 +173,21 @@ describe('Tag operations', () => {
         (callback) => {
           collectionDao.addTagTarget(1, 1)
             .then(callback(null));
-        }
+        },
+        (callback) => {
+          contentDao
+            .createContentType(contentTypeInit[0])
+            .then(callback(null));
+        },
+        (callback) => {
+          contentDao
+            .createContentType(contentTypeInit[1])
+            .then(callback(null));
+        },
+        (callback) => {
+          collectionDao.createItemContentTarget(1, 1)
+            .then(callback(null));
+        },
       ],
       (err) => {
         if (err) {
@@ -228,6 +247,24 @@ describe('Tag operations', () => {
     };
 
     tagDao.findTagsInArea('1')
+      .then(_onSuccess)
+      .catch(_onError);
+  });
+
+  it('should find tags associated with area and content type.', (done) => {
+    let _onSuccess = (tags) => {
+      expect(tags).to.be.defined;
+      expect(tags[0]).to.be.an('object');
+      expect(tags[0].name).to.equal('cats');
+      done();
+    };
+
+    let _onError = (err) => {
+      console.log(err);
+      expect(true).to.be.false; // should not come here
+    };
+
+    tagDao.findTagsForAreaAndContentType('1', '1')
       .then(_onSuccess)
       .catch(_onError);
   });

@@ -30,8 +30,8 @@ import subjectDao from '../../../../server/api/tagger/dao/tags-dao';
 import {expect} from 'chai';
 import async from 'async';
 
-/** Test area names. */
-const categoriesInit = [
+
+const contentTypeInit = [
   'Content Type Stub One',
   'Content Type Stub Two'
 ];
@@ -161,12 +161,12 @@ describe('Content type operations', () => {
         },
         (callback) => {
           contentDao
-            .createContentType(categoriesInit[0])
+            .createContentType(contentTypeInit[0])
             .then(callback(null));
         },
         (callback) => {
           contentDao
-            .createContentType(categoriesInit[1])
+            .createContentType(contentTypeInit[1])
             .then(callback(null));
         },
         (callback) => {
@@ -226,7 +226,7 @@ describe('Content type operations', () => {
     };
 
     contentDao
-      .findContentTypeByName(categoriesInit[1])
+      .findContentTypeByName(contentTypeInit[1])
       .then(_onSuccess)
       .catch(_onError);
 
@@ -238,7 +238,7 @@ describe('Content type operations', () => {
     let _onSuccess = (type) => {
 
       expect(type).to.be.defined;
-      expect(type.dataValues.name).to.have.string(categoriesInit[0]);
+      expect(type.dataValues.name).to.have.string(contentTypeInit[0]);
       done();
     };
 
@@ -257,7 +257,7 @@ describe('Content type operations', () => {
   it('should find content types available for area and subject query', (done) => {
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
-      expect(types[0].name).to.have.string(categoriesInit[0]);
+      expect(types[0].name).to.have.string(contentTypeInit[0]);
       done();
     };
 
@@ -275,7 +275,7 @@ describe('Content type operations', () => {
   it('should find content types available for area', (done) => {
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
-      expect(types[0].name).to.have.string(categoriesInit[0]);
+      expect(types[0].name).to.have.string(contentTypeInit[0]);
       done();
     };
 
@@ -293,7 +293,7 @@ describe('Content type operations', () => {
   it('should find content types available for subject', (done) => {
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
-      expect(types[0].name).to.have.string(categoriesInit[0]);
+      expect(types[0].name).to.have.string(contentTypeInit[0]);
       done();
     };
 
@@ -311,7 +311,7 @@ describe('Content type operations', () => {
   it('should find additional content types available for content type', (done) => {
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
-      expect(types[0].name).to.have.string(categoriesInit[0]);
+      expect(types[0].name).to.have.string(contentTypeInit[0]);
       done();
     };
 
@@ -329,7 +329,7 @@ describe('Content type operations', () => {
   it('should find content types available for subject and content type query', (done) => {
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
-      expect(types[0].name).to.have.string(categoriesInit[0]);
+      expect(types[0].name).to.have.string(contentTypeInit[0]);
       done();
     };
 
@@ -347,7 +347,7 @@ describe('Content type operations', () => {
   it('should find content types available for area and content type query', (done) => {
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
-      expect(types[0].name).to.have.string(categoriesInit[0]);
+      expect(types[0].name).to.have.string(contentTypeInit[0]);
       done();
     };
 
@@ -365,7 +365,7 @@ describe('Content type operations', () => {
   it('should find content types available for area, content type, and subject query', (done) => {
     let _onSuccess = (types) => {
       expect(types).to.be.defined;
-      expect(types[0].name).to.have.string(categoriesInit[0]);
+      expect(types[0].name).to.have.string(contentTypeInit[0]);
       done();
     };
 

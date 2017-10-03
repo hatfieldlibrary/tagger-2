@@ -109,4 +109,5 @@ utils.getWhereClauseForAllFields = (areaArray, itemArray, subjectArray) => {
 
 };
 
+
 module.exports =  utils;
