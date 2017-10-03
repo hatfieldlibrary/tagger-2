@@ -532,6 +532,10 @@ taggerDao.updateCollectionImage = (collId, imageName) => {
 
 };
 
+/**
+ * Gets the collections for one or more areas.
+ * @param areaId string containing a single or comma-separated area ids
+ */
 taggerDao.getCollectionsByArea = (areaId) => {
 
   if (!areaId) {
@@ -553,24 +557,29 @@ taggerDao.getCollectionsByArea = (areaId) => {
 
 };
 
-taggerDao.getCollectionsBySubjectAndArea = (subjectId, areaId) => {
+/**
+ * Gets the collections assigned to areas and subjects
+ * @param areaId area ids as comma separated string or a single value string
+ * @param subjectId subject ids as comma separated string or a single value string
+ */
+taggerDao.getCollectionsBySubjectAndArea = (areaId, subjectId) => {
 
   if (!areaId || !subjectId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }
 
-  let queryArray = areaId.split(',');
+  const areaArray = areaId.split(',');
+  const subjectArray = subjectId.split(',');
 
-  let areaWhereClause = utils.getWhereClauseForMultipleAreas(queryArray);
-
-  queryArray.unshift(subjectId);
+  const combinedWhereClause = utils.getWhereClauseForAreasAndSubjects(areaArray, subjectArray);
+  const queryArray = areaArray.concat(subjectArray);
 
   return taggerSchema.sequelize.query('Select c.id, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published ' +
     'from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id ' +
     'LEFT JOIN Collections c on tt.CollectionId = c.id ' +
     'LEFT JOIN AreaTargets at on c.id=at.CollectionId ' +
-    'where tt.TagId = ? and ' + areaWhereClause + ' and c.published = true group by c.id order by c.title',
+    'where (' + combinedWhereClause + ') and c.published = true group by c.id order by c.title',
     {
       replacements: queryArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -579,8 +588,8 @@ taggerDao.getCollectionsBySubjectAndArea = (subjectId, areaId) => {
 };
 
 /**
- * Gets list of collections by area id and content type id.
- * @param areaId area ids as comma separated string or single value string
+ * Gets list of collections assigned to areas and content types.
+ * @param areaId area ids as comma separated string or a single value string
  * @param contentTypeId tiem ids as comma separated string or single value string
  */
 taggerDao.getCollectionsByAreaAndItemType = (areaId, contentTypeId) => {
@@ -614,7 +623,13 @@ taggerDao.getCollectionsByAreaAndItemType = (areaId, contentTypeId) => {
 
 };
 
-taggerDao.getCollectionsByAreaSubjectAndItemType = (areaId, subjectId, contentTypeId) => {
+/**
+ * Gets collections assigned to areas, content types, and subjects.
+ * @param areaId a string containing comma separated area ids or a single area id
+ * @param contentTypeId a string containing comma separated content type ids or a single content type id
+ * @param subjectId a string containing comma separated subject ids or a single subject id
+ */
+taggerDao.getCollectionsByAreaSubjectAndItemType = (areaId, contentTypeId, subjectId) => {
 
   if (!areaId || !contentTypeId || !subjectId) {
     logger.dao(paramErrorMessage);
@@ -647,6 +662,12 @@ taggerDao.getCollectionsByAreaSubjectAndItemType = (areaId, subjectId, contentTy
 
 };
 
+/**
+ * Gets collections assigned to a single subject tag.  To provide functionality consistent
+ * with other methods, this may need to be modified to support multiple, comma-separated
+ * subject ids.
+ * @param subjectId the single subject id.
+ */
 taggerDao.getCollectionsBySubject = (subjectId) => {
 
   if (!subjectId) {
@@ -664,6 +685,10 @@ taggerDao.getCollectionsBySubject = (subjectId) => {
 
 };
 
+/**
+ * Gets collections assigned to a single category or content group.
+ * @param categoryId the category id.
+ */
 taggerDao.getCollectionsByCategory = (categoryId) => {
 
   if (!categoryId) {
@@ -679,6 +704,12 @@ taggerDao.getCollectionsByCategory = (categoryId) => {
 
 };
 
+/**
+ * Gets collections assigned to the item type. To provide functionality consistent
+ * with other methods, this may need to be modified to support multiple, comma-separated
+ * item type ids.
+ * @param itemTypeId
+ */
 taggerDao.getCollectionsByItemType = (itemTypeId) => {
 
   if (!itemTypeId) {
@@ -693,6 +724,11 @@ taggerDao.getCollectionsByItemType = (itemTypeId) => {
     });
 };
 
+/**
+ * Gets the subject tags that have been assigned to a collection.
+ * @param collId the collection id.
+ * @returns {Promise.<Array.<Model>>}
+ */
 taggerDao.findTagsForCollection = (collId) => {
 
   if (!collId) {
@@ -712,6 +748,12 @@ taggerDao.findTagsForCollection = (collId) => {
 
 };
 
+/**
+ * Finds related collections based on the collection id and subject id. Finds
+ * all collections with given subject id, excluding the current collection id.
+ * @param collId
+ * @param subjectId
+ */
 taggerDao.findRelatedCollections = (collId, subjectId) => {
 
   if (!subjectId || !collId) {
@@ -719,7 +761,9 @@ taggerDao.findRelatedCollections = (collId, subjectId) => {
     throw _errorResponse();
   }
 
-  return taggerSchema.sequelize.query('Select c.title, c.id, c.image from Collections c left join TagTargets t on t.CollectionId = c.id where t.TagId = ? and t.CollectionId != ? and c.published = true order by c.id limit 6',
+  return taggerSchema.sequelize.query('Select c.title, c.id, c.image ' +
+    'from Collections c left join TagTargets t on t.CollectionId = c.id ' +
+    'where t.TagId = ? and t.CollectionId != ? and c.published = true order by c.id limit 6',
     {
       replacements: [subjectId, collId],
       type: taggerSchema.Sequelize.QueryTypes.SELECT

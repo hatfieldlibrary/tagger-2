@@ -344,7 +344,7 @@ describe('Collection operations', () => {
   it('should add subject tag to collection', (done) => {
     let _onSuccess = (collection) => {
       expect(collection).to.be.defined;
-      expect(collection.dataValues.CollectionId).to.equal(1);
+      expect(collection.dataValues.CollectionId).to.equal(2);
       expect(collection.dataValues.TagId).to.equal(1);
       done();
     };
@@ -354,7 +354,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.addTagTarget(1, 1)
+    collectionDao.addTagTarget(2, 1)
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -568,11 +568,11 @@ describe('Collection operations', () => {
       .catch(_onError);
   });
 
-  it('should retrieve collections for content type 1 and area 1', (done) => {
+  it('should retrieve collections for content type 1 and area 2', (done) => {
     let _onSuccess = (collection) => {
       expect(collection).to.be.defined;
-      console.log(collection)
-      //expect(collection[0].title).to.equal('Init Collection One');
+      // should return no collection
+      expect(collection.length).to.equal(0);
       done();
     };
 
@@ -581,16 +581,16 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByAreaAndItemType('1', '1')
+    collectionDao.getCollectionsByAreaAndItemType('2', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
 
-  it('should retrieve collections for content type 1 and area 1 and subject 1', (done) => {
+  it('should retrieve zero collections for content type 1 and area 1 and subject 1', (done) => {
     let _onSuccess = (collection) => {
       expect(collection).to.be.defined;
-      console.log(collection)
-      //expect(collection[0].title).to.equal('Init Collection One');
+      // should return no collection
+      expect(collection.length).to.equal(0);
       done();
     };
 
@@ -616,7 +616,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.checkForExistingTagTarget(1, 1)
+    collectionDao.checkForExistingTagTarget(2, 1)
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -730,7 +730,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findTagsForCollection(1)
+    collectionDao.findTagsForCollection(2)
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -738,7 +738,7 @@ describe('Collection operations', () => {
   it('should find related collections.', (done) => {
     let _onSuccess = (related) => {
       expect(related).to.be.defined;
-      expect(related[0].title).to.have.string('Init Collection One');
+      expect(related[0].title).to.have.string('Updated Collection');
       done();
     };
 
@@ -746,7 +746,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
     // The collection id must not be identical to test collection. Using 2.
-    collectionDao.findRelatedCollections(2, 1)
+    collectionDao.findRelatedCollections(1, 1)
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -770,8 +770,7 @@ describe('Collection operations', () => {
   it('should return collection in subject and area.', (done) => {
     let _onSuccess = (collections) => {
       expect(collections).to.be.defined;
-      // should be no match
-      expect(collections.length).to.equal(0);
+      expect(collections[0].title).to.have.string('Updated Collection');
       done();
     };
 
@@ -787,8 +786,8 @@ describe('Collection operations', () => {
   it('should get collections by subject tag.', (done) => {
     let _onSuccess = (collections) => {
       expect(collections).to.be.defined;
-      expect(collections[0].CollectionId).to.equal(1);
-      expect(collections[0].title).to.have.string('Init Collection One');
+      expect(collections[0].CollectionId).to.equal(2);
+      expect(collections[0].title).to.have.string('Updated Collection');
       done();
     };
 
