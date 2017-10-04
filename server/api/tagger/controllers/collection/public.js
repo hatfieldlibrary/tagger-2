@@ -140,6 +140,46 @@ exports.collectionsBySubject = function (req, res, next) {
 };
 
 /**
+ * Retrieves collections by subject (from all areas)
+ */
+exports.collectionsByContentType = function (req, res, next) {
+  publicApiRepository.collectionsByContentType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+
+/**
+ * Retrieves collections by subject and area
+ */
+exports.collectionsByAreaAndContentType = function (req, res, next) {
+  publicApiRepository.collectionsByAreaAndContentType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+/**
+ * Retrieves collections by area, content type and subject.
+ */
+exports.collectionsByAreaSubjectAndContentType = function (req, res, next) {
+  publicApiRepository.collectionsByAreaAndContentType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+/**
  * Returns a JSON list of objects retrieved from the
  * external host defined in configuration (externalHostA).
  * The fields returned by the current service are the query

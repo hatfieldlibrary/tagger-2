@@ -344,7 +344,7 @@ describe('Collection operations', () => {
   it('should add subject tag to collection', (done) => {
     let _onSuccess = (collection) => {
       expect(collection).to.be.defined;
-      expect(collection.dataValues.CollectionId).to.equal(1);
+      expect(collection.dataValues.CollectionId).to.equal(2);
       expect(collection.dataValues.TagId).to.equal(1);
       done();
     };
@@ -354,7 +354,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.addTagTarget(1, 1)
+    collectionDao.addTagTarget(2, 1)
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -389,7 +389,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.updateCollection(updateCollectionData, 2)
+    collectionDao.updateCollection(updateCollectionData, '2')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -423,7 +423,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getPublicationStatus(1)
+    collectionDao.getPublicationStatus('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -441,7 +441,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.countCTypesByArea(1)
+    collectionDao.countCTypesByArea('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -459,7 +459,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.browseTypesByArea(1)
+    collectionDao.browseTypesByArea('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -478,7 +478,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.repoTypesByArea(1)
+    collectionDao.repoTypesByArea('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -495,7 +495,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findCollectionsInArea(1)
+    collectionDao.findCollectionsInArea('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -512,7 +512,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findAreasForCollection(2)
+    collectionDao.findAreasForCollection('2')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -529,7 +529,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findItemContentTarget(1, 1)
+    collectionDao.findItemContentTarget('1', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -546,7 +546,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findContentTypesForCollection(1)
+    collectionDao.findContentTypesForCollection('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -563,16 +563,16 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByItemType(1)
+    collectionDao.getCollectionsByContentType('1')
       .then(_onSuccess)
       .catch(_onError);
   });
 
-  it('should retrieve collections for content type 1 and area 1', (done) => {
+  it('should retrieve collections for content type 1 and area 2', (done) => {
     let _onSuccess = (collection) => {
       expect(collection).to.be.defined;
-      console.log(collection)
-      //expect(collection[0].title).to.equal('Init Collection One');
+      // should return no collection
+      expect(collection.length).to.equal(0);
       done();
     };
 
@@ -581,16 +581,16 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByAreaAndItemType('1', '1')
+    collectionDao.getCollectionsByAreaAndContentType('2', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
 
-  it('should retrieve collections for content type 1 and area 1 and subject 1', (done) => {
+  it('should retrieve zero collections for content type 1 and area 1 and subject 1', (done) => {
     let _onSuccess = (collection) => {
       expect(collection).to.be.defined;
-      console.log(collection)
-      //expect(collection[0].title).to.equal('Init Collection One');
+      // should return no collection
+      expect(collection.length).to.equal(0);
       done();
     };
 
@@ -599,7 +599,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByAreaSubjectAndItemType('1', '1', '1')
+    collectionDao.getCollectionsByAreaSubjectAndContentType('1', '1', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -616,7 +616,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.checkForExistingTagTarget(1, 1)
+    collectionDao.checkForExistingTagTarget('2', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -632,7 +632,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getAreaIdsForCollection(2)
+    collectionDao.getAreaIdsForCollection('2')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -648,7 +648,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.checkAreaAssociation(2, 1)
+    collectionDao.checkAreaAssociation('2', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -664,7 +664,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findCollectionById(2)
+    collectionDao.findCollectionById('2')
       .then(_onSuccess)
       .catch(_onError)
   });
@@ -680,7 +680,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findCategoryAssociation(1)
+    collectionDao.findCategoryAssociation('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -697,7 +697,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.updateCollectionCategory(1, 2)
+    collectionDao.updateCollectionCategory('1', '2')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -730,7 +730,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.findTagsForCollection(1)
+    collectionDao.findTagsForCollection('2')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -738,7 +738,7 @@ describe('Collection operations', () => {
   it('should find related collections.', (done) => {
     let _onSuccess = (related) => {
       expect(related).to.be.defined;
-      expect(related[0].title).to.have.string('Init Collection One');
+      expect(related[0].title).to.have.string('Updated Collection');
       done();
     };
 
@@ -746,7 +746,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
     // The collection id must not be identical to test collection. Using 2.
-    collectionDao.findRelatedCollections(2, 1)
+    collectionDao.findRelatedCollections('1', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -770,8 +770,7 @@ describe('Collection operations', () => {
   it('should return collection in subject and area.', (done) => {
     let _onSuccess = (collections) => {
       expect(collections).to.be.defined;
-      // should be no match
-      expect(collections.length).to.equal(0);
+      expect(collections[0].title).to.have.string('Updated Collection');
       done();
     };
 
@@ -787,8 +786,8 @@ describe('Collection operations', () => {
   it('should get collections by subject tag.', (done) => {
     let _onSuccess = (collections) => {
       expect(collections).to.be.defined;
-      expect(collections[0].CollectionId).to.equal(1);
-      expect(collections[0].title).to.have.string('Init Collection One');
+      expect(collections[0].CollectionId).to.equal(2);
+      expect(collections[0].title).to.have.string('Updated Collection');
       done();
     };
 
@@ -796,7 +795,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsBySubject(1)
+    collectionDao.getCollectionsBySubject('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -813,7 +812,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByCategory(2)
+    collectionDao.getCollectionsByCategory('2')
       .then(_onSuccess)
       .catch(_onError);
   });

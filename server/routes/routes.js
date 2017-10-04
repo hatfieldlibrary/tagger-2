@@ -128,6 +128,9 @@ module.exports = function(app,config){
   app.get('/rest/subject/collection/:id', apiTag.subjectsForCollection);
   app.get('/rest/type/collection/:id',  apiCollection.typesForCollection);
   app.get('/rest/collection/:id/related/:subjects', apiCollection.findRelatedCollections);
+  app.get('/rest/collection/type/:id', apiCollection.collectionsByContentType);
+  app.get('/rest/collection/area/:id/type/:typeId', apiCollection.collectionsByAreaAndContentType);
+  app.get('/rest/collection/area/:id/type/:typeId/subject/:subjectId', apiCollection.collectionsByAreaSubjectAndContentType);
   // This service communicates with a target host to retrieve a browse list.
   // It addresses a very specific use case, is not generalized provides no guarantees
   // about the data returned.

@@ -227,7 +227,7 @@ exports.collectionsBySubjectArea = function (req, callback, errorHandler) {
   const subjectId = req.params.id;
   const areaId = req.params.areaId;
 
-  taggerDao.getCollectionsBySubjectAndArea(subjectId, areaId).then(
+  taggerDao.getCollectionsBySubjectAndArea(areaId, subjectId).then(
     (collections) => {
       let data;
       try {
@@ -277,6 +277,75 @@ exports.collectionsBySubject = function (req, callback, errorHandler) {
   const subjectId = req.params.id;
 
   taggerDao.getCollectionsBySubject(subjectId).then(
+    (collections) => {
+      let data;
+      try {
+        data = apiMapper.mapCollectionList(collections, 'subject');
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
+/**
+ * Retrieves collections by content type (from all areas)
+ */
+exports.collectionsByContentType = function (req, callback, errorHandler) {
+  const contentTypeId = req.params.id;
+
+  taggerDao.getCollectionsByContentType(contentTypeId).then(
+    (collections) => {
+      let data;
+      try {
+        data = apiMapper.mapCollectionList(collections, 'subject');
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
+/**
+ * Retrieves collections by content type and area
+ */
+exports.collectionsByAreaAndContentType = function (req, callback, errorHandler) {
+  const areaId = req.params.id;
+  const contentTypeId = req.params.typeId;
+
+  taggerDao.getCollectionsByAreaAndContentType(areaId, contentTypeId).then(
+    (collections) => {
+      let data;
+      try {
+        data = apiMapper.mapCollectionList(collections, 'subject');
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
+/**
+ * Retrieves collections by content type and area
+ */
+exports.collectionsByAreaSubjectAndContentType = function (req, callback, errorHandler) {
+  const areaId = req.params.id;
+  const contentTypeId = req.params.typeId;
+  const subjectId = req.params.subjectId;
+
+  taggerDao.getCollectionsByAreaSubjectAndContentType(areaId, contentTypeId, subjectId).then(
     (collections) => {
       let data;
       try {
