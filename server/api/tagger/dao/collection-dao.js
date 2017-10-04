@@ -592,7 +592,7 @@ taggerDao.getCollectionsBySubjectAndArea = (areaId, subjectId) => {
  * @param areaId area ids as comma separated string or a single value string
  * @param contentTypeId tiem ids as comma separated string or single value string
  */
-taggerDao.getCollectionsByAreaAndItemType = (areaId, contentTypeId) => {
+taggerDao.getCollectionsByAreaAndContentType = (areaId, contentTypeId) => {
 
   if (!areaId || !contentTypeId) {
     logger.dao(paramErrorMessage);
@@ -629,7 +629,7 @@ taggerDao.getCollectionsByAreaAndItemType = (areaId, contentTypeId) => {
  * @param contentTypeId a string containing comma separated content type ids or a single content type id
  * @param subjectId a string containing comma separated subject ids or a single subject id
  */
-taggerDao.getCollectionsByAreaSubjectAndItemType = (areaId, contentTypeId, subjectId) => {
+taggerDao.getCollectionsByAreaSubjectAndContentType = (areaId, contentTypeId, subjectId) => {
 
   if (!areaId || !contentTypeId || !subjectId) {
     logger.dao(paramErrorMessage);
@@ -716,7 +716,7 @@ taggerDao.getCollectionsByCategory = (categoryId) => {
  * item type ids.
  * @param itemTypeId
  */
-taggerDao.getCollectionsByItemType = (itemTypeId) => {
+taggerDao.getCollectionsByContentType = (itemTypeId) => {
 
   if (!itemTypeId) {
     logger.dao(paramErrorMessage);

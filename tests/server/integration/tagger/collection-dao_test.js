@@ -563,7 +563,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByItemType('1')
+    collectionDao.getCollectionsByContentType('1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -581,7 +581,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByAreaAndItemType('2', '1')
+    collectionDao.getCollectionsByAreaAndContentType('2', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -599,7 +599,7 @@ describe('Collection operations', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.getCollectionsByAreaSubjectAndItemType('1', '1', '1')
+    collectionDao.getCollectionsByAreaSubjectAndContentType('1', '1', '1')
       .then(_onSuccess)
       .catch(_onError);
   });
