@@ -126,6 +126,8 @@ module.exports = function(app,config){
   app.get('/rest/subject', apiTag.subjectList);
   app.get('/rest/subject/area/:id', apiTag.subjectsByArea);
   app.get('/rest/subject/collection/:id', apiTag.subjectsForCollection);
+  app.get('/rest/subject/type/:id', apiTag.subjectsByContentType);
+  app.get('/rest/subject/area/:id/type/:typeId', apiTag.subjectsByAreaAndContentType);
   app.get('/rest/type/collection/:id',  apiCollection.typesForCollection);
   app.get('/rest/collection/:id/related/:subjects', apiCollection.findRelatedCollections);
   app.get('/rest/collection/type/:id', apiCollection.collectionsByContentType);
