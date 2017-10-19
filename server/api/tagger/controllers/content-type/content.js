@@ -17,8 +17,8 @@
 
 'use strict';
 
-const repository = require('../repository/content');
-const utils = require('../utils/response-utility');
+const repository = require('../../repository/content-type/content');
+const utils = require('../../utils/response-utility');
 
 /**
  * Retrieves content type by id

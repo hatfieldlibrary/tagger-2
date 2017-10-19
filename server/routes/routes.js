@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 'use strict';
-module.exports = function(app,config){
+module.exports = function (app, config) {
 
   const userInfo = require('../../server/api/tagger/controllers/user-info');
   const tag = require('../api/tagger/controllers/tag/admin');
@@ -23,7 +23,8 @@ module.exports = function(app,config){
   const tagTarget = require('../../server/api/tagger/controllers/tag-target.js');
   const area = require('../api/tagger/controllers/area/admin');
   const apiArea = require('../api/tagger/controllers/area/public');
-  const content = require('../../server/api/tagger/controllers/content');
+  const content = require('../api/tagger/controllers/content-type/content');
+  const apiContentType = require('../api/tagger/controllers/content-type/public');
   const collection = require('../api/tagger/controllers/collection/admin');
   const apiCollection = require('../api/tagger/controllers/collection/public');
   const category = require('../../server/api/tagger/controllers/category');
@@ -65,8 +66,8 @@ module.exports = function(app,config){
 
   // AREAS
   app.get('/rest/t/area/collection', ensureAuthenticated, apiArea.listAreasWithCount); // controller shared with public route
-  app.get('/rest/t/area/id/:id', ensureAuthenticated,  apiArea.byId); // controller shared with public route
-  app.get('/rest/t/area',      ensureAuthenticated,   apiArea.list); // controller shared with public route
+  app.get('/rest/t/area/id/:id', ensureAuthenticated, apiArea.byId); // controller shared with public route
+  app.get('/rest/t/area', ensureAuthenticated, apiArea.list); // controller shared with public route
   app.get('/rest/t/area/collection', ensureAuthenticated, apiArea.listAreasWithCount);// controller shared with public route
   app.get('/rest/t/area/collection/:id', ensureAuthenticated, apiArea.areasForCollection);// controller shared with public route
   app.post('/rest/t/area/add', ensureAuthenticated, area.add);
@@ -88,7 +89,7 @@ module.exports = function(app,config){
   app.get('/rest/t/content/byId/:id', ensureAuthenticated, content.byId);
   app.get('/rest/t/content/show/list', ensureAuthenticated, content.list);
   app.get('/rest/t/content/byArea/count/:areaId', ensureAuthenticated, content.countByArea);
-  app.get('/rest/t/type/collection/:id', ensureAuthenticated,  apiCollection.typesForCollection);// controller shared with public route
+  app.get('/rest/t/type/collection/:id', ensureAuthenticated, apiCollection.typesForCollection);// controller shared with public route
   app.post('/rest/t/content/add', ensureAuthenticated, content.add);
   app.put('/rest/t/content/update', ensureAuthenticated, content.update);
   app.delete('/rest/t/content/delete/:id', ensureAuthenticated, content.delete);
@@ -115,10 +116,10 @@ module.exports = function(app,config){
   // Public API routes
   app.get('/rest/area/collection', apiArea.listAreasWithCount);
   app.get('/rest/area/id/:id', apiArea.byId);
-  app.get('/rest/area',  apiArea.list);
+  app.get('/rest/area', apiArea.list);
   app.get('/rest/area/collection/:id', apiArea.areasForCollection);
-  app.get('/rest/collection/id/:id',   apiCollection.collectionById);
-  app.get('/rest/collection',  apiCollection.allCollections);
+  app.get('/rest/collection/id/:id', apiCollection.collectionById);
+  app.get('/rest/collection', apiCollection.allCollections);
   app.get('/rest/collection/area/:id', apiCollection.collectionsByArea);
   app.get('/rest/collection/subject/:id/area/:areaId', apiCollection.collectionsBySubjectArea);
   app.get('/rest/collection/category/:id', apiCollection.collectionsByCategory);
@@ -128,14 +129,24 @@ module.exports = function(app,config){
   app.get('/rest/subject/collection/:id', apiTag.subjectsForCollection);
   app.get('/rest/subject/type/:id', apiTag.subjectsByContentType);
   app.get('/rest/subject/area/:id/type/:typeId', apiTag.subjectsByAreaAndContentType);
-  app.get('/rest/type/collection/:id',  apiCollection.typesForCollection);
+  app.get('/rest/type/collection/:id', apiCollection.typesForCollection);
   app.get('/rest/collection/:id/related/:subjects', apiCollection.findRelatedCollections);
   app.get('/rest/collection/type/:id', apiCollection.collectionsByContentType);
   app.get('/rest/collection/area/:id/type/:typeId', apiCollection.collectionsByAreaAndContentType);
   app.get('/rest/collection/area/:id/type/:typeId/subject/:subjectId', apiCollection.collectionsByAreaSubjectAndContentType);
-  // This service communicates with a target host to retrieve a browse list.
+  app.get('/rest/type', apiContentType.contentTypes);
+  app.get('/rest/type/area/:id', apiContentType.contentTypesByArea);
+  app.get('/rest/type/subject/:id', apiContentType.contentTypesBySubject);
+  app.get('/rest/type/area/:id/subject/:subjectId', apiContentType.contentTypesByAreaAndSubject);
+  // These type methods not included in the api documentation.
+  // Implemented for use in development and prototyping.
+  app.get('/rest/type/type/:id', apiContentType.contentTypesByContentType);
+  app.get('/rest/type/area/:id/type/:typeId', apiContentType.contentTypesByAreaAndContentType);
+  app.get('/rest/type/subject/:id/type/:typeId', apiContentType.contentTypesBySubjectAndContentType);
+  app.get('/rest/type/area/:id/subject/:subjectId/type/:typeId', apiContentType.contentTypesByAreaAndSubjectAndContentType);
+  // This external options service communicates with a target host to retrieve a browse list.
   // It addresses a very specific use case, is not generalized provides no guarantees
-  // about the data returned.
+  // about the data returned. Currently in use.
   app.get('/rest/options/external/:collection', apiCollection.browseList);
 
   // HTML5 MODE ROUTING
@@ -154,7 +165,7 @@ module.exports = function(app,config){
 
     res.sendFile(
       app.get('appPath') +
-      '/partials/' + name  + '.html'
+      '/partials/' + name + '.html'
     );
   });
 

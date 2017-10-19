@@ -24,9 +24,8 @@
 
 
 const async = require('async');
-const utils = require('../utils/response-utility');
-const taggerDao = require('../dao/content-dao');
-const logger = require('../utils/error-logger');
+const taggerDao = require('../../dao/content-dao');
+const logger = require('../../utils/error-logger');
 
 /**
  * Retrieves content type by id
