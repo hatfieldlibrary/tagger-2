@@ -114,6 +114,8 @@
 
     ctrl.$onInit = () => {
 
+
+
       AreaObservable.subscribe((areaId) => {
         _setCollections(areaId);
         _getCategories(areaId);
