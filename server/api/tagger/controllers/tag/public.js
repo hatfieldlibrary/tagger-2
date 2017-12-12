@@ -77,3 +77,33 @@ exports.subjectsByArea = function (req, res, next) {
     });
 
 };
+
+/**
+* Retrieves subjects by content type.
+*/
+exports.subjectsByContentType = function (req, res, next) {
+  publicApiRepository.subjectsByContentType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+
+/**
+ * Retrieves subjects by area and content type.
+ */
+exports.subjectsByAreaAndContentType = function (req, res, next) {
+  publicApiRepository.subjectsByAreaAndContentType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+
+

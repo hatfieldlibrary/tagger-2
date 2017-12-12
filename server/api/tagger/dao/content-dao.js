@@ -156,9 +156,9 @@ taggerDao.getContentTypesForAreaContentTypeQuery = (areaId, contentTypeId) => {
  * @param areaId area ids as comma separated string or a single value string
  * @param contentTypeId content type ids as comma separated string or a single value string
  */
-taggerDao.getContentTypesForSubjectContentTypeQuery = (contentTypeid, subjectId) => {
+taggerDao.getContentTypesForSubjectContentTypeQuery = (subjectId, contentTypeId) => {
 
-  const typeArray = contentTypeid.split(',');
+  const typeArray = contentTypeId.split(',');
   const subjectArray = subjectId.split(',');
 
   const combinedWhereClause = utils.getWhereClauseForContentTypesAndSubjects(typeArray, subjectArray);
@@ -207,7 +207,7 @@ taggerDao.getContentTypesForAreaSubjectQuery = (areaId, subjectId) => {
  * @param contentTypeId content type ids as comma separated string or single value string
  * @param subjectId subject tag ids as comma separated string or a single value string
  */
-taggerDao.getContentTypesForAreaSubjectContentTypeQuery = (areaId, contentTypeId, subjectId) => {
+taggerDao.getContentTypesForAreaSubjectContentTypeQuery = (areaId, subjectId, contentTypeId) => {
 
   const areaArray = areaId.split(',');
   const typeArray = contentTypeId.split(',');
