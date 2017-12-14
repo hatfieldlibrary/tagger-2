@@ -133,7 +133,8 @@ module.exports = function (app, config) {
   app.get('/rest/collection/:id/related/:subjects', apiCollection.findRelatedCollections);
   app.get('/rest/collection/type/:id', apiCollection.collectionsByContentType);
   app.get('/rest/collection/area/:id/type/:typeId', apiCollection.collectionsByAreaAndContentType);
-  app.get('/rest/collection/area/:id/type/:typeId/subject/:subjectId', apiCollection.collectionsByAreaSubjectAndContentType);
+  app.get('/rest/collection/type/:typeId/subject/:subjectId', apiCollection.collectionsBySubjectAndContentType);
+  app.get('/rest/collection/type/:typeId/area/:areaId/subject/:subjectId', apiCollection.collectionsByAreaSubjectAndContentType);
   app.get('/rest/type', apiContentType.contentTypes);
   app.get('/rest/type/area/:id', apiContentType.contentTypesByArea);
   app.get('/rest/type/subject/:id', apiContentType.contentTypesBySubject);

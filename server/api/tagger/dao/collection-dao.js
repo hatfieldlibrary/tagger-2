@@ -544,7 +544,6 @@ taggerDao.getCollectionsByArea = (areaId) => {
   }
 
   let areaArray = areaId.split(',');
-
   let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
 
   return taggerSchema.sequelize.query('Select c.id, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published ' +
@@ -615,6 +614,42 @@ taggerDao.getCollectionsByAreaAndContentType = (areaId, contentTypeId) => {
   return taggerSchema.sequelize.query('Select c.id, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published ' +
     'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
     'LEFT JOIN AreaTargets at on at.CollectionId = c.id ' +
+    'where (' + combinedWhereClause + ') and c.published = true group by c.id order by c.title',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+};
+
+/**
+ * Gets collections assigned to areas, content types, and subjects.
+ * @param areaId a string containing comma separated area ids or a single area id
+ * @param contentTypeId a string containing comma separated content type ids or a single content type id
+ * @param subjectId a string containing comma separated subject ids or a single subject id
+ */
+taggerDao.getCollectionsBySubjectAndContentType = (contentTypeId, subjectId) => {
+
+  if (!contentTypeId || !subjectId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+  if (typeof contentTypeId !== 'string' || typeof subjectId !== 'string') {
+    logger.dao(paramTypeErrorMessage);
+    throw _errorResponse();
+  }
+  let typeArray = contentTypeId.split(',');
+  let subjectArray = subjectId.split(',');
+
+  // Pass arrays to method, area array first then type array.
+  let combinedWhereClause = utils.getWhereClauseForContentTypesAndSubjects(typeArray, subjectArray);
+  // concat arrays, adding type array to area array.
+  const queryArray = typeArray.concat(subjectArray);
+
+  return taggerSchema.sequelize.query('Select c.id, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published ' +
+    'from Collections c LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
+    'LEFT JOIN TagTargets tt on tt.CollectionId = c.id ' +
     'where (' + combinedWhereClause + ') and c.published = true group by c.id order by c.title',
     {
       replacements: queryArray,
@@ -734,7 +769,7 @@ taggerDao.getCollectionsByContentType = (itemTypeId) => {
     'LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
     'where (' + typeWhereClause + ') and c.published = true order by c.title',
     {
-      replacements: [typeArray],
+      replacements: typeArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
 };

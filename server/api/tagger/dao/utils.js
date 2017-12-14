@@ -38,7 +38,6 @@ const _getWhereClause = (inputArray, field) =>  {
  * @param areaArray list of areas
  */
 utils.getWhereClauseForMultipleAreas = (areaArray) => {
-
   return _getWhereClause(areaArray, areaField)
 
 };

@@ -340,8 +340,31 @@ exports.collectionsByAreaAndContentType = function (req, callback, errorHandler)
 /**
  * Retrieves collections by content type and area
  */
+exports.collectionsBySubjectAndContentType = function (req, callback, errorHandler) {
+  const contentTypeId = req.params.typeId;
+  const subjectId = req.params.subjectId;
+
+  taggerDao.getCollectionsBySubjectAndContentType(contentTypeId, subjectId).then(
+    (collections) => {
+      let data;
+      try {
+        data = apiMapper.mapCollectionList(collections, 'subject');
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
+/**
+ * Retrieves collections by content type and area
+ */
 exports.collectionsByAreaSubjectAndContentType = function (req, callback, errorHandler) {
-  const areaId = req.params.id;
+  const areaId = req.params.areaId;
   const contentTypeId = req.params.typeId;
   const subjectId = req.params.subjectId;
 
