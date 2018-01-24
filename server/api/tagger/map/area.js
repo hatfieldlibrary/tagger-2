@@ -82,12 +82,14 @@
   function _mapAreaListCount(areas) {
 
     let areaArray = [];
-
+    let count = 0;
     for (let i = 0; i < areas.length; i++) {
       let area = _mapAreaCount(areas[i]);
       areaArray.push(area);
+      count += areas[i]['count(*)'];
     }
 
+    areaArray.unshift({id: 0, title: 'All Collections', count: count});
     return areaArray;
 
   }

@@ -55,6 +55,84 @@
   };
 
   /**
+   * Retrieves a list of all areas.
+   * @param req the request object
+   * @param callback success response callback
+   * @param errorHandler failure response callback
+   */
+  exports.listBySubject = function (req, callback, errorHandler) {
+
+    taggerDao.listAllAreas()
+      .then((areas) => {
+          let data;
+          try {
+            data = apiMapper.mapAreaList(areas);
+          } catch (err) {
+            logger.map(err);
+            errorHandler(utils.createErrorResponse(filename, 'map', err));
+          }
+          callback(data);
+        }
+      )
+      .catch((err) => {
+        logger.repository(err);
+        errorHandler(utils.createErrorResponse(filename, 'repo', err));
+      });
+  };
+
+  /**
+   * Retrieves a list of all areas.
+   * @param req the request object
+   * @param callback success response callback
+   * @param errorHandler failure response callback
+   */
+  exports.listByType = function (req, callback, errorHandler) {
+
+    taggerDao.listAllAreas()
+      .then((areas) => {
+          let data;
+          try {
+            data = apiMapper.mapAreaList(areas);
+          } catch (err) {
+            logger.map(err);
+            errorHandler(utils.createErrorResponse(filename, 'map', err));
+          }
+          callback(data);
+        }
+      )
+      .catch((err) => {
+        logger.repository(err);
+        errorHandler(utils.createErrorResponse(filename, 'repo', err));
+      });
+  };
+
+  /**
+   * Retrieves a list of all areas.
+   * @param req the request object
+   * @param callback success response callback
+   * @param errorHandler failure response callback
+   */
+  exports.listByTypeAndSubject = function (req, callback, errorHandler) {
+
+    taggerDao.listAllAreas()
+      .then((areas) => {
+          let data;
+          try {
+            data = apiMapper.mapAreaList(areas);
+          } catch (err) {
+            logger.map(err);
+            errorHandler(utils.createErrorResponse(filename, 'map', err));
+          }
+          callback(data);
+        }
+      )
+      .catch((err) => {
+        logger.repository(err);
+        errorHandler(utils.createErrorResponse(filename, 'repo', err));
+      });
+  };
+
+  /**
    * Retrieves area information by area id.
    * @param req the request object
    * @param callback success response callback
