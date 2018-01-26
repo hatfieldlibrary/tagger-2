@@ -24,6 +24,7 @@
 const taggerSchema = require('../schema/index');
 const logger = require('../utils/error-logger');
 const path = require('path');
+const utils = require('./utils');
 const filename = path.basename(__filename);
 const paramErrorMessage = 'A parameter for an area query is not defined.';
 const taggerDao = {};
@@ -86,17 +87,21 @@ taggerDao.findAreasForCollection = (collId) => {
 };
 
 taggerDao.listAreasByContentType = (typeId) => {
-  return taggerSchema.sequelize.query('select count(*), a.id, a.title from Areas a join AreaTarget at on a.id = at.AreaId ' +
-    'join Collections c on c.id = at.CollectionId join ItemContentTargets t on t.CollectionId = c.id where t.ItemContentId = ? ' +
-    'group by (a.id) order by position;',
+
+  const typeArray = typeId.split(',');
+  const typeWhereClause = utils.getWhereClauseForContentTypes(typeArray);
+
+  return taggerSchema.sequelize.query('select count(*), a.id, a.title from Areas a join AreaTargets at on a.id = at.AreaId ' +
+    'join Collections c on c.id = at.CollectionId join ItemContentTargets it on it.CollectionId = c.id where ' +
+    typeWhereClause +   ' group by (a.id) order by position;',
     {
-      replacements: [typeId],
+      replacements: typeArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     })
 };
 
 taggerDao.listAreasBySubject = (subjectId) => {
-  return taggerSchema.sequelize.query('select count(*), a.id, a.title from Areas a join AreaTarget at on a.id = at.AreaId ' +
+  return taggerSchema.sequelize.query('select count(*), a.id, a.title from Areas a join AreaTargets at on a.id = at.AreaId ' +
     'join Collections c on c.id = at.CollectionId join TagTargets tt on tt.CollectionId = c.id where tt.TagId = ? ' +
     'group by (a.id) order by position;',
     {
@@ -105,12 +110,17 @@ taggerDao.listAreasBySubject = (subjectId) => {
     });
 };
 
-taggerDao.listAreasByTypeAndSubject = (subjectId, typeId) => {
-  return taggerSchema.sequelize.query('select count(*), a.id, a.title from Areas a join AreaTarget at on a.id = at.AreaId ' +
-    'join Collections c on c.id = at.CollectionId join TagTargets tt on tt.CollectionId = c.id join ItemContentTargets t ' +
-    'on t.CollectionId = c.id where tt.TagId = ? AND t.ItemContentId = ? group by (a.id) order by position;',
+taggerDao.listAreasByTypeAndSubject = (typeId, subjectId) => {
+
+  let typeArray = typeId.split(',');
+  const typeWhereClause = utils.getWhereClauseForContentTypes(typeArray);
+  typeArray.unshift(subjectId);
+
+  return taggerSchema.sequelize.query('select count(*), a.id, a.title from Areas a join AreaTargets at on a.id = at.AreaId ' +
+    'join Collections c on c.id = at.CollectionId join TagTargets tt on tt.CollectionId = c.id join ItemContentTargets it ' +
+    'on it.CollectionId = c.id where tt.TagId = ? AND ' + typeWhereClause + ' group by (a.id) order by position;',
     {
-      replacements: [subjectId, typeId],
+      replacements: typeArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
 };

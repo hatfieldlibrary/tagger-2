@@ -224,7 +224,7 @@ exports.collectionsByArea = function (req, callback, errorHandler) {
  * @param errorHandler failure response callback
  */
 exports.collectionsBySubjectArea = function (req, callback, errorHandler) {
-  const subjectId = req.params.id;
+  const subjectId = req.params.subjectId;
   const areaId = req.params.areaId;
 
   taggerDao.getCollectionsBySubjectAndArea(areaId, subjectId).then(
@@ -318,7 +318,7 @@ exports.collectionsByContentType = function (req, callback, errorHandler) {
  * Retrieves collections by content type and area
  */
 exports.collectionsByAreaAndContentType = function (req, callback, errorHandler) {
-  const areaId = req.params.id;
+  const areaId = req.params.areaId;
   const contentTypeId = req.params.typeId;
 
   taggerDao.getCollectionsByAreaAndContentType(areaId, contentTypeId).then(

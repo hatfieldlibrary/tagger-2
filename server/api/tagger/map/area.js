@@ -89,7 +89,7 @@
       count += areas[i]['count(*)'];
     }
 
-    areaArray.unshift({id: 0, title: 'All Collections', count: count});
+   // areaArray.unshift({id: 0, title: 'All Collections', count: count});
     return areaArray;
 
   }

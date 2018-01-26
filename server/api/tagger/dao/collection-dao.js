@@ -563,6 +563,8 @@ taggerDao.getCollectionsByArea = (areaId) => {
  */
 taggerDao.getCollectionsBySubjectAndArea = (areaId, subjectId) => {
 
+  console.log(areaId)
+  console.log(subjectId)
   if (!areaId || !subjectId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();

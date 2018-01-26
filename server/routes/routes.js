@@ -123,7 +123,7 @@ module.exports = function (app, config) {
   app.get('/rest/collection/subject/:id', apiCollection.collectionsBySubject);
   app.get('/rest/collection/type/:id', apiCollection.collectionsByContentType);
   // advanced collection queries
-  app.get('/rest/collection/area/:id/type/:typeId', apiCollection.collectionsByAreaAndContentType);
+  app.get('/rest/collection/area/:areaId/type/:typeId', apiCollection.collectionsByAreaAndContentType);
   app.get('/rest/collection/area/:areaId/subject/:subjectId', apiCollection.collectionsBySubjectArea);
   app.get('/rest/collection/area/:areaId/type/:typeId/subject/:subjectId', apiCollection.collectionsByAreaSubjectAndContentType);
   // combined type and subject
@@ -148,18 +148,18 @@ module.exports = function (app, config) {
   app.get('/rest/area/id/:id', apiArea.byId);
   // area lists
   app.get('/rest/area', apiArea.list);
-  app.get('/rest/area/type/:typeId', apiArea.listByType);
-  app.get('/rest/area/subject/:subjectId', apiArea.listBySubject);
-  app.get('/rest/area/type/:typeId/subject/:subjectId', apiArea.listByTypeAndSubject);
   app.get('/rest/area/collection', apiArea.listAreasWithCount);
+  app.get('/rest/area/type/:typeId', apiArea.listByTypeWithCount);
+  app.get('/rest/area/subject/:subjectId', apiArea.listBySubjectWithCount);
+  app.get('/rest/area/type/:typeId/subject/:subjectId', apiArea.listByTypeAndSubjectWithCount);
   app.get('/rest/area/collection/:id', apiArea.areasForCollection);
 
   // These type methods not included in the api documentation.
   // Implemented for use in development and prototyping.
   app.get('/rest/type/type/:id', apiContentType.contentTypesByContentType);
   app.get('/rest/type/area/:id/type/:typeId', apiContentType.contentTypesByAreaAndContentType);
-  app.get('/rest/type/subject/:id/type/:typeId', apiContentType.contentTypesBySubjectAndContentType);
-  app.get('/rest/type/area/:id/subject/:subjectId/type/:typeId', apiContentType.contentTypesByAreaAndSubjectAndContentType);
+  app.get('/rest/type/subject/:areaId/type/:typeId', apiContentType.contentTypesBySubjectAndContentType);
+  app.get('/rest/type/area/:areaId/type/:typeId/subject/:subjectId', apiContentType.contentTypesByAreaAndSubjectAndContentType);
   // This external options service communicates with a target host to retrieve a browse list.
   // It addresses a very specific use case, is not generalized provides no guarantees
   // about the data returned. Currently in use.

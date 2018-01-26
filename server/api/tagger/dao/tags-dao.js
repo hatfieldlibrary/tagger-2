@@ -152,7 +152,7 @@ taggerDao.findTagsForContentType = (contentTypeId) => {
   'from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id ' +
   'LEFT JOIN Collections c on tt.CollectionId = c.id ' +
   'LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
-  'where ' + whereClause + ' group by t.id order by t.name',
+  'where ' + whereClause + ' AND c.published = true group by t.id order by t.name',
     {
       replacements: typeArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -177,7 +177,7 @@ taggerDao.findTagsForAreaAndContentType = (areaId, contentTypeId) => {
   }
   const areaArray = areaId.split(',');
   const typeArray = contentTypeId.split(',');
-  const whereClause = utils.getWhereClauseForMultipleAreasAndContentTypes(areaArray, typeArray);
+  const whereClause = utils.getSubjectWhereClauseForAreasAndContentTypes(areaArray, typeArray);
 
   const queryArray = areaArray.concat(typeArray);
 
@@ -186,7 +186,7 @@ taggerDao.findTagsForAreaAndContentType = (areaId, contentTypeId) => {
     'LEFT JOIN TagTargets tt on at.TagId = tt.TagId ' +
     'LEFT JOIN Collections c on tt.CollectionId = c.id ' +
     'LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
-    'where ' + whereClause + ' group by t.id order by t.name',
+    'where ' + whereClause + ' AND c.published = true group by t.id order by t.name',
     {
       replacements: queryArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT

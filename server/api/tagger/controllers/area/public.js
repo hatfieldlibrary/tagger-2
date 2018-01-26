@@ -48,8 +48,8 @@
    * @param res
    * @param next
    */
-  exports.listBySubject = function (req, res, next) {
-    publicApiRepository.listBySubject(
+  exports.listBySubjectWithCount = function (req, res, next) {
+    publicApiRepository.listBySubjectWithCount(
       req,
       (data) => {
         utils.sendResponse(res, data);
@@ -65,8 +65,8 @@
    * @param res
    * @param next
    */
-  exports.listByType = function (req, res, next) {
-    publicApiRepository.listByType(
+  exports.listByTypeWithCount = function (req, res, next) {
+    publicApiRepository.listByTypeWithCount(
       req,
       (data) => {
         utils.sendResponse(res, data);
@@ -82,8 +82,8 @@
    * @param res
    * @param next
    */
-  exports.listByTypeAndSubject = function (req, res, next) {
-    publicApiRepository.listByTypeAndSubject(
+  exports.listByTypeAndSubjectWithCount = function (req, res, next) {
+    publicApiRepository.listByTypeAndSubjectWithCount(
       req,
       (data) => {
         utils.sendResponse(res, data);

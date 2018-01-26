@@ -60,13 +60,14 @@
    * @param callback success response callback
    * @param errorHandler failure response callback
    */
-  exports.listBySubject = function (req, callback, errorHandler) {
+  exports.listBySubjectWithCount = function (req, callback, errorHandler) {
+    const subjectId = req.params.subjectId;
 
-    taggerDao.listAllAreas()
+    taggerDao.listAreasBySubject(subjectId)
       .then((areas) => {
           let data;
           try {
-            data = apiMapper.mapAreaList(areas);
+            data = apiMapper.mapAreaCount(areas);
           } catch (err) {
             logger.map(err);
             errorHandler(utils.createErrorResponse(filename, 'map', err));
@@ -86,13 +87,15 @@
    * @param callback success response callback
    * @param errorHandler failure response callback
    */
-  exports.listByType = function (req, callback, errorHandler) {
+  exports.listByTypeWithCount = function (req, callback, errorHandler) {
+    const typeId = req.params.typeId;
+    console.log(req.params)
 
-    taggerDao.listAllAreas()
+    taggerDao.listAreasByContentType(typeId)
       .then((areas) => {
           let data;
           try {
-            data = apiMapper.mapAreaList(areas);
+            data = apiMapper.mapAreaCount(areas);
           } catch (err) {
             logger.map(err);
             errorHandler(utils.createErrorResponse(filename, 'map', err));
@@ -112,13 +115,15 @@
    * @param callback success response callback
    * @param errorHandler failure response callback
    */
-  exports.listByTypeAndSubject = function (req, callback, errorHandler) {
+  exports.listByTypeAndSubjectWithCount = function (req, callback, errorHandler) {
+    const typeId = req.params.typeId;
+    const subjectId = req.params.subjectId;
 
-    taggerDao.listAllAreas()
+    taggerDao.listAreasByTypeAndSubject(typeId, subjectId)
       .then((areas) => {
           let data;
           try {
-            data = apiMapper.mapAreaList(areas);
+            data = apiMapper.mapAreaCount(areas);
           } catch (err) {
             logger.map(err);
             errorHandler(utils.createErrorResponse(filename, 'map', err));
