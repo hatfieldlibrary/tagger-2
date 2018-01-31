@@ -36,7 +36,7 @@ module.exports = function(app, config) {
   // Cors is necessary for development.  In production, proxy
   // makes it unnecessary.
   var corsOptions = {
-    origin: 'http://158.104.5.46:3005',
+    origin: 'http://158.104.4.106:3005',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   };
   app.use(cors(corsOptions));

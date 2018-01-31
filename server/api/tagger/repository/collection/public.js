@@ -69,10 +69,12 @@ exports.typesForCollection = function (req, callback, errorHandler) {
 exports.allCollections = function (callback, errorHandler) {
   taggerDao.retrieveAllPublishedCollections()
     .then((collections) => {
-
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'all');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -85,6 +87,38 @@ exports.allCollections = function (callback, errorHandler) {
     });
 
 };
+
+/**
+ * This function transforms the SQL collection query response by
+ * adding a types array to the collection object and removing duplicate
+ * tuples.
+ * @param callback
+ * @param errorHandler
+ * @param collections the array of collection objects returned by query
+ * @private
+ */
+function _createCollectionResponse(callback, errorHandler, collections) {
+  try {
+    // Get list of unique collections.
+    const uniqueCollections = _.uniqBy(collections, function (c) {
+      return c.id;
+    });
+    // Create an array of arrays that contain type objects.
+    const types = uniqueCollections.map(col => collections.filter((c) => col.id === c.id))
+      .map(c => c.map(col =>
+        ({ id: col.ItemContentId, name: col.typeName})));
+    // Add type field to the collection object.
+    const result = uniqueCollections.map(c => {
+      c.types = types.shift();
+      return c;
+    });
+    callback(result);
+
+  } catch
+    (err) {
+    errorHandler('reduce', err);
+  }
+}
 
 /**
  * Retrieves single collection information for the public API.
@@ -202,9 +236,12 @@ exports.collectionsByArea = function (req, callback, errorHandler) {
 
   taggerDao.getCollectionsByArea(areaId).then(
     (collections) => {
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'area')
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -229,9 +266,12 @@ exports.collectionsBySubjectArea = function (req, callback, errorHandler) {
 
   taggerDao.getCollectionsBySubjectAndArea(areaId, subjectId).then(
     (collections) => {
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'subject');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -255,9 +295,12 @@ exports.collectionsByCategory = function (req, callback, errorHandler) {
 
   taggerDao.getCollectionsByCategory(categoryId)
     .then((collections) => {
-    let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'category');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -278,9 +321,12 @@ exports.collectionsBySubject = function (req, callback, errorHandler) {
 
   taggerDao.getCollectionsBySubject(subjectId).then(
     (collections) => {
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'subject');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -300,9 +346,12 @@ exports.collectionsByContentType = function (req, callback, errorHandler) {
 
   taggerDao.getCollectionsByContentType(contentTypeId).then(
     (collections) => {
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'subject');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -323,9 +372,12 @@ exports.collectionsByAreaAndContentType = function (req, callback, errorHandler)
 
   taggerDao.getCollectionsByAreaAndContentType(areaId, contentTypeId).then(
     (collections) => {
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'subject');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -346,9 +398,12 @@ exports.collectionsBySubjectAndContentType = function (req, callback, errorHandl
 
   taggerDao.getCollectionsBySubjectAndContentType(contentTypeId, subjectId).then(
     (collections) => {
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'subject');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -370,9 +425,12 @@ exports.collectionsByAreaSubjectAndContentType = function (req, callback, errorH
 
   taggerDao.getCollectionsByAreaSubjectAndContentType(areaId, contentTypeId, subjectId).then(
     (collections) => {
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'subject');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -419,6 +477,7 @@ exports.browseList = function (req, res, errorHandler) {
     path: config.externalHostA.path + collection,
     method: 'GET'
   };
+
   // If no error, handle response.
   function handleResponse(response) {
 
@@ -517,8 +576,8 @@ function _dedupeRelatedCollections(callback, errorHandler, collections) {
     errorHandler('reduce', err);
   }
 
-
 }
+
 
 /**
  * Filters collection array by collection id and returns the length of the
