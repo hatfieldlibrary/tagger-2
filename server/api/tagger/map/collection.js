@@ -104,6 +104,7 @@
         assetType: collection.ctype,
         restricted: collection.restricted,
         published: collection.published,
+        ctype: collection.ctype,
         types: collection.types
       };
 
