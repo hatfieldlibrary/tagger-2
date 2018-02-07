@@ -124,9 +124,9 @@ taggerDao.findTagsInArea = (areaId) => {
   let areaArray = areaId.split(',');
   let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
 
-  return taggerSchema.sequelize.query('SELECT t.id, t.name from TagAreaTargets at ' +
-    'LEFT JOIN Tags t on at.TagId = t.id  ' +
-    'where ' + areaWhereClause + ' group by t.id order by t.name',
+  return taggerSchema.sequelize.query('select t.id, t.name from TagTargets tt JOIN Collections c on tt.CollectionId=c.id ' +
+    'JOIN TagAreaTargets at on at.TagID=tt.TagId join Tags t on at.TagId=t.id where ' + areaWhereClause + ' ' +
+    'AND c.published=true group by tt.TagId',
     {
       replacements: areaArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
