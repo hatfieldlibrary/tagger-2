@@ -523,9 +523,10 @@ taggerDao.updateCollectionImage = (collId, imageName) => {
 
 
 taggerDao.retrieveAllPublishedCollections = () => {
-  return taggerSchema.sequelize.query('select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, ' +
-    'c.items, c.browseType, c.repoType, c.restricted, c.published from Collections c JOIN ItemContentTargets it on ' +
-    'c.id=it.CollectionId JOIN ItemContents i on it.ItemContentId=i.id where c.published = true order by c.title',
+  return taggerSchema.sequelize.query('select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
+    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published from Collections c ' +
+    'JOIN ItemContentTargets it on c.id=it.CollectionId JOIN ItemContents i on it.ItemContentId=i.id where c.published = true ' +
+    'order by c.title',
     {
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
@@ -547,7 +548,8 @@ taggerDao.getCollectionsByArea = (areaId) => {
   let areaArray = areaId.split(',');
   let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
 
-  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
+  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
+    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
     'from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId JOIN ItemContentTargets it on c.id=it.CollectionId  ' +
     'JOIN ItemContents i on it.ItemContentId=i.id where ' + areaWhereClause + ' AND c.published = true order by c.title',
     {
@@ -575,7 +577,8 @@ taggerDao.getCollectionsBySubjectAndArea = (areaId, subjectId) => {
   const combinedWhereClause = utils.getWhereClauseForAreasAndSubjects(areaArray, subjectArray);
   const queryArray = areaArray.concat(subjectArray);
 
-  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
+  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
+    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
     'from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id ' +
     'JOIN Collections c on tt.CollectionId = c.id ' +
     'JOIN AreaTargets at on c.id=at.CollectionId ' +
@@ -692,7 +695,8 @@ taggerDao.getCollectionsByAreaSubjectAndContentType = (areaId, contentTypeId, su
   // concat arrays, adding type array to area array.
   const queryArray = areaArray.concat(typeArray).concat(subjectArray);
 
-  return taggerSchema.sequelize.query('Select c.id,  it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
+  return taggerSchema.sequelize.query('Select c.id,  it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
+    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
     'from Collections c LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
     'LEFT JOIN TagTargets tt on tt.CollectionId = c.id ' +
     'LEFT JOIN AreaTargets at on at.CollectionId = c.id ' +
@@ -706,9 +710,8 @@ taggerDao.getCollectionsByAreaSubjectAndContentType = (areaId, contentTypeId, su
 };
 
 /**
- * Gets collections assigned to a single subject tag.  To provide functionality consistent
- * with other methods, this may need to be modified to support multiple, comma-separated
- * subject ids.
+ * Gets collections assigned to a single subject tag.  Supports single or multiple
+ * subject id input.
  * @param subjectId string containing comma separated or single subject id.
  */
 taggerDao.getCollectionsBySubject = (subjectId) => {
@@ -724,8 +727,10 @@ taggerDao.getCollectionsBySubject = (subjectId) => {
   const subjectArray = subjectId.split(',');
   const subjectWhereClause = utils.getWhereClauseForSubjects(subjectArray);
 
-  return taggerSchema.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
-    'on tt.CollectionId = c.id where (' + subjectWhereClause + ') and c.published = true order by c.title',
+  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
+    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
+    'from Collections c LEFT JOIN TagTargets at on c.id=at.CollectionId JOIN ItemContentTargets it on c.id=it.CollectionId  ' +
+    'JOIN ItemContents i on it.ItemContentId=i.id where ' + subjectWhereClause + ' AND c.published = true order by c.title',
     {
       replacements: [subjectArray],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -745,7 +750,10 @@ taggerDao.getCollectionsByCategory = (categoryId) => {
     throw _errorResponse();
   }
 
-  return taggerSchema.sequelize.query('Select * from Collections c left join CategoryTargets ct on ct.CollectionId = c.id where ct.CategoryId = ? and c.published = true order by c.title',
+  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
+    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
+    'from Collections c LEFT JOIN CategoryTargets ct on c.id=ct.CollectionId JOIN ItemContentTargets it on c.id=it.CollectionId  ' +
+    'JOIN ItemContents i on it.ItemContentId=i.id where ct.CategoryId=? AND c.published = true order by c.title',
     {
       replacements: [categoryId],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
