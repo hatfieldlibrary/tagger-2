@@ -564,8 +564,6 @@ taggerDao.getCollectionsByArea = (areaId) => {
  */
 taggerDao.getCollectionsBySubjectAndArea = (areaId, subjectId) => {
 
-  console.log(areaId)
-  console.log(subjectId)
   if (!areaId || !subjectId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
@@ -616,10 +614,10 @@ taggerDao.getCollectionsByAreaAndContentType = (areaId, contentTypeId) => {
   // concat arrays, adding type array to area array.
   const queryArray = areaArray.concat(typeArray);
 
-  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
+  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, c.searchUrl, ' +
+    'c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
     'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
     'LEFT JOIN AreaTargets at on at.CollectionId = c.id ' +
-    'LEFT JOIN ItemContents i on it.ItemContentId=i.id ' +
     'where (' + combinedWhereClause + ') and c.published = true order by c.title',
     {
       replacements: queryArray,
@@ -653,11 +651,12 @@ taggerDao.getCollectionsBySubjectAndContentType = (contentTypeId, subjectId) => 
   // concat arrays, adding type array to area array.
   const queryArray = typeArray.concat(subjectArray);
 
-  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
-    'from Collections c LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
+  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
+    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
+    'from Collections c LEFT JOIN ItemContentTargets ict on ict.CollectionId = c.id ' +
     'LEFT JOIN TagTargets tt on tt.CollectionId = c.id ' +
     'JOIN ItemContentTargets it on c.id=it.CollectionId ' +
-    'LEFT JOIN ItemContents i on it.ItemContentId=i.id ' +
+    'JOIN ItemContents i on it.ItemContentId=i.id ' +
     'where (' + combinedWhereClause + ') and c.published = true order by c.title',
     {
       replacements: queryArray,
