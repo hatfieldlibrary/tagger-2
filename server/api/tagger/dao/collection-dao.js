@@ -620,6 +620,7 @@ taggerDao.getCollectionsByAreaAndContentType = (areaId, contentTypeId) => {
   return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, c.searchUrl, ' +
     'c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
     'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
+    'JOIN ItemContents i on it.ItemContentId=i.id ' +
     'LEFT JOIN AreaTargets at on at.CollectionId = c.id ' +
     'where (' + combinedWhereClause + ') and c.published = true order by c.title',
     {
@@ -729,7 +730,7 @@ taggerDao.getCollectionsBySubject = (subjectId) => {
 
   return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
     'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
-    'from Collections c LEFT JOIN TagTargets at on c.id=at.CollectionId JOIN ItemContentTargets it on c.id=it.CollectionId  ' +
+    'from Collections c LEFT JOIN TagTargets tt on c.id=tt.CollectionId JOIN ItemContentTargets it on c.id=it.CollectionId  ' +
     'JOIN ItemContents i on it.ItemContentId=i.id where ' + subjectWhereClause + ' AND c.published = true order by c.title',
     {
       replacements: [subjectArray],
