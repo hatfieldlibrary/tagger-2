@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "main": "index.js",
   "engines": {
-    "node": "stable"
+    "node": "8.9.4"
   },
   "scripts": {
     "start": "node index",
@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "async": "^2.5.0",
+    "asyncawait": "^1.0.6",
     "body-parser": "^1.17.2",
     "connect-redis": "^3.3.0",
     "cookie-parser": "^1.4.3",

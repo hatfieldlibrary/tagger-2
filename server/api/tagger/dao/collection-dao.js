@@ -67,6 +67,18 @@ taggerDao.countCTypesByArea = (areaId) => {
 
 };
 
+taggerDao.getContentTypesForCollection = (collectionId) => {
+  if (!collectionId) {
+    logger.dao(paramErrorMessage);
+  }
+  return taggerSchema.sequelize.query('SELECT i.name from Collections c JOIN ItemContentTargets it ' +
+    'on c.id=it.CollectionId JOIN ItemContents i on it.ContentId=i.id where c.id=?',
+    { replacements: [areaId],
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+  };
+
 taggerDao.browseTypesByArea = (areaId) => {
 
   if (!areaId) {
@@ -196,7 +208,8 @@ taggerDao.findContentTypesForCollection = (collId) => {
       where: {
         CollectionId: collId
       },
-      include: [taggerSchema.ItemContent]
+      include: [taggerSchema.ItemContent],
+      order: [[taggerSchema.ItemContent, 'name', 'ASC']],
     }
   );
 
@@ -524,7 +537,7 @@ taggerDao.updateCollectionImage = (collId, imageName) => {
 
 taggerDao.retrieveAllPublishedCollections = () => {
   return taggerSchema.sequelize.query('select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
-    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published from Collections c ' +
+    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.ctype, c.published from Collections c ' +
     'JOIN ItemContentTargets it on c.id=it.CollectionId JOIN ItemContents i on it.ItemContentId=i.id where c.published = true ' +
     'order by c.title',
     {
@@ -619,9 +632,9 @@ taggerDao.getCollectionsByAreaAndContentType = (areaId, contentTypeId) => {
 
   return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, c.searchUrl, ' +
     'c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
-    'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
+    'from ItemContentTargets it JOIN Collections c on it.CollectionId = c.id ' +
     'JOIN ItemContents i on it.ItemContentId=i.id ' +
-    'LEFT JOIN AreaTargets at on at.CollectionId = c.id ' +
+    'JOIN AreaTargets at on at.CollectionId = c.id ' +
     'where (' + combinedWhereClause + ') and c.published = true order by c.title',
     {
       replacements: queryArray,
@@ -661,7 +674,7 @@ taggerDao.getCollectionsBySubjectAndContentType = (contentTypeId, subjectId) => 
     'LEFT JOIN TagTargets tt on tt.CollectionId = c.id ' +
     'JOIN ItemContentTargets it on c.id=it.CollectionId ' +
     'JOIN ItemContents i on it.ItemContentId=i.id ' +
-    'where (' + combinedWhereClause + ') and c.published = true order by c.title',
+    'where (' + combinedWhereClause + ') and c.published = true group by c.id order by c.title',
     {
       replacements: queryArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -781,9 +794,9 @@ taggerDao.getCollectionsByContentType = (itemTypeId) => {
   const typeArray = itemTypeId.split(',');
   const typeWhereClause = utils.getWhereClauseForContentTypes(typeArray);
 
-
-  return taggerSchema.sequelize.query('Select * from Collections c ' +
-    'LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
+  return taggerSchema.sequelize.query('SELECT c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
+    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype  from Collections c ' +
+    'JOIN ItemContentTargets it on it.CollectionId = c.id JOIN ItemContents i on i.id=it.ItemContentId ' +
     'where (' + typeWhereClause + ') and c.published = true order by c.title',
     {
       replacements: typeArray,

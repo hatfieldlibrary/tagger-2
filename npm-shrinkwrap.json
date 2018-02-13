@@ -311,6 +311,18 @@
       "resolved": "https://registry.npmjs.org/async-each-series/-/async-each-series-0.1.1.tgz",
       "dev": true
     },
+    "asyncawait": {
+      "version": "1.0.6",
+      "from": "asyncawait@latest",
+      "resolved": "https://registry.npmjs.org/asyncawait/-/asyncawait-1.0.6.tgz",
+      "dependencies": {
+        "lodash": {
+          "version": "3.10.1",
+          "from": "lodash@3.10.1",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
+        }
+      }
+    },
     "asynckit": {
       "version": "0.4.0",
       "from": "asynckit@>=0.4.0 <0.5.0",
@@ -2953,6 +2965,11 @@
       "version": "1.0.1",
       "from": "fd-slicer@>=1.0.1 <1.1.0",
       "resolved": "https://registry.npmjs.org/fd-slicer/-/fd-slicer-1.0.1.tgz"
+    },
+    "fibers": {
+      "version": "1.0.15",
+      "from": "fibers@>=1.0.8 <2.0.0",
+      "resolved": "https://registry.npmjs.org/fibers/-/fibers-1.0.15.tgz"
     },
     "figures": {
       "version": "1.7.0",
