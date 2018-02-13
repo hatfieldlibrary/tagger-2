@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "async": "^2.5.0",
-    "asyncawait": "^1.0.6",
     "body-parser": "^1.17.2",
     "connect-redis": "^3.3.0",
     "cookie-parser": "^1.4.3",

@@ -25,8 +25,6 @@
 'use strict';
 
 const myasync = require('async');
-//const awaitAsync = require('asyncawait/async');
-//const awaitAwait = require('asyncawait/await');
 const taggerDao = require('../../dao/collection-dao');
 const apiMapper = require('../../map/collection');
 const config = require('../../../../config/environment');
