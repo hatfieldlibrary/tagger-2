@@ -37,17 +37,29 @@ const taggerDao = {};
  * @private
  */
 function _errorResponse() {
+
   let error = new Error('Error: missing query parameter - ' + filename);
   error.status = 500;
   return error;
 }
 
-taggerDao.findAllTags = () => {
-
+taggerDao.findAllTagsAdmin = () => {
   return taggerSchema.Tag.findAll({
     order: [['name', 'ASC']]
-
   });
+
+};
+
+taggerDao.findAllTags = () => {
+
+  return taggerSchema.sequelize.query('SELECT t.id, t.name FROM TagAreaTargets at JOIN ' +
+    'TagTargets tt on tt.TagId=at.TagId JOIN ' +
+    'Tags t on tt.TagId=t.id  JOIN ' +
+    'Collections c on c.id=tt.CollectionId ' +
+    'WHERE c.published = true group by t.id order by t.name',
+    {
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    })
 
 };
 
@@ -124,15 +136,18 @@ taggerDao.findTagsInArea = (areaId) => {
   let areaArray = areaId.split(',');
   let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
 
-  return taggerSchema.sequelize.query('SELECT t.id, t.name from ' +
-    'TagAreaTargets at JOIN Tags t on at.TagId=t.id where ' + areaWhereClause + ' ' +
-    'group by t.id order by t.name',
+  return taggerSchema.sequelize.query('SELECT t.id, t.name FROM TagAreaTargets at JOIN ' +
+    'TagTargets tt on tt.TagId=at.TagId JOIN ' +
+    'Tags t on tt.TagId=t.id  JOIN ' +
+    'Collections c on c.id=tt.CollectionId ' +
+    'where  ' + areaWhereClause + ' AND c.published=true  group by t.id order by t.name',
     {
       replacements: areaArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
 
 };
+
 
 /**
  * Gets the tags available for a collection list that has been limited content type.

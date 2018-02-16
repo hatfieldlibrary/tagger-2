@@ -25,6 +25,7 @@
 const async = require('async');
 const taggerDao = require('../../dao/tags-dao');
 const logger = require('../../utils/error-logger');
+const apiMapper = require('../../map/tag');
 
 /**
  * Retrieves tag information by tag id.
@@ -42,6 +43,24 @@ exports.byId = function (req, callback, errorHandler) {
     errorHandler(err);
   });
 
+};
+
+/**
+ * Retrieves a list of all tags for administrative client.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.subjectList = function (req, callback, errorHandler) {
+
+  taggerDao.findAllTagsAdmin()
+    .then((tags) => {
+      callback(tags);
+    })
+    .catch(function (err) {
+      logger.repository(err);
+      errorHandler(err);
+    });
 };
 
 /**

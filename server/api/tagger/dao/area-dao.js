@@ -93,7 +93,7 @@ taggerDao.listAreasByContentType = (typeId) => {
 
   return taggerSchema.sequelize.query('SELECT count(*), a.id, a.title from Areas a join AreaTargets at on a.id = at.AreaId ' +
     'join Collections c on c.id = at.CollectionId join ItemContentTargets it on it.CollectionId = c.id where ' +
-    typeWhereClause +   ' AND c.published=true group by (a.id) order by position;',
+    typeWhereClause +   ' AND c.published=true group by a.id order by position;',
     {
       replacements: typeArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -103,7 +103,7 @@ taggerDao.listAreasByContentType = (typeId) => {
 taggerDao.listAreasBySubject = (subjectId) => {
   return taggerSchema.sequelize.query('SELECT count(*), a.id, a.title from Areas a join AreaTargets at on a.id = at.AreaId ' +
     'join Collections c on c.id = at.CollectionId join TagTargets tt on tt.CollectionId = c.id where tt.TagId = ? ' +
-    'AND c.published=true group by a.id, c.id order by position;',
+    'AND c.published=true group by a.id order by position;',
     {
       replacements: [subjectId],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -118,7 +118,7 @@ taggerDao.listAreasByTypeAndSubject = (typeId, subjectId) => {
 
   return taggerSchema.sequelize.query('SELECT count(*), a.id, a.title from Areas a join AreaTargets at on a.id = at.AreaId ' +
     'join Collections c on c.id = at.CollectionId join TagTargets tt on tt.CollectionId = c.id join ItemContentTargets it ' +
-    'on it.CollectionId = c.id where tt.TagId = ? AND ' + typeWhereClause + ' AND c.published=true group by (a.id) order by position;',
+    'on it.CollectionId = c.id where tt.TagId = ? AND ' + typeWhereClause + ' AND c.published=true group by a.id order by position;',
     {
       replacements: typeArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT

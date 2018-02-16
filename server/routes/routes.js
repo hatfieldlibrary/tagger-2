@@ -95,7 +95,7 @@ module.exports = function (app, config) {
   app.delete('/rest/t/content/delete/:id', ensureAuthenticated, content.delete);
 
   // TAGS
-  app.get('/rest/t/subject', ensureAuthenticated, apiTag.subjectList);// controller shared with public route
+  app.get('/rest/t/subject', ensureAuthenticated, tag.subjectListAdmin);
   app.get('/rest/t/subject/byId/:id', ensureAuthenticated, tag.byId);
   app.get('/rest/t/subject/byArea/:areaId', ensureAuthenticated, tag.tagByArea);
   app.get('/rest/t/subject/count/byArea/:areaId', ensureAuthenticated, tag.tagByAreaCount);

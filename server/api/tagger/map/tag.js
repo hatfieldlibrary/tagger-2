@@ -41,7 +41,7 @@ function _mapTagList(tags, type) {
       tag = _mapTag(tags[i].dataValues.Tag.dataValues);
     }
     else if (type === 'all') {
-      tag = _mapTag(tags[i].dataValues);
+      tag = _mapTag(tags[i]);
     }
     else {
       // The query for finding tags by area no longer
