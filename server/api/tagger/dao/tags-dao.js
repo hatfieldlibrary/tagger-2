@@ -149,6 +149,26 @@ taggerDao.findTagsInArea = (areaId) => {
 };
 
 
+taggerDao.findTagsInAreaAdmin = (areaId) => {
+
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+  let areaArray = areaId.split(',');
+  let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
+
+  return taggerSchema.sequelize.query('SELECT t.id, t.name FROM TagAreaTargets at JOIN ' +
+    'Tags t on at.TagId=t.id ' +
+    'where  ' + areaWhereClause + ' group by t.id order by t.name',
+    {
+      replacements: areaArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+};
+
 /**
  * Gets the tags available for a collection list that has been limited content type.
  * @param contentTypeId content type ids as comma separated string or a single value string

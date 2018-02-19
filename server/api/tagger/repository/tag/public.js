@@ -39,7 +39,6 @@ exports.subjectList = function (req, callback, errorHandler) {
     .then((tags) => {
       let data;
       try {
-        console.log(tags)
         data = apiMapper.mapTags(tags, "all");
       } catch (err) {
         logger.map(err);

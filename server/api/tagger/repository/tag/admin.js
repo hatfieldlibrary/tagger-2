@@ -74,7 +74,8 @@ exports.tagByArea = function (req, callback, errorHandler) {
 
   const areaId = req.params.areaId;
 
-  taggerDao.findTagsInArea(areaId).then(function (tags) {
+  taggerDao.findTagsInAreaAdmin(areaId).then(function (tags) {
+    console.log(tags)
     callback(tags);
   }).catch(function (err) {
     logger.dao(err);
