@@ -189,8 +189,6 @@
   }
 
   taggerComponents.component('subjectSelector', {
-
-
     template: '<md-card flex>' +
     ' <md-toolbar class="md_primary">' +
     '   <div class="md-toolbar-tools">     ' +

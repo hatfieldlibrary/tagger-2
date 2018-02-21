@@ -30,7 +30,7 @@
       </md-toolbar>
       <md-card-content class="grid-list-overview" flex="flex">
 
-        <md-grid-list md-cols-sm="1" md-cols-md="4" md-cols-lg="4" md-cols-gt-lg="4" md-row-height="210px"
+        <md-grid-list md-cols-sm="1" md-cols-md="4" md-cols-lg="4" md-cols-gt-lg="4" md-row-height="220px"
                       md-gutter="12px" md-gutter-gt-sm="8px">
           <md-grid-tile class="blue">
             <div flex layout="row" layout-align="start start"
@@ -56,14 +56,16 @@
               <link-type-summary collectionCount="$ctrl.collectionCount" flex></link-type-summary>
             </div>
           </md-grid-tile>
-
+        </md-grid-list>
+        <md-grid-list md-cols-sm="1" md-cols-md="4" md-cols-lg="4" md-cols-gt-lg="4" md-row-height="290px"
+                      md-gutter="12px" md-gutter-gt-sm="8px">
           <md-grid-tile class="blue" md-rowspan="2" md-colspan-gt-md="2" md-colspan-md="2" md-colspan-sm="1">
             <md-grid-tile-header>
               <h3>Collection Categories</h3>
             </md-grid-tile-header>
             <pie-visualization-component ng-if="$ctrl.categoriesReady" class="svg-container" id="categoryChart"
                                          flex="flex"
-                                         style="min-height: 200px;width:96%;padding-top: 50px;position: inherit;margin-top: 20px"
+                                         style="min-height: 200px;width:95%;top: 36px;padding-top: 0;position: inherit;margin-top: 12px"
                                          d3-pie="d3-pie" label="categorySVG"
                                          data="$ctrl.categoryCounts"></pie-visualization-component>
           </md-grid-tile>
@@ -71,10 +73,13 @@
             <md-grid-tile-header><h3>Content Types</h3>
             </md-grid-tile-header>
             <pie-visualization-component ng-if="$ctrl.typesReady" class="svg-container" id="typeChart" flex="flex"
-                                         style="min-height: 200px;width:96%;padding-top: 50px;position: inherit;margin-top: 20px"
+                                         style="min-height: 200px;width:96%;top: 36px;padding-top: 0;position: inherit;margin-top: 12px"
                                          d3-pie="d3-pie" label="typesSVG"
                                          data="$ctrl.typeCounts"></pie-visualization-component>
           </md-grid-tile>
+        </md-grid-list>
+        <md-grid-list md-cols-sm="1" md-cols-md="4" md-cols-lg="4" md-cols-gt-lg="4" md-row-height="170px"
+                      md-gutter="12px" md-gutter-gt-sm="8px">
           <md-grid-tile class="blue" md-rowspan="4" md-colspan-gt-lg="4" md-colspan-lg="4" md-colspan-md="4"
                         md-colspan-sm="1">
             <md-grid-tile-header>

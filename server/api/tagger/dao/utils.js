@@ -7,6 +7,7 @@ const utils = {};
 const areaField = ' at.AreaId = ? ';
 const itemTypeField = ' it.ItemContentId = ? ';
 const subjectField = ' tt.TagId = ? ';
+const areaField2 = ' a.AreaId = ? ';
 
 /**
  * Generates where clause from input values and field string.
@@ -34,11 +35,35 @@ const _getWhereClause = (inputArray, field) =>  {
 };
 
 /**
+ * Generates where clause from input values and field string.
+ * @param inputArray
+ * @param field
+ * @returns {string}
+ * @private
+ */
+const _getWhereAndClause = (inputArray, field) =>  {
+
+  let whereClause = '';
+
+  for (let i = 0; i < inputArray.length; i++) {
+    whereClause += field;
+    if (i < inputArray.length - 1) {
+      whereClause += ' OR ';
+    }
+  }
+  if (inputArray.length > 1) {
+    whereClause = '(' + whereClause + ')';
+  }
+
+  return whereClause;
+
+};
+
+/**
  * Returns the where clause for areas.
  * @param areaArray list of areas
  */
 utils.getWhereClauseForMultipleAreas = (areaArray) => {
-
   return _getWhereClause(areaArray, areaField)
 
 };
@@ -90,6 +115,21 @@ utils.getWhereClauseForMultipleAreasAndContentTypes = (areaArray, itemArray) => 
   const itemTypeClause = _getWhereClause(itemArray, itemTypeField);
 
   return areasClause + ' AND ' + itemTypeClause;
+
+};
+
+/**
+ * Constructs the where clause for one or more areas and one or more content types.
+ * @param areaArray the list of areas to query
+ * @param itemArray the list if content types to query
+ * @returns {string}
+ */
+utils.getSubjectWhereClauseForAreasAndContentTypes = (areaArray, itemArray) => {
+  const areasTargetClause = _getWhereAndClause(areaArray, areaField);
+  const subjectsClause = _getWhereAndClause(itemArray, itemTypeField);
+  const areasClause = _getWhereAndClause(areaArray, areaField2);
+
+  return areasTargetClause + ' AND ' + areasClause + 'AND' + subjectsClause;
 
 };
 

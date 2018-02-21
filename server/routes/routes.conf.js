@@ -33,8 +33,10 @@ module.exports = function(app, config) {
   app.set('view engine', 'pug');
 
   // This is hard-coded! Is cors being used?
+  // Cors is necessary for development.  In production, proxy
+  // makes it unnecessary.
   var corsOptions = {
-    origin: 'http://localhost:3001',
+    origin: 'http://158.104.4.106:3005',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   };
   app.use(cors(corsOptions));

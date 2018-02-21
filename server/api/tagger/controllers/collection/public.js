@@ -169,8 +169,21 @@ exports.collectionsByAreaAndContentType = function (req, res, next) {
 /**
  * Retrieves collections by area, content type and subject.
  */
+exports.collectionsBySubjectAndContentType = function (req, res, next) {
+  publicApiRepository.collectionsBySubjectAndContentType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+/**
+ * Retrieves collections by area, content type and subject.
+ */
 exports.collectionsByAreaSubjectAndContentType = function (req, res, next) {
-  publicApiRepository.collectionsByAreaAndContentType(
+  publicApiRepository.collectionsByAreaSubjectAndContentType(
     req,
     (data) => {
       utils.sendResponse(res, data);

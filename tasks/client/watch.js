@@ -26,12 +26,12 @@ const CSS = path.DEV + '**/*.css';
 const HTML = path.DEV + '**/*.html';
 
 gulp.task(tasks.CLIENT_RELOAD, () => {
-  return browserSync.reload();
+ // return browserSync.reload();
 });
 
 gulp.task(tasks.CLIENT_WATCH, () => {
 
-  browserSync({port: 3001, proxy: "http://localhost:3333/tagger/", reloadDelay: 1000});
+//  browserSync({port: 3001, proxy: "http://localhost:3333/tagger/", reloadDelay: 1000});
 
   let _watchable = [];
 
