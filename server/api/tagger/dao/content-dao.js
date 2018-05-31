@@ -282,7 +282,7 @@ taggerDao.createContentType = (name) => {
 
 taggerDao.updateContentType = (name, icon, id) => {
 
-  if (!name || !icon || !id) {
+  if (!name || !id) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
   }

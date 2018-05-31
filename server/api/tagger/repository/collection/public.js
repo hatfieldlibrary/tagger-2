@@ -24,12 +24,13 @@
 
 'use strict';
 
-const async = require('async');
+const myasync = require('async');
 const taggerDao = require('../../dao/collection-dao');
 const apiMapper = require('../../map/collection');
 const config = require('../../../../config/environment');
 const logger = require('../../utils/error-logger');
 const utils = require('../../utils/response-utility');
+const Promise = require('promise');
 const _ = require('lodash');
 const path = require('path');
 const filename = path.basename(__filename);
@@ -69,10 +70,12 @@ exports.typesForCollection = function (req, callback, errorHandler) {
 exports.allCollections = function (callback, errorHandler) {
   taggerDao.retrieveAllPublishedCollections()
     .then((collections) => {
-
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'all');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -87,6 +90,38 @@ exports.allCollections = function (callback, errorHandler) {
 };
 
 /**
+ * This function transforms the SQL collection query response by
+ * adding a types array to the collection object and removing duplicate
+ * tuples.
+ * @param callback
+ * @param errorHandler
+ * @param collections the array of collection objects returned by query
+ * @private
+ */
+function _createCollectionResponse(callback, errorHandler, collections) {
+  try {
+    // Get list of unique collections.
+    const uniqueCollections = _.uniqBy(collections, function (c) {
+      return c.id;
+    });
+    // Create an array of arrays that contain type objects.
+    const types = uniqueCollections.map(col => collections.filter((c) => col.id === c.id))
+      .map(c => c.map(col =>
+        ({id: col.ItemContentId, name: col.typeName})));
+    // Add type field to the collection object.
+    const result = uniqueCollections.map(c => {
+      c.types = types.shift();
+      return c;
+    });
+    callback(result);
+
+  } catch
+    (err) {
+    errorHandler('reduce', err);
+  }
+}
+
+/**
  * Retrieves single collection information for the public API.
  * @param req
  * @param callback success response callback
@@ -95,7 +130,7 @@ exports.allCollections = function (callback, errorHandler) {
 exports.collectionById = function (req, callback, errorHandler) {
   const collId = req.params.id;
 
-  async.series({
+  myasync.series({
       collection: function (series) {
 
         taggerDao.findCollectionById(collId).then(
@@ -202,9 +237,12 @@ exports.collectionsByArea = function (req, callback, errorHandler) {
 
   taggerDao.getCollectionsByArea(areaId).then(
     (collections) => {
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'area')
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -224,14 +262,17 @@ exports.collectionsByArea = function (req, callback, errorHandler) {
  * @param errorHandler failure response callback
  */
 exports.collectionsBySubjectArea = function (req, callback, errorHandler) {
-  const subjectId = req.params.id;
+  const subjectId = req.params.subjectId;
   const areaId = req.params.areaId;
 
   taggerDao.getCollectionsBySubjectAndArea(areaId, subjectId).then(
     (collections) => {
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'subject');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -255,7 +296,65 @@ exports.collectionsByCategory = function (req, callback, errorHandler) {
 
   taggerDao.getCollectionsByCategory(categoryId)
     .then((collections) => {
-    let data;
+      let data = [];
+      try {
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+
+};
+
+/**
+ * Retrieves a list of collections by category and content types for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.collectionsByCategoryAndType = function (req, callback, errorHandler) {
+  const categoryId = req.params.id;
+  const typeId = req.params.typeId;
+
+  taggerDao.getCollectionsByCategoryAndType(categoryId, typeId)
+    .then((collections) => {
+      let data;
+      try {
+        data = apiMapper.mapCollectionList(collections, 'category');
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+
+};
+
+/**
+ * Retrieves a list of collections by area, category, and content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.collectionsByAreaCategoryAndType = function (req, callback, errorHandler) {
+  const categoryId = req.params.id;
+  const areaId = req.params.areaId;
+  const typeId = req.params.typeId;
+
+  taggerDao.getCollectionsByAreaCategoryAndType(areaId, categoryId, typeId)
+    .then((collections) => {
+      let data;
       try {
         data = apiMapper.mapCollectionList(collections, 'category');
       } catch (err) {
@@ -278,9 +377,12 @@ exports.collectionsBySubject = function (req, callback, errorHandler) {
 
   taggerDao.getCollectionsBySubject(subjectId).then(
     (collections) => {
-      let data;
+      let data = [];
       try {
-        data = apiMapper.mapCollectionList(collections, 'subject');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -291,23 +393,47 @@ exports.collectionsBySubject = function (req, callback, errorHandler) {
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
   });
 };
-
 /**
- * Retrieves collections by content type (from all areas)
+ * Retrieves the types associated with a single collection.
+ * @param collId
+ * @returns {Promise<*>}
+ * @private
+ */
+const _typesForCollection = async function (collId) {
+  return taggerDao.findContentTypesForCollection(collId)
+};
+/**
+ * Retrieves collections by content type (from all areas).  Since this
+ * function looks up by content type, we need to request the complete list
+ * of content types for each individual collection and modify the collection
+ * before return.
  */
 exports.collectionsByContentType = function (req, callback, errorHandler) {
   const contentTypeId = req.params.id;
-
   taggerDao.getCollectionsByContentType(contentTypeId).then(
     (collections) => {
-      let data;
       try {
-        data = apiMapper.mapCollectionList(collections, 'subject');
+        // Use async to return promises.
+        const promises = collections.map(async collection => {
+            return _typesForCollection(
+              collection.id);
+          }
+        );
+        // Wait on all promises, then process the results synchronously.
+        Promise.all(promises).then(response => {
+          // Get array of types from the response.
+          const types = response.map(c => apiMapper.mapContentTypeList(c));
+          // Modify collections in the list.
+          const result = collections
+            .map(c => {
+              c.types = types.shift();
+              return c;
+            });
+          callback(result);
+        });
       } catch (err) {
-        logger.map(err);
-        errorHandler(utils.createErrorResponse(filename, 'map', err))
+        console.log(err);
       }
-      callback(data);
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -318,19 +444,33 @@ exports.collectionsByContentType = function (req, callback, errorHandler) {
  * Retrieves collections by content type and area
  */
 exports.collectionsByAreaAndContentType = function (req, callback, errorHandler) {
-  const areaId = req.params.id;
+  const areaId = req.params.areaId;
   const contentTypeId = req.params.typeId;
 
   taggerDao.getCollectionsByAreaAndContentType(areaId, contentTypeId).then(
     (collections) => {
-      let data;
       try {
-        data = apiMapper.mapCollectionList(collections, 'subject');
+        // Use async to return promises.
+        const promises = collections.map(async collection => {
+            return _typesForCollection(
+              collection.id);
+          }
+        );
+        // Wait on all promises, then process the results synchronously.
+        Promise.all(promises).then(response => {
+          // Get array of types from the response.
+          const types = response.map(c => apiMapper.mapContentTypeList(c));
+          // Modify collections in the list.
+          const result = collections
+            .map(c => {
+              c.types = types.shift();
+              return c;
+            });
+          callback(result);
+        });
       } catch (err) {
-        logger.map(err);
-        errorHandler(utils.createErrorResponse(filename, 'map', err))
+        console.log(err);
       }
-      callback(data);
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -338,23 +478,74 @@ exports.collectionsByAreaAndContentType = function (req, callback, errorHandler)
 };
 
 /**
- * Retrieves collections by content type and area
+ * Retrieves collections by content type and subject.
+ */
+exports.collectionsBySubjectAndContentType = function (req, callback, errorHandler) {
+  const contentTypeId = req.params.typeId;
+  const subjectId = req.params.subjectId;
+
+  taggerDao.getCollectionsBySubjectAndContentType(contentTypeId, subjectId).then(
+    (collections) => {
+      try {
+        // Use async to return promises.
+        const promises = collections.map(async collection => {
+            return _typesForCollection(
+              collection.id);
+          }
+        );
+        // Wait on all promises, then process the results synchronously.
+        Promise.all(promises).then(response => {
+          // Get array of types from the response.
+          const types = response.map(c => apiMapper.mapContentTypeList(c));
+          // Modify collections in the list.
+          const result = collections
+            .map(c => {
+              c.types = types.shift();
+              return c;
+            });
+          callback(result);
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
+/**
+ * Retrieves collections by content type and area and subject.
  */
 exports.collectionsByAreaSubjectAndContentType = function (req, callback, errorHandler) {
-  const areaId = req.params.id;
+  const areaId = req.params.areaId;
   const contentTypeId = req.params.typeId;
   const subjectId = req.params.subjectId;
 
   taggerDao.getCollectionsByAreaSubjectAndContentType(areaId, contentTypeId, subjectId).then(
     (collections) => {
-      let data;
       try {
-        data = apiMapper.mapCollectionList(collections, 'subject');
+        // Use async to return promises.
+        const promises = collections.map(async collection => {
+            return _typesForCollection(
+              collection.id);
+          }
+        );
+        // Wait on all promises, then process the results synchronously.
+        Promise.all(promises).then(response => {
+          // Get array of types from the response.
+          const types = response.map(c => apiMapper.mapContentTypeList(c));
+          // Modify collections in the list.
+          const result = collections
+            .map(c => {
+              c.types = types.shift();
+              return c;
+            });
+          callback(result);
+        });
       } catch (err) {
-        logger.map(err);
-        errorHandler(utils.createErrorResponse(filename, 'map', err))
+        console.log(err);
       }
-      callback(data);
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -396,6 +587,7 @@ exports.browseList = function (req, res, errorHandler) {
     path: config.externalHostA.path + collection,
     method: 'GET'
   };
+
   // If no error, handle response.
   function handleResponse(response) {
 
@@ -494,8 +686,8 @@ function _dedupeRelatedCollections(callback, errorHandler, collections) {
     errorHandler('reduce', err);
   }
 
-
 }
+
 
 /**
  * Filters collection array by collection id and returns the length of the
@@ -510,3 +702,4 @@ function _countDuplicates(collections, id) {
     return c.id == id
   }).length;
 }
+

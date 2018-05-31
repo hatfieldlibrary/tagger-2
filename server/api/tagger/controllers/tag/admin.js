@@ -38,6 +38,23 @@ exports.byId = function (req, res) {
 };
 
 /**
+ * Administrative list of all tags.
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.subjectListAdmin = function (req, res, next) {
+  repository.subjectList(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+
+/**
  * Retrieves list of tags associated with an area. Query
  * by area id.
  * @param req

@@ -55,6 +55,89 @@
   };
 
   /**
+   * Retrieves a list of all areas.
+   * @param req the request object
+   * @param callback success response callback
+   * @param errorHandler failure response callback
+   */
+  exports.listBySubjectWithCount = function (req, callback, errorHandler) {
+    const subjectId = req.params.subjectId;
+
+    taggerDao.listAreasBySubject(subjectId)
+      .then((areas) => {
+          let data;
+          try {
+            data = apiMapper.mapAreaCount(areas);
+          } catch (err) {
+            logger.map(err);
+            errorHandler(utils.createErrorResponse(filename, 'map', err));
+          }
+          callback(data);
+        }
+      )
+      .catch((err) => {
+        logger.repository(err);
+        errorHandler(utils.createErrorResponse(filename, 'repo', err));
+      });
+  };
+
+  /**
+   * Retrieves a list of all areas.
+   * @param req the request object
+   * @param callback success response callback
+   * @param errorHandler failure response callback
+   */
+  exports.listByTypeWithCount = function (req, callback, errorHandler) {
+    const typeId = req.params.typeId;
+    console.log(req.params)
+
+    taggerDao.listAreasByContentType(typeId)
+      .then((areas) => {
+          let data;
+          try {
+            data = apiMapper.mapAreaCount(areas);
+          } catch (err) {
+            logger.map(err);
+            errorHandler(utils.createErrorResponse(filename, 'map', err));
+          }
+          callback(data);
+        }
+      )
+      .catch((err) => {
+        logger.repository(err);
+        errorHandler(utils.createErrorResponse(filename, 'repo', err));
+      });
+  };
+
+  /**
+   * Retrieves a list of all areas.
+   * @param req the request object
+   * @param callback success response callback
+   * @param errorHandler failure response callback
+   */
+  exports.listByTypeAndSubjectWithCount = function (req, callback, errorHandler) {
+    const typeId = req.params.typeId;
+    const subjectId = req.params.subjectId;
+
+    taggerDao.listAreasByTypeAndSubject(typeId, subjectId)
+      .then((areas) => {
+          let data;
+          try {
+            data = apiMapper.mapAreaCount(areas);
+          } catch (err) {
+            logger.map(err);
+            errorHandler(utils.createErrorResponse(filename, 'map', err));
+          }
+          callback(data);
+        }
+      )
+      .catch((err) => {
+        logger.repository(err);
+        errorHandler(utils.createErrorResponse(filename, 'repo', err));
+      });
+  };
+
+  /**
    * Retrieves area information by area id.
    * @param req the request object
    * @param callback success response callback

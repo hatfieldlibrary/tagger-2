@@ -98,7 +98,6 @@ exports.addTarget = function (req, callback, jsonSuccessCallback, errorHandler) 
       // Check to see if tag is already associated
       // with area.
       check: (series) => {
-
         taggerDao.findTagAreaAssociation(tagId, areaId)
           .then((result) => {
             series(null, result);

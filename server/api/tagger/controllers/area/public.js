@@ -43,6 +43,57 @@
   };
 
   /**
+   * Retrieves a list of all areas.
+   * @param req
+   * @param res
+   * @param next
+   */
+  exports.listBySubjectWithCount = function (req, res, next) {
+    publicApiRepository.listBySubjectWithCount(
+      req,
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
+  };
+
+  /**
+   * Retrieves a list of all areas.
+   * @param req
+   * @param res
+   * @param next
+   */
+  exports.listByTypeWithCount = function (req, res, next) {
+    publicApiRepository.listByTypeWithCount(
+      req,
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
+  };
+
+  /**
+   * Retrieves a list of all areas.
+   * @param req
+   * @param res
+   * @param next
+   */
+  exports.listByTypeAndSubjectWithCount = function (req, res, next) {
+    publicApiRepository.listByTypeAndSubjectWithCount(
+      req,
+      (data) => {
+        utils.sendResponse(res, data);
+      },
+      (err) => {
+        return next(err);
+      });
+  };
+
+  /**
    * Retrieves area information by area id.
    * @param req
    * @param res

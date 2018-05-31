@@ -95,7 +95,7 @@ module.exports = function (app, config) {
   app.delete('/rest/t/content/delete/:id', ensureAuthenticated, content.delete);
 
   // TAGS
-  app.get('/rest/t/subject', ensureAuthenticated, apiTag.subjectList);// controller shared with public route
+  app.get('/rest/t/subject', ensureAuthenticated, tag.subjectListAdmin);
   app.get('/rest/t/subject/byId/:id', ensureAuthenticated, tag.byId);
   app.get('/rest/t/subject/byArea/:areaId', ensureAuthenticated, tag.tagByArea);
   app.get('/rest/t/subject/count/byArea/:areaId', ensureAuthenticated, tag.tagByAreaCount);
@@ -114,36 +114,55 @@ module.exports = function (app, config) {
   app.delete('/rest/t/user/delete/:id', ensureAuthenticated, users.delete);
 
   // Public API routes
-  app.get('/rest/area/collection', apiArea.listAreasWithCount);
-  app.get('/rest/area/id/:id', apiArea.byId);
-  app.get('/rest/area', apiArea.list);
-  app.get('/rest/area/collection/:id', apiArea.areasForCollection);
+  // individual collection
   app.get('/rest/collection/id/:id', apiCollection.collectionById);
+  // basic collection
   app.get('/rest/collection', apiCollection.allCollections);
+  // collections by area, subject, or type
   app.get('/rest/collection/area/:id', apiCollection.collectionsByArea);
-  app.get('/rest/collection/subject/:id/area/:areaId', apiCollection.collectionsBySubjectArea);
-  app.get('/rest/collection/category/:id', apiCollection.collectionsByCategory);
   app.get('/rest/collection/subject/:id', apiCollection.collectionsBySubject);
+  app.get('/rest/collection/type/:id', apiCollection.collectionsByContentType);
+  // advanced collection queries
+  app.get('/rest/collection/area/:areaId/type/:typeId', apiCollection.collectionsByAreaAndContentType);
+  app.get('/rest/collection/area/:areaId/subject/:subjectId', apiCollection.collectionsBySubjectArea);
+  app.get('/rest/collection/area/:areaId/type/:typeId/subject/:subjectId', apiCollection.collectionsByAreaSubjectAndContentType);
+  // combined type and subject
+  app.get('/rest/collection/type/:typeId/subject/:subjectId', apiCollection.collectionsBySubjectAndContentType);
+  // related collections
+  app.get('/rest/collection/:id/related/:subjects', apiCollection.findRelatedCollections);
+  // collections in category (collection group)
+  app.get('/rest/collection/category/:id', apiCollection.collectionsByCategory);
+  // advanced collections by category
+  app.get('/rest/collection/category/:id/type/:typeId', apiCollection.collectionsByCategoryAndType);
+  app.get('/rest/collection/category/:id/area/:areaId/type/:typeId', apiCollection.collectionsByAreaCategoryAndType);
+  // subject lists
   app.get('/rest/subject', apiTag.subjectList);
   app.get('/rest/subject/area/:id', apiTag.subjectsByArea);
   app.get('/rest/subject/collection/:id', apiTag.subjectsForCollection);
   app.get('/rest/subject/type/:id', apiTag.subjectsByContentType);
   app.get('/rest/subject/area/:id/type/:typeId', apiTag.subjectsByAreaAndContentType);
+  // type lists
   app.get('/rest/type/collection/:id', apiCollection.typesForCollection);
-  app.get('/rest/collection/:id/related/:subjects', apiCollection.findRelatedCollections);
-  app.get('/rest/collection/type/:id', apiCollection.collectionsByContentType);
-  app.get('/rest/collection/area/:id/type/:typeId', apiCollection.collectionsByAreaAndContentType);
-  app.get('/rest/collection/area/:id/type/:typeId/subject/:subjectId', apiCollection.collectionsByAreaSubjectAndContentType);
   app.get('/rest/type', apiContentType.contentTypes);
   app.get('/rest/type/area/:id', apiContentType.contentTypesByArea);
   app.get('/rest/type/subject/:id', apiContentType.contentTypesBySubject);
   app.get('/rest/type/area/:id/subject/:subjectId', apiContentType.contentTypesByAreaAndSubject);
+  // individual area
+  app.get('/rest/area/id/:id', apiArea.byId);
+  // area lists
+  app.get('/rest/area', apiArea.list);
+  app.get('/rest/area/collection', apiArea.listAreasWithCount);
+  app.get('/rest/area/type/:typeId', apiArea.listByTypeWithCount);
+  app.get('/rest/area/subject/:subjectId', apiArea.listBySubjectWithCount);
+  app.get('/rest/area/type/:typeId/subject/:subjectId', apiArea.listByTypeAndSubjectWithCount);
+  app.get('/rest/area/collection/:id', apiArea.areasForCollection);
+
   // These type methods not included in the api documentation.
   // Implemented for use in development and prototyping.
   app.get('/rest/type/type/:id', apiContentType.contentTypesByContentType);
   app.get('/rest/type/area/:id/type/:typeId', apiContentType.contentTypesByAreaAndContentType);
-  app.get('/rest/type/subject/:id/type/:typeId', apiContentType.contentTypesBySubjectAndContentType);
-  app.get('/rest/type/area/:id/subject/:subjectId/type/:typeId', apiContentType.contentTypesByAreaAndSubjectAndContentType);
+  app.get('/rest/type/subject/:areaId/type/:typeId', apiContentType.contentTypesBySubjectAndContentType);
+  app.get('/rest/type/area/:areaId/type/:typeId/subject/:subjectId', apiContentType.contentTypesByAreaAndSubjectAndContentType);
   // This external options service communicates with a target host to retrieve a browse list.
   // It addresses a very specific use case, is not generalized provides no guarantees
   // about the data returned. Currently in use.
