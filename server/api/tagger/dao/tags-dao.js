@@ -37,17 +37,29 @@ const taggerDao = {};
  * @private
  */
 function _errorResponse() {
+
   let error = new Error('Error: missing query parameter - ' + filename);
   error.status = 500;
   return error;
 }
 
-taggerDao.findAllTags = () => {
-
+taggerDao.findAllTagsAdmin = () => {
   return taggerSchema.Tag.findAll({
     order: [['name', 'ASC']]
-
   });
+
+};
+
+taggerDao.findAllTags = () => {
+
+  return taggerSchema.sequelize.query('SELECT t.id, t.name FROM TagAreaTargets at JOIN ' +
+    'TagTargets tt on tt.TagId=at.TagId JOIN ' +
+    'Tags t on tt.TagId=t.id  JOIN ' +
+    'Collections c on c.id=tt.CollectionId ' +
+    'WHERE c.published = true group by t.id order by t.name',
+    {
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    })
 
 };
 
@@ -124,9 +136,32 @@ taggerDao.findTagsInArea = (areaId) => {
   let areaArray = areaId.split(',');
   let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
 
-  return taggerSchema.sequelize.query('SELECT t.id, t.name from TagAreaTargets at ' +
-    'LEFT JOIN Tags t on at.TagId = t.id  ' +
-    'where ' + areaWhereClause + ' group by t.id order by t.name',
+  return taggerSchema.sequelize.query('SELECT t.id, t.name FROM TagAreaTargets at JOIN ' +
+    'TagTargets tt on tt.TagId=at.TagId JOIN ' +
+    'Tags t on tt.TagId=t.id  JOIN ' +
+    'Collections c on c.id=tt.CollectionId ' +
+    'where  ' + areaWhereClause + ' AND c.published=true  group by t.id order by t.name',
+    {
+      replacements: areaArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+};
+
+
+taggerDao.findTagsInAreaAdmin = (areaId) => {
+
+  if(!areaId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+  let areaArray = areaId.split(',');
+  let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
+
+  return taggerSchema.sequelize.query('SELECT t.id, t.name FROM TagAreaTargets at JOIN ' +
+    'Tags t on at.TagId=t.id ' +
+    'where  ' + areaWhereClause + ' group by t.id order by t.name',
     {
       replacements: areaArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -152,7 +187,7 @@ taggerDao.findTagsForContentType = (contentTypeId) => {
   'from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id ' +
   'LEFT JOIN Collections c on tt.CollectionId = c.id ' +
   'LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
-  'where ' + whereClause + ' group by t.id order by t.name',
+  'where ' + whereClause + ' AND c.published = true group by t.id order by t.name',
     {
       replacements: typeArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -177,16 +212,18 @@ taggerDao.findTagsForAreaAndContentType = (areaId, contentTypeId) => {
   }
   const areaArray = areaId.split(',');
   const typeArray = contentTypeId.split(',');
-  const whereClause = utils.getWhereClauseForMultipleAreasAndContentTypes(areaArray, typeArray);
+  const whereClause = utils.getSubjectWhereClauseForAreasAndContentTypes(areaArray, typeArray);
 
-  const queryArray = areaArray.concat(typeArray);
+
+  const queryArray = areaArray.concat(areaArray).concat(typeArray);
 
   return taggerSchema.sequelize.query('SELECT t.id, t.name ' +
     'from TagAreaTargets at LEFT JOIN Tags t on at.TagId = t.id  ' +
     'LEFT JOIN TagTargets tt on at.TagId = tt.TagId ' +
     'LEFT JOIN Collections c on tt.CollectionId = c.id ' +
     'LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
-    'where ' + whereClause + ' group by t.id order by t.name',
+    'JOIN AreaTargets a on a.CollectionId=c.id ' +
+    'where ' + whereClause + ' AND c.published = true group by t.id order by t.name',
     {
       replacements: queryArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
