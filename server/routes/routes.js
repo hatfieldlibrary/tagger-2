@@ -132,6 +132,9 @@ module.exports = function (app, config) {
   app.get('/rest/collection/:id/related/:subjects', apiCollection.findRelatedCollections);
   // collections in category (collection group)
   app.get('/rest/collection/category/:id', apiCollection.collectionsByCategory);
+  // advanced collections by category
+  app.get('/rest/collection/category/:id/type/:typeId', apiCollection.collectionsByCategoryAndType);
+  app.get('/rest/collection/category/:id/area/:areaId/type/:typeId', apiCollection.collectionsByAreaCategoryAndType);
   // subject lists
   app.get('/rest/subject', apiTag.subjectList);
   app.get('/rest/subject/area/:id', apiTag.subjectsByArea);

@@ -315,6 +315,61 @@ exports.collectionsByCategory = function (req, callback, errorHandler) {
 };
 
 /**
+ * Retrieves a list of collections by category and content types for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.collectionsByCategoryAndType = function (req, callback, errorHandler) {
+  const categoryId = req.params.id;
+  const typeId = req.params.typeId;
+
+  taggerDao.getCollectionsByCategoryAndType(categoryId, typeId)
+    .then((collections) => {
+      let data;
+      try {
+        data = apiMapper.mapCollectionList(collections, 'category');
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+
+};
+
+/**
+ * Retrieves a list of collections by area, category, and content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.collectionsByAreaCategoryAndType = function (req, callback, errorHandler) {
+  const categoryId = req.params.id;
+  const areaId = req.params.areaId;
+  const typeId = req.params.typeId;
+
+  taggerDao.getCollectionsByAreaCategoryAndType(areaId, categoryId, typeId)
+    .then((collections) => {
+      let data;
+      try {
+        data = apiMapper.mapCollectionList(collections, 'category');
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+
+};
+
+/**
  * Retrieves collections by subject (from all areas)
  */
 exports.collectionsBySubject = function (req, callback, errorHandler) {
