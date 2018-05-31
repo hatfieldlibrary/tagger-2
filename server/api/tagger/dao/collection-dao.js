@@ -767,13 +767,74 @@ taggerDao.getCollectionsByCategory = (categoryId) => {
   return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
     'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
     'from Collections c LEFT JOIN CategoryTargets ct on c.id=ct.CollectionId JOIN ItemContentTargets it on c.id=it.CollectionId  ' +
-    'JOIN ItemContents i on it.ItemContentId=i.id where ct.CategoryId=? AND c.published = true order by c.title',
+    'JOIN ItemContents i on it.ItemContentId=i.id where ct.CategoryId=? AND c.published = true group by c.id order by c.title',
     {
       replacements: [categoryId],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
 
 };
+
+/**
+ * Gets collections assigned to categories and content types.
+ * @param categoryId the category id (can be comma-separated).
+ * @param typeId the content type id (can be comma-separated).
+ */
+taggerDao.getCollectionsByCategoryAndType = (categoryId, typeId) => {
+
+  if (!categoryId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+  const typesArray = typeId.split(',');
+  const categoryArray = categoryId.split(',');
+
+  const categoriesWhereClause = utils.getWhereClauseForMultipleCategoriesAndContentTypes(categoryArray, typesArray);
+  const queryArray = categoryArray.concat(typesArray);
+  return taggerSchema.sequelize.query('Select * from Collections c left join CategoryTargets ct ' +
+    'on ct.CollectionId = c.id LEFT JOIN ItemContentTargets it on it.CollectionId = c.id where ' +
+    categoriesWhereClause + ' and c.published = true group by c.id order by c.title',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+
+};
+
+/**
+ * Gets collections assigned to areas, categories, and content types.
+ * @param areaId the area id (can be comma-separated).
+ * @param categoryId the category id (can be comma-separated).
+ * @param typeId the content type id (can be comma-separated).
+ */
+taggerDao.getCollectionsByAreaCategoryAndType = (areaId, categoryId, typeId) => {
+
+  if (!categoryId) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+  const typesArray = typeId.split(',');
+  const categoryArray = categoryId.split(',');
+  const areaArray = areaId.split(',');
+
+  const categoriesWhereClause =
+    utils.getWhereClauseForMultipleAreasCategoriesAndContentTypes(areaArray, categoryArray, typesArray);
+  const queryArray = areaArray.concat(categoryArray).concat(typesArray);
+
+  return taggerSchema.sequelize.query('Select * from Collections c left join CategoryTargets ct ' +
+    'on ct.CollectionId = c.id LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
+    'LEFT JOIN AreaTargets at on at.CollectionId = c.id where ' +
+    categoriesWhereClause + ' and c.published = true group by c.id order by c.title',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+};
+
 
 /**
  * Gets collections assigned to the item type. To provide functionality consistent
