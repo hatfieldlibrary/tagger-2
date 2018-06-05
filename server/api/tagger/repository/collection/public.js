@@ -328,7 +328,10 @@ exports.collectionsByCategoryAndType = function (req, callback, errorHandler) {
     .then((collections) => {
       let data;
       try {
-        data = apiMapper.mapCollectionList(collections, 'category');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
@@ -356,7 +359,10 @@ exports.collectionsByAreaCategoryAndType = function (req, callback, errorHandler
     .then((collections) => {
       let data;
       try {
-        data = apiMapper.mapCollectionList(collections, 'category');
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
       } catch (err) {
         logger.map(err);
         errorHandler(utils.createErrorResponse(filename, 'map', err))
