@@ -792,8 +792,9 @@ taggerDao.getCollectionsByCategoryAndType = (categoryId, typeId) => {
 
   const categoriesWhereClause = utils.getWhereClauseForMultipleCategoriesAndContentTypes(categoryArray, typesArray);
   const queryArray = categoryArray.concat(typesArray);
-  return taggerSchema.sequelize.query('Select * from Collections c left join CategoryTargets ct ' +
-    'on ct.CollectionId = c.id LEFT JOIN ItemContentTargets it on it.CollectionId = c.id where ' +
+  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
+    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype from Collections c left join CategoryTargets ct ' +
+    'on ct.CollectionId = c.id LEFT JOIN ItemContentTargets it on it.CollectionId = c.id JOIN ItemContents i on it.ItemContentId=i.id  where ' +
     categoriesWhereClause + ' and c.published = true group by c.id order by c.title',
     {
       replacements: queryArray,
@@ -824,9 +825,9 @@ taggerDao.getCollectionsByAreaCategoryAndType = (areaId, categoryId, typeId) => 
     utils.getWhereClauseForMultipleAreasCategoriesAndContentTypes(areaArray, categoryArray, typesArray);
   const queryArray = areaArray.concat(categoryArray).concat(typesArray);
 
-  return taggerSchema.sequelize.query('Select * from Collections c left join CategoryTargets ct ' +
-    'on ct.CollectionId = c.id LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
-    'LEFT JOIN AreaTargets at on at.CollectionId = c.id where ' +
+  return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
+    'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype from Collections c left join CategoryTargets ct ' +
+    'on ct.CollectionId = c.id LEFT JOIN ItemContentTargets it on it.CollectionId = c.id JOIN ItemContents i on it.ItemContentId=i.id  where ' +
     categoriesWhereClause + ' and c.published = true group by c.id order by c.title',
     {
       replacements: queryArray,
