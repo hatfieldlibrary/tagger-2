@@ -101,6 +101,46 @@ exports.contentTypesByAreaAndSubjectAndContentType = (req, callback, errorHandle
   });
 };
 
+exports.contentTypesByCategoryAndContentType = (req, callback, errorHandler) => {
+  const categoryId = req.params.categoryId;
+  const typeId = req.params.typeId;
+
+  taggerDao.getContentTypesForCategoryAndContentType(categoryId, typeId).then(
+    (types) => {
+      callback(_mapTypeList(types));
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
+exports.contentTypesByCategoryAndSubject = (req, callback, errorHandler) => {
+  const categoryId = req.params.categoryId;
+  const subjectId = req.params.subjectId;
+
+  taggerDao.getContentTypesForCategoryAndSubject(categoryId, subjectId).then(
+    (types) => {
+      callback(_mapTypeList(types));
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
+exports.contentTypesByCategorySubjectAndContentType = (req, callback, errorHandler) => {
+  const categoryId = req.params.categoryId;
+  const subjectId = req.params.subjectId;
+  const typeId = req.params.typeId;
+
+  taggerDao.getContentTypesForCategorySubjectAndContentType(categoryId, subjectId, typeId).then(
+    (types) => {
+      callback(_mapTypeList(types));
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
 /**
  * Retrieves list of content types by area and content type
  * @param req

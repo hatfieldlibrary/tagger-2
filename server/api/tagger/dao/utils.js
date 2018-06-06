@@ -135,7 +135,7 @@ utils.getSubjectWhereClauseForAreasAndContentTypes = (areaArray, itemArray) => {
 };
 
 /**
- * Constructs the where clause for one or more categories and one or more content types.
+ * Constructs the where clause for one or more categories and content types.
  * @param areaArray the list of areas to query
  * @param itemArray the list if content types to query
  * @returns {string}
@@ -145,6 +145,35 @@ utils.getWhereClauseForMultipleCategoriesAndContentTypes = (categoryArray, typeA
   const itemTypeClause = _getWhereClause(typeArray, itemTypeField);
 
   return categoryClause + ' AND ' + itemTypeClause;
+
+};
+
+/**
+ * Constructs the where clause for one or more categories and subjects
+ * @param areaArray the list of areas to query
+ * @param itemArray the list if content types to query
+ * @returns {string}
+ */
+utils.getWhereClauseForMultipleCategoriesAndSubjects = (categoryArray, subjectArray) => {
+  const categoryClause = _getWhereClause(categoryArray, categoryField);
+  const subjectClause = _getWhereClause(subjectArray, subjectField);
+
+  return categoryClause + ' AND ' + subjectClause;
+
+};
+
+/**
+ * Constructs the where clause for one or more categories, subjects and content types.
+ * @param areaArray the list of areas to query
+ * @param itemArray the list if content types to query
+ * @returns {string}
+ */
+utils.getWhereClauseForMultipleCategoriesSubjectsAndContentTypes = (categoryArray, subjectArray, typeArray) => {
+  const categoryClause = _getWhereClause(categoryArray, categoryField);
+  const subjectClause = _getWhereClause(subjectArray, subjectField);
+  const typeClause = _getWhereClause(typeArray, itemTypeField);
+
+  return categoryClause + ' AND ' + subjectClause + ' AND ' + typeClause;
 
 };
 
