@@ -724,7 +724,7 @@ taggerDao.getCollectionsByAreaSubjectAndContentType = (areaId, contentTypeId, su
 };
 
 /**
- * Gets collections assigned to a single subject tag.  Supports single or multiple
+ * Gets collections assigned to a subject tag.  Supports single or multiple
  * subject id input.
  * @param subjectId string containing comma separated or single subject id.
  */

@@ -191,8 +191,34 @@ utils.getWhereClauseForMultipleAreasCategoriesAndContentTypes = (areaArray, cate
   return areaClause + ' AND ' + categoryClause + ' AND ' + itemTypeClause;
 
 };
+/**
+ * Constructs the where clause for one or more areas, subjects and content types.
+ * @param areaArray the list of areas to query
+ * @param itemArray the list if content types to query
+ * @returns {string}
+ */
+utils.getWhereClauseForAreasSubjectsAndContentTypes = (areaArray, subjectArray, typeArray) => {
+  const areaClause = _getWhereClause(areaArray, areaField);
+  const subjectClause = _getWhereClause(subjectArray, subjectField);
+  const itemTypeClause = _getWhereClause(typeArray, itemTypeField);
+
+  return areaClause + ' AND ' + subjectClause + ' AND ' + itemTypeClause;
+
+};
+/**
+ * Constructs the where clause for one or more areas and subjects.
+ * @param areaArray the list of areas to query
+ * @param itemArray the list if content types to query
+ * @returns {string}
+ */
+utils.getWhereClauseForAreasAndSubjects = (areaArray, subjectArray) => {
+  const areaClause = _getWhereClause(areaArray, areaField);
+  const subjectClause = _getWhereClause(subjectArray, subjectField);
 
 
+  return areaClause + ' AND ' + subjectClause;
+
+};
 /**
  * Gets collections  where clause elements for one or more of areas, content types and subjects.
  * @param areaArray the list of area ids

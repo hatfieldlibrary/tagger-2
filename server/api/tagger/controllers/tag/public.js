@@ -93,10 +93,68 @@ exports.subjectsByContentType = function (req, res, next) {
 };
 
 /**
+ * Retrieves subjects by content type.
+ */
+exports.subjectsBySubject = function (req, res, next) {
+  publicApiRepository.subjectsBySubject(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+
+/**
+ * Retrieves subjects by area and content type.
+ */
+exports.subjectsByAreaAndSubject = function (req, res, next) {
+  publicApiRepository.subjectsByAreaAndSubject(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+
+/**
+ * Retrieves subjects by area and content type.
+ */
+exports.subjectsBySubjectAndContentType = function (req, res, next) {
+  publicApiRepository.subjectsBySubjectAndContentType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+
+
+/**
  * Retrieves subjects by area and content type.
  */
 exports.subjectsByAreaAndContentType = function (req, res, next) {
   publicApiRepository.subjectsByAreaAndContentType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+
+
+/**
+ * Retrieves subjects by area, subject and content type.
+ */
+exports.subjectsByAreaSubjectAndContentType = function (req, res, next) {
+  publicApiRepository.subjectsByAreaSubjectAndContentType(
     req,
     (data) => {
       utils.sendResponse(res, data);
