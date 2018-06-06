@@ -161,3 +161,70 @@ exports.subjectsByAreaAndContentType = function (req, callback, errorHandler) {
     });
 
 };
+
+exports.subjectsByCategoryAndSubject = (req, callback, errorHandler) => {
+  const categoryId = req.params.categoryId;
+  const subjectId = req.params.subjectId;
+
+  taggerDao.findTagsForCategoryAndSubject(categoryId, subjectId)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+
+exports.subjectsByCategoryAndContentType = (req, callback, errorHandler) => {
+  const categoryId = req.params.categoryId;
+  const typeId = req.params.typeId;
+
+  taggerDao.findTagsForCategoryAndContentType(categoryId, typeId)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+
+exports.subjectsByCategorySubjectAndContentType = (req, callback, errorHandler) => {
+  const categoryId = req.params.categoryId;
+  const subjectId = req.params.subjectId;
+  const typeId = req.params.typeId;
+
+  taggerDao.findTagsForCategorySubjectAndContentType(categoryId, subjectId, typeId)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};

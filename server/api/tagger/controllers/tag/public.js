@@ -106,4 +106,44 @@ exports.subjectsByAreaAndContentType = function (req, res, next) {
     });
 };
 
+/**
+ * Retrieves subjects by category and content type.
+ */
+exports.subjectsByCategoryAndContentType = function (req, res, next) {
+  publicApiRepository.subjectsByCategoryAndContentType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
 
+/**
+ * Retrieves subjects by category and subjects.
+ */
+exports.subjectsByCategoryAndSubject = function (req, res, next) {
+  publicApiRepository.subjectsByCategoryAndSubject(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+
+/**
+ * Retrieves subjects by category, subjects and content type.
+ */
+exports.subjectsByCategorySubjectAndContentType = function (req, res, next) {
+  publicApiRepository.subjectsByCategorySubjectAndContentType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};

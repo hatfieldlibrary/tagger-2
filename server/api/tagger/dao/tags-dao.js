@@ -231,6 +231,66 @@ taggerDao.findTagsForAreaAndContentType = (areaId, contentTypeId) => {
 
 };
 
+taggerDao.findTagsForCategoryAndSubject = (categoryId, subjectId) => {
+
+  const categoryArray = categoryId.split(',');
+  const subjectArray = subjectId.split(',');
+  const whereClause = utils.getWhereClauseForMultipleCategoriesAndSubjects(categoryArray, subjectArray);
+  const queryArray = categoryArray.concat(subjectArray);
+  return taggerSchema.sequelize.query('SELECT t.id, t.name ' +
+    'from TagAreaTargets at LEFT JOIN Tags t on at.TagId = t.id  ' +
+    'LEFT JOIN TagTargets tt on at.TagId = tt.TagId ' +
+    'LEFT JOIN Collections c on tt.CollectionId = c.id ' +
+    'JOIN CategoryTargets ct on ct.CollectionId=c.id ' +
+    'where ' + whereClause + ' AND c.published = true group by t.id order by t.name',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+};
+
+taggerDao.findTagsForCategoryAndContentType = (categoryId, typeId) => {
+
+  const categoryArray = categoryId.split(',');
+  const typeArray = typeId.split(',');
+  const whereClause = utils.getWhereClauseForMultipleCategoriesAndContentTypes(categoryArray, typeArray);
+  const queryArray = categoryArray.concat(typeArray);
+
+  return taggerSchema.sequelize.query('SELECT t.id, t.name ' +
+    'from TagAreaTargets at LEFT JOIN Tags t on at.TagId = t.id  ' +
+    'LEFT JOIN TagTargets tt on at.TagId = tt.TagId ' +
+    'LEFT JOIN Collections c on tt.CollectionId = c.id ' +
+    'LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
+    'JOIN CategoryTargets ct on ct.CollectionId=c.id ' +
+    'where ' + whereClause + ' AND c.published = true group by t.id order by t.name',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+};
+
+taggerDao.findTagsForCategorySubjectAndContentType = (categoryId, subjectId, typeId) => {
+
+  const categoryArray = categoryId.split(',');
+  const subjectArray = subjectId.split(',');
+  const typeArray = typeId.split(',');
+  const whereClause =
+    utils.getWhereClauseForMultipleCategoriesSubjectsAndContentTypes(categoryArray, subjectArray, typeArray);
+  const queryArray = categoryArray.concat(subjectArray).concat(typeArray);
+  return taggerSchema.sequelize.query('SELECT t.id, t.name ' +
+    'from TagAreaTargets at LEFT JOIN Tags t on at.TagId = t.id  ' +
+    'LEFT JOIN TagTargets tt on at.TagId = tt.TagId ' +
+    'LEFT JOIN Collections c on tt.CollectionId = c.id ' +
+    'LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
+    'JOIN CategoryTargets ct on ct.CollectionId=c.id ' +
+    'where ' + whereClause + ' AND c.published = true group by t.id order by t.name',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+
+};
 
 taggerDao.getTagCountByArea = (areaId) => {
 
