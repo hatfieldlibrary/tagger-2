@@ -559,7 +559,7 @@ taggerDao.getCollectionsByArea = (areaId) => {
   }
 
   let areaArray = areaId.split(',');
-  let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
+  let areaWhereClause = utils.getWhereClauseForAreas(areaArray);
 
   return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
     'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype ' +
@@ -626,7 +626,7 @@ taggerDao.getCollectionsByAreaAndContentType = (areaId, contentTypeId) => {
   let typeArray = contentTypeId.split(',');
 
   // Pass arrays to method, area array first then type array.
-  let combinedWhereClause = utils.getWhereClauseForMultipleAreasAndContentTypes(areaArray, typeArray);
+  let combinedWhereClause = utils.getWhereClauseForAreasAndContentTypes(areaArray, typeArray);
   // concat arrays, adding type array to area array.
   const queryArray = areaArray.concat(typeArray);
 
@@ -790,7 +790,7 @@ taggerDao.getCollectionsByCategoryAndType = (categoryId, typeId) => {
   const typesArray = typeId.split(',');
   const categoryArray = categoryId.split(',');
 
-  const categoriesWhereClause = utils.getWhereClauseForMultipleCategoriesAndContentTypes(categoryArray, typesArray);
+  const categoriesWhereClause = utils.getWhereClauseForCategoriesAndContentTypes(categoryArray, typesArray);
   const queryArray = categoryArray.concat(typesArray);
   return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +
     'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype from Collections c left join CategoryTargets ct ' +
@@ -822,7 +822,7 @@ taggerDao.getCollectionsByAreaCategoryAndType = (areaId, categoryId, typeId) => 
   const areaArray = areaId.split(',');
 
   const categoriesWhereClause =
-    utils.getWhereClauseForMultipleAreasCategoriesAndContentTypes(areaArray, categoryArray, typesArray);
+    utils.getWhereClauseForAreasCategoriesAndContentTypes(areaArray, categoryArray, typesArray);
   const queryArray = areaArray.concat(categoryArray).concat(typesArray);
 
   return taggerSchema.sequelize.query('Select c.id, it.ItemContentId, i.name AS typeName, c.title, c.image, c.url, ' +

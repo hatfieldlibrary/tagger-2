@@ -27,7 +27,8 @@ module.exports = function (app, config) {
   const apiContentType = require('../api/tagger/controllers/content-type/public');
   const collection = require('../api/tagger/controllers/collection/admin');
   const apiCollection = require('../api/tagger/controllers/collection/public');
-  const category = require('../../server/api/tagger/controllers/category');
+  const category = require('../api/tagger/controllers/category/category');
+  const apiCategory = require('../api/tagger/controllers/category/public');
   const users = require('../../server/api/tagger/controllers/users');
   /**
    * Indicates whether the request has an authenticated session.
@@ -174,6 +175,16 @@ module.exports = function (app, config) {
   app.get('/rest/area/subject/:subjectId', apiArea.listBySubjectWithCount);
   app.get('/rest/area/type/:typeId/subject/:subjectId', apiArea.listByTypeAndSubjectWithCount);
   app.get('/rest/area/collection/:id', apiArea.areasForCollection);
+  // categories
+  app.get('/rest/category', apiCategory.list);
+  app.get('/rest/category/area/:areaId', apiCategory.categoriesByArea);
+  app.get('/rest/category/type/:typeId', apiCategory.categoryByContentType);
+  app.get('/rest/category/subject/:subjectId', apiCategory.categoryBySubject);
+  app.get('/rest/category/area/:areaId/type/:typeId', apiCategory.categoryByAreaAndContentType);
+  app.get('/rest/category/subject/:subjectId/type/:typeId', apiCategory.categoryBySubjectAndContentType);
+  app.get('/rest/category/area/:areaId/subject/:subjectId', apiCategory.categoryByAreaAndSubject);
+  app.get('/rest/category/area/:areaId/subject/:subjectId/type/:typeId',
+    apiCategory.categoryByAreaSubjectAndContentType);
 
   // This external options service communicates with a target host to retrieve a browse list.
   // It addresses a very specific use case, is not generalized provides no guarantees

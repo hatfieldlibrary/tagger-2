@@ -4,8 +4,10 @@ const utils = require('../../utils/response-utility');
 const apiMapper = require('../../map/content-type');
 const taggerDao = require('../../dao/content-dao');
 const logger = require('../../utils/error-logger');
+const path = require('path');
+const filename = path.basename(__filename);
 
-function _mapTypeList(types) {
+function _mapTypeList(types, errorHandler) {
   let data;
   try {
     data = apiMapper.mapTypes(types);
@@ -19,7 +21,7 @@ function _mapTypeList(types) {
 exports.contentTypes = (req, callback, errorHandler) => {
   taggerDao.getContentTypes().then(
     (types) => {
-      callback(_mapTypeList(types));
+      callback(_mapTypeList(types, errorHandler));
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -30,7 +32,7 @@ exports.contentTypesByArea = (req, callback, errorHandler) => {
   const areaId = req.params.id;
   taggerDao.getContentTypesForArea(areaId).then(
     (types) => {
-      callback(_mapTypeList(types));
+      callback(_mapTypeList(types, errorHandler));
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -42,7 +44,7 @@ exports.contentTypesBySubject = (req, callback, errorHandler) => {
 
   taggerDao.getContentTypesForSubject(subjectId).then(
     (types) => {
-      callback(_mapTypeList(types));
+      callback(_mapTypeList(types, errorHandler));
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -54,7 +56,7 @@ exports.contentTypesByContentType = (req, callback, errorHandler) => {
 
   taggerDao.getContentTypesForContentType(id).then(
     (types) => {
-      callback(_mapTypeList(types));
+      callback(_mapTypeList(types, errorHandler));
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -67,7 +69,7 @@ exports.contentTypesByAreaAndSubject = (req, callback, errorHandler) => {
 
   taggerDao.getContentTypesForAreaSubjectQuery(areaId, subjectId).then(
     (types) => {
-      callback(_mapTypeList(types));
+      callback(_mapTypeList(types, errorHandler));
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -80,7 +82,7 @@ exports.contentTypesBySubjectAndContentType = (req, callback, errorHandler) => {
 
   taggerDao.getContentTypesForAreaSubjectQuery(subjectId, typeId).then(
     (types) => {
-      callback(_mapTypeList(types));
+      callback(_mapTypeList(types, errorHandler));
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -94,7 +96,7 @@ exports.contentTypesByAreaAndSubjectAndContentType = (req, callback, errorHandle
 
   taggerDao.getContentTypesForAreaSubjectContentTypeQuery(areaId, subjectId, typeId).then(
     (types) => {
-      callback(_mapTypeList(types));
+      callback(_mapTypeList(types, errorHandler));
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -107,7 +109,7 @@ exports.contentTypesByCategoryAndContentType = (req, callback, errorHandler) => 
 
   taggerDao.getContentTypesForCategoryAndContentType(categoryId, typeId).then(
     (types) => {
-      callback(_mapTypeList(types));
+      callback(_mapTypeList(types, errorHandler));
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -120,7 +122,7 @@ exports.contentTypesByCategoryAndSubject = (req, callback, errorHandler) => {
 
   taggerDao.getContentTypesForCategoryAndSubject(categoryId, subjectId).then(
     (types) => {
-      callback(_mapTypeList(types));
+      callback(_mapTypeList(types, errorHandler));
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -134,7 +136,7 @@ exports.contentTypesByCategorySubjectAndContentType = (req, callback, errorHandl
 
   taggerDao.getContentTypesForCategorySubjectAndContentType(categoryId, subjectId, typeId).then(
     (types) => {
-      callback(_mapTypeList(types));
+      callback(_mapTypeList(types, errorHandler));
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
@@ -153,7 +155,7 @@ exports.contentTypesByAreaAndContentType = (req, callback, errorHandler) => {
 
   taggerDao.getContentTypesForAreaContentTypeQuery(areaId, contentTypeId).then(
     (types) => {
-      callback(_mapTypeList(types));
+      callback(_mapTypeList(types, errorHandler));
     }).catch(function (err) {
     logger.repository(err);
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
