@@ -134,7 +134,7 @@ taggerDao.findTagsInArea = (areaId) => {
   }
 
   let areaArray = areaId.split(',');
-  let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
+  let areaWhereClause = utils.getWhereClauseForAreas(areaArray);
 
   return taggerSchema.sequelize.query('SELECT t.id, t.name FROM TagAreaTargets at JOIN ' +
     'TagTargets tt on tt.TagId=at.TagId JOIN ' +
@@ -157,7 +157,7 @@ taggerDao.findTagsInAreaAdmin = (areaId) => {
   }
 
   let areaArray = areaId.split(',');
-  let areaWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
+  let areaWhereClause = utils.getWhereClauseForAreas(areaArray);
 
   return taggerSchema.sequelize.query('SELECT t.id, t.name FROM TagAreaTargets at JOIN ' +
     'Tags t on at.TagId=t.id ' +
@@ -277,7 +277,7 @@ taggerDao.findTagsForAreaAndContentType = (areaId, contentTypeId) => {
   const typeArray = contentTypeId.split(',');
  // const whereClause = utils.getSubjectWhereClauseForAreasAndContentTypes(areaArray, typeArray);
 //  const queryArray = areaArray.concat(areaArray).concat(typeArray);
-  const whereClause = utils.getWhereClauseForMultipleAreasAndContentTypes(areaArray, typeArray);
+  const whereClause = utils.getWhereClauseForAreasAndContentTypes(areaArray, typeArray);
   const queryArray = areaArray.concat(typeArray);
   return taggerSchema.sequelize.query('SELECT t.id, t.name ' +
     'from TagAreaTargets at LEFT JOIN Tags t on at.TagId = t.id  ' +
@@ -389,7 +389,7 @@ taggerDao.findTagsForCategoryAndContentType = (categoryId, typeId) => {
 
   const categoryArray = categoryId.split(',');
   const typeArray = typeId.split(',');
-  const whereClause = utils.getWhereClauseForMultipleCategoriesAndContentTypes(categoryArray, typeArray);
+  const whereClause = utils.getWhereClauseForCategoriesAndContentTypes(categoryArray, typeArray);
   const queryArray = categoryArray.concat(typeArray);
 
   return taggerSchema.sequelize.query('SELECT t.id, t.name ' +

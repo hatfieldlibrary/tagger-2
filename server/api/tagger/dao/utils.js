@@ -64,7 +64,7 @@ const _getWhereAndClause = (inputArray, field) =>  {
  * Returns the where clause for areas.
  * @param areaArray list of areas
  */
-utils.getWhereClauseForMultipleAreas = (areaArray) => {
+utils.getWhereClauseForAreas = (areaArray) => {
   return _getWhereClause(areaArray, areaField)
 
 };
@@ -111,7 +111,7 @@ utils.getWhereClauseForAreasAndSubjects = (areaArray, subjectArray) => {
  * @param itemArray the list if content types to query
  * @returns {string}
  */
-utils.getWhereClauseForMultipleAreasAndContentTypes = (areaArray, itemArray) => {
+utils.getWhereClauseForAreasAndContentTypes = (areaArray, itemArray) => {
   const areasClause = _getWhereClause(areaArray, areaField);
   const itemTypeClause = _getWhereClause(itemArray, itemTypeField);
 
@@ -140,7 +140,7 @@ utils.getSubjectWhereClauseForAreasAndContentTypes = (areaArray, itemArray) => {
  * @param itemArray the list if content types to query
  * @returns {string}
  */
-utils.getWhereClauseForMultipleCategoriesAndContentTypes = (categoryArray, typeArray) => {
+utils.getWhereClauseForCategoriesAndContentTypes = (categoryArray, typeArray) => {
   const categoryClause = _getWhereClause(categoryArray, categoryField);
   const itemTypeClause = _getWhereClause(typeArray, itemTypeField);
 
@@ -183,7 +183,7 @@ utils.getWhereClauseForMultipleCategoriesSubjectsAndContentTypes = (categoryArra
  * @param itemArray the list if content types to query
  * @returns {string}
  */
-utils.getWhereClauseForMultipleAreasCategoriesAndContentTypes = (areaArray, categoryArray, typeArray) => {
+utils.getWhereClauseForAreasCategoriesAndContentTypes = (areaArray, categoryArray, typeArray) => {
   const areaClause = _getWhereClause(areaArray, areaField);
   const categoryClause = _getWhereClause(categoryArray, categoryField);
   const itemTypeClause = _getWhereClause(typeArray, itemTypeField);

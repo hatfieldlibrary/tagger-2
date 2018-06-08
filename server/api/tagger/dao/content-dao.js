@@ -73,7 +73,7 @@ taggerDao.getContentTypesForArea = (areaId) => {
 
   const areaArray = areaId.split(',');
 
-  const combinedWhereClause = utils.getWhereClauseForMultipleAreas(areaArray);
+  const combinedWhereClause = utils.getWhereClauseForAreas(areaArray);
 
   return taggerSchema.sequelize.query('Select i.id, i.name ' +
     'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
@@ -138,7 +138,7 @@ taggerDao.getContentTypesForAreaContentTypeQuery = (areaId, contentTypeId) => {
   const areaArray = areaId.split(',');
   const typeArray = contentTypeId.split(',');
 
-  const combinedWhereClause = utils.getWhereClauseForMultipleAreasAndContentTypes(areaArray, typeArray);
+  const combinedWhereClause = utils.getWhereClauseForAreasAndContentTypes(areaArray, typeArray);
   const queryArray = areaArray.concat(typeArray);
 
   return taggerSchema.sequelize.query('Select i.id, i.name ' +
@@ -241,7 +241,7 @@ taggerDao.getContentTypesForCategoryAndContentType = (categoryId, typeId) => {
   const typeArray = typeId.split(',');
 
   const queryArray = categoryArray.concat(typeArray);
-  const combinedWhereClause = utils.getWhereClauseForMultipleCategoriesAndContentTypes(categoryArray, typeArray);
+  const combinedWhereClause = utils.getWhereClauseForCategoriesAndContentTypes(categoryArray, typeArray);
 
   return taggerSchema.sequelize.query('Select i.id, i.name ' +
     'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
