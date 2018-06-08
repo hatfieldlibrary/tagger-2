@@ -109,18 +109,17 @@ taggerDao.getContentTypesForSubject = (subjectId) => {
 
 /**
  * Gets the content types that are available for collections that have been limited by content type.
- * @param contentTypeId content type ids as comma separated string or a single value string
+ * This is could be useful when the boolean operator in the main where clause is AND (currently OR).
  */
 taggerDao.getContentTypesForContentType = (contentTypeId) => {
 
   const typeArray = contentTypeId.split(',');
+  const whereClause = utils.getWhereClauseForContentTypes(typeArray);
 
-  const combinedWhereClause = utils.getWhereClauseForContentTypes(typeArray);
-
-  return taggerSchema.sequelize.query('Select i.id, i.name ' +
-    'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
-    'LEFT JOIN ItemContents i on i.id = it.ItemContentId ' +
-    'where (' + combinedWhereClause + ') group by i.id order by i.name',
+  return taggerSchema.sequelize.query('SELECT i.id, i.name from ItemContentTargets target JOIN ItemContents i ' +
+    'on target.ItemContentId = i.id JOIN (SELECT it.CollectionId from ItemContentTargets it where ' +
+    whereClause + ') sub ON target.CollectionId=sub.CollectionId JOIN Collections c ON target.CollectionId = c.id ' +
+    'where c.published = true group by i.id order by i.name',
     {
       replacements: typeArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -134,11 +133,12 @@ taggerDao.getContentTypesForContentType = (contentTypeId) => {
  */
 taggerDao.getContentTypesForAreaContentTypeQuery = (areaId, contentTypeId) => {
 
+  // TODO: Use subquery in join with ItemContentTargets to make use query useful.
+
   const areaArray = areaId.split(',');
   const typeArray = contentTypeId.split(',');
 
   const combinedWhereClause = utils.getWhereClauseForMultipleAreasAndContentTypes(areaArray, typeArray);
-
   const queryArray = areaArray.concat(typeArray);
 
   return taggerSchema.sequelize.query('Select i.id, i.name ' +
@@ -157,6 +157,8 @@ taggerDao.getContentTypesForAreaContentTypeQuery = (areaId, contentTypeId) => {
  * @param contentTypeId content type ids as comma separated string or a single value string
  */
 taggerDao.getContentTypesForSubjectContentTypeQuery = (subjectId, contentTypeId) => {
+
+  // TODO: Use subquery in join with ItemContentTargets to make use query useful.
 
   const typeArray = contentTypeId.split(',');
   const subjectArray = subjectId.split(',');
@@ -209,6 +211,8 @@ taggerDao.getContentTypesForAreaSubjectQuery = (areaId, subjectId) => {
  */
 taggerDao.getContentTypesForAreaSubjectContentTypeQuery = (areaId, subjectId, contentTypeId) => {
 
+  // TODO: Use subquery in join with ItemContentTargets to make use query useful.
+
   const areaArray = areaId.split(',');
   const typeArray = contentTypeId.split(',');
   const subjectArray = subjectId.split(',');
@@ -230,6 +234,8 @@ taggerDao.getContentTypesForAreaSubjectContentTypeQuery = (areaId, subjectId, co
 };
 
 taggerDao.getContentTypesForCategoryAndContentType = (categoryId, typeId) => {
+
+  // TODO: Use subquery in join with ItemContentTargets to make use query useful.
 
   const categoryArray = categoryId.split(',');
   const typeArray = typeId.split(',');
@@ -271,6 +277,8 @@ taggerDao.getContentTypesForCategoryAndSubject = (categoryId, subjectId) => {
 };
 
 taggerDao.getContentTypesForCategorySubjectAndContentType = (categoryId, subjectId, typeId) => {
+
+  // TODO: Use subquery in join with ItemContentTargets to make use query useful.
 
   const categoryArray = categoryId.split(',');
   const typeArray = typeId.split(',');

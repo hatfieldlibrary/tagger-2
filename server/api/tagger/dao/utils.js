@@ -77,8 +77,8 @@ utils.getWhereClauseForSubjects = (subjectsArray) => {
   return _getWhereClause(subjectsArray, subjectField);
 };
 
-utils.getWhereClauseForContentTypes = (contentTypeArray) => {
-  return _getWhereClause(contentTypeArray, itemTypeField);
+utils.getWhereClauseForContentTypes = (itemTypeArray) => {
+  return _getWhereClause(itemTypeArray, itemTypeField);
 };
 /**
  * Constructs the where clause for one or more content types and one or more subjects.

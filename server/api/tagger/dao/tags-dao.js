@@ -196,7 +196,8 @@ taggerDao.findTagsForContentType = (contentTypeId) => {
 };
 
 /**
- * Gets the tags available for a collection list that has been limited content type.
+ * Gets the tags available for a collection list that has been limited by subject.
+ * This is could be useful when the boolean operator in the main where clause is AND (currently OR).
  * @param contentTypeId content type ids (single value or comma-separated values)
  */
 taggerDao.findTagsForSubject = (subjectId) => {
@@ -209,10 +210,10 @@ taggerDao.findTagsForSubject = (subjectId) => {
   let subjectArray = subjectId.split(',');
   let whereClause = utils.getWhereClauseForSubjects(subjectArray);
 
-  return taggerSchema.sequelize.query('SELECT t.id, t.name ' +
-    'from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id ' +
-    'LEFT JOIN Collections c on tt.CollectionId = c.id ' +
-    'where ' + whereClause + ' AND c.published = true group by t.id order by t.name',
+  return taggerSchema.sequelize.query('SELECT t.id, t.name from TagTargets target JOIN Tags t on target.TagId = t.id ' +
+    'JOIN (SELECT tt.CollectionId from TagTargets tt where ' + whereClause + ') sub ON ' +
+    'target.CollectionId=sub.CollectionId JOIN Collections c ON target.CollectionId = c.id where ' +
+    'c.published = true group by t.id order by t.name',
     {
       replacements: subjectArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -228,6 +229,8 @@ taggerDao.findTagsForSubject = (subjectId) => {
  */
 taggerDao.findTagsForAreaAndSubject = (areaId, subjectId) => {
 
+  // TODO: Use subquery in join with ItemContentTargets to make use query useful.
+
   if(!areaId || !subjectId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
@@ -239,7 +242,7 @@ taggerDao.findTagsForAreaAndSubject = (areaId, subjectId) => {
   const areaArray = areaId.split(',');
   const subjectArray = subjectId.split(',');
   const whereClause = utils.getWhereClauseForAreasAndSubjects(areaArray, subjectArray);
-  const queryArray = areaArray.concat(areaArray).concat(subjectArray);
+  const queryArray = areaArray.concat(subjectArray);
 
   return taggerSchema.sequelize.query('SELECT t.id, t.name ' +
     'from TagAreaTargets at LEFT JOIN Tags t on at.TagId = t.id  ' +
@@ -297,6 +300,8 @@ taggerDao.findTagsForAreaAndContentType = (areaId, contentTypeId) => {
  */
 taggerDao.findTagsForSubjectAndContentType = (subjectId, typeId) => {
 
+
+
   if(!typeId || ! subjectId) {
     logger.dao(paramErrorMessage);
     throw _errorResponse();
@@ -309,7 +314,7 @@ taggerDao.findTagsForSubjectAndContentType = (subjectId, typeId) => {
   const subjectArray = subjectId.split(',');
 
   const whereClause = utils.getWhereClauseForContentTypesAndSubjects(typeArray, subjectArray);
-  const queryArray = subjectArray.concat(typeArray);
+  const queryArray = typeArray.concat(subjectArray);
 
   return taggerSchema.sequelize.query('SELECT t.id, t.name ' +
     'from TagAreaTargets at LEFT JOIN Tags t on at.TagId = t.id  ' +
@@ -345,7 +350,7 @@ taggerDao.findTagsForAreaSubjectAndContentType = (areaId, subjectId, typeId) => 
   const subjectArray = subjectId.split(',');
 
   const whereClause = utils.getWhereClauseForAreasSubjectsAndContentTypes(areaArray, subjectArray, typeArray);
-  const queryArray = areaArray.concat(areaArray).concat(subjectArray).concat(typeArray);
+  const queryArray = areaArray.concat(subjectArray).concat(typeArray);
 
   return taggerSchema.sequelize.query('SELECT t.id, t.name ' +
     'from TagAreaTargets at LEFT JOIN Tags t on at.TagId = t.id  ' +
