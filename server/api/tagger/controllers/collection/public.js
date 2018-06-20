@@ -142,6 +142,23 @@ exports.collectionsByCategoryAndType = function (req, res, next) {
 
 };
 
+/**
+ * Retrieves a list of collections by category and subjects for the public API.
+ * @param req
+ * @param res
+ */
+exports.collectionsByCategoryAndSubject = function (req, res, next) {
+  publicApiRepository.collectionsByCategoryAndSubject(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+
+};
+
 
 /**
  * Retrieves a list of collections by area, category and content types for the public API.
@@ -172,6 +189,41 @@ exports.collectionsBySubject = function (req, res, next) {
     (err) => {
       return next(err);
     });
+};
+
+
+/**
+ * Retrieves a list of collections by area, category and subjects for the public API.
+ * @param req
+ * @param res
+ */
+exports.collectionsByAreaCategoryAndSubject = function (req, res, next) {
+  publicApiRepository.getCollectionsByAreaCategoryAndSubject(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+
+};
+
+/**
+ * Retrieves a list of collections by area, category and subjects for the public API.
+ * @param req
+ * @param res
+ */
+exports.collectionsByAreaCategorySubjectAndType = function (req, res, next) {
+  publicApiRepository.getCollectionsByAreaCategorySubjectAndType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+
 };
 
 /**

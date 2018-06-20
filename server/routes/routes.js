@@ -135,8 +135,11 @@ module.exports = function (app, config) {
   // collections in category (collection group)
   app.get('/rest/collection/category/:id', apiCollection.collectionsByCategory);
   // advanced collections by category
-  app.get('/rest/collection/category/:id/type/:typeId', apiCollection.collectionsByCategoryAndType);
-  app.get('/rest/collection/category/:id/area/:areaId/type/:typeId', apiCollection.collectionsByAreaCategoryAndType);
+  app.get('/rest/collection/category/:categoryId/type/:typeId', apiCollection.collectionsByCategoryAndType);
+  app.get('/rest/collection/category/:categoryId/subject/:subjectId', apiCollection.collectionsByCategoryAndSubject);
+  app.get('/rest/collection/category/:categoryId/area/:areaId/subject/:subjectId', apiCollection.collectionsByAreaCategoryAndSubject);
+  app.get('/rest/collection/category/:categoryId/area/:areaId/type/:typeId', apiCollection.collectionsByAreaCategoryAndType);
+  app.get('/rest/collection/category/:categoryId/area/:areaId/subject/:subjectId/type/:typeId', apiCollection.collectionsByAreaCategorySubjectAndType);
   // subject lists
   app.get('/rest/subject', apiTag.subjectList);
   app.get('/rest/subject/area/:id', apiTag.subjectsByArea);

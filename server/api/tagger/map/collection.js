@@ -105,7 +105,8 @@
         restricted: collection.restricted,
         published: collection.published,
         ctype: collection.ctype,
-        types: collection.types
+        types: collection.types,
+        parent: collection.parent
       };
 
       return coll;

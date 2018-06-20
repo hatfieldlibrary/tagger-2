@@ -321,12 +321,12 @@ exports.collectionsByCategory = function (req, callback, errorHandler) {
  * @param errorHandler failure response callback
  */
 exports.collectionsByCategoryAndType = function (req, callback, errorHandler) {
-  const categoryId = req.params.id;
+  const categoryId = req.params.categoryId;
   const typeId = req.params.typeId;
 
   taggerDao.getCollectionsByCategoryAndType(categoryId, typeId)
     .then((collections) => {
-      let data;
+      let data = [];
       try {
         _createCollectionResponse((result) => {
           data = apiMapper.mapCollectionList(result);
@@ -345,13 +345,42 @@ exports.collectionsByCategoryAndType = function (req, callback, errorHandler) {
 };
 
 /**
+ * Retrieves a list of collections by category and content types for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.collectionsByCategoryAndSubject = function (req, callback, errorHandler) {
+  const categoryId = req.params.categoryId;
+  const subjectId = req.params.subjectId;
+
+  taggerDao.getCollectionsByCategoryAndSubject(categoryId, subjectId)
+    .then((collections) => {
+      let data = [];
+      try {
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+
+};
+/**
  * Retrieves a list of collections by area, category, and content type for the public API.
  * @param req
  * @param callback success response callback
  * @param errorHandler failure response callback
  */
 exports.collectionsByAreaCategoryAndType = function (req, callback, errorHandler) {
-  const categoryId = req.params.id;
+  const categoryId = req.params.categoryId;
   const areaId = req.params.areaId;
   const typeId = req.params.typeId;
 
@@ -399,6 +428,71 @@ exports.collectionsBySubject = function (req, callback, errorHandler) {
     errorHandler(utils.createErrorResponse(filename, 'repo', err))
   });
 };
+
+/**
+ * Retrieves a list of collections by area, category, and content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.getCollectionsByAreaCategoryAndSubject = function (req, callback, errorHandler) {
+  const categoryId = req.params.categoryId;
+  const areaId = req.params.areaId;
+  const subjectId = req.params.subjectId;
+
+  taggerDao.getCollectionsByAreaCategoryAndSubject(areaId, categoryId, subjectId)
+    .then((collections) => {
+      let data = [];
+      try {
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+
+};
+
+
+/**
+ * Retrieves a list of collections by area, category, and content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.getCollectionsByAreaCategorySubjectAndType = function (req, callback, errorHandler) {
+  const categoryId = req.params.categoryId;
+  const areaId = req.params.areaId;
+  const subjectId = req.params.subjectId;
+  const typeId = req.params.typeId;
+
+  taggerDao.getCollectionsByAreaCategorySubjectAndType(areaId, categoryId, subjectId, typeId)
+    .then((collections) => {
+      let data = [];
+      try {
+        _createCollectionResponse((result) => {
+          data = apiMapper.mapCollectionList(result);
+
+        }, errorHandler, collections);
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+
+};
+
 /**
  * Retrieves the types associated with a single collection.
  * @param collId
