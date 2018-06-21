@@ -82,6 +82,17 @@
       return typeArray;
     }
 
+    function _getParent(parentString) {
+
+      let parent = {id: null, title: ''};
+      try {
+        parent = JSON.parse(parentString);
+      } catch(err) {
+        console.log(err);
+      }
+      return parent;
+    }
+
     function _mapListCollection(collection) {
 
       let collectionId;
@@ -90,6 +101,9 @@
       } else {
         collectionId = collection.id;
       }
+
+      const parent = _getParent(collection.parent);
+
       let coll = {
         id: collectionId,
         title: collection.title,
@@ -106,7 +120,7 @@
         published: collection.published,
         ctype: collection.ctype,
         types: collection.types,
-        parent: collection.parent
+        parent: parent
       };
 
       return coll;
@@ -119,6 +133,8 @@
      * @private
      */
     function _mapSingleCollection(collection) {
+
+      const parent = _getParent(collection.parent);
 
       let coll = {
         id: collection.id,
@@ -133,7 +149,8 @@
         searchOptions: collection.repoType,
         assetType: collection.ctype,
         restricted: collection.restricted,
-        published: collection.published
+        published: collection.published,
+        parent: parent
       };
 
       return coll;
