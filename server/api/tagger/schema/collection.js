@@ -84,7 +84,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: true
       },
       parent: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING(240),
         allowNull: false
       },
       /**
