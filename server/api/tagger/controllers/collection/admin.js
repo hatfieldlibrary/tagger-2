@@ -62,9 +62,9 @@ exports.browseTypesByArea = function (req, res, next) {
 };
 /**
  * Sets the publication status of the collection.
- * @param req
- * @param res
- */
+* @param req
+* @param res
+*/
 exports.setPublicationStatus = function (req, res, next) {
   collectionRepository.setPublicationStatus(
     req,
@@ -75,6 +75,22 @@ exports.setPublicationStatus = function (req, res, next) {
       return next(err);
     });
 };
+/**
+ * Updates the parent area of collection.
+ * @param req
+ * @param res
+ */
+exports.updateParentCollection = function (req, res, next) {
+  collectionRepository.updateParentCollection(
+    req,
+    () => {
+      utils.sendSuccessJson(res);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+
 /**
  * Returns the publication status of the collection.
  * @param req

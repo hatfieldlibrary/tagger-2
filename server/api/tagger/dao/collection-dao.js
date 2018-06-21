@@ -405,6 +405,23 @@ taggerDao.setPublicationStatus = (status, collId) => {
     });
 };
 
+taggerDao.updateParentCollection = (collId, parent) => {
+
+  if (!collId || !parent) {
+    logger.dao(paramErrorMessage);
+    throw _errorResponse();
+  }
+
+  return taggerSchema.Collection.update({
+      parent: parent
+    },
+    {
+      where: {
+        id: collId
+      }
+    });
+};
+
 taggerDao.getPublicationStatus = (collId) => {
 
   if (!collId) {
@@ -498,7 +515,7 @@ taggerDao.deleteCollection = (collId) => {
 
 };
 
-taggerDao.addNewCollection = (title, browseType, repoType, ctype) => {
+taggerDao.addNewCollection = (title, browseType, repoType, ctype, parent) => {
 
   if (!title || !browseType || !repoType || !ctype) {
     logger.dao(paramErrorMessage);
@@ -509,7 +526,8 @@ taggerDao.addNewCollection = (title, browseType, repoType, ctype) => {
     title: title,
     browseType: browseType,
     repoType: repoType,
-    ctype: ctype
+    ctype: ctype,
+    parent: parent
   });
 
 };

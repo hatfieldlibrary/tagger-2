@@ -78,6 +78,17 @@
     }
   ]);
   /**
+   * Resource for updating a collection's parent collections using PATCH.
+   */
+  taggerServices.factory('UpdateParentCollection', ['$resource', 'config',
+    function ($resource, config) {
+      return $resource(config.restHost + 't/collection/:collId/parent', { collId: '@collId' },
+        {
+          update: { method: 'PATCH'}
+        });
+    }
+  ]);
+  /**
    * Resource for adding a collection via POST.
    */
   taggerServices.factory('CollectionAdd', ['$resource', 'config',

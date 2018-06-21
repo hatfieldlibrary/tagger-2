@@ -31,7 +31,9 @@
                           CollectionObservable,
                           CollectionAreasObservable,
                           AreaObservable,
-                          AreaListObservable) {
+                          AreaLabelObserver,
+                          AreaListObservable,
+                          UpdateParentCollection) {
 
     const ctrl = this;
 
@@ -112,6 +114,11 @@
      */
     ctrl.update = function (areaId) {
 
+
+      const id = CollectionObservable.get();
+
+      let currentTargets = _getAreasForCollection();
+
       if (ctrl.areaTargets !== undefined) {
         // If the area id of the selected checkbox is a
         // already a target, then delete the area target.
@@ -123,10 +130,18 @@
             let result = AreaTargetRemove.delete({collId: CollectionObservable.get(), areaId: areaId});
             result.$promise.then(function (result) {
               if (result.status === 'success') {
-                TaggerToast.toast('Collection removed from area.');
                 ctrl.areaTargets = result.data.areaList.getAreas;
-                _updateCollectionList(areaId);
-
+                const updatedTargets = currentTargets.filter(function (target) {
+                  return target.id !== areaId;
+                });
+                const patch = [{
+                  op: 'replace', path: '/parent', value: updatedTargets
+                }];
+                let updateParent = UpdateParentCollection.update({collId: id}, JSON.stringify(patch));
+                updateParent.$promise.then(function () {
+                  TaggerToast.toast('Collection removed from area.');
+                  _updateCollectionList(areaId);
+                });
               } else {
                 TaggerToast.toast(
                   result.status +
@@ -141,16 +156,22 @@
         // If the area id of the selected item is
         // not a target already, add a new area target.
         else {
-          let add = AreaTargetAdd.save({collId: CollectionObservable.get(), areaId: areaId});
+          let add = AreaTargetAdd.save({collId: id, areaId: areaId});
           add.$promise.then(function (result) {
             if (result.status === 'success') {
               ctrl.areaTargets = result.data.areaList;
-              TaggerToast.toast('Collection added to Area.');
+             currentTargets = _getAreasForCollection();
+              const patch = [{
+                op: 'replace', path: '/parent', value: currentTargets
+              }];
+              let updateParent = UpdateParentCollection.update({collId: id}, JSON.stringify(patch));
+              updateParent.$promise.then(function () {
+                TaggerToast.toast('Collection added to Area.');
+              });
             }
           });
         }
       }
-
     };
 
     ctrl.$onInit = function () {
@@ -162,7 +183,21 @@
 
     };
 
+    function _getAreasForCollection() {
+      let t = [];
+      for (var i = 0; i < ctrl.areaTargets.length; i++) {
+       let current = ctrl.areas.filter(function (a) {
+          return a.id === ctrl.areaTargets[i].AreaId;
+        });
+       if (typeof current[0].id !== 'undefined') {
+         t.push({'id': current[0].id, 'title': current[0].title});
+       }
+      }
+      return t;
+    }
+
   }
+
 
   taggerComponents.component('areaSelector', {
 

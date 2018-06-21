@@ -83,6 +83,10 @@ module.exports = function (sequelize, DataTypes) {
         //defaultValue: 'DEFAULT',
         allowNull: true
       },
+      parent: {
+        type: DataTypes.BLOB,
+        allowNull: false
+      },
       /**
        * Indicates whether the collection is public access or restricted.
        */

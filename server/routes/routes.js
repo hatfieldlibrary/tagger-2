@@ -64,6 +64,7 @@ module.exports = function (app, config) {
   app.delete('/rest/t/collection/:collId/remove/tag/:tagId', ensureAuthenticated, collection.removeTagTarget);
   app.delete('/rest/t/collection/:collId/remove/type/:typeId', ensureAuthenticated, collection.removeTypeTarget);
   app.delete('/rest/t/collection/delete/:id', ensureAuthenticated, collection.delete);
+  app.patch('/rest/t/collection/:collId/parent', ensureAuthenticated, collection.updateParentCollection);
 
   // AREAS
   app.get('/rest/t/area/collection', ensureAuthenticated, apiArea.listAreasWithCount); // controller shared with public route
