@@ -43,6 +43,7 @@
         description: vm.area.description,
         searchUrl: vm.area.searchUrl,
         linkLabel: vm.area.linkLabel,
+        image: vm.area.image,
         url: vm.area.url
 
       });
@@ -71,7 +72,7 @@
           vm.menu({id: vm.area.id, title: vm.area.title});
         });
       } else {
-        vm.area = {id: 0, title: '', linkLabel: '', searchLabel: '', description: ''};
+        vm.area = {id: 0, title: '', linkLabel: '', image: '', searchLabel: '', description: ''};
       }
     }
 
@@ -132,6 +133,10 @@
     '<md-input-container> ' +
     '<label>Button Label</label> ' +
     '<input type="text" ng-model="vm.area.linkLabel"/> ' +
+    '</md-input-container> ' +
+    '<md-input-container> ' +
+    '<label>Image URL</label> ' +
+    '<input type="text" ng-model="vm.area.image"/> ' +
     '</md-input-container> ' +
     '<md-input-container> ' +
     '<label>URL</label> ' +
