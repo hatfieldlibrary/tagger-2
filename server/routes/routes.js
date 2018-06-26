@@ -134,8 +134,9 @@ module.exports = function (app, config) {
   // related collections
   app.get('/rest/collection/:id/related/:subjects', apiCollection.findRelatedCollections);
   // collections in category (collection group)
-  app.get('/rest/collection/category/:id', apiCollection.collectionsByCategory);
+  app.get('/rest/collection/category/:categoryId', apiCollection.collectionsByCategory);
   // advanced collections by category
+  app.get('/rest/collection/category/:categoryId/area/:areaId', apiCollection.collectionsByCategoryAndArea);
   app.get('/rest/collection/category/:categoryId/type/:typeId', apiCollection.collectionsByCategoryAndType);
   app.get('/rest/collection/category/:categoryId/subject/:subjectId', apiCollection.collectionsByCategoryAndSubject);
   app.get('/rest/collection/category/:categoryId/area/:areaId/subject/:subjectId', apiCollection.collectionsByAreaCategoryAndSubject);
@@ -144,7 +145,6 @@ module.exports = function (app, config) {
   // subject lists
   app.get('/rest/subject', apiTag.subjectList);
   app.get('/rest/subject/area/:id', apiTag.subjectsByArea);
-  app.get('/rest/subject/collection/:id', apiTag.subjectsForCollection);
   app.get('/rest/subject/type/:id', apiTag.subjectsByContentType);
   app.get('/rest/subject/subject/:id', apiTag.subjectsBySubject);
   app.get('/rest/subject/area/:id/type/:typeId', apiTag.subjectsByAreaAndContentType);

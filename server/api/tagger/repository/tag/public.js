@@ -81,6 +81,34 @@ exports.subjectsForCollection = function (req, callback, errorHandler) {
 };
 
 /**
+ * Retrieves the tags associated with a single collection. Used by
+ * both admin interface and public REST API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+// exports.subjectsWithNamesForCollection = function (req, callback, errorHandler) {
+//   const collId = req.params.id;
+//
+//   taggerDao.findTagsWithNameForCollection(collId)
+//     .then((tags) => {
+//       let data;
+//       try {
+//         data = apiMapper.mapTags(tags, "collection");
+//       } catch (err) {
+//         logger.map(err);
+//         errorHandler(utils.createErrorResponse(filename, 'map', err))
+//       }
+//       callback(data);
+//     })
+//     .catch(function (err) {
+//       logger.dao(err);
+//       errorHandler(utils.createErrorResponse(filename, 'repo', err))
+//     });
+//
+// };
+
+/**
  * Retrieves a list of subjects by area for the public API.
  * @param req
  * @param callback success response callback

@@ -19,8 +19,8 @@
 
     'use strict';
 
-    exports.mapCollectionList = function (collections, type) {
-      return _mapCollectionList(collections, type);
+    exports.mapCollectionList = function (collections) {
+      return _mapCollectionList(collections);
 
     };
 
@@ -78,7 +78,6 @@
         let type = _mapContentType(contentTypes[i].dataValues.ItemContent.dataValues);
         typeArray.push(type);
       }
-
       return typeArray;
     }
 
@@ -192,7 +191,7 @@
       let tagArray = [];
 
       for (let i = 0; i < tags.length; i++) {
-        tagArray.push(tags[i].dataValues.TagId)
+        tagArray.push({id: tags[i].dataValues.Tag.id, name: tags[i].dataValues.Tag.name})
       }
       return tagArray;
     }
