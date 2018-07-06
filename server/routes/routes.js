@@ -144,13 +144,19 @@ module.exports = function (app, config) {
   app.get('/rest/collection/category/:categoryId/area/:areaId/subject/:subjectId/type/:typeId', apiCollection.collectionsByAreaCategorySubjectAndType);
   // subject lists
   app.get('/rest/subject', apiTag.subjectList);
-  app.get('/rest/subject/area/:id', apiTag.subjectsByArea);
-  app.get('/rest/subject/type/:id', apiTag.subjectsByContentType);
-  app.get('/rest/subject/subject/:id', apiTag.subjectsBySubject);
-  app.get('/rest/subject/area/:id/type/:typeId', apiTag.subjectsByAreaAndContentType);
+  app.get('/rest/subject/area/:areaId', apiTag.subjectsByArea);
+  app.get('/rest/subject/type/:typeId', apiTag.subjectsByContentType);
+  app.get('/rest/subject/subject/:subjectId', apiTag.subjectsBySubject);
+  app.get('/rest/subject/category/:categoryId', apiTag.subjectsByCategory);
+  app.get('/rest/subject/area/:areaId/type/:typeId', apiTag.subjectsByAreaAndContentType);
   app.get('/rest/subject/subject/:subjectId/type/:typeId', apiTag.subjectsBySubjectAndContentType);
   app.get('/rest/subject/area/:areaId/subject/:subjectId', apiTag.subjectsByAreaAndSubject);
   app.get('/rest/subject/area/:areaId/subject/:subjectId/type/:typeId', apiTag.subjectsByAreaSubjectAndContentType);
+  app.get('/rest/subject/area/:areaId/category/:categoryId', apiTag.subjectsByAreaAndCategory);
+  app.get('/rest/subject/area/:areaId/category/:categoryId/subject/:subjectId', apiTag.subjectsByAreaCategoryAndSubject);
+  app.get('/rest/subject/area/:areaId/category/:categoryId/type/:typeId', apiTag.subjectsByAreaCategoryAndContentType);
+  app.get('/rest/subject/area/:areaId/category/:categoryId/subject/:subjectId/type/:typeId',
+    apiTag.subjectsByAreaCategorySubjectAndContentType);
   app.get('/rest/subject/category/:categoryId/subject/:subjectId', apiTag.subjectsByCategoryAndSubject);
   app.get('/rest/subject/category/:categoryId/type/:typeId', apiTag.subjectsByCategoryAndContentType);
   app.get('/rest/subject/category/:categoryId/subject/:subjectId/type/:typeId',
@@ -158,12 +164,18 @@ module.exports = function (app, config) {
   // type lists
   app.get('/rest/type/collection/:id', apiCollection.typesForCollection);
   app.get('/rest/type', apiContentType.contentTypes);
-  app.get('/rest/type/area/:id', apiContentType.contentTypesByArea);
-  app.get('/rest/type/subject/:id', apiContentType.contentTypesBySubject);
-  app.get('/rest/type/area/:id/subject/:subjectId', apiContentType.contentTypesByAreaAndSubject);
+  app.get('/rest/type/area/:areaId', apiContentType.contentTypesByArea);
+  app.get('/rest/type/subject/:subjectId', apiContentType.contentTypesBySubject);
+  app.get('/rest/type/category/:categoryId', apiContentType.contentTypesByCategory);
+  app.get('/rest/type/area/:areaId/subject/:subjectId', apiContentType.contentTypesByAreaAndSubject);
+  app.get('/rest/type/area/:areaId/category/:categoryId', apiContentType.contentTypesByAreaAndCategory);
+  app.get('/rest/type/area/:areaId/category/:categoryId/type/:typeId', apiContentType.contentTypesByAreaCategoryAndContentType);
+  app.get('/rest/type/area/:areaId/category/:categoryId/subject/:subjectId', apiContentType.contentTypesByAreaCategoryAndSubject);
+  app.get('/rest/type/area/:areaId/category/:categoryId/subject/:subjectId/type/:typeId',
+    apiContentType.contentTypesByAreaCategorySubjectAndContentType);
   app.get('/rest/type/type/:id', apiContentType.contentTypesByContentType);
-  app.get('/rest/type/area/:id/type/:typeId', apiContentType.contentTypesByAreaAndContentType);
-  app.get('/rest/type/subject/:areaId/type/:typeId', apiContentType.contentTypesBySubjectAndContentType);
+  app.get('/rest/type/area/:areaId/type/:typeId', apiContentType.contentTypesByAreaAndContentType);
+  app.get('/rest/type/subject/:subjectId/type/:typeId', apiContentType.contentTypesBySubjectAndContentType);
   app.get('/rest/type/area/:areaId/type/:typeId/subject/:subjectId',
     apiContentType.contentTypesByAreaAndSubjectAndContentType);
   app.get('/rest/type/category/:categoryId/type/:typeId', apiContentType.contentTypesByCategoryAndContentType);
