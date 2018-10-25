@@ -26,9 +26,9 @@
     return process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
   }
   // Home of the development/test credentials file.
-  const devDirectory = getUserHome() + '/etc/tagger-2-ONE/';
+  const devDirectory = getUserHome() + '/etc/tagger/';
   // Home of the production credentials file.
-  const prodDirectory =  '/etc/tagger/';
+  const prodDirectory =  '/etc/tagger-3_x/';
 
   const path = {
     development: devDirectory,

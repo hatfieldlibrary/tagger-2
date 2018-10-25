@@ -15,7 +15,7 @@ Access to Tagger's administrative interface is limited to Administrators and Are
 
 ## Microservice
 
-Tagger itself is not a fullstack, out-of-the-box publishing solution.  It is a modest microservice that shares information with external clients or other services over the network. External clients can access information such as:
+Tagger itself is not a fullstack, out-of-the-box publishing solution.  It is best thought of as a microservice that shares information with external clients or other services over the network. External clients can access information such as:
 
  * All Collections 
  * The Collections in an Area

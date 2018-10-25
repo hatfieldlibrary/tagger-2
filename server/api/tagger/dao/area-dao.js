@@ -101,18 +101,21 @@ taggerDao.listAreasByContentType = (typeId) => {
 };
 
 taggerDao.listAreasBySubject = (subjectId) => {
+
+  const subjectArray = subjectId.split(',');
+  const subjectWhereClause = utils.getWhereClauseForSubjects(subjectArray);
   return taggerSchema.sequelize.query('SELECT count(*), a.id, a.title from Areas a join AreaTargets at on a.id = at.AreaId ' +
-    'join Collections c on c.id = at.CollectionId join TagTargets tt on tt.CollectionId = c.id where tt.TagId = ? ' +
-    'AND c.published=true group by a.id order by position;',
+    'join Collections c on c.id = at.CollectionId join TagTargets tt on tt.CollectionId = c.id where ' +
+    subjectWhereClause + ' AND c.published=true group by a.id order by position;',
     {
-      replacements: [subjectId],
+      replacements: subjectArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
 };
 
 taggerDao.listAreasByTypeAndSubject = (typeId, subjectId) => {
 
-  let typeArray = typeId.split(',');
+  const typeArray = typeId.split(',');
   const typeWhereClause = utils.getWhereClauseForContentTypes(typeArray);
   typeArray.unshift(subjectId);
 

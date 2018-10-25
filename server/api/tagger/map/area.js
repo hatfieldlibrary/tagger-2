@@ -60,6 +60,7 @@
       title: areaIn.title,
       url: areaIn.url,
       linkLabel: areaIn.linkLabel,
+      image: areaIn.image,
       description: areaIn.description,
       searchUrl: areaIn.searchUrl
     };

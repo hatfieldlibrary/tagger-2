@@ -1,6 +1,6 @@
 {
   "name": "Tagger",
-  "version": "3.0.1",
+  "version": "3.2.1",
   "main": "index.js",
   "engines": {
     "node": "8.9.4"

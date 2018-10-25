@@ -87,7 +87,7 @@ exports.subjectsForCollection = function (req, callback, errorHandler) {
  * @param errorHandler failure response callback
  */
 exports.subjectsByArea = function (req, callback, errorHandler) {
-  const id = req.params.id;
+  const id = req.params.areaId;
 
   taggerDao.findTagsInArea(id)
     .then((tags) => {
@@ -114,9 +114,91 @@ exports.subjectsByArea = function (req, callback, errorHandler) {
  * @param errorHandler failure response callback
  */
 exports.subjectsByContentType = function (req, callback, errorHandler) {
-  const id = req.params.id;
+  const id = req.params.typeId;
 
   taggerDao.findTagsForContentType(id)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+
+/**
+ * Retrieves a list of subjects by content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.subjectsByCategory = function (req, callback, errorHandler) {
+  const id = req.params.categoryId;
+
+  taggerDao.findTagsForCategory(id)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+
+/**
+ * Retrieves a list of subjects by content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.subjectsBySubject = function (req, callback, errorHandler) {
+  const id = req.params.subjectId;
+
+  taggerDao.findTagsForSubject(id)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+
+/**
+ * Retrieves a list of subjects by area and content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.subjectsByAreaAndSubject = function (req, callback, errorHandler) {
+  const areaId = req.params.areaId;
+  const subjectId = req.params.subjectId;
+
+  taggerDao.findTagsForAreaAndSubject(areaId, subjectId)
     .then((tags) => {
       let data;
       try {
@@ -141,10 +223,218 @@ exports.subjectsByContentType = function (req, callback, errorHandler) {
  * @param errorHandler failure response callback
  */
 exports.subjectsByAreaAndContentType = function (req, callback, errorHandler) {
-  const areaId = req.params.id;
+  const areaId = req.params.areaId;
   const contentTypeId = req.params.typeId;
 
   taggerDao.findTagsForAreaAndContentType(areaId, contentTypeId)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+
+/**
+ * Retrieves a list of subjects by area and content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.subjectsByAreaAndCategory = function (req, callback, errorHandler) {
+  const areaId = req.params.areaId;
+  const categoryId = req.params.categoryId;
+
+  taggerDao.findTagsForAreaAndCategory(areaId, categoryId)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+/**
+ * Retrieves a list of subjects by area and content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.subjectsBySubjectAndContentType = function (req, callback, errorHandler) {
+  const subjectId = req.params.subjectId;
+  const typeId = req.params.typeId;
+
+  taggerDao.findTagsForSubjectAndContentType(subjectId, typeId)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+
+/**
+ * Retrieves a list of subjects by area and content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.subjectsByAreaCategoryAndContentType = function (req, callback, errorHandler) {
+  const areaId = req.params.areaId;
+  const typeId = req.params.typeId;
+  const categoryId = req.params.categoryId;
+
+  taggerDao.findTagsForAreaCategoryAndContentType(areaId, categoryId, typeId)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+
+/**
+ * Retrieves a list of subjects by area and content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.subjectsByAreaCategoryAndSubject = function (req, callback, errorHandler) {
+  const areaId = req.params.areaId;
+  const subjectId = req.params.subjectId;
+  const categoryId = req.params.categoryId;
+
+  taggerDao.findTagsForAreaCategoryAndSubject(areaId, categoryId, subjectId)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+/**
+ * Retrieves a list of subjects by area and content type for the public API.
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.subjectsByAreaSubjectAndContentType = function (req, callback, errorHandler) {
+  const areaId = req.params.areaId;
+  const subjectId = req.params.subjectId;
+  const typeId = req.params.typeId;
+
+  taggerDao.findTagsForAreaSubjectAndContentType(areaId, subjectId, typeId)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+
+exports.subjectsByCategoryAndSubject = (req, callback, errorHandler) => {
+  const categoryId = req.params.categoryId;
+  const subjectId = req.params.subjectId;
+
+  taggerDao.findTagsForCategoryAndSubject(categoryId, subjectId)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+
+exports.subjectsByCategoryAndContentType = (req, callback, errorHandler) => {
+  const categoryId = req.params.categoryId;
+  const typeId = req.params.typeId;
+
+  taggerDao.findTagsForCategoryAndContentType(categoryId, typeId)
+    .then((tags) => {
+      let data;
+      try {
+        data = apiMapper.mapTags(tags, "area");
+      } catch (err) {
+        logger.map(err);
+        errorHandler(utils.createErrorResponse(filename, 'map', err))
+      }
+      callback(data);
+    })
+    .catch(function (err) {
+      logger.dao(err);
+      errorHandler(utils.createErrorResponse(filename, 'repo', err))
+    });
+
+};
+
+exports.subjectsByCategorySubjectAndContentType = (req, callback, errorHandler) => {
+  const categoryId = req.params.categoryId;
+  const subjectId = req.params.subjectId;
+  const typeId = req.params.typeId;
+
+  taggerDao.findTagsForCategorySubjectAndContentType(categoryId, subjectId, typeId)
     .then((tags) => {
       let data;
       try {

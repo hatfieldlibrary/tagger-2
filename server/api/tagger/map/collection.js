@@ -19,8 +19,8 @@
 
     'use strict';
 
-    exports.mapCollectionList = function (collections, type) {
-      return _mapCollectionList(collections, type);
+    exports.mapCollectionList = function (collections) {
+      return _mapCollectionList(collections);
 
     };
 
@@ -78,8 +78,18 @@
         let type = _mapContentType(contentTypes[i].dataValues.ItemContent.dataValues);
         typeArray.push(type);
       }
-
       return typeArray;
+    }
+
+    function _getParent(parentString) {
+
+      let parent = {id: null, title: ''};
+      try {
+        parent = JSON.parse(parentString);
+      } catch(err) {
+        console.log(err);
+      }
+      return parent;
     }
 
     function _mapListCollection(collection) {
@@ -90,6 +100,9 @@
       } else {
         collectionId = collection.id;
       }
+
+      const parent = _getParent(collection.parent);
+
       let coll = {
         id: collectionId,
         title: collection.title,
@@ -105,7 +118,8 @@
         restricted: collection.restricted,
         published: collection.published,
         ctype: collection.ctype,
-        types: collection.types
+        types: collection.types,
+        parent: parent
       };
 
       return coll;
@@ -118,6 +132,8 @@
      * @private
      */
     function _mapSingleCollection(collection) {
+
+      const parent = _getParent(collection.parent);
 
       let coll = {
         id: collection.id,
@@ -132,7 +148,8 @@
         searchOptions: collection.repoType,
         assetType: collection.ctype,
         restricted: collection.restricted,
-        published: collection.published
+        published: collection.published,
+        parent: parent
       };
 
       return coll;
@@ -174,7 +191,7 @@
       let tagArray = [];
 
       for (let i = 0; i < tags.length; i++) {
-        tagArray.push(tags[i].dataValues.TagId)
+        tagArray.push({id: tags[i].dataValues.Tag.id, name: tags[i].dataValues.Tag.name})
       }
       return tagArray;
     }

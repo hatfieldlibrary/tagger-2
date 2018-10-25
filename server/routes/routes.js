@@ -27,7 +27,8 @@ module.exports = function (app, config) {
   const apiContentType = require('../api/tagger/controllers/content-type/public');
   const collection = require('../api/tagger/controllers/collection/admin');
   const apiCollection = require('../api/tagger/controllers/collection/public');
-  const category = require('../../server/api/tagger/controllers/category');
+  const category = require('../api/tagger/controllers/category/category');
+  const apiCategory = require('../api/tagger/controllers/category/public');
   const users = require('../../server/api/tagger/controllers/users');
   /**
    * Indicates whether the request has an authenticated session.
@@ -63,6 +64,7 @@ module.exports = function (app, config) {
   app.delete('/rest/t/collection/:collId/remove/tag/:tagId', ensureAuthenticated, collection.removeTagTarget);
   app.delete('/rest/t/collection/:collId/remove/type/:typeId', ensureAuthenticated, collection.removeTypeTarget);
   app.delete('/rest/t/collection/delete/:id', ensureAuthenticated, collection.delete);
+  app.patch('/rest/t/collection/:collId/parent', ensureAuthenticated, collection.updateParentCollection);
 
   // AREAS
   app.get('/rest/t/area/collection', ensureAuthenticated, apiArea.listAreasWithCount); // controller shared with public route
@@ -125,28 +127,61 @@ module.exports = function (app, config) {
   // advanced collection queries
   app.get('/rest/collection/area/:areaId/type/:typeId', apiCollection.collectionsByAreaAndContentType);
   app.get('/rest/collection/area/:areaId/subject/:subjectId', apiCollection.collectionsBySubjectArea);
-  app.get('/rest/collection/area/:areaId/type/:typeId/subject/:subjectId', apiCollection.collectionsByAreaSubjectAndContentType);
+  app.get('/rest/collection/area/:areaId/type/:typeId/subject/:subjectId',
+    apiCollection.collectionsByAreaSubjectAndContentType);
   // combined type and subject
   app.get('/rest/collection/type/:typeId/subject/:subjectId', apiCollection.collectionsBySubjectAndContentType);
   // related collections
   app.get('/rest/collection/:id/related/:subjects', apiCollection.findRelatedCollections);
   // collections in category (collection group)
-  app.get('/rest/collection/category/:id', apiCollection.collectionsByCategory);
+  app.get('/rest/collection/category/:categoryId', apiCollection.collectionsByCategory);
   // advanced collections by category
-  app.get('/rest/collection/category/:id/type/:typeId', apiCollection.collectionsByCategoryAndType);
-  app.get('/rest/collection/category/:id/area/:areaId/type/:typeId', apiCollection.collectionsByAreaCategoryAndType);
+  app.get('/rest/collection/category/:categoryId/area/:areaId', apiCollection.collectionsByCategoryAndArea);
+  app.get('/rest/collection/category/:categoryId/type/:typeId', apiCollection.collectionsByCategoryAndType);
+  app.get('/rest/collection/category/:categoryId/subject/:subjectId', apiCollection.collectionsByCategoryAndSubject);
+  app.get('/rest/collection/category/:categoryId/area/:areaId/subject/:subjectId', apiCollection.collectionsByAreaCategoryAndSubject);
+  app.get('/rest/collection/category/:categoryId/area/:areaId/type/:typeId', apiCollection.collectionsByAreaCategoryAndType);
+  app.get('/rest/collection/category/:categoryId/area/:areaId/type/:typeId/subject/:subjectId', apiCollection.collectionsByAreaCategorySubjectAndType);
   // subject lists
   app.get('/rest/subject', apiTag.subjectList);
-  app.get('/rest/subject/area/:id', apiTag.subjectsByArea);
-  app.get('/rest/subject/collection/:id', apiTag.subjectsForCollection);
-  app.get('/rest/subject/type/:id', apiTag.subjectsByContentType);
-  app.get('/rest/subject/area/:id/type/:typeId', apiTag.subjectsByAreaAndContentType);
+  app.get('/rest/subject/area/:areaId', apiTag.subjectsByArea);
+  app.get('/rest/subject/type/:typeId', apiTag.subjectsByContentType);
+  app.get('/rest/subject/subject/:subjectId', apiTag.subjectsBySubject);
+  app.get('/rest/subject/category/:categoryId', apiTag.subjectsByCategory);
+  app.get('/rest/subject/area/:areaId/type/:typeId', apiTag.subjectsByAreaAndContentType);
+  app.get('/rest/subject/subject/:subjectId/type/:typeId', apiTag.subjectsBySubjectAndContentType);
+  app.get('/rest/subject/area/:areaId/subject/:subjectId', apiTag.subjectsByAreaAndSubject);
+  app.get('/rest/subject/area/:areaId/subject/:subjectId/type/:typeId', apiTag.subjectsByAreaSubjectAndContentType);
+  app.get('/rest/subject/area/:areaId/category/:categoryId', apiTag.subjectsByAreaAndCategory);
+  app.get('/rest/subject/area/:areaId/category/:categoryId/subject/:subjectId', apiTag.subjectsByAreaCategoryAndSubject);
+  app.get('/rest/subject/area/:areaId/category/:categoryId/type/:typeId', apiTag.subjectsByAreaCategoryAndContentType);
+  app.get('/rest/subject/area/:areaId/category/:categoryId/subject/:subjectId/type/:typeId',
+    apiTag.subjectsByAreaCategorySubjectAndContentType);
+  app.get('/rest/subject/category/:categoryId/subject/:subjectId', apiTag.subjectsByCategoryAndSubject);
+  app.get('/rest/subject/category/:categoryId/type/:typeId', apiTag.subjectsByCategoryAndContentType);
+  app.get('/rest/subject/category/:categoryId/subject/:subjectId/type/:typeId',
+    apiTag.subjectsByCategorySubjectAndContentType);
   // type lists
   app.get('/rest/type/collection/:id', apiCollection.typesForCollection);
   app.get('/rest/type', apiContentType.contentTypes);
-  app.get('/rest/type/area/:id', apiContentType.contentTypesByArea);
-  app.get('/rest/type/subject/:id', apiContentType.contentTypesBySubject);
-  app.get('/rest/type/area/:id/subject/:subjectId', apiContentType.contentTypesByAreaAndSubject);
+  app.get('/rest/type/area/:areaId', apiContentType.contentTypesByArea);
+  app.get('/rest/type/subject/:subjectId', apiContentType.contentTypesBySubject);
+  app.get('/rest/type/category/:categoryId', apiContentType.contentTypesByCategory);
+  app.get('/rest/type/area/:areaId/subject/:subjectId', apiContentType.contentTypesByAreaAndSubject);
+  app.get('/rest/type/area/:areaId/category/:categoryId', apiContentType.contentTypesByAreaAndCategory);
+  app.get('/rest/type/area/:areaId/category/:categoryId/type/:typeId', apiContentType.contentTypesByAreaCategoryAndContentType);
+  app.get('/rest/type/area/:areaId/category/:categoryId/subject/:subjectId', apiContentType.contentTypesByAreaCategoryAndSubject);
+  app.get('/rest/type/area/:areaId/category/:categoryId/subject/:subjectId/type/:typeId',
+    apiContentType.contentTypesByAreaCategorySubjectAndContentType);
+  app.get('/rest/type/type/:id', apiContentType.contentTypesByContentType);
+  app.get('/rest/type/area/:areaId/type/:typeId', apiContentType.contentTypesByAreaAndContentType);
+  app.get('/rest/type/subject/:subjectId/type/:typeId', apiContentType.contentTypesBySubjectAndContentType);
+  app.get('/rest/type/area/:areaId/type/:typeId/subject/:subjectId',
+    apiContentType.contentTypesByAreaAndSubjectAndContentType);
+  app.get('/rest/type/category/:categoryId/type/:typeId', apiContentType.contentTypesByCategoryAndContentType);
+  app.get('/rest/type/category/:categoryId/subject/:subjectId', apiContentType.contentTypesByCategoryAndSubject);
+  app.get('/rest/type/category/:categoryId/subject/:subjectId/type/:typeId',
+    apiContentType.contentTypesByCategorySubjectAndContentType);
   // individual area
   app.get('/rest/area/id/:id', apiArea.byId);
   // area lists
@@ -156,13 +191,17 @@ module.exports = function (app, config) {
   app.get('/rest/area/subject/:subjectId', apiArea.listBySubjectWithCount);
   app.get('/rest/area/type/:typeId/subject/:subjectId', apiArea.listByTypeAndSubjectWithCount);
   app.get('/rest/area/collection/:id', apiArea.areasForCollection);
+  // categories
+  app.get('/rest/category', apiCategory.list);
+  app.get('/rest/category/area/:areaId', apiCategory.categoriesByArea);
+  app.get('/rest/category/type/:typeId', apiCategory.categoryByContentType);
+  app.get('/rest/category/subject/:subjectId', apiCategory.categoryBySubject);
+  app.get('/rest/category/area/:areaId/type/:typeId', apiCategory.categoryByAreaAndContentType);
+  app.get('/rest/category/subject/:subjectId/type/:typeId', apiCategory.categoryBySubjectAndContentType);
+  app.get('/rest/category/area/:areaId/subject/:subjectId', apiCategory.categoryByAreaAndSubject);
+  app.get('/rest/category/area/:areaId/subject/:subjectId/type/:typeId',
+    apiCategory.categoryByAreaSubjectAndContentType);
 
-  // These type methods not included in the api documentation.
-  // Implemented for use in development and prototyping.
-  app.get('/rest/type/type/:id', apiContentType.contentTypesByContentType);
-  app.get('/rest/type/area/:id/type/:typeId', apiContentType.contentTypesByAreaAndContentType);
-  app.get('/rest/type/subject/:areaId/type/:typeId', apiContentType.contentTypesBySubjectAndContentType);
-  app.get('/rest/type/area/:areaId/type/:typeId/subject/:subjectId', apiContentType.contentTypesByAreaAndSubjectAndContentType);
   // This external options service communicates with a target host to retrieve a browse list.
   // It addresses a very specific use case, is not generalized provides no guarantees
   // about the data returned. Currently in use.

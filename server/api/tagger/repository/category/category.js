@@ -22,9 +22,8 @@
 
 'use strict';
 
-const taggerDao = require('../dao/category-dao');
-const utils = require('../utils/response-utility');
-const logger = require('../utils/error-logger');
+const taggerDao = require('../../dao/category-dao');
+const logger = require('../../utils/error-logger');
 
 /**
  * Retrieves the list of all collection groups.

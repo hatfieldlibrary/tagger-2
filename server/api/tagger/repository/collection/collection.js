@@ -86,6 +86,32 @@ exports.setPublicationStatus = function (req, callback, errorHandler) {
 };
 
 /**
+ * Sets the collection parents (area).
+ * @param req
+ * @param callback success response callback
+ * @param errorHandler failure response callback
+ */
+exports.updateParentCollection = function (req, callback, errorHandler) {
+  const collectionId = req.params.collId;
+  // Assuming the patch request is a single value array. Additional patch operations are ignored.
+  const parent = req.body[0].value;
+  const path = req.body[0].path;
+  if (path !== '/parent') {
+    const err = new Error(`Invalid patch path. Expected "/parent". `);
+    errorHandler(err);
+    logger.dao(err);
+  }
+  taggerDao.updateParentCollection(collectionId, JSON.stringify(parent))
+    .then(() => {
+      callback();
+    })
+    .catch((err) => {
+      errorHandler(err);
+      logger.dao(err);
+    });
+
+};
+/**
  * Gets the collection publication status.
  * @param req
  * @param callback success response callback
@@ -365,12 +391,15 @@ exports.add = function (req, callback, errorHandler) {
   const browseType = req.body.browseType;
   const repoType = req.body.repoType;
   const ctype = req.body.ctype;
+  const parent = req.body.parent;
+
+  console.log(req.body)
 
   let newCollectionId;
 
   async.series({
       addCollection: (series) => {
-        taggerDao.addNewCollection(title, browseType, repoType, ctype).then(function (coll) {
+        taggerDao.addNewCollection(title, browseType, repoType, ctype, parent).then(function (coll) {
           newCollectionId = coll.id;
           series(null, coll);
         });

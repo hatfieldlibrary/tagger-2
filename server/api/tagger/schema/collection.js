@@ -62,6 +62,9 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING(60),
         allowNull: true
       },
+      /**
+       * Number of items in the collection.
+       */
       items: {
         type: DataTypes.STRING(60),
         allowNull: true
@@ -82,6 +85,13 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING(7),
         //defaultValue: 'DEFAULT',
         allowNull: true
+      },
+      /**
+       * JSON string that serializes an array of parent area objects.
+       */
+      parent: {
+        type: DataTypes.STRING(240),
+        allowNull: false
       },
       /**
        * Indicates whether the collection is public access or restricted.

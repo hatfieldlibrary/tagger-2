@@ -17,8 +17,8 @@
 
 'use strict';
 
-const repository = require('../repository/category');
-const utils = require('../utils/response-utility');
+const repository = require('../../repository/category/category');
+const utils = require('../../utils/response-utility');
 
 /**
  * Retrieves the list of all collection groups.
