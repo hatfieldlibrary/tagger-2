@@ -87,6 +87,26 @@ taggerDao.getContentTypesForArea = (areaId) => {
 };
 
 /**
+ * Gets the content types that are available for collections that have been limited by area.
+ * @param areaId area ids as comma separated string or a single value string
+ */
+taggerDao.getContentTypesForCategory = (categoryId) => {
+
+  const categoryArray = categoryId.split(',');
+
+  const combinedWhereClause = utils.getWhereClauseForCategories(categoryArray);
+
+  return taggerSchema.sequelize.query('Select i.id, i.name ' +
+    'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
+    'LEFT JOIN CategoryTargets ct on c.id=ct.CollectionId ' +
+    'LEFT JOIN ItemContents i on i.id = it.ItemContentId ' +
+    'where (' + combinedWhereClause + ') group by i.id order by i.name',
+    {
+      replacements: categoryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+};
+/**
  * Gets the content types that are available for collections that have been limited by subject.
  * @param subjectId subject ids as comma separated string or a single value string
  */
@@ -202,7 +222,114 @@ taggerDao.getContentTypesForAreaSubjectQuery = (areaId, subjectId) => {
       type: taggerSchema.Sequelize.QueryTypes.SELECT
     });
 };
+/**
+ * Gets the content types that are available for collections that have been limited by area and subject.
+ * @param areaId area ids as comma separated string or a single value string
+ * @param categoryId category ids as comma separated string or a single value string
+ */
+taggerDao.getContentTypesForAreaCategoryQuery = (areaId, categoryId) => {
 
+  const areaArray = areaId.split(',');
+  const categoryArray = categoryId.split(',');
+
+  const combinedWhereClause = utils.getWhereClauseForAreasAndCategories(areaArray, categoryArray);
+
+  const queryArray = areaArray.concat(categoryArray);
+
+  return taggerSchema.sequelize.query('Select i.id, i.name ' +
+    'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
+    'LEFT JOIN AreaTargets at on c.id=at.CollectionId ' +
+    'LEFT JOIN CategoryTargets ct on ct.CollectionId = c.id ' +
+    'LEFT JOIN ItemContents i on i.id = it.ItemContentId ' +
+    'where (' + combinedWhereClause + ') group by i.id order by i.name',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+};
+/**
+ * Gets the content types that are available for collections that have been limited by area and subject.
+ * @param areaId area ids as comma separated string or a single value string
+ * @param categoryId category ids as comma separated string or a single value string
+ */
+taggerDao.getContentTypesForAreaCategorySubjectQuery = (areaId, categoryId, subjectId) => {
+
+  const areaArray = areaId.split(',');
+  const categoryArray = categoryId.split(',');
+  const subjectArray = subjectId.split(',');
+
+  const combinedWhereClause = utils.getWhereClauseForAreasCategoriesAndSubjects(areaArray, categoryArray, subjectArray);
+
+  const queryArray = areaArray.concat(categoryArray).concat(subjectArray);
+
+  return taggerSchema.sequelize.query('Select i.id, i.name ' +
+    'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
+    'LEFT JOIN AreaTargets at on c.id=at.CollectionId ' +
+    'LEFT JOIN CategoryTargets ct on ct.CollectionId = c.id ' +
+    'LEFT JOIN ItemContents i on i.id = it.ItemContentId ' +
+    'LEFT JOIN TagTargets tt on tt.CollectionId = c.id ' +
+    'where (' + combinedWhereClause + ') group by i.id order by i.name',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+};
+/**
+ * Gets the content types that are available for collections that have been limited by area and subject.
+ * @param areaId area ids as comma separated string or a single value string
+ * @param categoryId category ids as comma separated string or a single value string
+ */
+taggerDao.getContentTypesForAreaCategoryTypeQuery = (areaId, categoryId, typeId) => {
+
+  const areaArray = areaId.split(',');
+  const categoryArray = categoryId.split(',');
+  const typeArray = typeId.split(',');
+
+  const combinedWhereClause = utils.getWhereClauseForAreasCategoriesAndContentTypes(areaArray, categoryArray, typeArray);
+
+  const queryArray = areaArray.concat(categoryArray).concat(typeArray);
+
+  return taggerSchema.sequelize.query('Select i.id, i.name ' +
+    'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
+    'LEFT JOIN AreaTargets at on c.id=at.CollectionId ' +
+    'LEFT JOIN CategoryTargets ct on ct.CollectionId = c.id ' +
+    'LEFT JOIN ItemContents i on i.id = it.ItemContentId ' +
+    'where (' + combinedWhereClause + ') group by i.id order by i.name',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+};
+
+
+/**
+ * Gets the content types that are available for collections that have been limited by area and subject.
+ * @param areaId area ids as comma separated string or a single value string
+ * @param categoryId category ids as comma separated string or a single value string
+ */
+taggerDao.getContentTypesForAreaCategorySubjectTypeQuery = (areaId, categoryId, subjectId, typeId) => {
+
+  const areaArray = areaId.split(',');
+  const categoryArray = categoryId.split(',');
+  const typeArray = typeId.split(',');
+  const subjectArray = subjectId.split(',');
+
+  const combinedWhereClause = utils.getWhereClauseForAreasCategoriesSubjectsAndTypes(areaArray, categoryArray, subjectArray, typeArray);
+
+  const queryArray = areaArray.concat(categoryArray).concat(subjectArray).concat(typeArray);
+
+  return taggerSchema.sequelize.query('Select i.id, i.name ' +
+    'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
+    'LEFT JOIN AreaTargets at on c.id=at.CollectionId ' +
+    'LEFT JOIN TagTargets tt on tt.CollectionId = c.id ' +
+    'LEFT JOIN CategoryTargets ct on ct.CollectionId = c.id ' +
+    'LEFT JOIN ItemContents i on i.id = it.ItemContentId ' +
+    'where (' + combinedWhereClause + ') group by i.id order by i.name',
+    {
+      replacements: queryArray,
+      type: taggerSchema.Sequelize.QueryTypes.SELECT
+    });
+};
 /**
  * Gets the content types that are available for collections that have been limited by area, item type, and subject.
  * @param areaId area ids as comma separated string or a single value string
@@ -262,7 +389,7 @@ taggerDao.getContentTypesForCategoryAndSubject = (categoryId, subjectId) => {
   const subjectArray = subjectId.split(',');
 
   const queryArray = categoryArray.concat(subjectArray);
-  const combinedWhereClause = utils.getWhereClauseForMultipleCategoriesAndSubjects(categoryArray, subjectArray);
+  const combinedWhereClause = utils.getWhereClauseForCategoriesAndSubjects(categoryArray, subjectArray);
   return taggerSchema.sequelize.query('Select i.id, i.name ' +
     'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
     'LEFT JOIN CategoryTargets ct on c.id=ct.CollectionId ' +
@@ -286,7 +413,7 @@ taggerDao.getContentTypesForCategorySubjectAndContentType = (categoryId, subject
 
   const queryArray = categoryArray.concat(subjectArray).concat(typeArray);
   const combinedWhereClause =
-    utils.getWhereClauseForMultipleCategoriesSubjectsAndContentTypes(categoryArray, subjectArray, typeArray);
+    utils.getWhereClauseForCategoriesSubjectsAndContentTypes(categoryArray, subjectArray, typeArray);
   return taggerSchema.sequelize.query('Select i.id, i.name ' +
     'from ItemContentTargets it LEFT JOIN Collections c on it.CollectionId = c.id ' +
     'LEFT JOIN CategoryTargets ct on c.id=ct.CollectionId ' +

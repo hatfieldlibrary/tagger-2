@@ -302,10 +302,10 @@ taggerDao.categoryByAreaSubjectAndContentType = (areaId, subjectId, typeId) => {
   const whereClause = utils.getWhereClauseForAreasSubjectsAndContentTypes(areaArray, subjectArray, typeArray);
   const queryArray = areaArray.concat(subjectArray).concat(typeArray);
 
-  return taggerSchema.sequelize.query('SELECT cat.id, cat.title from Categories cat JOIN CategoryTargets ct ' +
-    'ON cat.id=ct.CategoryId JOIN Collections c on c.id = ct.CollectionId JOIN AreaTargets at ' +
-    'ON at.CollectionId=c.id JOIN TagTargets tt ON tt.CollectionId JOIN ItemContentTargets it ON it.CollectionId=c.id ' +
-    'where ' + whereClause + ' AND c.published=true group by cat.id order by cat.title;',
+  return taggerSchema.sequelize.query('SELECT cat.id, cat.title FROM Collections c JOIN CategoryTargets ct on ' +
+    'c.id=ct.CollectionId JOIN Categories cat on cat.id=ct.CategoryId JOIN ItemContentTargets it on it.CollectionId=c.id ' +
+    'JOIN TagTargets tt on tt.CollectionId = c.id JOIN AreaTargets at on at.CollectionId=c.id WHERE ' + whereClause +
+    ' AND c.published = true GROUP BY cat.id ORDER BY cat.title;',
     {
       replacements: queryArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT

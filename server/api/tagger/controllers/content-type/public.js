@@ -27,7 +27,16 @@ exports.contentTypesByArea = function (req, res, next) {
       return next(err);
     });
 };
-
+exports.contentTypesByCategory = function (req, res, next) {
+  repository.contentTypesByCategory (
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
 exports.contentTypesBySubject = function (req, res, next) {
   repository.contentTypesBySubject (
     req,
@@ -72,6 +81,47 @@ exports.contentTypesByAreaAndSubject = function (req, res, next) {
     });
 };
 
+exports.contentTypesByAreaAndCategory = function (req, res, next) {
+  repository.contentTypesByAreaAndCategory (
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+
+exports.contentTypesByAreaCategoryAndContentType = function (req, res, next) {
+  repository.contentTypesByAreaCategoryAndContentType (
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+exports.contentTypesByAreaCategoryAndSubject = function (req, res, next) {
+  repository.contentTypesByAreaCategoryAndSubject (
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
+exports.contentTypesByAreaCategorySubjectAndContentType = function (req, res, next) {
+  repository.contentTypesByAreaCategorySubjectAndContentType (
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+};
 exports.contentTypesBySubjectAndContentType = function (req, res, next) {
   repository.contentTypesBySubjectAndContentType(
     req,

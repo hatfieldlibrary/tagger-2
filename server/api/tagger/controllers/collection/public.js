@@ -126,12 +126,46 @@ exports.collectionsByCategory = function (req, res, next) {
 };
 
 /**
+ * Retrieves a list of collections by category for the public API.
+ * @param req
+ * @param res
+ */
+exports.collectionsByCategoryAndArea = function (req, res, next) {
+  publicApiRepository.collectionsByCategoryAndArea(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+
+};
+
+/**
  * Retrieves a list of collections by category and content types for the public API.
  * @param req
  * @param res
  */
 exports.collectionsByCategoryAndType = function (req, res, next) {
   publicApiRepository.collectionsByCategoryAndType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+
+};
+
+/**
+ * Retrieves a list of collections by category and subjects for the public API.
+ * @param req
+ * @param res
+ */
+exports.collectionsByCategoryAndSubject = function (req, res, next) {
+  publicApiRepository.collectionsByCategoryAndSubject(
     req,
     (data) => {
       utils.sendResponse(res, data);
@@ -172,6 +206,41 @@ exports.collectionsBySubject = function (req, res, next) {
     (err) => {
       return next(err);
     });
+};
+
+
+/**
+ * Retrieves a list of collections by area, category and subjects for the public API.
+ * @param req
+ * @param res
+ */
+exports.collectionsByAreaCategoryAndSubject = function (req, res, next) {
+  publicApiRepository.collectionsByAreaCategoryAndSubject(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+
+};
+
+/**
+ * Retrieves a list of collections by area, category and subjects for the public API.
+ * @param req
+ * @param res
+ */
+exports.collectionsByAreaCategorySubjectAndType = function (req, res, next) {
+  publicApiRepository.collectionsByAreaCategorySubjectAndType(
+    req,
+    (data) => {
+      utils.sendResponse(res, data);
+    },
+    (err) => {
+      return next(err);
+    });
+
 };
 
 /**

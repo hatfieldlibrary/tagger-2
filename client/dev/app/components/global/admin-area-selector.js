@@ -70,10 +70,13 @@
           areas.$promise.then(function (data) {
             if (data.length > 0) {
               AreaListObservable.set(data);
+              AreaLabelObserver.set(data[0].title);
+              AreaObservable.set(data[0].id);
             }
           });
         }
         else {
+          // TODO: This will not provide parent area information when creating a new collection. Lookup is needed.
           AreaObservable.set(vm.userAreaId);
         }
       });

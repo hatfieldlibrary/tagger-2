@@ -29,7 +29,7 @@ exports.contentTypes = (req, callback, errorHandler) => {
 };
 
 exports.contentTypesByArea = (req, callback, errorHandler) => {
-  const areaId = req.params.id;
+  const areaId = req.params.areaId;
   taggerDao.getContentTypesForArea(areaId).then(
     (types) => {
       callback(_mapTypeList(types, errorHandler));
@@ -39,8 +39,19 @@ exports.contentTypesByArea = (req, callback, errorHandler) => {
   });
 };
 
+exports.contentTypesByCategory= (req, callback, errorHandler) => {
+  const categoryId = req.params.categoryId;
+  taggerDao.getContentTypesForCategory(categoryId).then(
+    (types) => {
+      callback(_mapTypeList(types, errorHandler));
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
 exports.contentTypesBySubject = (req, callback, errorHandler) => {
-  const subjectId = req.params.id;
+  const subjectId = req.params.subjectId;
 
   taggerDao.getContentTypesForSubject(subjectId).then(
     (types) => {
@@ -64,7 +75,7 @@ exports.contentTypesByContentType = (req, callback, errorHandler) => {
 };
 
 exports.contentTypesByAreaAndSubject = (req, callback, errorHandler) => {
-  const areaId = req.params.id;
+  const areaId = req.params.areaId;
   const subjectId = req.params.subjectId;
 
   taggerDao.getContentTypesForAreaSubjectQuery(areaId, subjectId).then(
@@ -76,8 +87,63 @@ exports.contentTypesByAreaAndSubject = (req, callback, errorHandler) => {
   });
 };
 
+exports.contentTypesByAreaAndCategory = (req, callback, errorHandler) => {
+  const areaId = req.params.areaId;
+  const categoryId = req.params.categoryId;
+
+  taggerDao.getContentTypesForAreaCategoryQuery(areaId, categoryId).then(
+    (types) => {
+      callback(_mapTypeList(types, errorHandler));
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
+exports.contentTypesByAreaCategoryAndContentType = (req, callback, errorHandler) => {
+  const areaId = req.params.areaId;
+  const categoryId = req.params.categoryId;
+  const typeId = req.params.typeId;
+
+  taggerDao.getContentTypesForAreaCategoryTypeQuery(areaId, categoryId, typeId).then(
+    (types) => {
+      callback(_mapTypeList(types, errorHandler));
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
+exports.contentTypesByAreaCategoryAndSubject = (req, callback, errorHandler) => {
+  const areaId = req.params.areaId;
+  const categoryId = req.params.categoryId;
+  const subjectId = req.params.subjectId;
+
+  taggerDao.getContentTypesForAreaCategorySubjectQuery(areaId, categoryId, subjectId).then(
+    (types) => {
+      callback(_mapTypeList(types, errorHandler));
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
+
+exports.contentTypesByAreaCategorySubjectAndContentType = (req, callback, errorHandler) => {
+  const areaId = req.params.areaId;
+  const categoryId = req.params.categoryId;
+  const subjectId = req.params.subjectId;
+  const typeId = req.params.typeId;
+
+  taggerDao.getContentTypesForAreaCategorySubjectTypeQuery(areaId, categoryId, subjectId, typeId).then(
+    (types) => {
+      callback(_mapTypeList(types, errorHandler));
+    }).catch(function (err) {
+    logger.repository(err);
+    errorHandler(utils.createErrorResponse(filename, 'repo', err))
+  });
+};
 exports.contentTypesBySubjectAndContentType = (req, callback, errorHandler) => {
-  const subjectId = req.params.id;
+  const subjectId = req.params.subjectId;
   const typeId = req.params.typeId;
 
   taggerDao.getContentTypesForAreaSubjectQuery(subjectId, typeId).then(
@@ -90,7 +156,7 @@ exports.contentTypesBySubjectAndContentType = (req, callback, errorHandler) => {
 };
 
 exports.contentTypesByAreaAndSubjectAndContentType = (req, callback, errorHandler) => {
-  const areaId = req.params.id;
+  const areaId = req.params.areaId;
   const subjectId = req.params.subjectId;
   const typeId = req.params.typeId;
 
@@ -150,7 +216,7 @@ exports.contentTypesByCategorySubjectAndContentType = (req, callback, errorHandl
  * @param errorHandler failure response callback
  */
 exports.contentTypesByAreaAndContentType = (req, callback, errorHandler) => {
-  const areaId = req.params.id;
+  const areaId = req.params.areaId;
   const contentTypeId = req.params.typeId;
 
   taggerDao.getContentTypesForAreaContentTypeQuery(areaId, contentTypeId).then(

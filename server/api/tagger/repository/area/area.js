@@ -68,11 +68,13 @@ exports.update = function (req, callback, errorHandler) {
   const description = req.body.description;
   const linkLabel = req.body.linkLabel;
   const id = req.body.id;
+  const image = req.body.image;
 
   const data = {
     title: title,
     url: url,
     linkLabel: linkLabel,
+    image: image,
     searchUrl: searchUrl,
     description: description
   };
