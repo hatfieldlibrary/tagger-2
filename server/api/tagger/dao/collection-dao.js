@@ -612,7 +612,7 @@ taggerDao.getCollectionsBySubjectAndArea = (areaId, subjectId) => {
     'from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id ' +
     'JOIN Collections c on tt.CollectionId = c.id ' +
     'JOIN AreaTargets at on c.id=at.CollectionId ' +
-    'where ' + combinedWhereClause + ' and c.published = true order by c.title',
+    'where ' + combinedWhereClause + ' and c.published = true group by c.id order by c.title',
     {
       replacements: queryArray,
       type: taggerSchema.Sequelize.QueryTypes.SELECT
@@ -757,7 +757,8 @@ taggerDao.getCollectionsBySubject = (subjectId) => {
 
   return taggerSchema.sequelize.query('Select c.id, c.title, c.image, c.url, ' +
     'c.searchUrl, c.description, c.dates, c.items, c.browseType, c.repoType, c.restricted, c.published, c.ctype, c.parent ' +
-    'from Collections c LEFT JOIN TagTargets tt on c.id=tt.CollectionId where ' + subjectWhereClause + ' AND c.published = true order by c.title',
+    'from Collections c LEFT JOIN TagTargets tt on c.id=tt.CollectionId where ' + subjectWhereClause + ' AND c.published = true ' +
+    'group by c.id order by c.title',
     {
       replacements: [subjectArray],
       type: taggerSchema.Sequelize.QueryTypes.SELECT
