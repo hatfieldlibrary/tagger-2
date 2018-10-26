@@ -33,11 +33,14 @@ describe('The collection area selector component', () => {
     AreasForCollection,
     AreaTargetAdd,
     AreaTargetRemove,
+    UpdateParentCollection,
     TaggerToast,
     testCollectionId,
     testAreaId,
-    testTwoAreaResponse,
-    testSingleAreaResponse,
+    testTwoAreas,
+    testSingleArea,
+    twoAreaResponse,
+    singleAreaResponse,
     testAreasForCollectionAdd,
     testAreasForCollectionRemove,
     testAreasForCollectionResponse,
@@ -97,7 +100,13 @@ describe('The collection area selector component', () => {
         }
       });
     });
-
+    module(($provide) => {
+      $provide.value('UpdateParentCollection', {
+        patch: () => {
+        },
+        update: () => {}
+      });
+    });
     module(($provide) => {
       $provide.value('AreaTargetAdd', {
         save: () => {
@@ -127,6 +136,7 @@ describe('The collection area selector component', () => {
                      _CollectionAreasObservable_,
                      _AreasForCollection_,
                      _AreaTargetAdd_,
+                     _UpdateParentCollection_,
                      _AreaTargetRemove_,
                      _TaggerToast_,
                      _$rootScope_,
@@ -138,6 +148,7 @@ describe('The collection area selector component', () => {
     CollectionObservable = _CollectionObservable_;
     AreasForCollection = _AreasForCollection_;
     AreaTargetAdd = _AreaTargetAdd_;
+    UpdateParentCollection = _UpdateParentCollection_;
     AreaTargetRemove = _AreaTargetRemove_;
     TaggerToast = _TaggerToast_;
     deferred = _$q_.defer();
@@ -149,41 +160,71 @@ describe('The collection area selector component', () => {
 
     testCollectionId = 1;
     testAreaId = 1;
-    testTwoAreaResponse = {
+
+    twoAreaResponse = {
       status: 'success',
       data: {
-        areaList: [
-          {
-            AreaId: 1,
-            CollectionId: 1
-          },
-          {
-            AreaId: 2,
-            CollectionId: 1
-          }
-        ]
+        areaList: {
+          getAreas: [
+            {AreaId: 1},
+            {AreaId: 2}
+          ]
+        }
       }
-
     };
 
-    testSingleAreaResponse = {
+    singleAreaResponse = {
       status: 'success',
       data: {
-        areaList: [
-          {
-            AreaId: 2,
-            CollectionId: 1
-          }
-        ]
+        areaList: {
+          getAreas: [
+            {AreaId: 1}
+          ]
+        }
       }
     };
+
+    testTwoAreas =
+      [
+        {
+          description: '',
+          id: 1,
+          image: '',
+          linkLabel: '',
+          searchUrl: '',
+          title: 'test area',
+          url: ''
+        },
+        {
+          description: '',
+          id: 2,
+          image: '',
+          linkLabel: '',
+          searchUrl: '',
+          title: 'test area 2',
+          url: ''
+        }
+      ];
+
+    testSingleArea =
+      [
+        {
+          description: '',
+          id: 1,
+          image: '',
+          linkLabel: '',
+          searchUrl: '',
+          title: 'test area',
+          url: ''
+        }
+      ];
 
     failedQuery = {
       status: 'failure',
       reason: 'unknown'
     };
 
-    testAreaResponse = testTwoAreaResponse;
+    testAreaResponse = testTwoAreas;
 
     testAreasForCollectionAdd = [
       {
@@ -250,7 +291,7 @@ describe('The collection area selector component', () => {
       fakeAreaListCallback(testAreaResponse);
     });
     spyOn(AreaListObservable, 'get').and.callFake(() => {
-      return testTwoAreaResponse;
+      return testTwoAreas;
     });
     spyOn(AreaListObservable, 'subscribe').and.callFake((o) => {
       fakeAreaListCallback = o;
@@ -270,7 +311,7 @@ describe('The collection area selector component', () => {
       return {
         $promise: {
           then: (callback) => {
-            return callback(testAreaResponse);
+            return callback(twoAreaResponse);
           }
         }
       }
@@ -282,6 +323,12 @@ describe('The collection area selector component', () => {
       }
     });
 
+    // This will patch the parent collection for the area.
+    spyOn(UpdateParentCollection, 'update').and.callFake(() => {
+      return {
+        $promise: deferred.promise
+      }
+    });
   });
 
 
@@ -302,12 +349,12 @@ describe('The collection area selector component', () => {
 
     let ctrl = $componentController('areaSelector', null);
     ctrl.$onInit();
-    expect(ctrl.areas).toEqual(testTwoAreaResponse);
+    expect(ctrl.areas).toEqual(testTwoAreas);
 
-    testAreaResponse = testSingleAreaResponse;
+    testAreaResponse = testSingleArea;
     AreaListObservable.set(testAreaResponse);
 
-    expect(ctrl.areas).toEqual(testSingleAreaResponse);
+    expect(ctrl.areas).toEqual(testSingleArea);
 
   });
 
@@ -328,14 +375,15 @@ describe('The collection area selector component', () => {
 
     let ctrl = $componentController('areaSelector', null);
     ctrl.$onInit();
-    expect(ctrl.areas).toEqual(testTwoAreaResponse);
+    expect(ctrl.areas).toEqual(testTwoAreas);
 
     ctrl.update(1);
-    deferred.resolve(testAreaResponse);
+    deferred.resolve(singleAreaResponse);
     $rootScope.$apply();
 
     expect(AreaTargetRemove.delete).toHaveBeenCalledWith({collId: testCollectionId, areaId: 1});
     expect(CollectionAreasObservable.set).toHaveBeenCalled();
+    expect(UpdateParentCollection.update).toHaveBeenCalled();
 
 
   });
@@ -344,7 +392,7 @@ describe('The collection area selector component', () => {
 
     let ctrl = $componentController('areaSelector', null);
     ctrl.$onInit();
-    expect(ctrl.areas).toEqual(testTwoAreaResponse);
+    expect(ctrl.areas).toEqual(testTwoAreas);
 
     ctrl.update(1);
     deferred.resolve(failedQuery);
@@ -377,7 +425,7 @@ describe('The collection area selector component', () => {
     let ctrl = $componentController('areaSelector', null);
     ctrl.$onInit();
     ctrl.update(1);
-    expect(ctrl.areaTargets).toEqual(testAreasForCollectionAdd);
+    expect(ctrl.areaTargets).toEqual(twoAreaResponse.data.areaList);
 
   });
 
