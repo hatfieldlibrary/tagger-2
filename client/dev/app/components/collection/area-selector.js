@@ -128,27 +128,30 @@
           }
           else {
             let result = AreaTargetRemove.delete({collId: CollectionObservable.get(), areaId: areaId});
-            result.$promise.then(function (result) {
-              if (result.status === 'success') {
-                ctrl.areaTargets = result.data.areaList.getAreas;
-                const updatedTargets = currentTargets.filter(function (target) {
-                  return target.id !== areaId;
-                });
-                const patch = [{
-                  op: 'replace', path: '/parent', value: updatedTargets
-                }];
-                let updateParent = UpdateParentCollection.update({collId: id}, JSON.stringify(patch));
-                updateParent.$promise.then(function () {
-                  TaggerToast.toast('Collection removed from area.');
-                  _updateCollectionList(areaId);
-                });
-              } else {
-                TaggerToast.toast(
-                  result.status +
-                  ': ' +
-                  result.reason);
-              }
-            }).catch((err) => {
+            result.$promise
+              .then(
+                function (result) {
+                  if (result.status === 'success') {
+                    ctrl.areaTargets = result.data.areaList.getAreas;
+                    const updatedTargets = currentTargets.filter(function (target) {
+                      return target.id !== areaId;
+                    });
+                    const patch = [{
+                      op: 'replace', path: '/parent', value: updatedTargets
+                    }];
+                    let updateParent = UpdateParentCollection.update({collId: id}, JSON.stringify(patch));
+                    updateParent.$promise.then(function () {
+                      TaggerToast.toast('Collection removed from area.');
+                      _updateCollectionList(areaId);
+                    });
+                  } else {
+                    TaggerToast.toast(
+                      result.status +
+                      ': ' +
+                      result.reason);
+                  }
+                }
+              ).catch((err) => {
               console.log(err);
             });
           }
@@ -160,7 +163,7 @@
           add.$promise.then(function (result) {
             if (result.status === 'success') {
               ctrl.areaTargets = result.data.areaList;
-             currentTargets = _getAreasForCollection();
+              currentTargets = _getAreasForCollection();
               const patch = [{
                 op: 'replace', path: '/parent', value: currentTargets
               }];
@@ -177,7 +180,6 @@
     ctrl.$onInit = function () {
 
       _setSubscriptions();
-
       ctrl.areas = AreaListObservable.get();
       _getCurrentAreaTargets(CollectionObservable.get());
 
@@ -185,13 +187,14 @@
 
     function _getAreasForCollection() {
       let t = [];
+
       for (var i = 0; i < ctrl.areaTargets.length; i++) {
-       let current = ctrl.areas.filter(function (a) {
+        let current = ctrl.areas.filter(function (a) {
           return a.id === ctrl.areaTargets[i].AreaId;
         });
-       if (typeof current[0].id !== 'undefined') {
-         t.push({'id': current[0].id, 'title': current[0].title});
-       }
+        if (typeof current[0].id !== 'undefined') {
+          t.push({'id': current[0].id, 'title': current[0].title});
+        }
       }
       return t;
     }
@@ -202,20 +205,20 @@
   taggerComponents.component('areaSelector', {
 
     template: '<md-content class="transparent"><md-card>' +
-    '  <md-toolbar class="md-primary">' +
-    '   <div class="md-toolbar-tools">' +
-    '     <i class="material-icons"> public </i>' +
-    '     <h3 class="md-display-1"> &nbsp;Areas</h3>' +
-    '    </div>' +
-    '   </md-toolbar>' +
-    '   <md-card-content>' +
-    '      <div layout="column" class="md-subhead">Select the Areas in which this Collection will appear.' +
-    '        <md-container layout="column">' +
-    '           <md-checkbox ng-repeat="area in $ctrl.areas" aria-label="Areas" value="area.id" ng-checked=$ctrl.isChosen(area.id) ng-click="$ctrl.update(area.id)">{{area.title}}</md-checkbox>' +
-    '        </md=container>' +
-    '      </div>' +
-    '   </md-content>' +
-    '</md-card></md-content>',
+      '  <md-toolbar class="md-primary">' +
+      '   <div class="md-toolbar-tools">' +
+      '     <i class="material-icons"> public </i>' +
+      '     <h3 class="md-display-1"> &nbsp;Areas</h3>' +
+      '    </div>' +
+      '   </md-toolbar>' +
+      '   <md-card-content>' +
+      '      <div layout="column" class="md-subhead">Select the Areas in which this Collection will appear.' +
+      '        <md-container layout="column">' +
+      '           <md-checkbox ng-repeat="area in $ctrl.areas" aria-label="Areas" value="area.id" ng-checked=$ctrl.isChosen(area.id) ng-click="$ctrl.update(area.id)">{{area.title}}</md-checkbox>' +
+      '        </md=container>' +
+      '      </div>' +
+      '   </md-content>' +
+      '</md-card></md-content>',
     controller: AreaController
 
   });
