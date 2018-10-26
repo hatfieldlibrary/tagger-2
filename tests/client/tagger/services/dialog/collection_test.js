@@ -211,6 +211,7 @@ describe('The collection dialog controller', () => {
       browseType: Constant.defaultBrowseType,
       repoType: Constant.defaultRepoType,
       ctype: Constant.defaultCollectionType,
+      parent: '[{"id":1,"title":""}]',
       published: false
     };
 
