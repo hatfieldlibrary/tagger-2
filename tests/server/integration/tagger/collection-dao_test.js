@@ -68,6 +68,7 @@ const updateCollectionData = {
   browseType: 'test',
   repoType: 'search',
   restricted: 1,
+  parent: '[{"id":1,"title":""}]',
   published: 1
 
 };
@@ -127,7 +128,7 @@ describe('Collection init', () => {
       expect(true).to.be.false; // should not come here
     };
 
-    collectionDao.addNewCollection(initCollections[0], 'foo', 'foo', 'foo')
+    collectionDao.addNewCollection(initCollections[0], 'foo', 'foo', 'foo','[{"id":1,"title":""}]')
       .then(_onSuccess)
       .catch(_onError);
   });
@@ -239,7 +240,7 @@ describe('Collection operations', () => {
         },
         (callback) => {
           collectionDao
-            .addNewCollection(initCollections[0], 'foo', 'foo', 'foo')
+            .addNewCollection(initCollections[0], 'foo', 'foo', 'foo','[{"id":1,"title":""}]')
             .then(() => {
               collectionDao.setPublicationStatus(true, 1)
                 .then(callback(null));
@@ -248,7 +249,7 @@ describe('Collection operations', () => {
         },
         (callback) => {
           collectionDao
-            .addNewCollection(initCollections[1], 'foo', 'foo', 'foo')
+            .addNewCollection(initCollections[1], 'foo', 'foo', 'foo','[{"id":1,"title":""}]')
             .then(() => {
               collectionDao.setPublicationStatus(true, 2)
                 .then(callback(null));
@@ -721,7 +722,7 @@ describe('Collection operations', () => {
   it('should find subject tags for collection.', (done) => {
     let _onSuccess = (tags) => {
       expect(tags).to.be.defined;
-      expect(tags[0].dataValues.TagId).to.equal(1);
+      expect(tags[0].dataValues.Tag.id).to.equal(1);
       expect(tags[0].dataValues.Tag).to.be.an('object');
       done();
     };
@@ -786,7 +787,7 @@ describe('Collection operations', () => {
   it('should get collections by subject tag.', (done) => {
     let _onSuccess = (collections) => {
       expect(collections).to.be.defined;
-      expect(collections[0].CollectionId).to.equal(2);
+      expect(collections[0].id).to.equal(2);
       expect(collections[0].title).to.have.string('Updated Collection');
       done();
     };
@@ -803,7 +804,7 @@ describe('Collection operations', () => {
   it('should get collections by category.', (done) => {
     let _onSuccess = (collections) => {
       expect(collections).to.be.defined;
-      expect(collections[0].CollectionId).to.equal(1);
+      expect(collections[0].id).to.equal(1);
       expect(collections[0].title).to.have.string('Init Collection One');
       done();
     };

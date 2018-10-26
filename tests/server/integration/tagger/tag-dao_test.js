@@ -47,6 +47,11 @@ const contentTypeInit = [
   'Content Type Stub Two'
 ];
 
+const initCollections = [
+  'Init Collection One',
+  'Init Collection Two'
+];
+
 let count = 1;
 
 describe('Tag creation', () => {
@@ -163,15 +168,36 @@ describe('Tag operations', () => {
 
         },
         (callback) => {
-          collectionDao.addNewCollection('mock collection', 'foo', 'foo', 'foo')
-            .then(callback(null));
+          collectionDao
+            .addNewCollection(initCollections[0], 'foo', 'foo', 'foo','[{"id":1,"title":""}]')
+            .then(() => {
+              collectionDao.setPublicationStatus(true, 1)
+                .then(callback(null));
+            });
+
+        },
+        (callback) => {
+          collectionDao
+            .addNewCollection(initCollections[1], 'foo', 'foo', 'foo','[{"id":1,"title":""}]')
+            .then(() => {
+              collectionDao.setPublicationStatus(true, 2)
+                .then(callback(null));
+            });
         },
         (callback) => {
           targetDao.addTagToArea(1, 1)
             .then(callback(null));
         },
         (callback) => {
+          targetDao.addTagToArea(2, 2)
+            .then(callback(null));
+        },
+        (callback) => {
           collectionDao.addTagTarget(1, 1)
+            .then(callback(null));
+        },
+        (callback) => {
+          collectionDao.addTagTarget(1, 2)
             .then(callback(null));
         },
         (callback) => {
