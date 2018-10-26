@@ -193,7 +193,7 @@ describe('Category operations', () => {
         },
         (callback) => {
           collectionDao
-            .addNewCollection('mock collection', 'foo', 'foo', 'foo')
+            .addNewCollection('mock collection', 'foo', 'foo', 'foo', '[{"id":1,"title":""}]')
             .then(callback(null));
         },
         (callback) => {

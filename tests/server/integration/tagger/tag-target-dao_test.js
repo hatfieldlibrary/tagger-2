@@ -57,7 +57,7 @@ describe('Tag area target operations', () => {
 
         },
         (callback) => {
-          collectionDao.addNewCollection('mock collection', 'foo', 'foo', 'foo')
+          collectionDao.addNewCollection('mock collection', 'foo', 'foo', 'foo', '[{"id":1,"title":""}]')
             .then(callback(null));
         },
         (callback) => {
