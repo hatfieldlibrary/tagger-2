@@ -138,7 +138,7 @@ taggerDao.getContentTypesForContentType = (contentTypeId) => {
 
   return taggerSchema.sequelize.query('SELECT i.id, i.name from ItemContentTargets target JOIN ItemContents i ' +
     'on target.ItemContentId = i.id JOIN (SELECT it.CollectionId from ItemContentTargets it where (' +
-    whereClause + ') sub ON target.CollectionId=sub.CollectionId JOIN Collections c ON target.CollectionId = c.id ' +
+    whereClause + ')) sub ON target.CollectionId=sub.CollectionId JOIN Collections c ON target.CollectionId = c.id ' +
     'where c.published = true group by i.id order by i.name',
     {
       replacements: typeArray,
