@@ -343,7 +343,6 @@ taggerDao.findTagsForAreaAndContentType = (areaId, contentTypeId) => {
     'LEFT JOIN TagTargets tt on at.TagId = tt.TagId ' +
     'LEFT JOIN Collections c on tt.CollectionId = c.id ' +
     'LEFT JOIN ItemContentTargets it on it.CollectionId = c.id ' +
-//    'JOIN AreaTargets a on a.CollectionId=c.id ' +
     'where ' + whereClause + ' AND c.published = true group by t.id order by t.name',
     {
       replacements: queryArray,
