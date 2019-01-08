@@ -18,19 +18,68 @@
 'use strict';
 
 const express = require('express');
-const  http = require('http');
+const http = require('http');
+const helmet = require('helmet');
 
-  /* jshint unused:false */
-const  multiparty = require('multiparty');
+/* jshint unused:false */
+const multiparty = require('multiparty');
+
 const config = require('./config/environment');
 const app = express();
+app.use(helmet());
+
 // initialize database.
 const taggerSchema = require('./api/tagger/schema/index');
 
-const logger = require('winston');
+// set up access log
+const { createLogger, format, transports } = require('winston');
+require('winston-daily-rotate-file');
+const fs = require('fs');
+const morgan = require('morgan');
 
-// // configure express
-// require('./config/')(app, config);
+const logDir = '/var/log/tagger';
+
+const options = {
+  file: {
+    level: 'info',
+    filename: `${logDir}/access-%DATE%.log`,
+    datePattern: 'YYYY-MM-DD',
+    maxFiles: '14d',
+    zippedArchive: true,
+    handleExceptions: true,
+    json: false,
+    format: format.combine(format.timestamp({
+        format: 'YYYY-MM-DD HH:mm:ss'
+      }),
+      format.printf(info => `${info.level}: ${info.message}`))
+  },
+  console: {
+    level: 'debug',
+    handleExceptions: true,
+    json: false,
+    colorize: true,
+  },
+};
+
+// Create the log directory if it does not exist
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir);
+}
+
+const dailyRotateFileTransport = new transports.DailyRotateFile(options.file);
+
+const logger = createLogger({
+  transports: [
+    dailyRotateFileTransport,
+    new transports.Console(options.console)
+  ],
+  exitOnError: false, // do not exit on handled exceptions
+});
+
+app.use(morgan('combined', { 'stream': {
+    write: (message) =>
+      logger.info(message.trim())
+  }}));
 
 // configure passport and session before route middleware.
 require('./auth/authenticate')(app, config);
@@ -43,7 +92,7 @@ require('./routes/routes')(app, config);
 
 function startServer() {
 
-  const server = http.createServer(app).listen(config.port, function () {
+  http.createServer(app).listen(config.port, function () {
 
     if (config.nodeEnv !== 'development') {
       try {
@@ -92,11 +141,10 @@ if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
   /* jshint unused:false   */
   app.use(function (err, req, res, next) {
 
-    if(err.status !== 404) {
-     console.log(err);
-     _apiErrorResponse(res, err);
-    }
-    else {
+    if (err.status !== 404) {
+      console.log(err);
+      _apiErrorResponse(res, err);
+    } else {
       res.render('error', {
         message: err.message,
         error: err
@@ -110,10 +158,9 @@ if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
 
-  if(err.status !== 404) {
+  if (err.status !== 404) {
     _apiErrorResponse(res, err);
-  }
-  else {
+  } else {
     res.render('error', {
       message: err.message,
       error: {}
@@ -139,8 +186,7 @@ if (config.nodeEnv !== 'test') {
     startServer();
 
   });
-}
-else {
+} else {
   // Integration tests. No need to sync.
   startServer();
 }
