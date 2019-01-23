@@ -31,55 +31,11 @@ app.use(helmet());
 // initialize database.
 const taggerSchema = require('./api/tagger/schema/index');
 
-// set up access log
-const { createLogger, format, transports } = require('winston');
-require('winston-daily-rotate-file');
-const fs = require('fs');
-const morgan = require('morgan');
-
-const logDir = '/var/log/tagger';
-
-const options = {
-  file: {
-    level: 'info',
-    filename: `${logDir}/access-%DATE%.log`,
-    datePattern: 'YYYY-MM-DD',
-    maxFiles: '14d',
-    zippedArchive: true,
-    handleExceptions: true,
-    json: false,
-    format: format.combine(format.timestamp({
-        format: 'YYYY-MM-DD HH:mm:ss'
-      }),
-      format.printf(info => `${info.level}: ${info.message}`))
-  },
-  console: {
-    level: 'debug',
-    handleExceptions: true,
-    json: false,
-    colorize: true,
-  },
-};
-
-// Create the log directory if it does not exist
-if (!fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir);
-}
-
-const dailyRotateFileTransport = new transports.DailyRotateFile(options.file);
-
-const logger = createLogger({
-  transports: [
-    dailyRotateFileTransport,
-    new transports.Console(options.console)
-  ],
-  exitOnError: false, // do not exit on handled exceptions
-});
-
-app.use(morgan('combined', { 'stream': {
-    write: (message) =>
-      logger.info(message.trim())
-  }}));
+const logInitializer = require('./app-logger');
+// Initialize the access log.
+logInitializer.setAccessLog(app);
+// Get a copy of the error logger.
+const errorLogger = logInitializer.getErrorLogger();
 
 // configure passport and session before route middleware.
 require('./auth/authenticate')(app, config);
@@ -141,8 +97,8 @@ if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
   /* jshint unused:false   */
   app.use(function (err, req, res, next) {
 
+    errorLogger.error(`${err.status || 500} - ${err.message} - ${req.method} - ${req.originalUrl} - ${req.ip}`);
     if (err.status !== 404) {
-      console.log(err);
       _apiErrorResponse(res, err);
     } else {
       res.render('error', {
@@ -160,6 +116,7 @@ app.use(function (err, req, res, next) {
 
   if (err.status !== 404) {
     _apiErrorResponse(res, err);
+    errorLogger.error(`${err.status || 500} - ${err.message} - ${req.method} - ${req.originalUrl} - ${req.ip}`);
   } else {
     res.render('error', {
       message: err.message,
@@ -184,7 +141,6 @@ if (config.nodeEnv !== 'test') {
       }
     }).then(function () {
     startServer();
-
   });
 } else {
   // Integration tests. No need to sync.
