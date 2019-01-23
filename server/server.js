@@ -31,69 +31,6 @@ app.use(helmet());
 // initialize database.
 const taggerSchema = require('./api/tagger/schema/index');
 
-// // set up access log
-// const { createLogger, format, transports } = require('winston');
-// require('winston-daily-rotate-file');
-// const fs = require('fs');
-// const morgan = require('morgan');
-//
-// const logDir = '/var/log/tagger';
-//
-// const options = {
-//   file: {
-//     level: 'info',
-//     filename: `${logDir}/access-%DATE%.log`,
-//     datePattern: 'YYYY-MM-DD',
-//     maxFiles: '14d',
-//     zippedArchive: true,
-//     handleExceptions: true,
-//     json: false,
-//     format: format.combine(format.timestamp({
-//         format: 'YYYY-MM-DD HH:mm:ss'
-//       }),
-//       format.printf(info => `${info.level}: ${info.message}`))
-//   },
-//   error: {
-//     level: 'error',
-//     filename: `${logDir}/error-%DATE%.log`,
-//     datePattern: 'YYYY-MM',
-//     maxFiles: '10',
-//     zippedArchive: true,
-//     handleExceptions: true,
-//     json: false,
-//     format: combine(format.timestamp({
-//         format: 'YYYY-MM-DD HH:mm:ss'
-//       }),
-//       format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`))
-//   },
-//   console: {
-//     level: 'debug',
-//     handleExceptions: true,
-//     json: false,
-//     colorize: true,
-//   },
-// };
-//
-// // Create the log directory if it does not exist
-// if (!fs.existsSync(logDir)) {
-//   fs.mkdirSync(logDir);
-// }
-//
-// const dailyRotateFileTransport = new transports.DailyRotateFile(options.file);
-//
-// const logger = createLogger({
-//   transports: [
-//     dailyRotateFileTransport,
-//     new transports.Console(options.console)
-//   ],
-//   exitOnError: false, // do not exit on handled exceptions
-// });
-//
-// app.use(morgan('combined', { 'stream': {
-//     write: (message) =>
-//       logger.info(message.trim())
-//   }}));
-
 const logInitializer = require('./app-logger');
 // Initialize the access log.
 logInitializer.setAccessLog(app);
